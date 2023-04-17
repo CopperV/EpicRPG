@@ -1,0 +1,58 @@
+name: EpicRPG
+version: 2.0.0-ALPHA
+main: me.Vark123.EpicRPG.Main
+author: Vark123
+depend: [CalendarEvents,MythicMobs,NBTAPI,EpicRPGRespawn,Clans,PartyAndFriends,ProtocolLib]
+softdepend: [EpicClans]
+api-version: 1.18
+
+commands:
+  staty:
+    aliases: [stats, statystyki]
+  sprzedaj:
+  chat:
+  chatclear:
+  kon:
+    aliases: [horse]
+  epicrpg:
+    aliases: [erpg, rpg]
+  sklep:
+  drop:
+  level:
+    aliases: [lvl, poziom]
+  stygia:
+    aliases: [sg]
+  endtut:
+  kosz:
+    aliases: [smietnik, bin]
+  rpgmm:
+  soulbindgive:
+    aliases: [sbgive, sb]
+  uniquegive:
+    aliases: [ugive]
+  stygiabuy:
+    aliases: [sgbuy]
+  coinsbuy:
+    aliases: [dcbuy]
+  dragoncoins:
+    aliases: [coins]
+  ruda:
+    aliases: [brylkirudy]
+  brbuy:
+    aliases: [rudabuy, brylkirudybuy]
+  coinscmd:
+  rpgmenu:
+  rotacja:
+  kasa:
+  reset:
+  blackrock:
+  bizuteria:
+    aliases: [jewerly, akcesoria, biz, akc, jew]
+  stygiamod:
+    aliases: [sgmod]
+  reputation:
+    aliases: [rep,reputacja]
+  reputationmod:
+    aliases: [repmod]
+  advancedbuy:
+    aliases: [ab,abs,advancedbuysystem]
