@@ -2,11 +2,12 @@ package me.Vark123.EpicRPG.Files;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import me.Vark123.EpicRPG.EpicRPGManager;
+import me.Vark123.EpicRPG.EpicRPGMobManager;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Utils.Pair;
 
@@ -54,7 +55,26 @@ public class FileOperations {
 		fYml.getKeys(false).stream().parallel().forEach(s -> {
 			String mob = ChatColor.translateAlternateColorCodes('&', fYml.getString(s+".name"));
 			Pair<Integer, Integer> mobExp = new Pair<>(fYml.getInt(s+".min"), fYml.getInt(s+".max"));
-			EpicRPGManager.getInstance().getMobExp().put(mob, mobExp);
+			EpicRPGMobManager.getInstance().addMobExp(mob, mobExp);
+			
+			if(fYml.contains(s+".money")) {
+				EpicRPGMobManager.getInstance().addMobMoney(mob, fYml.getDouble(s+".money"));
+			}
+			
+			if(fYml.contains(s+".cmds")) {
+				List<String> cmds = fYml.getStringList(s+".cmds");
+				EpicRPGMobManager.getInstance().addMobCmds(mob, cmds);
+			}
+			
+			if(fYml.contains(s+".coins")) {
+				EpicRPGMobManager.getInstance().addMobCoins(mob, fYml.getInt(s+".coins"));
+			}
+			
+			if(fYml.contains(s+".points")) {
+				fYml.getConfigurationSection(s+".points").getKeys(false).parallelStream().forEach(k ->{
+					EpicRPGMobManager.getInstance().addMobPoints(mob, k, fYml.getInt(s+".points."+k));
+				});
+			}
 		});
 	}
 }

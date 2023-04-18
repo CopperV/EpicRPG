@@ -25,6 +25,7 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		DBOperations.close();
+		EpicRPGMobManager.getInstance().clear();
 		// TODO Auto-generated method stub
 		super.onDisable();
 	}
