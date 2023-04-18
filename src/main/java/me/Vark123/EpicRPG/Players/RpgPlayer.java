@@ -45,11 +45,11 @@ public class RpgPlayer {
 			this.info = new RpgPlayerInfo(this, set);
 			this.stats = new RpgStats(this, set);
 			this.rzemiosla = new RpgRzemiosla(this, set);
-			this.modifiers = new RpgModifiers(this, set);
+			this.modifiers = new RpgModifiers(this);
 			this.skills = new RpgSkills(this, set);
 			this.vault = new RpgVault(this, set);
 			//TODO
-			this.jewerly = new RpgJewerly(this, set);
+			this.jewerly = new RpgJewerly(this);
 			this.reputation = new RpgReputation(this, set);
 		} catch (SQLException e) {
 			p.kickPlayer("Blad pobierania danych z bazy danych - zglos ten fakt administratorowi");
@@ -64,11 +64,11 @@ public class RpgPlayer {
 		this.info = new RpgPlayerInfo(this, fYml);
 		this.stats = new RpgStats(this, fYml);
 		this.rzemiosla = new RpgRzemiosla(this, fYml);
-		this.modifiers = new RpgModifiers(this, fYml);
+		this.modifiers = new RpgModifiers(this);
 		this.skills = new RpgSkills(this, fYml);
 		this.vault = new RpgVault(this, fYml);
 		//TODO
-		this.jewerly = new RpgJewerly(this, fYml);
+		this.jewerly = new RpgJewerly(this);
 		this.reputation = new RpgReputation(this, fYml);
 		createScoreboard();
 		createDisplay();
@@ -91,7 +91,7 @@ public class RpgPlayer {
 	
 	//TODO
 	public void endTasks() {
-		
+		skills.endTasks();
 	}
 	
 	//TODO
