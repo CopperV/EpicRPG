@@ -16,6 +16,8 @@ public class Main extends JavaPlugin {
 	public static Economy eco;
 	public static Permission perm;
 	
+	private final String prefix = "§7[§bEpicRPG§7]";
+	
 	@Override
 	public void onEnable() {
 		instance = this;
@@ -39,6 +41,10 @@ public class Main extends JavaPlugin {
 		EpicRPGMobManager.getInstance().clear();
 		// TODO Auto-generated method stub
 		super.onDisable();
+	}
+	
+	public final String getPrefix() {
+		return prefix;
 	}
 	
 	private boolean checkEco() {

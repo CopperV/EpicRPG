@@ -36,4 +36,18 @@ public class PlayerManager {
 		playerContainer.remove(p.getUniqueId());
 	}
 	
+	public RpgPlayer loadPlayer(Player p) {
+		RpgPlayer rpg;
+		
+		
+		
+		addPlayer(rpg);
+		return rpg;
+	}
+	
+	public boolean playerExists(Player p) {
+		
+		return false;
+	}
+	
 }
