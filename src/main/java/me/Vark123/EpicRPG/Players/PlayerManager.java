@@ -6,7 +6,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Singleton;
 
+import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
+
+import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.RpgScoreboard;
+import me.Vark123.EpicRPG.MySQL.DBOperations;
 
 @Singleton
 public class PlayerManager {
@@ -37,9 +43,28 @@ public class PlayerManager {
 	}
 	
 	public RpgPlayer loadPlayer(Player p) {
-		RpgPlayer rpg;
+		final RpgPlayer rpg;
 		
+		if(DBOperations.playerExists(p)) {
+			rpg = new RpgPlayer(p, DBOperations.getPlayer(p));
+		} else {
+			rpg = new RpgPlayer(p);
+			DBOperations.savePlayer(rpg);
+		}
 		
+		//TODO - CHANGE STATS NA KONCU LADOWANIA RPG PLAYER
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), ()->{
+			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(rpg.getStats().getFinalHealth());
+			p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+			if(rpg.getSkills().hasHungerless()) 
+				p.setFoodLevel(18);
+			else
+				p.setFoodLevel(20);
+			RpgScoreboard.createScore(p);
+			rpg.getStats().addPresentManaSmart(rpg.getStats().getFinalMana());
+		});
+		
+		p.setHealthScale(20);
 		
 		addPlayer(rpg);
 		return rpg;

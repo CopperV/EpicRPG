@@ -33,12 +33,11 @@ public class ReputationCommand implements CommandExecutor {
 
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		tmp.sendMessage(prefix+" §2Reputacja gracza §7"+p.getName());
-		for(String id : rpg.getReputacja().keySet()) {
-			Reputation rep = rpg.getReputacja().get(id);
+		rpg.getReputation().getReputacja().forEach((id, rep) -> {
 			tmp.sendMessage("§4> §r"+rep.getDisplayFraction()+"§7: "
 					+ "§a"+rep.getReputationLevel().getName()+" "
 					+ "§7(§a"+rep.getReputationAmount()+"§7/§a"+rep.getReputationLevel().getAmount()+"§7)");
-		}
+		});
 		
 		return true;
 	}

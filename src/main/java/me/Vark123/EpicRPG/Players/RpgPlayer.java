@@ -3,9 +3,15 @@ package me.Vark123.EpicRPG.Players;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.scoreboard.Scoreboard;
+
+import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.RpgScoreboard;
+import me.Vark123.EpicRPG.Stats.ChangeStats;
 
 public class RpgPlayer {
 
@@ -23,6 +29,8 @@ public class RpgPlayer {
 	private RpgJewelry jewelry;
 	private RpgReputation reputation;
 	
+	private Scoreboard board;
+	
 	public RpgPlayer(Player p) {
 		this.player = p;
 		this.info = new RpgPlayerInfo(this);
@@ -34,8 +42,12 @@ public class RpgPlayer {
 		//TODO
 		this.jewelry = new RpgJewelry(this);
 		this.reputation = new RpgReputation(this);
+		board = Bukkit.getScoreboardManager().getNewScoreboard();
+		
 		createScoreboard();
 		createDisplay();
+		
+		ChangeStats.change(this);
 	}
 	
 	public RpgPlayer(Player p, ResultSet set) {
@@ -55,8 +67,12 @@ public class RpgPlayer {
 			p.kickPlayer("Blad pobierania danych z bazy danych - zglos ten fakt administratorowi");
 			e.printStackTrace();
 		}
+		board = Bukkit.getScoreboardManager().getNewScoreboard();
+		
 		createScoreboard();
 		createDisplay();
+		
+		ChangeStats.change(this);
 	}
 	
 	public RpgPlayer(Player p, YamlConfiguration fYml) {
@@ -70,13 +86,20 @@ public class RpgPlayer {
 		//TODO
 		this.jewelry = new RpgJewelry(this);
 		this.reputation = new RpgReputation(this, fYml);
+		board = Bukkit.getScoreboardManager().getNewScoreboard();
+		
 		createScoreboard();
 		createDisplay();
+		
+		ChangeStats.change(this);
 	}
 	
 	//TODO
 	private void createScoreboard() {
-		
+		RpgScoreboard.createScore(player);
+		this.score = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.getInstance(), ()->{
+			RpgScoreboard.updateScore(player);
+		}, 0, 60);
 	}
 	
 	//TODO
@@ -91,12 +114,14 @@ public class RpgPlayer {
 	
 	//TODO
 	public void endTasks() {
+		score.cancel();
 		skills.endTasks();
 	}
 	
 	//TODO
 	public void resetStats() {
 		
+		ChangeStats.change(this);
 	}
 	
 	//TODO
@@ -156,6 +181,10 @@ public class RpgPlayer {
 
 	public RpgReputation getReputation() {
 		return reputation;
+	}
+
+	public Scoreboard getBoard() {
+		return board;
 	}
 	
 }

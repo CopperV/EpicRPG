@@ -53,12 +53,12 @@ public class ReputationModCommand implements CommandExecutor {
 		
 		switch(args[0].toLowerCase()) {
 			case "add":
-				rpg.getReputacja().get(frakcja).addSmartReputation(cena);
-				sender.sendMessage(prefix+" §7"+p.getName()+" otrzymal §f"+cena+" §7 pkt reputacji do frakcji §r"+rpg.getReputacja().get(frakcja).getDisplayFraction());
+				rpg.getReputation().getReputacja().get(frakcja).addSmartReputation(cena);
+				sender.sendMessage(prefix+" §7"+p.getName()+" otrzymal §f"+cena+" §7 pkt reputacji do frakcji §r"+rpg.getReputation().getReputacja().get(frakcja).getDisplayFraction());
 				return true;
 			case "remove":
-				sender.sendMessage(prefix+" §7"+p.getName()+" stracil §f"+cena+" §7 pkt reputacji z frakcji §r"+rpg.getReputacja().get(frakcja).getDisplayFraction());
-				rpg.getReputacja().get(frakcja).removeSmartReputation(cena);
+				sender.sendMessage(prefix+" §7"+p.getName()+" stracil §f"+cena+" §7 pkt reputacji z frakcji §r"+rpg.getReputation().getReputacja().get(frakcja).getDisplayFraction());
+				rpg.getReputation().getReputacja().get(frakcja).removeSmartReputation(cena);
 				return true;
 		}
 		

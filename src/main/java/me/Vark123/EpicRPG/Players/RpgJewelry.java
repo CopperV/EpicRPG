@@ -3,6 +3,7 @@ package me.Vark123.EpicRPG.Players;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import me.Vark123.EpicRPG.Files.FileOperations;
 import me.Vark123.EpicRPG.Jewelry.Amulet;
 import me.Vark123.EpicRPG.Jewelry.Gloves;
 import me.Vark123.EpicRPG.Jewelry.JewerlyItem;
@@ -17,6 +18,11 @@ public class RpgJewelry {
 	public RpgJewelry(RpgPlayer rpg) {
 		this.rpg = rpg;
 		akcesoria = createJewerlyEq();
+		if(FileOperations.hasPlayerJewelryFile(rpg.getPlayer())) {
+			FileOperations.loadPlayerJewelry(rpg, rpg.getPlayer());
+		} else {
+			FileOperations.createPlayerJewelryFile(rpg.getPlayer());
+		}
 	}
 	
 	public RpgPlayer getRpg() {

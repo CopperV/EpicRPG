@@ -55,7 +55,7 @@ public class JewerlyMenu {
 	public static void openBaseMenu(Player p) {
 		if(!PlayerManager.getInstance().playerExists(p))
 			return;
-		Inventory inv = Bukkit.createInventory(new BaseJewerlyMenu(), 9, title);
+		Inventory inv = Bukkit.createInventory(new BaseJewerlyMenu(p), 9, title);
 		p.openInventory(inv);
 		
 		for(int slot = 0; slot < 9; ++slot) {

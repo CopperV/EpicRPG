@@ -68,7 +68,7 @@ public class JewerlyMenuCloseEvent implements Listener {
 //			rpg.getJewelry().getAkcesoria().get(i).setItem(inv.getItem(10+2*i));
 		});
 		
-		ChangeStats.change(rpg, p.getInventory().getItemInMainHand());
+		ChangeStats.change(rpg);
 		inv.clear();
 		
 	}

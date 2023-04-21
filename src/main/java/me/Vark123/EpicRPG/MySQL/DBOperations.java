@@ -51,6 +51,19 @@ public class DBOperations {
 		}
 	}
 	
+	public static boolean playerExists(Player player) {
+		String uuid = player.getUniqueId().toString();
+		String polecenie = "SELECT nick FROM players WHERE UUID LIKE '"+uuid+"';";
+		try {
+			ResultSet result = c.createStatement().executeQuery(polecenie);
+			if(result.next())
+				return true;
+			return false;
+		} catch (SQLException e) {
+			return false;
+		}
+	}
+	
 	public static ResultSet getPlayer(Player player) {
 		ResultSet toReturn = null;
 		
@@ -104,11 +117,11 @@ public class DBOperations {
 	
 	private static void updatePlayer(RpgPlayer rpg, UUID id) {
 		RpgStats stats = rpg.getStats();
-		RpgReputation reputation = rpg.getReputation();
 		RpgPlayerInfo playerInfo = rpg.getInfo();
 		RpgRzemiosla rzemiosla = rpg.getRzemiosla();
 		RpgSkills skills = rpg.getSkills();
 		RpgVault vault = rpg.getVault();
+		RpgReputation rep = rpg.getReputation();
 		String nick = rpg.getPlayer().getName();
 		String polecenie = "SELECT id FROM players WHERE players.UUID=\""+id.toString()+"\";";
 		int db_id = -1;
@@ -223,16 +236,16 @@ public class DBOperations {
 		
 		polecenie = "INSERT INTO player_reputation (player_id,archolos_id,archolos_amount,klan_id,klan_amount,witcher_id,witcher_amount) "
 				+ "VALUES ("+db_id+","
-				+reputation.getReputacja().get("archolos").getReputationLevel().getId()+","+rpg.getReputacja().get("archolos").getReputationAmount()+","
-				+reputation.getReputacja().get("klan").getReputationLevel().getId()+","+rpg.getReputacja().get("klan").getReputationAmount()+","
-				+reputation.getReputacja().get("witcher").getReputationLevel().getId()+","+rpg.getReputacja().get("witcher").getReputationAmount()+") "
+				+rep.getReputacja().get("archolos").getReputationLevel().getId()+","+rep.getReputacja().get("archolos").getReputationAmount()+","
+				+rep.getReputacja().get("klan").getReputationLevel().getId()+","+rep.getReputacja().get("klan").getReputationAmount()+","
+				+rep.getReputacja().get("witcher").getReputationLevel().getId()+","+rep.getReputacja().get("witcher").getReputationAmount()+") "
 				+ "ON DUPLICATE KEY UPDATE "
-				+ "archolos_id="+reputation.getReputacja().get("archolos").getReputationLevel().getId()+","
-				+ "archolos_amount="+reputation.getReputacja().get("archolos").getReputationAmount()+","
-				+ "klan_id="+reputation.getReputacja().get("klan").getReputationLevel().getId()+","
-				+ "klan_amount="+reputation.getReputacja().get("klan").getReputationAmount()+","
-				+ "witcher_id="+reputation.getReputacja().get("witcher").getReputationLevel().getId()+","
-				+ "witcher_amount="+reputation.getReputacja().get("witcher").getReputationAmount()+";";
+				+ "archolos_id="+rep.getReputacja().get("archolos").getReputationLevel().getId()+","
+				+ "archolos_amount="+rep.getReputacja().get("archolos").getReputationAmount()+","
+				+ "klan_id="+rep.getReputacja().get("klan").getReputationLevel().getId()+","
+				+ "klan_amount="+rep.getReputacja().get("klan").getReputationAmount()+","
+				+ "witcher_id="+rep.getReputacja().get("witcher").getReputationLevel().getId()+","
+				+ "witcher_amount="+rep.getReputacja().get("witcher").getReputationAmount()+";";
 		try {
 			c.createStatement().executeUpdate(polecenie);
 		} catch (SQLException e) {
