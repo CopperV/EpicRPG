@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -14,6 +15,7 @@ import de.tr7zw.nbtapi.NBTItem;
 import me.Vark123.EpicRPG.Players.RpgJewelry;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.RpgStats;
+import me.Vark123.EpicRPG.Utils.Utils;
 
 public class ChangeStats {
 	
@@ -140,11 +142,11 @@ public class ChangeStats {
 			return true;
 		}).forEach(s -> {
 			s = s.replace("+", "");
-			int toAdd = Integer.parseInt(s.replace(": §7", ""));
+			int toAdd = Integer.parseInt(s.replace(": ", ChatColor.stripColor(s)));
+//			int toAdd = Integer.parseInt(s.replace(": §7", ""));
 			s = s.replace("§4- §8", "");
 			s = s.split(":")[0];
-			if(s.contains("Zdolnosci mysliwskie"))
-				s = "ZdolnosciMysliwskie";
+			s = Utils.convertToClassConvention(s);
 			
 			Class<?> _class = stats.getClass();
 			Method getMethod;

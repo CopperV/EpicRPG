@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.RpgScoreboard;
 import me.Vark123.EpicRPG.MySQL.DBOperations;
+import me.Vark123.EpicRPG.Stats.ChangeStats;
 
 @Singleton
 public class PlayerManager {
@@ -60,19 +61,22 @@ public class PlayerManager {
 				p.setFoodLevel(18);
 			else
 				p.setFoodLevel(20);
-			RpgScoreboard.createScore(p);
 			rpg.getStats().addPresentManaSmart(rpg.getStats().getFinalMana());
 		});
 		
 		p.setHealthScale(20);
 		
 		addPlayer(rpg);
+		
+		ChangeStats.change(rpg);
+		rpg.createScoreboard();
+		
 		return rpg;
 	}
 	
 	public boolean playerExists(Player p) {
 		
-		return false;
+		return playerContainer.containsKey(p.getUniqueId());
 	}
 	
 }

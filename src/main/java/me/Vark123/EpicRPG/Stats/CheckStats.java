@@ -11,6 +11,7 @@ import de.tr7zw.nbtapi.NBTItem;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.RpgPlayerInfo;
 import me.Vark123.EpicRPG.Players.RpgStats;
+import me.Vark123.EpicRPG.Utils.Utils;
 
 public class CheckStats {
 
@@ -32,12 +33,13 @@ public class CheckStats {
 			if(s.contains("§4- §8Klasa: ") 
 					|| s.contains("§4- §8Krag: §7"))
 				return true;
-			if(s.contains(": §c"))
+			if(!s.contains(": §c"))
 				return false;
 			return true;
 		}).takeWhile(s -> {
 			return check.booleanValue();
 		}).forEach(s -> {
+//			Bukkit.broadcastMessage(s+" §r"+s.replace("§", "&"));
 			if(s.contains("§4- §8Klasa: ")) {
 				s = s.replace("§4- §8Klasa: ", "");
 				String proffesion = ChatColor.stripColor(info.getProffesion());
@@ -59,11 +61,12 @@ public class CheckStats {
 				return;
 			}
 			s = s.replace("§4- §8", "");
-			int toCheck = Integer.parseInt(s.replace(": §c", ""));
+			int toCheck = Integer.parseInt(ChatColor.stripColor(s.split(": ")[1]));
+//			int toCheck = Integer.parseInt(s.replace(": ", ChatColor.stripColor(s)));
+//			int toCheck = Integer.parseInt(s.replace(": §c", ""));
 			int result;
 			s = s.split(":")[0];
-			if(s.contains("Zdolnosci mysliwskie"))
-				s = "ZdolnosciMysliwskie";
+			s = Utils.convertToClassConvention(s);
 			Class<?> _class = stats.getClass();
 			String strMethod = "getFinal"+s;
 			Method method;

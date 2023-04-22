@@ -62,8 +62,8 @@ public class StatsCommand implements CommandExecutor {
 		sender.sendMessage("§2Poziom: §a" + playerInfo.getLevel());
 		sender.sendMessage("§a" + playerInfo.getExp() +" §7xp/§a"+ playerInfo.getNextLevel() +" §7xp");
 		sender.sendMessage("§2Punkty nauki: §a" + playerInfo.getPn());
-		sender.sendMessage("§2Obrazenia §a" + stats.getObrazenia());
-		sender.sendMessage("§2Obrona §a" + stats.getOchrona());
+		sender.sendMessage("§2Obrazenia §a" + stats.getObrazenia() + "§7/§a" + stats.getPotionObrazenia() + "§7/§a" + stats.getFinalObrazenia());
+		sender.sendMessage("§2Obrona §a" + stats.getOchrona() + "§7/§a" + stats.getPotionOchrona() + "§7/§a" + stats.getFinalOchrona());
 		sender.sendMessage("§2Sila: §a" + stats.getSila() + "§7/§a" + stats.getPotionSila() + "§7/§a" + stats.getFinalSila());
 		sender.sendMessage("§2Zrecznosc: §a" + stats.getZrecznosc() + "§7/§a" + stats.getPotionZrecznosc() + "§7/§a" + stats.getFinalZrecznosc());
 		sender.sendMessage("§2Wytrzymalosc: §a" + stats.getWytrzymalosc() + "§7/§a" + stats.getPotionWytrzymalosc() + "§7/§a" + stats.getFinalWytrzymalosc());

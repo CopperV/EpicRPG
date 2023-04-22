@@ -44,10 +44,8 @@ public class RpgPlayer {
 		this.reputation = new RpgReputation(this);
 		board = Bukkit.getScoreboardManager().getNewScoreboard();
 		
-		createScoreboard();
+//		createScoreboard();
 		createDisplay();
-		
-		ChangeStats.change(this);
 	}
 	
 	public RpgPlayer(Player p, ResultSet set) {
@@ -69,10 +67,8 @@ public class RpgPlayer {
 		}
 		board = Bukkit.getScoreboardManager().getNewScoreboard();
 		
-		createScoreboard();
+//		createScoreboard();
 		createDisplay();
-		
-		ChangeStats.change(this);
 	}
 	
 	public RpgPlayer(Player p, YamlConfiguration fYml) {
@@ -88,14 +84,14 @@ public class RpgPlayer {
 		this.reputation = new RpgReputation(this, fYml);
 		board = Bukkit.getScoreboardManager().getNewScoreboard();
 		
-		createScoreboard();
+//		createScoreboard();
 		createDisplay();
-		
-		ChangeStats.change(this);
 	}
 	
 	//TODO
-	private void createScoreboard() {
+	public void createScoreboard() {
+		if(score != null && !score.isCancelled())
+			return;
 		RpgScoreboard.createScore(player);
 		this.score = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.getInstance(), ()->{
 			RpgScoreboard.updateScore(player);

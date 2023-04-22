@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -84,8 +85,9 @@ public class DBOperations {
 				"LEFT JOIN player_reputation ON players.id = player_reputation.player_id " + 
 				"WHERE players.nick LIKE \""+player.getName()+"\"";
 		try {
-			if(!c.createStatement().executeQuery(polecenie).next()) return null;
-			toReturn = c.createStatement().executeQuery(polecenie);
+			Statement stmt = c.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			if(!stmt.executeQuery(polecenie).next()) return null;
+			toReturn = stmt.executeQuery(polecenie);
 		} catch (SQLException e) {
 			System.out.println("Blad pobierania danych "+player.getName()+" z bazy danych");
 			e.printStackTrace();
