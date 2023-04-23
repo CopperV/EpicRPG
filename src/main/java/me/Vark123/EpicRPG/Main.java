@@ -6,6 +6,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import me.Vark123.EpicRPG.Files.FileOperations;
 import me.Vark123.EpicRPG.MySQL.DBOperations;
+import me.Vark123.EpicRPG.Placeholders.PlayerPlaceholders;
+import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
@@ -15,6 +17,8 @@ public class Main extends JavaPlugin {
 
 	public static Economy eco;
 	public static Permission perm;
+	
+	private static PlaceholderExpansion playerPlaceholders;
 	
 	private final String prefix = "§7[§bEpicRPG§7]";
 	
@@ -31,6 +35,9 @@ public class Main extends JavaPlugin {
 		checkEco();
 		checkPerm();
 		
+		playerPlaceholders = new PlayerPlaceholders();
+		playerPlaceholders.register();
+		
 		// TODO Auto-generated method stub
 		super.onEnable();
 	}
@@ -39,6 +46,8 @@ public class Main extends JavaPlugin {
 	public void onDisable() {
 		DBOperations.close();
 		EpicRPGMobManager.getInstance().clear();
+		
+		playerPlaceholders.unregister();
 		// TODO Auto-generated method stub
 		super.onDisable();
 	}

@@ -87,9 +87,6 @@ public class RpgScoreboard {
 			team.addEntry(ChatColor.BLUE+""+ChatColor.WHITE);
 			obj.getScore(ChatColor.BLUE+""+ChatColor.WHITE).setScore(15);
 			
-//			Score score = obj.getScore("§3》 §x§0§0§8§0§b§4§lINFO §3《");
-//			score.setScore(15);
-			
 			String klasa = "  §bGracz: ";
 			switch(ChatColor.stripColor(playerInfo.getProffesion().toLowerCase())) {
 				case "wojownik":

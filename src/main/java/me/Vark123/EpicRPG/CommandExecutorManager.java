@@ -2,6 +2,8 @@ package me.Vark123.EpicRPG;
 
 import org.bukkit.Bukkit;
 
+import me.Vark123.EpicRPG.Chat.ChatClearCommand;
+import me.Vark123.EpicRPG.Chat.ChatToggleCommand;
 import me.Vark123.EpicRPG.Jewelry.JewerlyCommand;
 import me.Vark123.EpicRPG.Reputation.ReputationCommand;
 import me.Vark123.EpicRPG.Reputation.ReputationModCommand;
@@ -14,6 +16,8 @@ public class CommandExecutorManager {
 		Bukkit.getPluginCommand("reputation").setExecutor(new ReputationCommand());
 		Bukkit.getPluginCommand("reputationmod").setExecutor(new ReputationModCommand());
 		Bukkit.getPluginCommand("staty").setExecutor(new StatsCommand());
+		Bukkit.getPluginCommand("chat").setExecutor(new ChatToggleCommand());
+		Bukkit.getPluginCommand("chatclear").setExecutor(new ChatClearCommand());
 	}
 	
 }
