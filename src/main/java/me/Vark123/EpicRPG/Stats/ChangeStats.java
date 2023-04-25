@@ -39,7 +39,7 @@ public class ChangeStats {
 		stats.setFinalMana(stats.getMana()+stats.getPotionMana());
 		stats.setFinalWalka(stats.getWalka()+stats.getPotionWalka());
 		stats.setFinalOchrona(stats.getOchrona() + stats.getPotionOchrona());
-		stats.setFinalObrazenia(stats.getFinalObrazenia() + stats.getPotionObrazenia());
+		stats.setFinalObrazenia(stats.getObrazenia() + stats.getPotionObrazenia());
 		
 		boolean weaponCheck = (weapon != null);
 
@@ -156,7 +156,7 @@ public class ChangeStats {
 			
 			try {
 				getMethod = _class.getMethod(STR_GET_METHOD+s);
-				setMethod = _class.getMethod(STR_SET_METHOD+s, Integer.class);
+				setMethod = _class.getMethod(STR_SET_METHOD+s, int.class);
 			} catch (NoSuchMethodException e) {
 				return;
 			} catch (SecurityException e) {

@@ -36,7 +36,7 @@ public class RpgDamageEvent implements Listener {
 		}
 		
 		e.setDamage(DamageManager.getInstance().getDefenseCalculator().calc(damager, e.getEntity(), e.getDamage()));
-
+		
 		if(e.getDamage() < 0) {
 			e.setCancelled(true);
 			return;

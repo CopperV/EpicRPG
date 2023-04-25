@@ -317,4 +317,208 @@ public class RpgModifiers {
 	public int getPotionWalka() {
 		return potionWalka;
 	}
+
+	public void setBowPower(float bowPower) {
+		this.bowPower = bowPower;
+	}
+
+	public void setModifier1_lock(boolean modifier1_lock) {
+		this.modifier1_lock = modifier1_lock;
+	}
+
+	public void setModifier2_lock(boolean modifier2_lock) {
+		this.modifier2_lock = modifier2_lock;
+	}
+
+	public void setWyostrzoneZmysly(boolean wyostrzoneZmysly) {
+		this.wyostrzoneZmysly = wyostrzoneZmysly;
+	}
+
+	public void setOgnistaStrzala(boolean ognistaStrzala) {
+		this.ognistaStrzala = ognistaStrzala;
+	}
+
+	public void setZatrutaStrzala(boolean zatrutaStrzala) {
+		this.zatrutaStrzala = zatrutaStrzala;
+	}
+
+	public void setPrecyzyjnyStrzal(boolean precyzyjnyStrzal) {
+		this.precyzyjnyStrzal = precyzyjnyStrzal;
+	}
+
+	public void setLodowaStrzala(boolean lodowaStrzala) {
+		this.lodowaStrzala = lodowaStrzala;
+	}
+
+	public void setTrans(boolean trans) {
+		this.trans = trans;
+	}
+
+	public void setSzalBitewny(boolean szalBitewny) {
+		this.szalBitewny = szalBitewny;
+	}
+
+	public void setGruboskornosc(boolean gruboskornosc) {
+		this.gruboskornosc = gruboskornosc;
+	}
+
+	public void setSfera(boolean sfera) {
+		this.sfera = sfera;
+	}
+
+	public void setTotemObronny(boolean totemObronny) {
+		this.totemObronny = totemObronny;
+	}
+
+	public void setInkantacja(boolean inkantacja) {
+		this.inkantacja = inkantacja;
+	}
+
+	public void setSkrytobojstwo(boolean skrytobojstwo) {
+		this.skrytobojstwo = skrytobojstwo;
+	}
+
+	public void setZadzaKrwi(boolean zadzaKrwi) {
+		this.zadzaKrwi = zadzaKrwi;
+	}
+
+	public void setCienAssasyna(boolean cienAssasyna) {
+		this.cienAssasyna = cienAssasyna;
+	}
+
+	public void setProwokacja(boolean prowokacja) {
+		this.prowokacja = prowokacja;
+	}
+
+	public void setWampiryzm(boolean wampiryzm) {
+		this.wampiryzm = wampiryzm;
+	}
+
+	public void setWampiryzm_h(boolean wampiryzm_h) {
+		this.wampiryzm_h = wampiryzm_h;
+	}
+
+	public void setWampiryzm_m(boolean wampiryzm_m) {
+		this.wampiryzm_m = wampiryzm_m;
+	}
+
+	public void setPenetracja(boolean penetracja) {
+		this.penetracja = penetracja;
+	}
+
+	public void setPoswiecenie(boolean poswiecenie) {
+		this.poswiecenie = poswiecenie;
+	}
+
+	public void setTarczaCienia(boolean tarczaCienia) {
+		this.tarczaCienia = tarczaCienia;
+	}
+
+	public void setAuraRozproszenia(boolean auraRozproszenia) {
+		this.auraRozproszenia = auraRozproszenia;
+	}
+
+	public void setRytualWzniesienia(boolean rytualWzniesienia) {
+		this.rytualWzniesienia = rytualWzniesienia;
+	}
+
+	public void setSwietaStrzala(boolean swietaStrzala) {
+		this.swietaStrzala = swietaStrzala;
+	}
+
+	public void setZyciodajnaZiemia(boolean zyciodajnaZiemia) {
+		this.zyciodajnaZiemia = zyciodajnaZiemia;
+	}
+
+	public void setZyciodajnaZiemia_m(boolean zyciodajnaZiemia_m) {
+		this.zyciodajnaZiemia_m = zyciodajnaZiemia_m;
+	}
+
+	public void setZakazanyRytual(boolean zakazanyRytual) {
+		this.zakazanyRytual = zakazanyRytual;
+	}
+
+	public void setZakazanyRytual_h(boolean zakazanyRytual_h) {
+		this.zakazanyRytual_h = zakazanyRytual_h;
+	}
+
+	public void setZakazanyRytual_m(boolean zakazanyRytual_m) {
+		this.zakazanyRytual_m = zakazanyRytual_m;
+	}
+
+	public void setZewKrwi(boolean zewKrwi) {
+		this.zewKrwi = zewKrwi;
+	}
+
+	public void setZewKrwiMod(int zewKrwiMod) {
+		this.zewKrwiMod = zewKrwiMod;
+	}
+
+	public void addZewKrwiMod(int zewKrwiMod) {
+		this.zewKrwiMod += zewKrwiMod;
+	}
+
+	public void resetZewKrwiMod() {
+		this.zewKrwiMod = 0;
+	}
+
+	public void setRytualKrwi(boolean rytualKrwi) {
+		this.rytualKrwi = rytualKrwi;
+	}
+
+	public void setKrewPrzodkow(boolean krewPrzodkow) {
+		this.krewPrzodkow = krewPrzodkow;
+	}
+
+	public void setGniew(boolean gniew) {
+		this.gniew = gniew;
+	}
+
+	public void setTransfuzja(boolean transfuzja) {
+		this.transfuzja = transfuzja;
+	}
+
+	public void setPelnia(boolean pelnia) {
+		this.pelnia = pelnia;
+	}
+
+	public void setLodowyBlok(boolean lodowyBlok) {
+		this.lodowyBlok = lodowyBlok;
+	}
+
+	public void setZrodloNatury(boolean zrodloNatury) {
+		this.zrodloNatury = zrodloNatury;
+	}
+
+	public void setBarbarzynskiSzal(boolean barbarzynskiSzal) {
+		this.barbarzynskiSzal = barbarzynskiSzal;
+	}
+
+	public void setSilaJednosci(boolean silaJednosci) {
+		this.silaJednosci = silaJednosci;
+	}
+
+	public void setZryw(boolean zryw) {
+		this.zryw = zryw;
+	}
+
+	public void setKrwawaStrzala(boolean krwawaStrzala) {
+		this.krwawaStrzala = krwawaStrzala;
+	}
+
+	public void setGradStrzal(boolean gradStrzal) {
+		this.gradStrzal = gradStrzal;
+	}
+
+	public void setWedrownyCien(boolean wedrownyCien) {
+		this.wedrownyCien = wedrownyCien;
+	}
+
+	public void setCiosWPlecy(boolean ciosWPlecy) {
+		this.ciosWPlecy = ciosWPlecy;
+	}
+
+	public void setMord(boolean mord) {
+		this.mord = mord;
+	}
 }
