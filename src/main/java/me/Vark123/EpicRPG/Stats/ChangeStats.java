@@ -23,8 +23,11 @@ public class ChangeStats {
 	private static final String STR_SET_METHOD = "setFinal";
 
 	public static void change(RpgPlayer rpg) {
+		change(rpg, rpg.getPlayer().getInventory().getItemInMainHand());
+	}
+
+	public static void change(RpgPlayer rpg, ItemStack weapon) {
 		Player p = rpg.getPlayer();
-		ItemStack weapon = p.getInventory().getItemInMainHand();
 		
 		RpgJewelry jewelry = rpg.getJewelry();
 		RpgStats stats = rpg.getStats();
@@ -142,8 +145,7 @@ public class ChangeStats {
 			return true;
 		}).forEach(s -> {
 			s = s.replace("+", "");
-			int toAdd = Integer.parseInt(s.replace(": ", ChatColor.stripColor(s)));
-//			int toAdd = Integer.parseInt(s.replace(": §7", ""));
+			int toAdd = Integer.parseInt(ChatColor.stripColor(s.split(": ")[1]));
 			s = s.replace("§4- §8", "");
 			s = s.split(":")[0];
 			s = Utils.convertToClassConvention(s);
