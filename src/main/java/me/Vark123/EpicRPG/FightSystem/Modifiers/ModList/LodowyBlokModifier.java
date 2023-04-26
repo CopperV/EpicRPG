@@ -7,8 +7,8 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import me.Vark123.EpicRPG.FightSystem.Modifiers.DamageModifier;
 import me.Vark123.EpicRPG.Players.PlayerManager;
-import me.Vark123.EpicRPG.Players.RpgModifiers;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
+import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 
 public class LodowyBlokModifier implements DamageModifier {
 

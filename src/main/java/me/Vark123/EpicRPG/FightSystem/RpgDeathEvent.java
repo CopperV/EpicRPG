@@ -8,10 +8,11 @@ import org.bukkit.event.entity.EntityDeathEvent;
 
 import me.Vark123.EpicRPG.EpicRPGMobManager;
 import me.Vark123.EpicRPG.Core.ExpSystem;
+import me.Vark123.EpicRPG.Core.StygiaSystem;
 import me.Vark123.EpicRPG.Players.PlayerManager;
-import me.Vark123.EpicRPG.Players.RpgModifiers;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.Players.RpgSkills;
+import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
+import me.Vark123.EpicRPG.Players.Components.RpgSkills;
 
 public class RpgDeathEvent implements Listener {
 
@@ -35,6 +36,7 @@ public class RpgDeathEvent implements Listener {
 		int xp = EpicRPGMobManager.getInstance().getRandomMobExp(name);
 		if(xp > 0) {
 			ExpSystem.getInstance().addMobExp(rpg, xp);
+			StygiaSystem.getInstance().addMobStygia(rpg, xp);
 		}
 		
 		//TODO

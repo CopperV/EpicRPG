@@ -12,12 +12,12 @@ import org.bukkit.entity.Player;
 import me.Vark123.EpicRPG.EpicRPGMobManager;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.Players.RpgPlayerInfo;
-import me.Vark123.EpicRPG.Players.RpgReputation;
-import me.Vark123.EpicRPG.Players.RpgRzemiosla;
-import me.Vark123.EpicRPG.Players.RpgSkills;
-import me.Vark123.EpicRPG.Players.RpgStats;
-import me.Vark123.EpicRPG.Players.RpgVault;
+import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
+import me.Vark123.EpicRPG.Players.Components.RpgReputation;
+import me.Vark123.EpicRPG.Players.Components.RpgRzemiosla;
+import me.Vark123.EpicRPG.Players.Components.RpgSkills;
+import me.Vark123.EpicRPG.Players.Components.RpgStats;
+import me.Vark123.EpicRPG.Players.Components.RpgVault;
 import me.Vark123.EpicRPG.Utils.Pair;
 
 public class FileOperations {

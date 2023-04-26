@@ -8,8 +8,8 @@ import org.bukkit.inventory.ItemStack;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import me.Vark123.EpicRPG.FightSystem.Modifiers.DamageModifier;
 import me.Vark123.EpicRPG.Players.PlayerManager;
-import me.Vark123.EpicRPG.Players.RpgModifiers;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
+import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 
 public class RytualKrwiModifier implements DamageModifier {
 

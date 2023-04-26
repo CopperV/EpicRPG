@@ -1,4 +1,4 @@
-package me.Vark123.EpicRPG.Players;
+package me.Vark123.EpicRPG.Players.Components;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Reputation.Reputation;
 import me.Vark123.EpicRPG.Reputation.ReputationContainer;
 import me.Vark123.EpicRPG.Reputation.ReputationLevels;

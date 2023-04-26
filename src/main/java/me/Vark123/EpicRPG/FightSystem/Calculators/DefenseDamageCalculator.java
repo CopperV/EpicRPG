@@ -11,11 +11,11 @@ import de.simonsator.partyandfriends.clan.api.Clan;
 import de.simonsator.partyandfriends.clan.api.ClansManager;
 import me.Vark123.EpicClans.EpicClansApi;
 import me.Vark123.EpicRPG.Players.PlayerManager;
-import me.Vark123.EpicRPG.Players.RpgModifiers;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.Players.RpgPlayerInfo;
-import me.Vark123.EpicRPG.Players.RpgSkills;
-import me.Vark123.EpicRPG.Players.RpgStats;
+import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
+import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
+import me.Vark123.EpicRPG.Players.Components.RpgSkills;
+import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import net.md_5.bungee.api.ChatColor;
 
 public class DefenseDamageCalculator implements DamageCalculator {

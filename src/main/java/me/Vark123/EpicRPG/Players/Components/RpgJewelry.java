@@ -1,4 +1,4 @@
-package me.Vark123.EpicRPG.Players;
+package me.Vark123.EpicRPG.Players.Components;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -8,6 +8,7 @@ import me.Vark123.EpicRPG.Jewelry.Amulet;
 import me.Vark123.EpicRPG.Jewelry.Gloves;
 import me.Vark123.EpicRPG.Jewelry.JewerlyItem;
 import me.Vark123.EpicRPG.Jewelry.Ring;
+import me.Vark123.EpicRPG.Players.RpgPlayer;
 
 public class RpgJewelry {
 	

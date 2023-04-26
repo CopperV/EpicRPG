@@ -12,7 +12,7 @@ import de.simonsator.partyandfriends.clan.api.Clan;
 import de.simonsator.partyandfriends.clan.api.ClansManager;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.Players.RpgPlayerInfo;
+import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 
 public class ChatMsgSendEvent implements Listener {
 

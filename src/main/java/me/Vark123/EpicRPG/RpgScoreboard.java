@@ -10,9 +10,9 @@ import org.bukkit.scoreboard.Team;
 
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.Players.RpgPlayerInfo;
-import me.Vark123.EpicRPG.Players.RpgStats;
-import me.Vark123.EpicRPG.Players.RpgVault;
+import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
+import me.Vark123.EpicRPG.Players.Components.RpgStats;
+import me.Vark123.EpicRPG.Players.Components.RpgVault;
 import net.md_5.bungee.api.ChatColor;
 
 public class RpgScoreboard {
@@ -22,7 +22,7 @@ public class RpgScoreboard {
 			return;
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		Scoreboard board = rpg.getBoard();
-		Objective obj = board.registerNewObjective("test", "dummy", ChatColor.of(new Color(132, 165, 184)).toString()+""+ChatColor.BOLD+"Archolos §9§l§o#1");
+		Objective obj = board.registerNewObjective("test", "dummy", ChatColor.translateAlternateColorCodes('&', ChatColor.of(new Color(132, 165, 184)).toString()+""+ChatColor.BOLD+"Archolos &9&l&o#1"));
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 		
 		board.registerNewTeam("rpg_info");
@@ -83,222 +83,222 @@ public class RpgScoreboard {
 		if(playerInfo.getLevel() > 10 && !playerInfo.getProffesion().toLowerCase().contains("obywatel")) {
 			
 			Team team = board.getTeam("rpg_info");
-			team.setSuffix("§3》 "+ChatColor.of(new Color(66, 104, 124)).toString() + "" + ChatColor.BOLD + "INFO §3《");
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&3》 "+ChatColor.of(new Color(66, 104, 124)).toString() + "" + ChatColor.BOLD + "INFO &3《"));
 			team.addEntry(ChatColor.BLUE+""+ChatColor.WHITE);
 			obj.getScore(ChatColor.BLUE+""+ChatColor.WHITE).setScore(15);
 			
-			String klasa = "  §bGracz: ";
+			String klasa = "  &bGracz: ";
 			switch(ChatColor.stripColor(playerInfo.getProffesion().toLowerCase())) {
 				case "wojownik":
-					klasa += "§c§o";
+					klasa += "&c&o";
 					break;
 				case "mag":
-					klasa += "§5§o";
+					klasa += "&5&o";
 					break;
 				case "mysliwy":
-					klasa += "§2§o";
+					klasa += "&2&o";
 					break;
 				default:
-					klasa += "§e§o";
+					klasa += "&e&o";
 					break;
 			}
 			klasa += nick;
 			team = board.getTeam("rpg_nick");
-			team.setSuffix(klasa);
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', klasa));
 			team.addEntry(ChatColor.YELLOW+""+ChatColor.WHITE);
 			obj.getScore(ChatColor.YELLOW+""+ChatColor.WHITE).setScore(14);
 			
-			String poziom = "  §bPoziom: §e";
+			String poziom = "  &bPoziom: &e";
 			if(playerInfo.getLevel() == 95)
 				poziom += "MAX";
 			else
 				poziom += playerInfo.getLevel();
 			team = board.getTeam("rpg_level");
-			team.setSuffix(poziom);
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', poziom));
 			team.addEntry(ChatColor.YELLOW+""+ChatColor.GREEN);
 			obj.getScore(ChatColor.YELLOW+""+ChatColor.GREEN).setScore(13);
 			
-			String exp = "  §bExp: §e";
+			String exp = "  &bExp: &e";
 			if(playerInfo.getLevel() == 95)
 				exp += "MAX";
 			else 
-				exp += (playerInfo.getExp()+"§a/§e"+playerInfo.getNextLevel());
+				exp += (playerInfo.getExp()+"&a/&e"+playerInfo.getNextLevel());
 			team = board.getTeam("rpg_exp");
-			team.setSuffix(exp);
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', exp));
 			team.addEntry(ChatColor.YELLOW+""+ChatColor.GRAY);
 			obj.getScore(ChatColor.YELLOW+""+ChatColor.GRAY).setScore(12);
 			
-			String pn = "  §bPunkty nauki: §e"+playerInfo.getPn();
+			String pn = "  &bPunkty nauki: &e"+playerInfo.getPn();
 			team = board.getTeam("rpg_pn");
-			team.setSuffix(pn);
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', pn));
 			team.addEntry(ChatColor.YELLOW+""+ChatColor.LIGHT_PURPLE);
 			obj.getScore(ChatColor.YELLOW+""+ChatColor.LIGHT_PURPLE).setScore(11);
 			
 			team = board.getTeam("rpg_zasoby");
-			team.setSuffix("§3》 "+ChatColor.of(new Color(66, 104, 124)).toString() + "" + ChatColor.BOLD + "ZASOBY §3《");
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&3》 "+ChatColor.of(new Color(66, 104, 124)).toString() + "" + ChatColor.BOLD + "ZASOBY &3《"));
 			team.addEntry(ChatColor.BLUE+""+ChatColor.GRAY);
 			obj.getScore(ChatColor.BLUE+""+ChatColor.GRAY).setScore(10);
 			
 			team = board.getTeam("rpg_money");
-			team.setSuffix("  §bSaldo: §e"+((int)Main.eco.getBalance(rpg.getPlayer()))+"$");
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "  &bSaldo: &e"+((int)Main.eco.getBalance(rpg.getPlayer()))+"$"));
 			team.addEntry(ChatColor.GOLD+""+ChatColor.GRAY);
 			obj.getScore(ChatColor.GOLD+""+ChatColor.GRAY).setScore(9);
 			
 			team = board.getTeam("rpg_stygia");
-			team.setSuffix("  §bStygia: §3"+vault.getStygia());
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "  &bStygia: &3"+vault.getStygia()));
 			team.addEntry(ChatColor.GOLD+""+ChatColor.YELLOW);
 			obj.getScore(ChatColor.GOLD+""+ChatColor.YELLOW).setScore(8);
 			
 			team = board.getTeam("rpg_coins");
-			team.setSuffix("  §bSmocze monety: §4"+vault.getDragonCoins());
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "  &bSmocze monety: &4"+vault.getDragonCoins()));
 			team.addEntry(ChatColor.GOLD+""+ChatColor.RED);
 			obj.getScore(ChatColor.GOLD+""+ChatColor.RED).setScore(7);
 			
 			team = board.getTeam("rpg_brylki");
-			team.setSuffix("  §bBrylki rudy: §9"+vault.getBrylkiRudy());
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "  &bBrylki rudy: &9"+vault.getBrylkiRudy()));
 			team.addEntry(ChatColor.GOLD+""+ChatColor.BLUE);
 			obj.getScore(ChatColor.GOLD+""+ChatColor.BLUE).setScore(6);
 
 			team = board.getTeam("rpg_staty");
-			team.setSuffix("§3》 "+ChatColor.of(new Color(66, 104, 124)).toString() + "" + ChatColor.BOLD + "STATY §3《");
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&3》 "+ChatColor.of(new Color(66, 104, 124)).toString() + "" + ChatColor.BOLD + "STATY &3《"));
 			team.addEntry(ChatColor.BLUE+""+ChatColor.BLACK);
 			obj.getScore(ChatColor.BLUE+""+ChatColor.BLACK).setScore(5);
 			
 			switch(ChatColor.stripColor(playerInfo.getProffesion().toLowerCase())) {
 			case "wojownik":
 					team = board.getTeam("rpg_stat1");
-					team.setSuffix("  §bSila: §e"+stats.getFinalSila());
+					team.setSuffix(ChatColor.translateAlternateColorCodes('&', "  &bSila: &e"+stats.getFinalSila()));
 					team.addEntry(ChatColor.RED+""+ChatColor.GREEN);
 					obj.getScore(ChatColor.RED+""+ChatColor.GREEN).setScore(4);
 					
 					team = board.getTeam("rpg_stat2");
-					team.setSuffix("  §bWytrzymalosc: §e"+stats.getFinalWytrzymalosc());
+					team.setSuffix(ChatColor.translateAlternateColorCodes('&', "  &bWytrzymalosc: &e"+stats.getFinalWytrzymalosc()));
 					team.addEntry(ChatColor.RED+""+ChatColor.YELLOW);
 					obj.getScore(ChatColor.RED+""+ChatColor.YELLOW).setScore(3);
 					break;
 				case "mag":
 					team = board.getTeam("rpg_stat1");
-					team.setSuffix("  §bKrag: §e"+stats.getKrag());
+					team.setSuffix(ChatColor.translateAlternateColorCodes('&', "  &bKrag: &e"+stats.getKrag()));
 					team.addEntry(ChatColor.RED+""+ChatColor.GREEN);
 					obj.getScore(ChatColor.RED+""+ChatColor.GREEN).setScore(4);
 					
 					team = board.getTeam("rpg_stat2");
-					team.setSuffix("  §bInteligencja: §e"+stats.getFinalInteligencja());
+					team.setSuffix(ChatColor.translateAlternateColorCodes('&', "  &bInteligencja: &e"+stats.getFinalInteligencja()));
 					team.addEntry(ChatColor.RED+""+ChatColor.YELLOW);
 					obj.getScore(ChatColor.RED+""+ChatColor.YELLOW).setScore(3);
 					break;
 				case "mysliwy":
 					team = board.getTeam("rpg_stat1");
-					team.setSuffix("  §bZrecznosc: §e"+stats.getFinalZrecznosc());
+					team.setSuffix(ChatColor.translateAlternateColorCodes('&', "  &bZrecznosc: &e"+stats.getFinalZrecznosc()));
 					team.addEntry(ChatColor.RED+""+ChatColor.GREEN);
 					obj.getScore(ChatColor.RED+""+ChatColor.GREEN).setScore(4);
 					
 					team = board.getTeam("rpg_stat2");
-					team.setSuffix("  §bZdolnosci mysliwskie: §e"+stats.getFinalZdolnosci());
+					team.setSuffix(ChatColor.translateAlternateColorCodes('&', "  &bZdolnosci mysliwskie: &e"+stats.getFinalZdolnosci()));
 					team.addEntry(ChatColor.RED+""+ChatColor.YELLOW);
 					obj.getScore(ChatColor.RED+""+ChatColor.YELLOW).setScore(3);
 					break;
 				default:
 					team = board.getTeam("rpg_stat1");
-					team.setSuffix("  §bSila: §e"+stats.getFinalSila());
+					team.setSuffix(ChatColor.translateAlternateColorCodes('&', "  &bSila: &e"+stats.getFinalSila()));
 					team.addEntry(ChatColor.RED+""+ChatColor.GREEN);
 					obj.getScore(ChatColor.RED+""+ChatColor.GREEN).setScore(4);
 					
 					team = board.getTeam("rpg_stat2");
-					team.setSuffix("  §bWytrzymalosc: §e"+stats.getFinalWytrzymalosc());
+					team.setSuffix(ChatColor.translateAlternateColorCodes('&', "  &bWytrzymalosc: &e"+stats.getFinalWytrzymalosc()));
 					team.addEntry(ChatColor.RED+""+ChatColor.YELLOW);
 					obj.getScore(ChatColor.RED+""+ChatColor.YELLOW).setScore(3);
 					break;
 			}
 			
 			team = board.getTeam("rpg_stat3");
-			team.setSuffix("  §bMana: §9"+stats.getPresentMana()+"§b/§9"+stats.getFinalMana());
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "  &bMana: &9"+stats.getPresentMana()+"&b/&9"+stats.getFinalMana()));
 			team.addEntry(ChatColor.RED+""+ChatColor.BLUE);
 			obj.getScore(ChatColor.RED+""+ChatColor.BLUE).setScore(2);
 			
 		} else {
 			Team team = board.getTeam("rpg_nick");
-			team.setSuffix("§bGracz: §e"+nick);
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&bGracz: &e"+nick));
 			team.addEntry(ChatColor.AQUA+""+ChatColor.WHITE);
 			obj.getScore(ChatColor.AQUA+""+ChatColor.WHITE).setScore(15);
 			
 			team = board.getTeam("rpg_klasa");
-			team.setSuffix("§bKlasa: "+playerInfo.getProffesion());
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&bKlasa: "+playerInfo.getProffesion()));
 			team.addEntry(ChatColor.AQUA+""+ChatColor.BLACK);
 			obj.getScore(ChatColor.AQUA+""+ChatColor.BLACK).setScore(14);
 			
-			String poziom = "  §bPoziom: §e";
+			String poziom = "  &bPoziom: &e";
 			if(playerInfo.getLevel() == 95)
 				poziom += "MAX";
 			else
 				poziom += playerInfo.getLevel();
-			String exp = "  §bExp: §e";
+			String exp = "  &bExp: &e";
 			if(playerInfo.getLevel() == 95)
 				exp += "MAX";
 			else 
-				exp += (playerInfo.getExp()+"§a/§e"+playerInfo.getNextLevel());
+				exp += (playerInfo.getExp()+"&a/&e"+playerInfo.getNextLevel());
 
 			team = board.getTeam("rpg_level");
-			team.setSuffix(poziom);
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', poziom));
 			team.addEntry(ChatColor.AQUA+""+ChatColor.BLUE);
 			obj.getScore(ChatColor.AQUA+""+ChatColor.BLUE).setScore(13);
 			team = board.getTeam("rpg_exp");
-			team.setSuffix(exp);
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', exp));
 			team.addEntry(ChatColor.AQUA+""+ChatColor.DARK_AQUA);
 			obj.getScore(ChatColor.AQUA+""+ChatColor.DARK_AQUA).setScore(12);
 			
 			team = board.getTeam("rpg_pn");
-			team.setSuffix("§bPunkty nauki: §e"+playerInfo.getPn());
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&bPunkty nauki: &e"+playerInfo.getPn()));
 			team.addEntry(ChatColor.AQUA+""+ChatColor.DARK_BLUE);
 			obj.getScore(ChatColor.AQUA+""+ChatColor.DARK_BLUE).setScore(11);
 			
 			team = board.getTeam("rpg_dmg");
-			team.setSuffix("§bObrazenia: §e"+stats.getFinalObrazenia());
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&bObrazenia: &e"+stats.getFinalObrazenia()));
 			team.addEntry(ChatColor.AQUA+""+ChatColor.DARK_GRAY);
 			obj.getScore(ChatColor.AQUA+""+ChatColor.DARK_GRAY).setScore(10);
 			
 			team = board.getTeam("rpg_def");
-			team.setSuffix("§bObrona: §e"+stats.getFinalOchrona());
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&bObrona: &e"+stats.getFinalOchrona()));
 			team.addEntry(ChatColor.AQUA+""+ChatColor.DARK_GREEN);
 			obj.getScore(ChatColor.AQUA+""+ChatColor.DARK_GREEN).setScore(9);
 			
 			team = board.getTeam("rpg_str");
-			team.setSuffix("§bSila: §e"+stats.getFinalSila());
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&bSila: &e"+stats.getFinalSila()));
 			team.addEntry(ChatColor.AQUA+""+ChatColor.DARK_PURPLE);
 			obj.getScore(ChatColor.AQUA+""+ChatColor.DARK_PURPLE).setScore(8);
 			
 			team = board.getTeam("rpg_wytrz");
-			team.setSuffix("§bWytrzymalosc: §e"+stats.getFinalWytrzymalosc());
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&bWytrzymalosc: &e"+stats.getFinalWytrzymalosc()));
 			team.addEntry(ChatColor.AQUA+""+ChatColor.DARK_RED);
 			obj.getScore(ChatColor.AQUA+""+ChatColor.DARK_RED).setScore(7);
 			
 			team = board.getTeam("rpg_zr");
-			team.setSuffix("§bZrecznosc: §e"+stats.getFinalZrecznosc());
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&bZrecznosc: &e"+stats.getFinalZrecznosc()));
 			team.addEntry(ChatColor.AQUA+""+ChatColor.GOLD);
 			obj.getScore(ChatColor.AQUA+""+ChatColor.GOLD).setScore(6);
 			
 			team = board.getTeam("rpg_zd");
-			team.setSuffix("§bZdolnosci mysliwskie: §e"+stats.getFinalZdolnosci());
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&bZdolnosci mysliwskie: &e"+stats.getFinalZdolnosci()));
 			team.addEntry(ChatColor.AQUA+""+ChatColor.GRAY);
 			obj.getScore(ChatColor.AQUA+""+ChatColor.GRAY).setScore(5);
 			
 			team = board.getTeam("rpg_walka");
-			team.setSuffix("§bWalka: §e"+stats.getFinalWalka());
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&bWalka: &e"+stats.getFinalWalka()));
 			team.addEntry(ChatColor.AQUA+""+ChatColor.GREEN);
 			obj.getScore(ChatColor.AQUA+""+ChatColor.GREEN).setScore(4);
 			
 			team = board.getTeam("rpg_krag");
-			team.setSuffix("§bKrag: §e"+stats.getKrag());
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&bKrag: &e"+stats.getKrag()));
 			team.addEntry(ChatColor.AQUA+""+ChatColor.LIGHT_PURPLE);
 			obj.getScore(ChatColor.AQUA+""+ChatColor.LIGHT_PURPLE).setScore(3);
 			
 			team = board.getTeam("rpg_int");
-			team.setSuffix("§bInteligencja: §e"+stats.getFinalInteligencja());
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&bInteligencja: &e"+stats.getFinalInteligencja()));
 			team.addEntry(ChatColor.AQUA+""+ChatColor.RED);
 			obj.getScore(ChatColor.AQUA+""+ChatColor.RED).setScore(2);
 			
 			team = board.getTeam("rpg_mana");
-			team.setSuffix("§bMana: §9"+stats.getPresentMana()+"§b/§9"+stats.getFinalMana());
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&bMana: &9"+stats.getPresentMana()+"&b/&9"+stats.getFinalMana()));
 			team.addEntry(ChatColor.AQUA+""+ChatColor.WHITE);
 			obj.getScore(ChatColor.AQUA+""+ChatColor.WHITE).setScore(1);
 			

@@ -20,10 +20,10 @@ import org.bukkit.potion.PotionEffectType;
 import me.Vark123.EpicRPG.EpicRPGMobManager;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Players.PlayerManager;
-import me.Vark123.EpicRPG.Players.RpgModifiers;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.Players.RpgPlayerInfo;
-import me.Vark123.EpicRPG.Players.RpgStats;
+import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
+import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
+import me.Vark123.EpicRPG.Players.Components.RpgStats;
 
 public class DamageUtils {
 

@@ -11,7 +11,6 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 
 import me.Vark123.EpicRPG.Main;
-import me.Vark123.EpicRPG.RpgScoreboard;
 import me.Vark123.EpicRPG.MySQL.DBOperations;
 import me.Vark123.EpicRPG.Stats.ChangeStats;
 
@@ -53,7 +52,6 @@ public class PlayerManager {
 			DBOperations.savePlayer(rpg);
 		}
 		
-		//TODO - CHANGE STATS NA KONCU LADOWANIA RPG PLAYER
 		Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), ()->{
 			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(rpg.getStats().getFinalHealth());
 			p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());

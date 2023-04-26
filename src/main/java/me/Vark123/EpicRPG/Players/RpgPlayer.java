@@ -13,6 +13,14 @@ import org.bukkit.scoreboard.Scoreboard;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.RpgScoreboard;
 import me.Vark123.EpicRPG.Core.ExpSystem;
+import me.Vark123.EpicRPG.Players.Components.RpgJewelry;
+import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
+import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
+import me.Vark123.EpicRPG.Players.Components.RpgReputation;
+import me.Vark123.EpicRPG.Players.Components.RpgRzemiosla;
+import me.Vark123.EpicRPG.Players.Components.RpgSkills;
+import me.Vark123.EpicRPG.Players.Components.RpgStats;
+import me.Vark123.EpicRPG.Players.Components.RpgVault;
 import me.Vark123.EpicRPG.Stats.ChangeStats;
 import me.Vark123.EpicRPG.Utils.Utils;
 

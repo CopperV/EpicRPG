@@ -1,4 +1,4 @@
-package me.Vark123.EpicRPG.Players;
+package me.Vark123.EpicRPG.Players.Components;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,6 +13,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Players.RpgPlayer;
 
 public class RpgSkills {
 

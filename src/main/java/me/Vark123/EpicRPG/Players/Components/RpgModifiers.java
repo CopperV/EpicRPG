@@ -1,4 +1,6 @@
-package me.Vark123.EpicRPG.Players;
+package me.Vark123.EpicRPG.Players.Components;
+
+import me.Vark123.EpicRPG.Players.RpgPlayer;
 
 public class RpgModifiers {
 

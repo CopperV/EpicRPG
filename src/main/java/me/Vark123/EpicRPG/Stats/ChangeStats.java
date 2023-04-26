@@ -12,9 +12,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import de.tr7zw.nbtapi.NBTItem;
-import me.Vark123.EpicRPG.Players.RpgJewelry;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.Players.RpgStats;
+import me.Vark123.EpicRPG.Players.Components.RpgJewelry;
+import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import me.Vark123.EpicRPG.Utils.Utils;
 
 public class ChangeStats {
