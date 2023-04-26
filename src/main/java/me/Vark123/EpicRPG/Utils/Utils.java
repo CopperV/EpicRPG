@@ -2,6 +2,9 @@ package me.Vark123.EpicRPG.Utils;
 
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Location;
+import org.bukkit.inventory.ItemStack;
+
+import io.lumine.mythic.bukkit.MythicBukkit;
 
 public class Utils {
 
@@ -41,6 +44,15 @@ public class Utils {
 	public static double scaleValue(double min1, double max1, double min2, double max2, double value) {
 		double percent = (value - min1) / (max1 - min1);
 		return percent*(max2 - min2) + min2;
+	}
+	
+	public static boolean isRune(ItemStack item) {
+		if(!MythicBukkit.inst().getItemManager().isMythicItem(item))
+			return false;
+		if(item.getType().name().contains("RECORD")) 
+			return true;
+		else 
+			return false;
 	}
 	
 }

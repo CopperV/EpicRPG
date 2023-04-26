@@ -7,7 +7,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 
 import me.Vark123.EpicRPG.EpicRPGMobManager;
+import me.Vark123.EpicRPG.Core.CoinsSystem;
 import me.Vark123.EpicRPG.Core.ExpSystem;
+import me.Vark123.EpicRPG.Core.MoneySystem;
 import me.Vark123.EpicRPG.Core.StygiaSystem;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
@@ -38,6 +40,8 @@ public class RpgDeathEvent implements Listener {
 			ExpSystem.getInstance().addMobExp(rpg, xp);
 			StygiaSystem.getInstance().addMobStygia(rpg, xp);
 		}
+		CoinsSystem.getInstance().addMobCoins(rpg, name);
+		MoneySystem.getInstance().addMobMoney(rpg, name);
 		
 		//TODO
 //		if(skills.hasRozprucie()) {

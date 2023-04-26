@@ -21,7 +21,7 @@ public class CheckStats {
 				!item.hasItemMeta() ||
 				!item.getItemMeta().hasLore())
 			return true;
-		if(isRune(item))
+		if(Utils.isRune(item))
 			return false;
 		NBTItem nbtit = new NBTItem(item);
 		if(nbtit.hasTag("RPGType")) return false;
@@ -95,13 +95,6 @@ public class CheckStats {
 		});;
 		
 		return check.booleanValue();
-	}
-	
-	public static boolean isRune(ItemStack item) {
-		if(item.getType().name().contains("RECORD")) 
-			return true;
-		else 
-			return false;
 	}
 	
 }
