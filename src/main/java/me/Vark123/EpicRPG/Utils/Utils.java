@@ -28,4 +28,19 @@ public class Utils {
 		return combineDirections ? Direction.doubleDirection[index] : Direction.Directions[index];
 	}
 	
+	public static double normalizeValue(double min, double max, double value) {
+		if(min > max)
+			throw new IllegalArgumentException("Minimum value cannot be greater than maximum value. Min: "+min+"; Max: "+max);
+		if(value < min)
+			return min;
+		if(value > max)
+			return max;
+		return value;
+	}
+	
+	public static double scaleValue(double min1, double max1, double min2, double max2, double value) {
+		double percent = (value - min1) / (max1 - min1);
+		return percent*(max2 - min2) + min2;
+	}
+	
 }

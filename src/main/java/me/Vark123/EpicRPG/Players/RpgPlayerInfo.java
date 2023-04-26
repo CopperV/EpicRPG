@@ -102,6 +102,10 @@ public class RpgPlayerInfo {
 		this.exp+=xp;
 	}
 	
+	public void setXP(int xp) {
+		this.exp=xp;
+	}
+	
 	public void addLevel(int lvl) {
 		this.level += lvl;
 	}

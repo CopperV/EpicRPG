@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
@@ -11,7 +12,9 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.RpgScoreboard;
+import me.Vark123.EpicRPG.Core.ExpSystem;
 import me.Vark123.EpicRPG.Stats.ChangeStats;
+import me.Vark123.EpicRPG.Utils.Utils;
 
 public class RpgPlayer {
 
@@ -125,14 +128,22 @@ public class RpgPlayer {
 		resetStats();
 	}
 	
-	//TODO
 	public void updateBarLevel() {
-		
+		player.setLevel(info.getLevel());
 	}
 	
-	//TODO
 	public void updateBarExp() {
-		
+		float prevLvlExp = ExpSystem.getInstance().getNextLevelExp(info.getLevel() - 1);
+		float presLvlExp = info.getNextLevel();
+		float exp = info.getExp();
+		exp = (float) Utils.normalizeValue(prevLvlExp, presLvlExp, exp);
+		exp = (float) Utils.scaleValue(prevLvlExp, presLvlExp, 0, 1, exp);
+		player.setExp(exp);
+	}
+	
+	public void updateHp() {
+		stats.setFinalHealth(stats.getPotionHealth() + stats.getHealth());
+		player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(stats.getFinalHealth());
 	}
 
 	public Player getPlayer() {

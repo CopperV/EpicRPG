@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Singleton;
@@ -26,6 +27,7 @@ public class EpicRPGMobManager {
 	private final Map<String, Integer> mobCoins;
 	private final Map<String, Map<String,Integer>> mobPoints;
 	private final Map<String, Double> mobMoney;
+	private final Random rand;
 	
 	private final List<String> waterMobs = Arrays.asList(
 			ChatColor.translateAlternateColorCodes('&', "&bZywiolak wody"),
@@ -41,6 +43,7 @@ public class EpicRPGMobManager {
 			ChatColor.translateAlternateColorCodes('&', "&9&lSwiatynna Krolowa Pelzaczy"));
 	
 	private EpicRPGMobManager() {
+		rand = new Random();
 		mobExp = new ConcurrentHashMap<>();
 		mobCmds = new ConcurrentHashMap<>();
 		mobCoins = new ConcurrentHashMap<>();
@@ -65,6 +68,11 @@ public class EpicRPGMobManager {
 	
 	public Pair<Integer, Integer> getMobExp(String mob){
 		return mobExp.getOrDefault(mob, new Pair<>(0, 0));
+	}
+	
+	public int getRandomMobExp(String mob) {
+		Pair<Integer, Integer> pair = getMobExp(mob);
+		return rand.nextInt(pair.getKey(), pair.getValue());
 	}
 	
 	public void addMobCmds(String mob, List<String> cmds) {
