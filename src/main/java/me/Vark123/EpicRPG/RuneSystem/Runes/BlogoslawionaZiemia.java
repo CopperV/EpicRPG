@@ -13,13 +13,14 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class BlogoslawionaZiemia extends ARune {
 
@@ -42,25 +43,25 @@ public class BlogoslawionaZiemia extends ARune {
 				}
 				--timer;
 				Collection<Entity> entities = loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar());
-				for(Entity e : entities) {
-					if(!(e instanceof Player)) continue;
-					Player tmp = (Player) e;
-					
-					if(!tmp.equals(p)) {
+				entities.parallelStream().filter(e -> {
+					if(!(e instanceof Player))
+						return false;
+					if(!e.equals(p)) {
 						RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(tmp.getLocation()));
-						if(set.queryValue(null, Flags.PVP).equals(StateFlag.State.ALLOW)) {
-							continue;
-						}
+						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+						State flag = set.queryValue(null, Flags.PVP);
+						if(flag != null && flag.equals(State.ALLOW)
+								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+							return false;
 					}
-					
-					RpgPlayer rpg = Main.getListaRPG().get(tmp.getUniqueId().toString());
-					int amount = (int) (rpg.getFinalmana()*0.07);
-					
-					rpg.addPresentManaSmart(amount);
-
+					return true;
+				}).forEach(e -> {
+					Player tmp = (Player) e;
+					RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(tmp);
+					int amount = (int) (rpg.getStats().getFinalMana()*0.07);
+					rpg.getStats().addPresentManaSmart(amount);
 					tmp.getWorld().spawnParticle(Particle.END_ROD, tmp.getLocation().add(0,1,0),5,0.3F,0.3F,0.3F,0.1F);
-				}
+				});
 			}
 		}.runTaskTimer(Main.getInstance(), 0, 20);
 		

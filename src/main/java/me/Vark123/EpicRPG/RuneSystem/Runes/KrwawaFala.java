@@ -9,7 +9,6 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -19,14 +18,13 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
-import me.Vark123.EpicRPG.RuneSystem.RuneDamage;
-import net.minecraft.world.phys.AxisAlignedBB;
+import me.Vark123.EpicRPG.FightSystem.RuneDamage;
 
 public class KrwawaFala extends ARune {
 
@@ -75,58 +73,64 @@ public class KrwawaFala extends ARune {
 					point.add(0, .3, 0);
 					p.getWorld().spawnParticle(Particle.REDSTONE, point, 1, .2f, .2f, .2f, .1f, dust);
 					
-					for(Entity entity : point.getWorld().getNearbyEntities(loc, 3, 5, 3)) {
-						AxisAlignedBB aabb = ((CraftEntity)entity).getHandle().cw();
-						AxisAlignedBB aabb2 = new AxisAlignedBB(point.getX()-1.5, point.getY()-4, point.getZ()-1.5, point.getX()+1.5, point.getY()+4, point.getZ()+1.5);
-						if(aabb.c(aabb2)) {
-							if(!entity.equals(p) && entity instanceof LivingEntity && !shooted.contains(entity) && entity.getLocation().distance(loc) <= dr.getObszar()) {
-								if(entity instanceof Player || entity.hasMetadata("NPC")) {
-									RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-									ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(entity.getLocation()));
-									if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
-										continue;
-								}
-								le = (LivingEntity) entity;
-								RuneDamage.damageNormal(p, le, dr, (p,le,dr)->{
-									Bukkit.getScheduler().runTaskLater(Main.getInstance(), ()->{
-										new BukkitRunnable() {
-											double t = 0;
-											DustOptions dust = new DustOptions(Color.fromRGB(128, 0, 0), 1f);
-											double dmg = dr.getDamage()/50.0;
-											@Override
-											public void run() {
-												
-												if(t>15 || !casterInCastWorld() || !entityInCastWorld(entity)) {
-													this.cancel();
-													return;
-												}
-												++t;
-												
-												if(le.isDead()) {
-													this.cancel();
-													return;
-												}
-												
-												if(!RuneDamage.damageTiming(p, le, dr, dmg)) {
-													this.cancel();
-													return;
-												}
-												Location loc = le.getLocation().clone().add(0, 1, 0);
-												loc.getWorld().playSound(loc, Sound.ENTITY_SLIME_ATTACK, 1, 1.2f);
-												loc.getWorld().spawnParticle(Particle.REDSTONE, loc, 2, 0.2, 0.2, 0.2, 0.1, dust);
-												
-												
-											}
-										}.runTaskTimer(Main.getInstance(), 0, 20);
-									}, 20);
-								});
-								entity.getLocation().getWorld().playSound(entity.getLocation(), Sound.ENTITY_HOSTILE_BIG_FALL, 1, .4f);
-								shooted.add(entity);
-							}
-						}
-					}
-					
 				}
+				
+				loc.getWorld().getNearbyEntities(loc, t, t, t, e -> {
+					if(e.equals(p) || !(e instanceof LivingEntity))
+						return false;
+					if(shooted.contains(e))
+						return false;
+					if(e.getLocation().distance(loc) > t)
+						return false;
+					if(e instanceof Player) {
+						RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+						State flag = set.queryValue(null, Flags.PVP);
+						if(flag != null && flag.equals(State.ALLOW)
+								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+							return false;
+					}
+					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+						return false;
+					return true;
+				}).parallelStream().forEach(e -> {
+					le = (LivingEntity) e;
+					RuneDamage.damageNormal(p, le, dr, (p,le,dr)->{
+						Bukkit.getScheduler().runTaskLater(Main.getInstance(), ()->{
+							new BukkitRunnable() {
+								double t = 0;
+								DustOptions dust = new DustOptions(Color.fromRGB(128, 0, 0), 1f);
+								double dmg = dr.getDamage()/50.0;
+								@Override
+								public void run() {
+									
+									if(t>15 || !casterInCastWorld() || !entityInCastWorld(e)) {
+										this.cancel();
+										return;
+									}
+									++t;
+									
+									if(le.isDead()) {
+										this.cancel();
+										return;
+									}
+									
+									if(!RuneDamage.damageTiming(p, le, dr, dmg)) {
+										this.cancel();
+										return;
+									}
+									Location loc = le.getLocation().clone().add(0, 1, 0);
+									loc.getWorld().playSound(e.getLocation(), Sound.ENTITY_SLIME_ATTACK, 1, 1.2f);
+									loc.getWorld().spawnParticle(Particle.REDSTONE, e.getLocation(), 2, 0.2, 0.2, 0.2, 0.1, dust);
+									
+									
+								}
+							}.runTaskTimer(Main.getInstance(), 0, 20);
+						}, 20);
+					});
+					e.getLocation().getWorld().playSound(e.getLocation(), Sound.ENTITY_HOSTILE_BIG_FALL, 1, .4f);
+					shooted.add(e);
+				});
 			}
 		}.runTaskTimer(Main.getInstance(), 0, 1);
 	}

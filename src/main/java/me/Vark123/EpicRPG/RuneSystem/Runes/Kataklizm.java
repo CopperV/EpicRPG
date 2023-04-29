@@ -21,15 +21,14 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import me.Vark123.EpicRPG.Main;
-import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
+import me.Vark123.EpicRPG.FightSystem.RuneDamage;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
-import me.Vark123.EpicRPG.RuneSystem.RuneDamage;
-import me.Vark123.EpicRPG.RuneSystem.ARunesTimerCheck;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
+import me.Vark123.EpicRPG.RuneSystem.RuneManager;
 import net.minecraft.world.phys.AxisAlignedBB;
 
 public class Kataklizm extends ARune {
@@ -44,7 +43,6 @@ public class Kataklizm extends ARune {
 	@Override
 	public void castSpell() {
 		Random rand = new Random();
-//		switch(rand.nextInt(6)) {
 		switch(rand.nextInt(6)) {
 			case 0:
 				effect1();
@@ -66,7 +64,7 @@ public class Kataklizm extends ARune {
 				break;
 		}
 
-		RunesTimerCheck.getObszarowkiCd().put(p.getUniqueId(), new Date());
+		RuneManager.getInstance().getObszarowkiCd().put(p, new Date());
 	}
 	
 	//Deszcz meteorytow
@@ -149,46 +147,56 @@ public class Kataklizm extends ARune {
 					loc.add(x,0.5,z);
 					loc.getWorld().playSound(loc, Sound.ENTITY_GENERIC_EXPLODE, 0.2f, 1);
 					p.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, loc, 1, 0, 0, 0, 0);
-					for(Entity entity:loc.getWorld().getNearbyEntities(loc, 4, 4, 4)) {
-						AxisAlignedBB aabb = ((CraftEntity)entity).getHandle().cw();
+					
+					loc.getWorld().getNearbyEntities(loc, 4, 4, 4).parallelStream().filter(e -> {
+						AxisAlignedBB aabb = ((CraftEntity)e).getHandle().cw();
 						AxisAlignedBB aabb2 = new AxisAlignedBB(loc.getX()-1, loc.getY()-5, loc.getZ()-1, loc.getX()+1, loc.getY()+5, loc.getZ()+1);
-						if(aabb.c(aabb2)) {
-							if(!entity.equals(p) && entity instanceof LivingEntity && !shooted.contains(entity) && entity.getLocation().distance(check) <= obszar) {
-								if(entity instanceof Player || entity.hasMetadata("NPC")) {
-									RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-									ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(entity.getLocation()));
-									if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
-										continue;
-								}
-//								if(rpg.hasInkantacja()) dmg *= 1.3;
-//								RuneDamage.damageNormal(p, (LivingEntity)entity, dr);
-								le = (LivingEntity) entity;
-								RuneDamage.damageNormal(p, le, dr, dmg, (p, le, dr)->{
-									new BukkitRunnable() {
-										int timer = 20;
-										double dmg = dr.getDamage()/50.0;
-										@Override
-										public void run() {
-											if(timer <= 0 || !casterInCastWorld() || !entityInCastWorld(entity)) {
-												this.cancel();
-												return;
-											}
-											--timer;
-											boolean end = RuneDamage.damageTiming(p, le, dr, dmg);
-											if(!end) {
-												this.cancel();
-												return;
-											}
-											Location loc = le.getLocation().add(0,1,0);
-											p.getWorld().spawnParticle(Particle.FLAME, loc,10,0.2,0.2,0.2,0.05);
-											p.getWorld().playSound(loc, Sound.ENTITY_GENERIC_BURN, 1, 1);
-										}
-									}.runTaskTimer(Main.getInstance(), 0, 20);
-								});
-								shooted.add(entity);
-							}
+						if(!aabb.c(aabb2))
+							return false;
+						if(e.equals(p) || !(e instanceof LivingEntity))
+							return false;
+						if(shooted.contains(e))
+							return false;
+						if(e.getLocation().distance(check) > obszar)
+							return false;
+						if(e instanceof Player) {
+							RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+							ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+							State flag = set.queryValue(null, Flags.PVP);
+							if(flag != null && flag.equals(State.ALLOW)
+									&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+								return false;
 						}
-					}
+						if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+							return false;
+						return true;
+					}).forEach(e -> {
+						le = (LivingEntity) e;
+						RuneDamage.damageNormal(p, le, dr, dmg, (p, le, dr)->{
+							new BukkitRunnable() {
+								int timer = 20;
+								double dmg = dr.getDamage()/50.0;
+								@Override
+								public void run() {
+									if(timer <= 0 || !casterInCastWorld() || !entityInCastWorld(e)) {
+										this.cancel();
+										return;
+									}
+									--timer;
+									boolean end = RuneDamage.damageTiming(p, le, dr, dmg);
+									if(!end) {
+										this.cancel();
+										return;
+									}
+									Location loc = le.getLocation().add(0,1,0);
+									p.getWorld().spawnParticle(Particle.FLAME, loc,10,0.2,0.2,0.2,0.05);
+									p.getWorld().playSound(loc, Sound.ENTITY_GENERIC_BURN, 1, 1);
+								}
+							}.runTaskTimer(Main.getInstance(), 0, 20);
+						});
+						shooted.add(e);
+					});
+					
 					loc.subtract(x, 0.5, z);
 				}
 				++t;
@@ -229,21 +237,27 @@ public class Kataklizm extends ARune {
 					return;
 				}
 				--timer;
-//				loc.getWorld().playSound(loc, Sound.ENTITY_PHANTOM_DEATH, 1, 0.7f);
-				for(Entity e : loc.getWorld().getNearbyEntities(loc, obszar, obszar, obszar)) {
+				
+				loc.getWorld().getNearbyEntities(loc, obszar, obszar, obszar).parallelStream().filter(e -> {
+					if(e.equals(p) || !(e instanceof LivingEntity))
+						return false;
 					if(e.getLocation().distance(loc) > obszar)
-						continue;
-					if(!e.equals(p) && e instanceof LivingEntity) {
-						if(e instanceof Player || e.hasMetadata("NPC")) {
-							RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-							ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
-							if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
-								continue;
-						}
-						loc.getWorld().playSound(e.getLocation(), Sound.ENTITY_PHANTOM_HURT, 0.4f, 0.7f);
-						RuneDamage.damageNormal(p, (LivingEntity)e, dr, dmg);
+						return false;
+					if(e instanceof Player) {
+						RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+						State flag = set.queryValue(null, Flags.PVP);
+						if(flag != null && flag.equals(State.ALLOW)
+								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+							return false;
 					}
-				}
+					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+						return false;
+					return true;
+				}).forEach(e -> {
+					loc.getWorld().playSound(e.getLocation(), Sound.ENTITY_PHANTOM_HURT, 0.4f, 0.7f);
+					RuneDamage.damageNormal(p, (LivingEntity)e, dr, dmg);
+				});
 			}
 		}.runTaskTimer(Main.getInstance(), 0, 20);
 		new BukkitRunnable() {
@@ -256,24 +270,30 @@ public class Kataklizm extends ARune {
 					return;
 				}
 				--timer;
-				loc.getWorld().playSound(loc, Sound.ENTITY_PHANTOM_DEATH, 0.5f, 0.7f);
-				for(Entity e : loc.getWorld().getNearbyEntities(loc, obszar, obszar, obszar)) {
+				
+				loc.getWorld().getNearbyEntities(loc, obszar, obszar, obszar).parallelStream().filter(e -> {
+					if(e.equals(p) || !(e instanceof LivingEntity))
+						return false;
 					if(e.getLocation().distance(loc) > obszar)
-						continue;
-					if(!e.equals(p) && e instanceof LivingEntity) {
-						if(e instanceof Player || e.hasMetadata("NPC")) {
-							RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-							ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
-							if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
-								continue;
-						}
-						Location loc2 = e.getLocation();
-						Vector p1 = new Vector(loc.getX(), loc.getY(), loc.getZ());
-						Vector p2 = new Vector(loc2.getX(), loc2.getY(), loc2.getZ());
-						Vector vec = p1.clone().subtract(p2).normalize().multiply(2/loc2.distance(loc));
-						e.setVelocity(vec);
+						return false;
+					if(e instanceof Player) {
+						RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+						State flag = set.queryValue(null, Flags.PVP);
+						if(flag != null && flag.equals(State.ALLOW)
+								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+							return false;
 					}
-				}
+					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+						return false;
+					return true;
+				}).forEach(e -> {
+					Location loc2 = e.getLocation();
+					Vector p1 = new Vector(loc.getX(), loc.getY(), loc.getZ());
+					Vector p2 = new Vector(loc2.getX(), loc2.getY(), loc2.getZ());
+					Vector vec = p1.clone().subtract(p2).normalize().multiply(2/loc2.distance(loc));
+					e.setVelocity(vec);
+				});
 			}
 		}.runTaskTimer(Main.getInstance(), 0, 5);
 	}
@@ -296,7 +316,6 @@ public class Kataklizm extends ARune {
 		new BukkitRunnable() {
 			int timer = (int) (dr.getDurationTime() * 1.5);
 			double dmg = dr.getDamage()/3;
-			Location loc = p.getLocation();
 			@Override
 			public void run() {
 				if(timer < 0 || !casterInCastWorld()) {
@@ -305,26 +324,30 @@ public class Kataklizm extends ARune {
 				}
 				--timer;
 				List<Entity> list = p.getNearbyEntities(dr.getObszar(), dr.getObszar(), dr.getObszar());
-				while(true) {
-					if(list.isEmpty()) {
-						break;
+				
+				list.parallelStream().filter(e -> {
+					if(e.equals(p) || !(e instanceof LivingEntity))
+						return false;
+					if(e instanceof Player) {
+						RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+						State flag = set.queryValue(null, Flags.PVP);
+						if(flag != null && flag.equals(State.ALLOW)
+								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+							return false;
 					}
-					Entity e = list.get(rand.nextInt(list.size()));
-					list.remove(e);
-					if(!e.equals(p) && e instanceof LivingEntity) {
-						if(e instanceof Player || e.hasMetadata("NPC")) {
-							RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-							ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
-							if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
-								continue;
-						}
-						if(RuneDamage.damageNormal(p, (LivingEntity)e, dr, dmg)) {
-							e.getWorld().playSound(e.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1, 0.9f);
-							spellEffect3(e.getLocation());
-							break;
-						}
+					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+						return false;
+					return true;
+				}).sorted((e1, e2) -> {
+					Random rand = new Random();
+					return rand.nextInt(3) - 1;
+				}).limit(2).forEach(e -> {
+					if(RuneDamage.damageNormal(p, (LivingEntity)e, dr, dmg)) {
+						e.getWorld().playSound(e.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1, 0.9f);
+						spellEffect3(e.getLocation());
 					}
-				}
+				});
 			}
 		}.runTaskTimer(Main.getInstance(), 0, 20);
 		new BukkitRunnable() {
@@ -398,7 +421,6 @@ public class Kataklizm extends ARune {
 			LivingEntity le;
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
 				if(t > obszar || !casterInCastWorld()) {
 					this.cancel();
 					return;
@@ -410,46 +432,56 @@ public class Kataklizm extends ARune {
 					double z = t*Math.cos(theta);
 					loc.add(x,0,z);
 					p.getWorld().spawnParticle(Particle.FLAME, loc, 15, 0.3f, 1.5f, 0.3f, 0.1f);
-					for(Entity entity:loc.getWorld().getNearbyEntities(loc, 4, 4, 4)) {
-						AxisAlignedBB aabb = ((CraftEntity)entity).getHandle().cw();
+					
+					loc.getWorld().getNearbyEntities(loc, 4, 4, 4).parallelStream().filter(e -> {
+						AxisAlignedBB aabb = ((CraftEntity)e).getHandle().cw();
 						AxisAlignedBB aabb2 = new AxisAlignedBB(loc.getX()-1, loc.getY()-5, loc.getZ()-1, loc.getX()+1, loc.getY()+5, loc.getZ()+1);
-						if(aabb.c(aabb2)) {
-							if(!entity.equals(p) && entity instanceof LivingEntity && !shooted.contains(entity) && entity.getLocation().distance(check) <= obszar) {
-								if(entity instanceof Player || entity.hasMetadata("NPC")) {
-									RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-									ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(entity.getLocation()));
-									if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
-										continue;
-								}
-//								if(rpg.hasInkantacja()) dmg *= 1.3;
-//								RuneDamage.damageNormal(p, (LivingEntity)entity, dr);
-								le = (LivingEntity) entity;
-								RuneDamage.damageNormal(p, le, dr, dmg, (p, le, dr)->{
-									new BukkitRunnable() {
-										int timer = 25;
-										double dmg = dr.getDamage()/30.0;
-										@Override
-										public void run() {
-											if(timer <= 0 || !casterInCastWorld()) {
-												this.cancel();
-												return;
-											}
-											--timer;
-											boolean end = RuneDamage.damageTiming(p, le, dr, dmg);
-											if(!end) {
-												this.cancel();
-												return;
-											}
-											Location loc = le.getLocation().add(0,1,0);
-											p.getWorld().spawnParticle(Particle.FLAME, loc,10,0.2,0.2,0.2,0.05);
-											p.getWorld().playSound(loc, Sound.ENTITY_GENERIC_BURN, 1, 1);
-										}
-									}.runTaskTimer(Main.getInstance(), 0, 20);
-								});
-								shooted.add(entity);
-							}
+						if(!aabb.c(aabb2))
+							return false;
+						if(e.equals(p) || !(e instanceof LivingEntity))
+							return false;
+						if(shooted.contains(e))
+							return false;
+						if(e.getLocation().distance(check) > obszar)
+							return false;
+						if(e instanceof Player) {
+							RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+							ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+							State flag = set.queryValue(null, Flags.PVP);
+							if(flag != null && flag.equals(State.ALLOW)
+									&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+								return false;
 						}
-					}
+						if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+							return false;
+						return true;
+					}).forEach(e -> {
+						le = (LivingEntity) e;
+						RuneDamage.damageNormal(p, le, dr, dmg, (p, le, dr)->{
+							new BukkitRunnable() {
+								int timer = 25;
+								double dmg = dr.getDamage()/30.0;
+								@Override
+								public void run() {
+									if(timer <= 0 || !casterInCastWorld()) {
+										this.cancel();
+										return;
+									}
+									--timer;
+									boolean end = RuneDamage.damageTiming(p, le, dr, dmg);
+									if(!end) {
+										this.cancel();
+										return;
+									}
+									Location loc = le.getLocation().add(0,1,0);
+									p.getWorld().spawnParticle(Particle.FLAME, loc,10,0.2,0.2,0.2,0.05);
+									p.getWorld().playSound(loc, Sound.ENTITY_GENERIC_BURN, 1, 1);
+								}
+							}.runTaskTimer(Main.getInstance(), 0, 20);
+						});
+						shooted.add(e);
+					});
+					
 					loc.subtract(x, 0, z);
 				}
 				t += 0.25;
@@ -488,66 +520,82 @@ public class Kataklizm extends ARune {
 				loc2.getWorld().playSound(loc2, Sound.ENTITY_ENDER_DRAGON_FLAP, 1.2f, 0.8f);
 				effect5Tornado(loc1,alfa);
 				effect5Tornado(loc2,alfa);
-				for(Entity entity : loc1.getWorld().getNearbyEntities(loc1, 3, 3, 3)) {
-					AxisAlignedBB aabb = ((CraftEntity)entity).getHandle().cw();
+				
+				loc1.getWorld().getNearbyEntities(loc1, 3, 3, 3).parallelStream().filter(e -> {
+					AxisAlignedBB aabb = ((CraftEntity)e).getHandle().cw();
 					AxisAlignedBB aabb2 = new AxisAlignedBB(loc1.getX()-1, loc1.getY()-5, loc1.getZ()-1, loc1.getX()+1, loc1.getY()+5, loc1.getZ()+1);
-					if(aabb.c(aabb2)) {
-						if(!entity.equals(p) && entity instanceof LivingEntity && !shooted.contains(entity)) {
-							if(entity instanceof Player || entity.hasMetadata("NPC")) {
-								Location loc = entity.getLocation();
-								RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-								ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(entity.getLocation()));
-								if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
-									continue;
-							}
-							if(RuneDamage.damageNormal(p, (LivingEntity) entity, dr, dmg)) {
-								Location tmp = entity.getLocation();
-								Vector p1 = new Vector(loc1.getX(), loc1.getY(), loc1.getZ());
-								Vector p2 = new Vector(tmp.getX(), tmp.getY(), tmp.getZ());
-								Vector vec = p1.clone().subtract(p2).normalize().setY(1).multiply(3);
-								entity.setVelocity(vec);
-								loc1.getWorld().playSound(loc1, Sound.ENTITY_ENDER_DRAGON_FLAP, 0.6f, 1.2f);
-								shooted.add(entity);
-								new BukkitRunnable() {
-									@Override
-									public void run() {
-										shooted.remove(entity);
-									}
-								}.runTaskLater(Main.getInstance(), 20);
-							}
-						}
+					if(!aabb.c(aabb2))
+						return false;
+					if(e.equals(p) || !(e instanceof LivingEntity))
+						return false;
+					if(shooted.contains(e))
+						return false;
+					if(e instanceof Player) {
+						RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+						State flag = set.queryValue(null, Flags.PVP);
+						if(flag != null && flag.equals(State.ALLOW)
+								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+							return false;
 					}
-				}
-				for(Entity entity : loc2.getWorld().getNearbyEntities(loc2, 3, 3, 3)) {
-					AxisAlignedBB aabb = ((CraftEntity)entity).getHandle().cw();
+					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+						return false;
+					return true;
+				}).forEach(e -> {
+					if(RuneDamage.damageNormal(p, (LivingEntity) e, dr, dmg)) {
+						Location tmp = e.getLocation();
+						Vector p1 = new Vector(loc1.getX(), loc1.getY(), loc1.getZ());
+						Vector p2 = new Vector(tmp.getX(), tmp.getY(), tmp.getZ());
+						Vector vec = p1.clone().subtract(p2).normalize().setY(1).multiply(3);
+						e.setVelocity(vec);
+						loc1.getWorld().playSound(loc1, Sound.ENTITY_ENDER_DRAGON_FLAP, 0.6f, 1.2f);
+						shooted.add(e);
+						new BukkitRunnable() {
+							@Override
+							public void run() {
+								shooted.remove(e);
+							}
+						}.runTaskLater(Main.getInstance(), 20);
+					}
+				});
+				
+				loc2.getWorld().getNearbyEntities(loc2, 3, 3, 3).parallelStream().filter(e -> {
+					AxisAlignedBB aabb = ((CraftEntity)e).getHandle().cw();
 					AxisAlignedBB aabb2 = new AxisAlignedBB(loc2.getX()-1, loc2.getY()-5, loc2.getZ()-1, loc2.getX()+1, loc2.getY()+5, loc2.getZ()+1);
-					if(aabb.c(aabb2)) {
-						if(!entity.equals(p) && entity instanceof LivingEntity && !shooted.contains(entity)) {
-							if(entity instanceof Player || entity.hasMetadata("NPC")) {
-								Location loc = entity.getLocation();
-								RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-								ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(entity.getLocation()));
-								if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
-									continue;
-							}
-							if(RuneDamage.damageNormal(p, (LivingEntity) entity, dr, dmg)) {
-								Location tmp = entity.getLocation();
-								Vector p1 = new Vector(loc2.getX(), loc2.getY(), loc2.getZ());
-								Vector p2 = new Vector(tmp.getX(), tmp.getY(), tmp.getZ());
-								Vector vec = p1.clone().subtract(p2).normalize().setY(0.3).multiply(3);
-								entity.setVelocity(vec);
-								loc2.getWorld().playSound(loc2, Sound.ENTITY_ENDER_DRAGON_FLAP, 0.4f, 1.2f);
-								shooted.add(entity);
-								new BukkitRunnable() {
-									@Override
-									public void run() {
-										shooted.remove(entity);
-									}
-								}.runTaskLater(Main.getInstance(), 20);
-							}
-						}
+					if(!aabb.c(aabb2))
+						return false;
+					if(e.equals(p) || !(e instanceof LivingEntity))
+						return false;
+					if(shooted.contains(e))
+						return false;
+					if(e instanceof Player) {
+						RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+						State flag = set.queryValue(null, Flags.PVP);
+						if(flag != null && flag.equals(State.ALLOW)
+								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+							return false;
 					}
-				}
+					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+						return false;
+					return true;
+				}).forEach(e -> {
+					if(RuneDamage.damageNormal(p, (LivingEntity) e, dr, dmg)) {
+						Location tmp = e.getLocation();
+						Vector p1 = new Vector(loc2.getX(), loc2.getY(), loc2.getZ());
+						Vector p2 = new Vector(tmp.getX(), tmp.getY(), tmp.getZ());
+						Vector vec = p1.clone().subtract(p2).normalize().setY(0.3).multiply(3);
+						e.setVelocity(vec);
+						loc2.getWorld().playSound(loc2, Sound.ENTITY_ENDER_DRAGON_FLAP, 0.4f, 1.2f);
+						shooted.add(e);
+						new BukkitRunnable() {
+							@Override
+							public void run() {
+								shooted.remove(e);
+							}
+						}.runTaskLater(Main.getInstance(), 20);
+					}
+				});
 				
 				theta -= update;
 				alfa += alfaUpdate;
@@ -620,47 +668,65 @@ public class Kataklizm extends ARune {
 			LivingEntity le;
 			@Override
 			public void run() {
-				for(Entity e : loc.getWorld().getNearbyEntities(loc, 2, 2, 2)) {
+				
+				loc.getWorld().getNearbyEntities(loc, 2, 2, 2, e -> {
 					AxisAlignedBB aabb = ((CraftEntity)e).getHandle().cw();
 					AxisAlignedBB aabb2 = new AxisAlignedBB(loc.getX()-1, loc.getY()-1, loc.getZ()-1, loc.getX()+1, loc.getY()+1, loc.getZ()+1);
-					if(aabb.c(aabb2)) {
-						if(!e.equals(p) && e instanceof LivingEntity) {
-							if(e instanceof Player || e.hasMetadata("NPC")) {
-								RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-								ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
-								if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
-									continue;
-							}
-							le = (LivingEntity) e;
-							if(RuneDamage.damageNormal(p, le, dr, dmg, (p, le, dmg)->{
-								new BukkitRunnable() {
-									int timer = 10;
-									double dmg = dr.getDamage()/50.0;
-									@Override
-									public void run() {
-										if(timer <= 0) {
-											this.cancel();
-											return;
-										}
-										--timer;
-										boolean end = RuneDamage.damageTiming(p, le, dr, dmg);
-										if(!end) {
-											this.cancel();
-											return;
-										}
-										Location loc = le.getLocation().add(0,1,0);
-										p.getWorld().spawnParticle(Particle.FLAME, loc,10,0.2,0.2,0.2,0.05);
-										p.getWorld().playSound(loc, Sound.ENTITY_GENERIC_BURN, 1, 1);
-									}
-								}.runTaskTimer(Main.getInstance(), 0, 20);
-							})) {
-								loc.getWorld().playSound(loc, Sound.BLOCK_LAVA_EXTINGUISH, 0.7f, 0.8f);
-								this.cancel();
-								return;
-							}
-						}
+					if(!aabb.c(aabb2))
+						return false;
+					if(e.equals(p) || !(e instanceof LivingEntity))
+						return false;
+					if(e instanceof Player) {
+						RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+						State flag = set.queryValue(null, Flags.PVP);
+						if(flag != null && flag.equals(State.ALLOW)
+								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+							return false;
 					}
+					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+						return false;
+					return true;
+				}).parallelStream().min((e1, e2) -> {
+					double dist1 = e1.getLocation().distanceSquared(loc);
+					double dist2 = e2.getLocation().distanceSquared(loc);
+					if(dist1 == dist2)
+						return 0;
+					return dist1 < dist2 ? -1 : 1;
+				}).ifPresent(e -> {
+					le = (LivingEntity) e;
+					if(RuneDamage.damageNormal(p, le, dr, dmg, (p, le, dmg)->{
+						new BukkitRunnable() {
+							int timer = 10;
+							double dmg = dr.getDamage()/50.0;
+							@Override
+							public void run() {
+								if(timer <= 0) {
+									this.cancel();
+									return;
+								}
+								--timer;
+								boolean end = RuneDamage.damageTiming(p, le, dr, dmg);
+								if(!end) {
+									this.cancel();
+									return;
+								}
+								Location loc = le.getLocation().add(0,1,0);
+								p.getWorld().spawnParticle(Particle.FLAME, loc,10,0.2,0.2,0.2,0.05);
+								p.getWorld().playSound(loc, Sound.ENTITY_GENERIC_BURN, 1, 1);
+							}
+						}.runTaskTimer(Main.getInstance(), 0, 20);
+					})) {
+						loc.getWorld().playSound(loc, Sound.BLOCK_LAVA_EXTINGUISH, 0.7f, 0.8f);
+						this.cancel();
+						return;
+					}
+				});
+				
+				if(this.isCancelled()) {
+					return;
 				}
+				
 				if(loc.getBlock().getType().isSolid() || !casterInCastWorld()) {
 					this.cancel();
 					return;

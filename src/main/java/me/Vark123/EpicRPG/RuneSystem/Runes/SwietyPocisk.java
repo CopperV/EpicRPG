@@ -17,13 +17,13 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
-import me.Vark123.EpicRPG.RuneSystem.RuneDamage;
+import me.Vark123.EpicRPG.FightSystem.RuneDamage;
 import net.minecraft.world.phys.AxisAlignedBB;
 
 public class SwietyPocisk extends ARune {
@@ -55,24 +55,33 @@ public class SwietyPocisk extends ARune {
 				loc2.setY(loc.getY()+y);
 				loc2.setZ(loc.getZ()+z);
 				p.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, loc2, 7, 0.1f, 0.1f, 0.1f, 0.05f);
-				for(Entity e : loc.getWorld().getNearbyEntities(loc2, 3, 3, 3)) {
-					if(shooted.contains(e)) continue;
+
+				loc.getWorld().getNearbyEntities(loc2, 3, 3, 3, e -> {
 					AxisAlignedBB aabb = ((CraftEntity)e).getHandle().cw();
 					AxisAlignedBB aabb2 = new AxisAlignedBB(loc2.getX()-0.6, loc2.getY()-0.6, loc2.getZ()-0.6, loc2.getX()+0.6, loc2.getY()+0.6, loc2.getZ()+0.6);
-					if(aabb.c(aabb2)) {
-						if(!e.equals(p) && e instanceof LivingEntity) {
-							if(e instanceof Player || e.hasMetadata("NPC")) {
-								RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-								ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
-								if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
-									continue;
-							}
-							shooted.add(e);
-							RuneDamage.damageNormal(p, (LivingEntity)e, dr);
-							p.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, e.getLocation(), 15, 0.4f, 0.5f, 0.4f, 0.15f);
-						}
+					if(!aabb.c(aabb2))
+						return false;
+					if(e.equals(p) || !(e instanceof LivingEntity))
+						return false;
+					if(shooted.contains(e))
+						return false;
+					if(e instanceof Player) {
+						RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+						State flag = set.queryValue(null, Flags.PVP);
+						if(flag != null && flag.equals(State.ALLOW)
+								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+							return false;
 					}
-				}
+					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+						return false;
+					return true;
+				}).forEach(e -> {
+					shooted.add(e);
+					RuneDamage.damageNormal(p, (LivingEntity)e, dr);
+					p.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, e.getLocation(), 15, 0.4f, 0.5f, 0.4f, 0.15f);
+				});
+				
 				if(loc2.getBlock().getType().isSolid() && !loc2.getBlock().isLiquid()) {
 					this.cancel();
 					return;

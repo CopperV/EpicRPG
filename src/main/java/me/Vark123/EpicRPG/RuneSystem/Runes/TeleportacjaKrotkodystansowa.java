@@ -19,7 +19,7 @@ public class TeleportacjaKrotkodystansowa extends ARune {
 	@Override
 	public void castSpell() {
 		Location start = p.getLocation().add(0, 0.2, 0);
-		Vector vec = start.getDirection().setY(0).normalize();
+		Vector vec = start.getDirection().setY(0).normalize().multiply(0.25);
 		Location end = start.clone();
 		while(end.distance(start) < dr.getObszar()) {
 			Location next = end.clone().add(vec);
@@ -34,6 +34,7 @@ public class TeleportacjaKrotkodystansowa extends ARune {
 		p.playSound(start, Sound.ITEM_CHORUS_FRUIT_TELEPORT, 10, .5f);
 	}
 
+	//TODO
 	private Location checkBlock(Location loc) {
 		Material m = loc.getBlock().getType();
 		if(m.isSolid()) {

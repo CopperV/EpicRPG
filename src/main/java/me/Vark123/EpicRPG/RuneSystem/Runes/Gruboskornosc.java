@@ -11,9 +11,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
+import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class Gruboskornosc extends ARune {
 
@@ -25,9 +27,9 @@ public class Gruboskornosc extends ARune {
 	@Override
 	public void castSpell() {
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
-		RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
-		rpg.setGruboskornosc(true);
-//		rpg.setModifier1_lock(true);
+		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
+		RpgModifiers modifiers = rpg.getModifiers();
+		modifiers.setGruboskornosc(true);
 		
 		new BukkitRunnable() {
 			
@@ -57,7 +59,6 @@ public class Gruboskornosc extends ARune {
 		
 		new BukkitRunnable() {
 			int licznik = 0;
-//			Vector vec = loc.getDirection().normalize();
 			@Override
 			public void run() {
 				Location loc = p.getLocation();
@@ -66,8 +67,7 @@ public class Gruboskornosc extends ARune {
 				p.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, loc, 4, 0.7F, 0.7F, 0.7F, 0);
 				loc.subtract(0, 1.5, 0);
 				if(licznik>=20*dr.getDurationTime() || !casterInCastWorld()) {
-					rpg.setGruboskornosc(false);
-//					rpg.setModifier1_lock(false);
+					modifiers.setGruboskornosc(false);
 					this.cancel();
 				}
 			}

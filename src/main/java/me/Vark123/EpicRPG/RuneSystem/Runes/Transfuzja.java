@@ -16,9 +16,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class Transfuzja extends ARune {
 	
@@ -33,9 +34,9 @@ public class Transfuzja extends ARune {
 		if(effected.contains(p))
 			effected.remove(p);
 		effected.add(p);
-		RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
+		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_MAGMA_CUBE_JUMP, 1, 0.6f);
-		rpg.setTransfuzja(true);
+		rpg.getModifiers().setTransfuzja(true);
 		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
 		
 		new BukkitRunnable() {
@@ -58,7 +59,7 @@ public class Transfuzja extends ARune {
 					
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_MAGMA_CUBE_HURT, 1, 0.7f);
 					p.getWorld().spawnParticle(Particle.REDSTONE, p.getLocation().add(0,1,0), 20, 0.5f, 0.5f, 0.5f, 0.1f, dust);
-					rpg.setTransfuzja(false);
+					rpg.getModifiers().setTransfuzja(false);
 					effected.remove(p);
 					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					
@@ -88,9 +89,6 @@ public class Transfuzja extends ARune {
 					this.cancel();
 					return;
 				}
-				
-//				Location loc = p.getLocation().add(0,1,0);
-//				p.getWorld().spawnParticle(Particle.SNEEZE, loc, 5, 0.5f, 0.5f, 0.5f, 0.1f);
 				
 				Location loc1 = p.getLocation().clone().add(0,1,0);
 				Location loc2 = p.getLocation().clone().add(0,1,0);

@@ -13,9 +13,11 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
+import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class Skrytobojstwo extends ARune{
 
@@ -26,13 +28,14 @@ public class Skrytobojstwo extends ARune{
 
 	@Override
 	public void castSpell() {
-		RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
+		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
+		RpgModifiers modifiers = rpg.getModifiers();
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_VEX_AMBIENT, 4, 0.2f);
 		PotionEffect potion = new PotionEffect(PotionEffectType.SPEED, 20*dr.getDurationTime(), 1);
 		p.addPotionEffect(potion);
 		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
-		rpg.setSkrytobojstwo(true);
-		rpg.setModifier1_lock(true);
+		modifiers.setSkrytobojstwo(true);
+		modifiers.setModifier1_lock(true);
 		
 		new BukkitRunnable() {
 			
@@ -67,8 +70,8 @@ public class Skrytobojstwo extends ARune{
 				if(timer <= 0 || !casterInCastWorld()) {
 					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_VEX_AMBIENT, 4, 1.8f);
-					rpg.setSkrytobojstwo(false);
-					rpg.setModifier1_lock(false);
+					modifiers.setSkrytobojstwo(false);
+					modifiers.setModifier1_lock(false);
 					this.cancel();
 					return;
 				}

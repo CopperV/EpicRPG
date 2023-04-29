@@ -18,15 +18,16 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.FightSystem.RuneDamage;
+import me.Vark123.EpicRPG.HealthSystem.RpgPlayerHealEvent;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.Healing.RpgPlayerHealEvent;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
-import me.Vark123.EpicRPG.RuneSystem.RuneDamage;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class ZlodziejEnergii extends ARune {
 
@@ -52,47 +53,39 @@ public class ZlodziejEnergii extends ARune {
 				List<Player> players = new ArrayList<>();
 				List<Entity> entitiesList = new ArrayList<>();
 				
-				for(Entity e : entities) {
-					if(e instanceof Player) {
-						Player tmp = (Player) e;
-						if(tmp.equals(p)) {
-							players.add(p);
-							continue;
-						}
-						RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(tmp.getLocation()));
-						if(set.queryValue(null, Flags.PVP).equals(StateFlag.State.ALLOW)) {
-							continue;
-						}
-						players.add(tmp);
-						continue;	
+				entities.parallelStream().forEach(e -> {
+					if(!(e instanceof LivingEntity))
+						return;
+					if(!(e instanceof Player)) {
+						entitiesList.add(e);
+						return;
 					}
-					if(!(e instanceof LivingEntity)) continue;
-					entitiesList.add(e);
-					continue;
-				}
+					if(!e.equals(p)) {
+						RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+						State flag = set.queryValue(null, Flags.PVP);
+						if(flag != null && flag.equals(State.ALLOW)
+								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+							return;
+					}
+					players.add((Player) e);
+					return;
+				});
 				
 				if(!entitiesList.isEmpty() && !players.isEmpty()) {
-					for(Entity e : entitiesList) {
+					entities.parallelStream().forEach(e -> {
 						e.getWorld().spawnParticle(Particle.SOUL, e.getLocation().add(0, 1, 0), 10, 0.3f, 0.3f, 0.3f, 0.1f);
 						RuneDamage.damageNormal(p, (LivingEntity) e, dr);
-					}
-					for(Player tmp : players) {
-						
-						RpgPlayer rpg = Main.getListaRPG().get(tmp.getUniqueId().toString());
+					});
+					players.parallelStream().forEach(tmp -> {
+						RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(tmp);
 						double amount = tmp.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()*0.02;
 						
 						RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg, amount);
 						Bukkit.getPluginManager().callEvent(event);
 						
-//						if(tmp.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() > ()) {
-//							tmp.setHealth((int)(tmp.getHealth()+tmp.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()*0.02));
-//						}else {
-//							tmp.setHealth(tmp.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-//						}
-						
 						tmp.getWorld().spawnParticle(Particle.HEART, tmp.getLocation().add(0,1,0),10,0.3F,0.3F,0.3F,0.1F);
-					}
+					});
 				}
 				
 				--timer;

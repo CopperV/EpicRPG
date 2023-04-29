@@ -10,9 +10,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class RytualWzniesienia extends ARune {
 
@@ -22,9 +23,9 @@ public class RytualWzniesienia extends ARune {
 
 	@Override
 	public void castSpell() {
-		RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
+		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
-		rpg.setRytualWzniesienia(true);
+		rpg.getModifiers().setRytualWzniesienia(true);
 		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
 		
 		new BukkitRunnable() {
@@ -44,7 +45,7 @@ public class RytualWzniesienia extends ARune {
 					bar.setVisible(false);
 					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GHAST_SHOOT, 1, 1);
-					rpg.setRytualWzniesienia(false);
+					rpg.getModifiers().setRytualWzniesienia(false);
 					p.getWorld().spawnParticle(Particle.END_ROD, p.getLocation().add(0,1,0), 35,0.4f,0.4f,0.4f,0.1f);
 					this.cancel();
 					return;
@@ -57,16 +58,6 @@ public class RytualWzniesienia extends ARune {
 			}
 		}.runTaskTimer(Main.getInstance(), 0, 20);
 		
-//		new BukkitRunnable(){
-//			@Override
-//			public void run() {
-//				p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
-//				p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GHAST_SHOOT, 1, 1);
-//				rpg.setRytualWzniesienia(false);
-//				p.getWorld().spawnParticle(Particle.END_ROD, p.getLocation().add(0,1,0), 35,0.4f,0.4f,0.4f,0.1f);
-//			}
-//			
-//		}.runTaskLater(Main.getInstance(), 20*dr.getDurationTime());
 	}
 
 }

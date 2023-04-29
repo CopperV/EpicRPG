@@ -13,9 +13,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class Wampiryzm_M extends ARune {
 
@@ -26,8 +27,8 @@ public class Wampiryzm_M extends ARune {
 	@Override
 	public void castSpell() {
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_CAT_HISS, 1, .1f);
-		RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
-		rpg.setWampiryzm_m(true);
+		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
+		rpg.getModifiers().setWampiryzm_m(true);
 		
 		new BukkitRunnable() {
 			
@@ -67,7 +68,7 @@ public class Wampiryzm_M extends ARune {
 				p.getWorld().spawnParticle(Particle.REDSTONE, loc, 10, 0.5F, 0.5F, 0.5F, 0.1f, dust);
 				loc.subtract(0, 1.5, 0);
 				if(licznik>=20*dr.getDurationTime() || !casterInCastWorld()) {
-					rpg.setWampiryzm_m(false);
+					rpg.getModifiers().setWampiryzm_m(false);
 					this.cancel();
 					return;
 				}

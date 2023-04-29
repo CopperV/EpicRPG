@@ -6,11 +6,12 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.HealthSystem.RpgPlayerHealEvent;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.Healing.RpgPlayerHealEvent;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
+import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class RozerwanieDuszy extends ARune {
 
@@ -21,10 +22,11 @@ public class RozerwanieDuszy extends ARune {
 	@Override
 	public void castSpell() {
 
-		RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
+		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
+		RpgStats stats = rpg.getStats();
 		
-		int mana = rpg.getFinalmana() / 20;
-		if(rpg.getPresent_mana() < mana) mana = rpg.getPresent_mana();
+		int mana = stats.getFinalMana() / 20;
+		if(stats.getPresentMana() < mana) mana = stats.getPresentMana();
 		if(mana <= 0)
 			return;
 		double hp = mana * 0.75;
@@ -33,7 +35,7 @@ public class RozerwanieDuszy extends ARune {
 		Bukkit.getPluginManager().callEvent(event);
 		if(event.isCancelled())
 			return;
-		rpg.removePresentMana(mana);
+		stats.removePresentMana(mana);
 		
 		p.getWorld().playSound(p.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_CHARGE, 0.9f, 0.8f);
 		

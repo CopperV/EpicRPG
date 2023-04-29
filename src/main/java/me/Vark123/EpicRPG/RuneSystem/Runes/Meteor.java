@@ -8,7 +8,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -18,14 +17,13 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
-import me.Vark123.EpicRPG.RuneSystem.RuneDamage;
-import net.minecraft.world.phys.AxisAlignedBB;
+import me.Vark123.EpicRPG.FightSystem.RuneDamage;
 
 public class Meteor extends ARune {
 	
@@ -63,8 +61,6 @@ public class Meteor extends ARune {
 		Location check = loc.clone();
 		new BukkitRunnable() {
 			double t = 0;
-//			double dmg = dr.getDamage();
-//			RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
 			@Override
 			public void run() {
 				t++;
@@ -79,40 +75,32 @@ public class Meteor extends ARune {
 					}
 					p.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, loc, 1, 0, 0, 0, 0);
 					
-					for(Entity entity:loc.getWorld().getNearbyEntities(loc, 10, 10, 10)) {
-						AxisAlignedBB aabb = ((CraftEntity)entity).getHandle().cw();
-						AxisAlignedBB aabb2 = new AxisAlignedBB(loc.getX()-1, loc.getY()-4, loc.getZ()-1, loc.getX()+1, loc.getY()+4, loc.getZ()+1);
-						if(aabb.c(aabb2)) {
-							if(!entity.equals(p) && entity instanceof LivingEntity && !shooted.contains(entity) && entity.getLocation().distance(check) <= dr.getObszar()) {
-								if(entity instanceof Player || entity.hasMetadata("NPC")) {
-									RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-									ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(entity.getLocation()));
-									if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
-										continue;
-								}
-//								if(rpg.hasInkantacja()) dmg *= 1.3;
-								RuneDamage.damageNormal(p, (LivingEntity)entity, dr);
-								shooted.add(entity);
-							}
-						}
-					}
-					
-//					for(Entity entity:loc.getChunk().getEntities()) {
-//						if(entity.getLocation().distance(loc) < 1 || entity.getLocation().add(0, 1, 0).distance(loc) < 1 || entity.getLocation().add(0, 1, 0).distance(loc) < 1) {
-//							if(!entity.equals(p) && entity instanceof LivingEntity && !shooted.contains(entity) && entity.getLocation().distance(check) <= dr.getObszar()) {
-//								if(entity instanceof Player || entity.hasMetadata("NPC")) {
-//									ApplicableRegionSet set = WorldGuardPlugin.inst().getRegionManager(entity.getWorld()).getApplicableRegions(entity.getLocation());
-//									if(set.queryState(null, DefaultFlag.PVP) == State.DENY) 
-//										continue;
-//								}
-//								((LivingEntity)entity).setLastDamageCause(new EntityDamageEvent(p, DamageCause.CUSTOM, dr.getDamage()));
-//								((LivingEntity)entity).damage(dr.getDamage(), p);
-//								shooted.add(entity);
-//							}
-//						}
-//					}
 					loc.subtract(x,1,z);
 				}
+				
+				loc.getWorld().getNearbyEntities(loc, t, t, t, e -> {
+					if(e.equals(p) || !(e instanceof LivingEntity))
+						return false;
+					if(shooted.contains(e))
+						return false;
+					if(e.getLocation().distance(loc) > t)
+						return false;
+					if(e instanceof Player) {
+						RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+						State flag = set.queryValue(null, Flags.PVP);
+						if(flag != null && flag.equals(State.ALLOW)
+								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+							return false;
+					}
+					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+						return false;
+					return true;
+				}).parallelStream().forEach(e -> {
+					RuneDamage.damageNormal(p, (LivingEntity)e, dr);
+					shooted.add(e);
+				});
+				
 			}
 		}.runTaskTimer(Main.getInstance(), 0, 2);
 	}

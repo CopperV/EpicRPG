@@ -14,9 +14,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class LodowyBlok extends ARune {
 	
@@ -32,9 +33,9 @@ public class LodowyBlok extends ARune {
 			effected.remove(p);
 		effected.add(p);
 //		Bukkit.broadcastMessage("Test1 - contains: "+effected.contains(p));
-		RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
+		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ILLUSIONER_PREPARE_MIRROR, 1, 1.25f);
-		rpg.setLodowyBlok(true);
+		rpg.getModifiers().setLodowyBlok(true);
 		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
 		
 		new BukkitRunnable() {
@@ -58,7 +59,7 @@ public class LodowyBlok extends ARune {
 					
 					p.getWorld().playSound(p.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_DEPLETE, 1, 1f);
 					p.getWorld().spawnParticle(Particle.SNOWFLAKE, p.getLocation().add(0,1,0), 30, 0.5f, 1f, 0.5f, 0.1f);
-					rpg.setLodowyBlok(false);
+					rpg.getModifiers().setLodowyBlok(false);
 					effected.remove(p);
 					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					

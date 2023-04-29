@@ -8,9 +8,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 //import org.bukkit.util.Vector;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class OgnistaSfera extends ARune{
 
@@ -21,17 +22,15 @@ public class OgnistaSfera extends ARune{
 	@Override
 	public void castSpell() {
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GHAST_SHOOT, 1, 1);
-		RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
-		rpg.setSfera(true);
+		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
+		rpg.getModifiers().setSfera(true);
 		new BukkitRunnable() {
 			int licznik = 0;
 			double theta = 0;
-//			Vector vec = loc.getDirection().normalize();
 			@Override
 			public void run() {
 				Location loc = p.getLocation();
 				Location loc2 = p.getLocation();
-//				Vector v1 = loc.getDirection().normalize();
 				theta = 0;
 				licznik++;
 				for(double y = 0;y<= 2.5; y+=0.1) {
@@ -48,7 +47,7 @@ public class OgnistaSfera extends ARune{
 					loc.subtract(x,y,z);
 				}
 				if(licznik>=20*dr.getDurationTime() || !casterInCastWorld()) {
-					rpg.setSfera(false);
+					rpg.getModifiers().setSfera(false);
 					this.cancel();
 					return;
 				}

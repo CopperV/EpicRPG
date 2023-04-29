@@ -6,7 +6,6 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -18,14 +17,13 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
-import me.Vark123.EpicRPG.RuneSystem.RuneDamage;
-import net.minecraft.world.phys.AxisAlignedBB;
+import me.Vark123.EpicRPG.FightSystem.RuneDamage;
 
 public class Spetanie extends ARune {
 	
@@ -69,30 +67,36 @@ public class Spetanie extends ARune {
 					loc.add(0,0.25,0);
 					p.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 2,0.2F,0.2F,0.2F,0.05F);
 					
-					for(Entity entity:loc.getWorld().getNearbyEntities(loc, 10, 10, 10)) {
-						AxisAlignedBB aabb = ((CraftEntity)entity).getHandle().cw();
-						AxisAlignedBB aabb2 = new AxisAlignedBB(loc.getX()-0.75, loc.getY()-0.75, loc.getZ()-0.75, loc.getX()+0.75, loc.getY()+4, loc.getZ()+0.75);
-						if(aabb.c(aabb2)) {
-							if(!entity.equals(p) && entity instanceof LivingEntity && !shooted.contains(entity) && entity.getLocation().distance(check) <= dr.getObszar()) {
-								if(entity instanceof Player || entity.hasMetadata("NPC")) {
-									RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-									ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(entity.getLocation()));
-									if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon")) {
-										((LivingEntity)entity).addPotionEffect(slow);
-										continue;
-									}
-								}
-								((LivingEntity)entity).addPotionEffect(stun);
-								if(RuneDamage.damageNormal(p, (LivingEntity)entity, dr)) {
-									loc.getWorld().playSound(loc, Sound.ENTITY_ILLUSIONER_CAST_SPELL, 1, 1);
-									shooted.add(entity);
-									spellEffect(entity);
-								}
-							}
-						}
-					}
 					loc.subtract(x,1.5,z);
 				}
+				
+				loc.getWorld().getNearbyEntities(loc, t, t, t, e -> {
+					if(e.equals(p) || !(e instanceof LivingEntity))
+						return false;
+					if(shooted.contains(e))
+						return false;
+					if(e.getLocation().distance(loc) > t)
+						return false;
+					if(e instanceof Player) {
+						RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+						State flag = set.queryValue(null, Flags.PVP);
+						if(flag != null && flag.equals(State.ALLOW)
+								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+							return false;
+					}
+					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+						return false;
+					return true;
+				}).parallelStream().forEach(e -> {
+					((LivingEntity) e).addPotionEffect(stun);
+					if(RuneDamage.damageNormal(p, (LivingEntity) e, dr)) {
+						loc.getWorld().playSound(e.getLocation(), Sound.ENTITY_ILLUSIONER_CAST_SPELL, 1, 1);
+						shooted.add(e);
+						spellEffect(e);
+					}
+				});
+				
 			}
 		}.runTaskTimer(Main.getInstance(), 0, 2);
 	}

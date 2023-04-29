@@ -10,7 +10,6 @@ import org.bukkit.Sound;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -18,10 +17,11 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
@@ -36,27 +36,34 @@ public class AuraRozproszenia extends ARune {
 	public void castSpell() {
 		List<Player> effected = new LinkedList<>();
 		effected.add(p);
-		for(Entity e : p.getWorld().getNearbyEntities(p.getLocation(), dr.getObszar(), dr.getObszar(), dr.getObszar())) {
+		
+		p.getWorld().getNearbyEntities(p.getLocation(), dr.getObszar(), dr.getObszar(), dr.getObszar()).parallelStream().filter(e -> {
 			if(!(e instanceof Player))
-				continue;
+				return false;
 			if(e.equals(p))
-				continue;
-			Player tmp = (Player) e;
+				return false;
 			RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
 			ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
-			if(set.queryValue(null, Flags.PVP).equals(StateFlag.State.ALLOW))
-				continue;
+			State flag = set.queryValue(null, Flags.PVP);
+			if(flag != null && flag.equals(State.ALLOW)
+					&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+				return false;
+			return true;
+		}).forEach(e -> {
+			Player tmp = (Player) e;
 			effected.add(tmp);
-			RpgPlayer rpg = Main.getListaRPG().get(tmp.getUniqueId().toString());
-			rpg.setAuraRozproszenia(true);
-		}
+			RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(tmp);
+			rpg.getModifiers().setAuraRozproszenia(true);
+		});
 		
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, 1.5f, .2f);
 		BossBar bar = Bukkit.createBossBar("§c§oAura rozproszenia§f: "+dr.getDurationTime()+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);
 		bar.setProgress(1);
 		bar.setVisible(true);
-		for(Player tmp : effected)
+		
+		effected.parallelStream().forEach(tmp -> {
 			bar.addPlayer(tmp);
+		});
 		
 		new BukkitRunnable() {
 			
@@ -85,13 +92,13 @@ public class AuraRozproszenia extends ARune {
 			@Override
 			public void run() {
 				if(timer <= 0 || !casterInCastWorld()) {
-					for(Player tmp : effected) {
+					effected.parallelStream().forEach(tmp -> {
 						if(!tmp.isOnline())
-							continue;
+							return;
 						tmp.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
-						RpgPlayer rpg = Main.getListaRPG().get(tmp.getUniqueId().toString());
-						rpg.setAuraRozproszenia(false);
-					}
+						RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(tmp);
+						rpg.getModifiers().setAuraRozproszenia(false);
+					});
 					this.cancel();
 					return;
 				}

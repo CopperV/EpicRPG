@@ -11,9 +11,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
+import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class Penetracja extends ARune {
 
@@ -24,10 +26,11 @@ public class Penetracja extends ARune {
 
 	@Override
 	public void castSpell() {
-		RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
+		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
+		RpgModifiers modifiers = rpg.getModifiers();
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ILLUSIONER_CAST_SPELL, 1, 1.2f);
-		rpg.setPenetracja(true);
-		rpg.setModifier1_lock(true);
+		modifiers.setPenetracja(true);
+		modifiers.setModifier1_lock(true);
 		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
 		
 		new BukkitRunnable() {
@@ -63,8 +66,8 @@ public class Penetracja extends ARune {
 				if(timer <= 0 || !casterInCastWorld()) {
 					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GHAST_SHOOT, 1, 1.7f);
-					rpg.setPenetracja(false);
-					rpg.setModifier1_lock(false);
+					modifiers.setPenetracja(false);
+					modifiers.setModifier1_lock(false);
 					this.cancel();
 					return;
 				}

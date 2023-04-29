@@ -19,9 +19,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.mobs.ActiveMob;
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class WedrownyCien extends ARune {
 	
@@ -36,28 +37,29 @@ public class WedrownyCien extends ARune {
 		if(effected.contains(p))
 			effected.remove(p);
 		effected.add(p);
-		RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
+		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 0.8f);
-		rpg.setWedrownyCien(true);
+		rpg.getModifiers().setWedrownyCien(true);
 		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
 		
 		Collection<Entity> targetList = p.getWorld().getNearbyEntities(p.getLocation(), 40, 40, 40);
-		for(Entity e : targetList) {
-//			Bukkit.broadcastMessage("instanceof Creature: "+(e instanceof Creature));
+		targetList.parallelStream().filter(e -> {
 			if(!(e instanceof Creature))
-				continue;
+				return false;
 			Creature creature = (Creature) e;
 			if(creature.getTarget() == null)
-				continue;
+				return false;
 			if(!creature.getTarget().equals(p))
-				continue;
+				return false;
+			return true;
+		}).forEach(e -> {
+			Creature creature = (Creature) e;
 			creature.setTarget(null);
-			
 			ActiveMob mob = MythicBukkit.inst().getMobManager().getMythicMobInstance(e);
 			if(mob == null)
-				continue;
+				return;
 			mob.resetTarget();
-		}
+		});
 		
 		new BukkitRunnable() {
 			
@@ -92,7 +94,7 @@ public class WedrownyCien extends ARune {
 				if(timer <= 0 || !casterInCastWorld() || !effected.contains(p)) {
 					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1.5f);
-					rpg.setWedrownyCien(false);
+					rpg.getModifiers().setWedrownyCien(false);
 					this.cancel();
 					return;
 				}

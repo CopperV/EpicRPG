@@ -8,7 +8,6 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -20,13 +19,13 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
-import me.Vark123.EpicRPG.RuneSystem.RuneDamage;
+import me.Vark123.EpicRPG.FightSystem.RuneDamage;
 
 public class TrzesienieZiemii extends ARune {
 
@@ -50,19 +49,25 @@ public class TrzesienieZiemii extends ARune {
 					return;
 				}
 				
-				for(Entity entity : loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar())) {
-					if(!entity.equals(p) && entity instanceof LivingEntity) {
-						if(entity instanceof Player || entity.hasMetadata("NPC")) {
-							RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-							ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(entity.getLocation()));
-							if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
-								continue;
-						}	
-						if(RuneDamage.damageNormal(p, (LivingEntity) entity, dr)) {
-							((LivingEntity)entity).addPotionEffect(effect);
-						}
+				loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar()).parallelStream().filter(e -> {
+					if(e.equals(p) || !(e instanceof LivingEntity))
+						return false;
+					if(e instanceof Player) {
+						RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+						State flag = set.queryValue(null, Flags.PVP);
+						if(flag != null && flag.equals(State.ALLOW)
+								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+							return false;
 					}
-				}
+					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+						return false;
+					return true;
+				}).forEach(e -> {
+					if(RuneDamage.damageNormal(p, (LivingEntity) e, dr)) {
+						((LivingEntity) e).addPotionEffect(effect);
+					}
+				});
 				
 				--timer;
 				
@@ -92,28 +97,28 @@ public class TrzesienieZiemii extends ARune {
 					theta = Math.random() * Math.PI * 2;
 					x = loc.getX() + r * Math.sin(theta);
 					z = loc.getZ() + r * Math.cos(theta);
-//					Block block = loc.getWorld().getHighestBlockAt((int)x, (int)z);
-//					ItemStack it = new ItemStack(block.getType(),1);
-//					p.getWorld().spawnParticle(Particle.ITEM_CRACK, block.getLocation().add(0.5,0,0.5),4,0.3F,0.3F,0.3F,0.1F, it);
 				}
 				
-				for(Entity entity : loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar())) {
-					
-					if(!entity.equals(p) && entity instanceof LivingEntity) {
-						if(entity instanceof Player || entity.hasMetadata("NPC")) {
-							RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-							ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(entity.getLocation()));
-							if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
-								continue;
-						}
-						
-						int number = new Random().nextInt(100);
-						if(number < 10) {
-							entity.setVelocity(new Vector(0, Math.random()*0.5+0.01, 0));
-						}
-						
+				loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar()).parallelStream().filter(e -> {
+					if(e.equals(p) || !(e instanceof LivingEntity))
+						return false;
+					if(e instanceof Player) {
+						RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+						State flag = set.queryValue(null, Flags.PVP);
+						if(flag != null && flag.equals(State.ALLOW)
+								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+							return false;
 					}
-				}
+					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+						return false;
+					return true;
+				}).forEach(e -> {
+					int number = new Random().nextInt(100);
+					if(number < 10) {
+						e.setVelocity(new Vector(0, Math.random()*0.5+0.01, 0));
+					}
+				});
 				
 				--timer;
 			}

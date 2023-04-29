@@ -43,20 +43,22 @@ public class OdwrocenieUwagi extends ARune {
 		PotionEffect potion = new PotionEffect(PotionEffectType.SLOW, 20*dr.getDurationTime(), 9);
 		
 		Collection<Entity> targetList = p.getWorld().getNearbyEntities(p.getLocation(), dr.getObszar(), dr.getObszar(), dr.getObszar());
-		for(Entity e : targetList) {
-			if(!(e instanceof LivingEntity))
-				continue;
+		
+		targetList.parallelStream().filter(e -> {
+			if(e.equals(p) || !(e instanceof LivingEntity))
+				return false;
 			if(e instanceof Player)
-				continue;
+				return false;
 			if(e.getLocation().distance(loc) > dr.getObszar())
-				continue;
-			
+				return false;
+			if(!BukkitAdapter.adapt(e).isDamageable())
+				return false;
+			return true;
+		}).forEach(e -> {
 			if(globalEffected.containsKey(e))
 				globalEffected.get(e).getLocalEffected().remove(e);
-			
 			Vector vec = e.getLocation().toVector().subtract(p.getLocation().toVector());
 			Location eLoc = e.getLocation().setDirection(vec);
-//			Bukkit.broadcastMessage("§e"+vec.toString()+"§r : §a"+eLoc.getYaw()+" "+eLoc.getPitch());
 			
 			((LivingEntity)e).addPotionEffect(potion);
 			e.teleport(eLoc);
@@ -68,8 +70,8 @@ public class OdwrocenieUwagi extends ARune {
 			hadAIs.put(e, ae.hasAI());
 			if(ae.hasAI())
 				ae.setAI(false);
-			
-		}
+		});
+		
 		new BukkitRunnable() {
 			int timer = 20*dr.getDurationTime();
 			@Override
@@ -79,32 +81,25 @@ public class OdwrocenieUwagi extends ARune {
 					return;
 				}
 				--timer;
-//				Bukkit.broadcastMessage("Timer: "+timer+" -> "+localEffected.size());
-				for(Entity e : localEffected.keySet()) {
+				
+				localEffected.keySet().parallelStream().filter(e -> {
 					if(e == null || e.isDead())
-						continue;
-					if(!globalEffected.containsKey(e)) {
-						continue;
-					}
-					if(!globalEffected.get(e).equals(inst)){
-						continue;
-					}
-					
+						return false;
+					if(!globalEffected.containsKey(e))
+						return false;
+					if(!globalEffected.get(e).equals(inst))
+						return false;
 					LivingEntity le = (LivingEntity) e;
 					if(!le.hasPotionEffect(PotionEffectType.SLOW)) 
-						continue;
-//					Bukkit.broadcastMessage("Test6 "+e.getName());
-					
+						return false;
+					return true;
+				}).forEach(e -> {
 					Location tmp = e.getLocation();
 					tmp.setDirection(localEffected.get(e));
-					
-//					MythicBukkit.inst().getVolatileCodeHandler().lookAt(
-//							BukkitAdapter.adapt(e), tmp.getYaw(), tmp.getPitch());
-					
 					MythicBukkit.inst().getVolatileCodeHandler().getEntityHandler().setLocation(
 							BukkitAdapter.adapt(e), tmp.getX(), tmp.getY(), tmp.getZ(), 
 							tmp.getYaw(), tmp.getPitch());
-				}
+				});
 			}
 		}.runTaskTimer(Main.getInstance(), 0, 1);
 		
@@ -112,20 +107,22 @@ public class OdwrocenieUwagi extends ARune {
 			
 			@Override
 			public void run() {
-				for(Entity e : localEffected.keySet()) {
-					if(!globalEffected.containsKey(e))
-						continue;
-					if(!globalEffected.get(e).equals(inst))
-						continue;
-					globalEffected.remove(e);
-				}
-				localEffected.clear();
 				
-				for(Entity e : hadAIs.keySet()) {
-					if(!hadAIs.get(e))
-						continue;
+				localEffected.keySet().parallelStream().filter(e -> {
+					if(!globalEffected.containsKey(e))
+						return false;
+					if(!globalEffected.get(e).equals(inst))
+						return false;
+					return true;
+				}).forEach(e -> {
+					globalEffected.remove(e);
+				});
+				localEffected.clear();
+				hadAIs.forEach((e, ai) -> {
+					if(!ai)
+						return;
 					BukkitAdapter.adapt(e).setAI(true);
-				}
+				});
 				hadAIs.clear();
 			}
 		}.runTaskLaterAsynchronously(Main.getInstance(), 20*dr.getDurationTime());

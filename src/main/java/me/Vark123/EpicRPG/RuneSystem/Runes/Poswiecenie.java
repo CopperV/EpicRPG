@@ -11,9 +11,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
+import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class Poswiecenie extends ARune {
 
@@ -25,9 +27,10 @@ public class Poswiecenie extends ARune {
 	@Override
 	public void castSpell() {
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
-		RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
-		rpg.setPoswiecenie(true);
-		rpg.setModifier1_lock(true);
+		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
+		RpgModifiers modifiers = rpg.getModifiers();
+		modifiers.setPoswiecenie(true);
+		modifiers.setModifier1_lock(true);
 		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
 		
 		new BukkitRunnable() {
@@ -63,8 +66,8 @@ public class Poswiecenie extends ARune {
 				if(timer <= 0 || !casterInCastWorld()) {
 					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1.5f);
-					rpg.setPoswiecenie(false);
-					rpg.setModifier1_lock(false);
+					modifiers.setPoswiecenie(false);
+					modifiers.setModifier1_lock(false);
 					this.cancel();
 					return;
 				}

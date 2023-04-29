@@ -23,7 +23,7 @@ public class AuraCzystosci extends ARune {
 
 	@Override
 	public void castSpell() {
-//		RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
+//		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		p.getWorld().playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1, 1);
 		double amount = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()*0.5;
 		p.setAbsorptionAmount(p.getAbsorptionAmount()+amount);

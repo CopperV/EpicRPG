@@ -15,9 +15,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class SilaJednosci extends ARune {
 	
@@ -41,17 +42,17 @@ public class SilaJednosci extends ARune {
 			@Override
 			public void run() {
 				if(timer <= 0 || !casterInCastWorld()) {
-					for(Player p : localEffected) {
-						if(!p.isOnline()) 
-							continue;
-						
-						RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
-						if(rpg.hasSilaJednosci()) rpg.setSilaJednosci(false);
-						
-						if(!globalEffected.containsKey(p) || !globalEffected.get(p).equals(inst))
-							continue;
-						globalEffected.remove(p);
-					}
+					
+					localEffected.parallelStream().forEach(tmp -> {
+						if(!tmp.isOnline())
+							return;
+						RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(tmp);
+						if(rpg.getModifiers().hasSilaJednosci()) 
+							rpg.getModifiers().setSilaJednosci(false);
+						if(!globalEffected.containsKey(tmp) || !globalEffected.get(tmp).equals(inst))
+							return;
+						globalEffected.remove(tmp);
+					});
 					localEffected.clear();
 					
 					loc.getWorld().playSound(loc, Sound.ENTITY_ITEM_BREAK, 1, 1);
@@ -61,47 +62,44 @@ public class SilaJednosci extends ARune {
 				}
 				
 				List<Player> tmp = new LinkedList<>(localEffected);
-				for(Player tmpP : tmp) {
-					if(!tmpP.isOnline())
-						continue;
-					
-					if(!globalEffected.containsKey(tmpP) || !globalEffected.get(tmpP).equals(inst)) {
-						localEffected.remove(tmpP);
-//						RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
-//						if(rpg.hasSilaJednosci()) rpg.setSilaJednosci(false);
-						continue;
+				tmp.parallelStream().forEach(temp -> {
+					if(!temp.isOnline())
+						return;
+					if(!globalEffected.containsKey(temp) || !globalEffected.get(temp).equals(inst)) {
+						localEffected.remove(temp);
+						return;
 					}
+					if(temp.getLocation().distance(loc) <= dr.getObszar())
+						return;
 					
-					if(tmpP.getLocation().distance(loc) <= dr.getObszar())
-						continue;
-					
-					localEffected.remove(tmpP);
-					RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
-					if(rpg.hasSilaJednosci()) rpg.setSilaJednosci(false);
-				}
+					localEffected.remove(temp);
+					RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(temp);
+					if(rpg.getModifiers().hasSilaJednosci()) 
+						rpg.getModifiers().setSilaJednosci(false);
+				});
 				
 				Collection<Entity> entities = loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar());
-				for(Entity e : entities) {
+				
+				entities.parallelStream().filter(e -> {
 					if(!(e instanceof Player))
-						continue;
-					
-					Player tmpP = (Player) e;
-					if(tmpP.equals(p))
-						continue;
-					
-					if(localEffected.contains(p)) {
-						if(!globalEffected.containsKey(tmpP) || !globalEffected.get(tmpP).equals(inst)) {
-							localEffected.remove(tmpP);
+						return false;
+					if(e.equals(p))
+						return false;
+					Player temp = (Player) e;
+					if(localEffected.contains(temp)) {
+						if(!globalEffected.containsKey(temp) || !globalEffected.get(temp).equals(inst)) {
+							localEffected.remove(temp);
 						}
-						continue;
+						return false;
 					}
-					
-					localEffected.add(tmpP);
-					globalEffected.put(tmpP, inst);
-					RpgPlayer rpg = Main.getListaRPG().get(tmpP.getUniqueId().toString());
-					rpg.setSilaJednosci(true);
-					
-				}
+					return true;
+				}).forEach(e -> {
+					Player temp = (Player) e;
+					localEffected.add(temp);
+					globalEffected.put(temp, inst);
+					RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(temp);
+					rpg.getModifiers().setSilaJednosci(true);
+				});
 				
 				--timer;
 			}

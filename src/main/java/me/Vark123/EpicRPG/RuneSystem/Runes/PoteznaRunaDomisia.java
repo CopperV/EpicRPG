@@ -13,7 +13,6 @@ import org.bukkit.Sound;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -23,7 +22,7 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
@@ -113,15 +112,18 @@ public class PoteznaRunaDomisia extends ARune {
 			}
 		}.runTaskTimer(Main.getInstance(), 0, 5);
 		
-		for(Entity en : p.getNearbyEntities(dr.getObszar(), dr.getObszar(), dr.getObszar())) {
-			if(!(en instanceof Player))
-				continue;
+		p.getNearbyEntities(dr.getObszar(), dr.getObszar(), dr.getObszar()).parallelStream().filter(e -> {
+			if(!(e instanceof Player))
+				return false;
 			RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-			ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(en.getLocation()));
-			if(set.queryValue(null, Flags.PVP).equals(StateFlag.State.ALLOW))
-				continue;
-
-			Player tmp = (Player) en;
+			ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+			State flag = set.queryValue(null, Flags.PVP);
+			if(flag != null && flag.equals(State.ALLOW)
+					&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+				return false;
+			return false;
+		}).forEach(e -> {
+			Player tmp = (Player) e;
 			tmp.playSound(tmp.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 5, 0.1f);
 			tmp.addPotionEffect(effect1);
 			tmp.addPotionEffect(effect2);
@@ -176,8 +178,7 @@ public class PoteznaRunaDomisia extends ARune {
 					--timer;
 				}
 			}.runTaskTimer(Main.getInstance(), 0, 5);
-				
-		}
+		});
 		
 		OnlinePAFPlayer pafPlayer = PAFPlayerManager.getInstance().getPlayer(p);
 		PlayerParty party = PartyAPI.getParty(pafPlayer);
@@ -191,12 +192,12 @@ public class PoteznaRunaDomisia extends ARune {
 			set.addAll(klan.getAllOnlineClanPlayers());
 		}
 		
-		for(OnlinePAFPlayer temp : set) {
-			if(temp == null)
-				continue;
-			if(temp.equals(pafPlayer))
-				continue;
-			Player tmp = Bukkit.getPlayer(temp.getUniqueId());
+		set.parallelStream().filter(paf -> {
+			if(paf.equals(pafPlayer))
+				return false;
+			return true;
+		}).forEach(paf -> {
+			Player tmp = paf.getPlayer();
 			tmp.playSound(tmp.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 5, 0.1f);
 			tmp.addPotionEffect(effect1);
 			tmp.addPotionEffect(effect2);
@@ -251,72 +252,7 @@ public class PoteznaRunaDomisia extends ARune {
 					--timer;
 				}
 			}.runTaskTimer(Main.getInstance(), 0, 5);
-		}
-
-//		PartyPlayer partyP = Main.getPartiesAPI().getPartyPlayer(p.getUniqueId());
-//		if(!partyP.isInParty()) return;
-//		Party part = Main.getPartiesAPI().getParty(partyP.getPartyId());
-//		if(part == null) return;
-//		for(PartyPlayer pp : part.getOnlineMembers()) {
-//			if(pp == null)
-//				continue;
-//			if(p.getUniqueId().equals(pp.getPlayerUUID()))
-//				continue;
-//			Player tmp = Bukkit.getPlayer(pp.getPlayerUUID());
-//			tmp.playSound(tmp.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 5, 0.1f);
-//			tmp.addPotionEffect(effect1);
-//			tmp.addPotionEffect(effect2);
-//			tmp.addPotionEffect(effect3);
-//			tmp.addPotionEffect(effect4);
-//			tmp.addPotionEffect(effect5);
-//			if(conf)
-//				tmp.addPotionEffect(effect6);
-//			
-//			new BukkitRunnable() {
-//				
-//				double time = dr.getDurationTime();
-//				double timer = dr.getDurationTime();
-//				BossBar bar = Bukkit.createBossBar("§5§lPotezna Runa Domisia§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
-//					bar.setVisible(true);
-//					bar.addPlayer(tmp);
-//					bar.setProgress(timer/time);
-//				}
-//				
-//				@Override
-//				public void run() {
-//					if(timer <= 0) {
-//						bar.removeAll();
-//						bar.setVisible(false);
-//						this.cancel();
-//						return;
-//					}
-//					
-//					bar.setTitle("§5§lPotezna Runa Domisia§f: "+(int)timer+" sekund");
-//					bar.setProgress(timer/time);
-//					
-//					--timer;
-//				}
-//			}.runTaskTimer(Main.getInstance(), 0, 20);
-//			
-//			new BukkitRunnable() {
-//				int timer = dr.getDurationTime()*4;
-//				DustOptions dust = new DustOptions(Color.fromRGB(128, 0, 128), 1);
-//				@Override
-//				public void run() {
-//					if(timer <= 0) {
-//						tmp.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
-//						tmp.playSound(tmp.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 5, 1f);
-//						this.cancel();
-//						return;
-//					}
-//					
-//					Location loc = tmp.getLocation().add(0,1,0);
-//					tmp.getWorld().spawnParticle(Particle.REDSTONE, loc, 3, 0.5f, 0.5f, 0.5f, 0.1f,dust);
-//					
-//					--timer;
-//				}
-//			}.runTaskTimer(Main.getInstance(), 0, 5);
-//		}
+		});
 		
 	}
 

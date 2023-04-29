@@ -11,9 +11,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
+import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class LodowaStrzalaLcz extends ARune {
 
@@ -24,10 +26,11 @@ public class LodowaStrzalaLcz extends ARune {
 
 	@Override
 	public void castSpell() {
-		RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
+		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
+		RpgModifiers modifier = rpg.getModifiers();
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
-		rpg.setLodowaStrzala(true);
-		rpg.setModifier1_lock(true);
+		modifier.setLodowaStrzala(true);
+		modifier.setModifier1_lock(true);
 		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
 		
 		new BukkitRunnable() {
@@ -47,8 +50,8 @@ public class LodowaStrzalaLcz extends ARune {
 					bar.setVisible(false);
 					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GHAST_SHOOT, 1, 1);
-					rpg.setLodowaStrzala(false);
-					rpg.setModifier1_lock(false);
+					modifier.setLodowaStrzala(false);
+					modifier.setModifier1_lock(false);
 					Location loc = p.getLocation();
 					for(double y = 0.1;y<=2.2;y+=0.1) {
 						for(double t = 0;t<=2*Math.PI;t+=(Math.PI/16)) {
@@ -69,28 +72,6 @@ public class LodowaStrzalaLcz extends ARune {
 				--timer;
 			}
 		}.runTaskTimer(Main.getInstance(), 0, 20);
-		
-//		new BukkitRunnable(){
-//
-//			@Override
-//			public void run() {
-//				p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
-//				p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GHAST_SHOOT, 1, 1);
-//				rpg.setLodowaStrzala(false);
-//				rpg.setModifier1_lock(false);
-//				Location loc = p.getLocation();
-//				for(double y = 0.1;y<=2.2;y+=0.1) {
-//					for(double t = 0;t<=2*Math.PI;t+=(Math.PI/16)) {
-//						double x = Math.sin(t);
-//						double z = Math.cos(t);
-//						loc.add(x,y,z);
-//						p.getWorld().spawnParticle(Particle.SMOKE_LARGE, loc, 10, 0, 0,0,0);
-//						loc.subtract(x, y, z);
-//					}
-//				}
-//			}
-//			
-//		}.runTaskLater(Main.getInstance(), 20*dr.getDurationTime());
 	}
 
 }

@@ -27,13 +27,17 @@ import de.simonsator.partyandfriends.api.party.PlayerParty;
 import de.simonsator.partyandfriends.clan.api.Clan;
 import de.simonsator.partyandfriends.clan.api.ClansManager;
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class ZadzaKrwi extends ARune {
 
 	private static List<Player> effected = new ArrayList<>();
+	
+	private List<OnlinePAFPlayer> list1 = new LinkedList<>();
+	private List<OnlinePAFPlayer> list2 = new LinkedList<>();
 
 	public ZadzaKrwi(ItemStackRune dr, Player p) {
 		super(dr, p);
@@ -45,11 +49,11 @@ public class ZadzaKrwi extends ARune {
 		
 		if(!effected.contains(p)) {
 			p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 5, 0.1f);
-			RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
+			RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 			effected.add(p);
 			p.addPotionEffect(effect);
 			p.sendMessage("§7[§6EpicRPG§7] §cKrew Ciebie zalewa - Twoi przeciwnicy zaczynaja drzec ze strachu...");
-			rpg.setZadzaKrwi(true);
+			rpg.getModifiers().setZadzaKrwi(true);
 			
 			new BukkitRunnable() {
 				
@@ -85,7 +89,7 @@ public class ZadzaKrwi extends ARune {
 					if(timer <= 0 || !casterInCastWorld()) {
 						p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 						p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 5, 1f);
-						rpg.setZadzaKrwi(false);
+						rpg.getModifiers().setZadzaKrwi(false);
 						this.cancel();
 						return;
 					}
@@ -114,31 +118,30 @@ public class ZadzaKrwi extends ARune {
 		OnlinePAFPlayer pafPlayer = PAFPlayerManager.getInstance().getPlayer(p);
 		PlayerParty party = PartyAPI.getParty(pafPlayer);
 		Clan klan = ClansManager.getInstance().getClan(pafPlayer);
-//		List<OnlinePAFPlayer> list1 = party.getAllPlayers();
-//		List<OnlinePAFPlayer> list2 = klan.getAllOnlineClanPlayers();
-		List<OnlinePAFPlayer> list1 = new LinkedList<>();
-		List<OnlinePAFPlayer> list2 = new LinkedList<>();
+		
 		if(party != null) list1 = party.getAllPlayers();
 		if(klan != null) list2 = klan.getAllOnlineClanPlayers();
 		
 		Collection<Entity> entities = p.getWorld().getNearbyEntities(p.getLocation(), dr.getObszar(), dr.getObszar(), dr.getObszar());
-		for(Entity e : entities) {
+		
+		entities.parallelStream().filter(e -> {
 			if(!(e instanceof Player))
-				continue;
+				return false;
 			Player tmp = (Player) e;
 			if(effected.contains(tmp))
-				continue;
-			
+				return false;
 			OnlinePAFPlayer tmpPAF = PAFPlayerManager.getInstance().getPlayer(tmp);
 			if(!(list1.contains(tmpPAF) || list2.contains(tmpPAF)))
-				continue;
-			
-			RpgPlayer rpg = Main.getListaRPG().get(tmp.getUniqueId().toString());
+				return false;
+			return true;
+		}).forEach(e -> {
+			Player tmp = (Player) e;
+			RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(tmp);
 			tmp.playSound(tmp.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 5, 0.1f);
 			effected.add(tmp);
 			tmp.addPotionEffect(effect);
 			tmp.sendMessage("§7[§6EpicRPG§7] §cKrew Ciebie zalewa - Twoi przeciwnicy zaczynaja drzec ze strachu...");
-			rpg.setZadzaKrwi(true);
+			rpg.getModifiers().setZadzaKrwi(true);
 			new BukkitRunnable() {
 				int timer = dr.getDurationTime()*4;
 				DustOptions dust = new DustOptions(Color.RED, 1);
@@ -147,7 +150,7 @@ public class ZadzaKrwi extends ARune {
 					if(timer <= 0 || !entityInCastWorld(tmp)) {
 						tmp.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 						tmp.playSound(tmp.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 5, 1f);
-						rpg.setZadzaKrwi(false);
+						rpg.getModifiers().setZadzaKrwi(false);
 						this.cancel();
 						return;
 					}
@@ -168,8 +171,7 @@ public class ZadzaKrwi extends ARune {
 					effected.remove(tmp);
 				}
 			}.runTaskLater(Main.getInstance(), 60*10*20);
-			
-		}
+		});
 		
 	}
 	

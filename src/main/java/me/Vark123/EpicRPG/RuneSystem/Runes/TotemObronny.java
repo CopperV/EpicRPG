@@ -15,13 +15,14 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class TotemObronny extends ARune {
 	
@@ -44,45 +45,54 @@ public class TotemObronny extends ARune {
 			@Override
 			public void run() {
 				if(timer <= 0 || !casterInCastWorld()) {
-					for(Player p : defense) {
-						if(!p.isOnline()) continue;
-						RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
-						if(rpg.hasTotemObronny()) rpg.setTotemObronny(false);
-					}
+					defense.parallelStream().filter(tmp -> {
+						return tmp.isOnline();
+					}).forEach(tmp -> {
+						RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(tmp);
+						if(rpg.getModifiers().hasTotemObronny()) 
+							rpg.getModifiers().setTotemObronny(false);
+					});
 					defense.clear();
 					this.cancel();
 					return;
 				}
 
 				List<Player> tmp = new ArrayList<>(defense);
-				for(Player p : tmp) {
-					if(!p.isOnline()) continue;
-					
-					if(p.getLocation().distance(loc) <= dr.getObszar()) continue;
-					
-					defense.remove(p);
-					RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
-					if(rpg.hasTotemObronny()) rpg.setTotemObronny(false);
-					
-				}
+				tmp.parallelStream().filter(temp -> {
+					if(!temp.isOnline())
+						return false;
+					if(temp.getLocation().distance(loc) <= dr.getObszar())
+						return false;
+					return true;
+				}).forEach(temp -> {
+					defense.remove(temp);
+					RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(temp);
+					if(rpg.getModifiers().hasTotemObronny()) 
+						rpg.getModifiers().setTotemObronny(false);
+				});
 				
 				Collection<Entity> entities = loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar());
-				for(Entity e : entities) {
-					if(!(e instanceof Player)) continue;
-					Player p = (Player) e;
-					if(defense.contains(p)) continue;
-					if(!p.equals(p)) {
+				entities.parallelStream().filter(e -> {
+					if(!(e instanceof Player))
+						return false;
+					Player temp = (Player) e;
+					if(defense.contains(temp))
+						return false;
+					if(!temp.equals(p)) {
 						RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(p.getLocation()));
-						if(set.queryValue(null, Flags.PVP).equals(StateFlag.State.ALLOW)) {
-							continue;
-						}
+						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+						State flag = set.queryValue(null, Flags.PVP);
+						if(flag != null && flag.equals(State.ALLOW)
+								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+							return false;
 					}
-					
-					defense.add(p);
-					RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
-					rpg.setTotemObronny(true);
-				}
+					return true;
+				}).forEach(e -> {
+					Player temp = (Player) e;
+					defense.add(temp);
+					RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(temp);
+					rpg.getModifiers().setTotemObronny(true);
+				});
 				
 				--timer;
 			}

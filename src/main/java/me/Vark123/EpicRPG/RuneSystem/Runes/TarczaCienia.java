@@ -11,9 +11,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class TarczaCienia extends ARune {
 
@@ -24,8 +25,8 @@ public class TarczaCienia extends ARune {
 	@Override
 	public void castSpell() {
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ILLUSIONER_PREPARE_MIRROR, 1, 0.8f);
-		RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
-		rpg.setTarczaCienia(true);
+		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
+		rpg.getModifiers().setTarczaCienia(true);
 		
 		new BukkitRunnable() {
 			
@@ -55,7 +56,6 @@ public class TarczaCienia extends ARune {
 		
 		new BukkitRunnable() {
 			int licznik = 0;
-//			Vector vec = loc.getDirection().normalize();
 			@Override
 			public void run() {
 				Location loc = p.getLocation();
@@ -66,7 +66,7 @@ public class TarczaCienia extends ARune {
 				if(licznik>=20*dr.getDurationTime() || !casterInCastWorld()) {
 					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GHAST_SHOOT, 1, 1.7f);
-					rpg.setTarczaCienia(false);
+					rpg.getModifiers().setTarczaCienia(false);
 					this.cancel();
 				}
 			}

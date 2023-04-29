@@ -25,14 +25,14 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.RPGFight.ManualDamage;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class CienAssasyna extends ARune {
 
@@ -42,9 +42,9 @@ public class CienAssasyna extends ARune {
 
 	@Override
 	public void castSpell() {
-		RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
+		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
-		rpg.setCienAssasyna(true);
+		rpg.getModifiers().setCienAssasyna(true);
 		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
 		
 		new BukkitRunnable() {
@@ -80,7 +80,7 @@ public class CienAssasyna extends ARune {
 				if(timer <= 0 || !casterInCastWorld()) {
 					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GHAST_SHOOT, 1, 1.7f);
-					rpg.setCienAssasyna(false);
+					rpg.getModifiers().setCienAssasyna(false);
 					this.cancel();
 					return;
 				}
@@ -103,25 +103,32 @@ public class CienAssasyna extends ARune {
 				
 				List<Entity> newTargets = new ArrayList<>();
 				Map<Entity, Location> locations = new ConcurrentHashMap<>();
-				for(Entity en : last) {
-					List<Entity> tmp = en.getNearbyEntities(3, 3, 3);
-					for(Entity e : tmp) {
-						if(shooted.contains(e)) continue;
-						if(newTargets.contains(e)) continue;
-						if(e.equals(player)) continue;
-						if(!(e instanceof LivingEntity)) continue;
-						if(en instanceof Player || en.hasMetadata("NPC")) {
-							Location loc = en.getLocation();
+				
+				last.parallelStream().forEach(en -> {
+					en.getNearbyEntities(3, 3, 3).parallelStream().filter(e -> {
+						if(shooted.contains(e) || last.contains(e) || newTargets.contains(e))
+							return false;
+						if(!(e instanceof LivingEntity))
+							return false;
+						if(e.equals(player))
+							return false;
+						if(e instanceof Player) {
 							RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-							ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(en.getLocation()));
-							if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
-								continue;
+							ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+							State flag = set.queryValue(null, Flags.PVP);
+							if(flag != null && flag.equals(State.ALLOW)
+									&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+								return false;
 						}
+						if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+							return false;
+						return true;
+					}).forEach(e -> {
 						newTargets.add(e);
 						locations.put(e, en.getLocation());
 						shooted.add(e);
-					}
-				}
+					});
+				});
 				
 				if(newTargets.isEmpty()) {
 					this.cancel();
@@ -141,9 +148,9 @@ public class CienAssasyna extends ARune {
 					if(event.isCancelled()) {
 						continue;
 					}
-					ManualDamage.doDamage(player, (LivingEntity)e, damage, event);
+					//TODO
+//					ManualDamage.doDamage(player, (LivingEntity)e, damage, event);
 					drawLine(e.getLocation(), locations.get(e));
-//					EntityContactDamage.damage(e, player, damage, DamageCause.CONTACT);
 					e.getWorld().spawnParticle(Particle.SMOKE_NORMAL, e.getLocation(), 15, 0.4f, 0.4f, 0.4f, 0.15f);
 				}
 				
@@ -153,8 +160,6 @@ public class CienAssasyna extends ARune {
 	
 	private static void drawLine(Location loc1, Location loc2) {
 		double space = 0.4;
-//		Vector p1 = loc1.getDirection();
-//		Vector p2 = loc2.getDirection();
 		Vector p1 = new Vector(loc1.getX(), loc1.getY(), loc1.getZ());
 		Vector p2 = new Vector(loc2.getX(), loc2.getY(), loc2.getZ());
 		double distance = loc1.distance(loc2);

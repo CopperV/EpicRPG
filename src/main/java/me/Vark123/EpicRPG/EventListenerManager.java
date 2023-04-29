@@ -24,6 +24,7 @@ import me.Vark123.EpicRPG.FightSystem.Modifiers.ModList.TransfuzjaModifier;
 import me.Vark123.EpicRPG.FightSystem.Modifiers.ModList.WeaknessModifier;
 import me.Vark123.EpicRPG.FightSystem.Modifiers.ModList.WedrownyCienModifier;
 import me.Vark123.EpicRPG.FightSystem.Modifiers.ModList.ZewKrwiModifier;
+import me.Vark123.EpicRPG.HealthSystem.PlayerHealEvent;
 import me.Vark123.EpicRPG.Players.BaseEvents.PlayerJoinEvent;
 import me.Vark123.EpicRPG.Players.BaseEvents.PlayerQuitEvent;
 
@@ -35,6 +36,8 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new PlayerJoinEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new PlayerQuitEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new ChatMsgSendEvent(), inst);
+
+		Bukkit.getPluginManager().registerEvents(new PlayerHealEvent(), inst);
 
 		Bukkit.getPluginManager().registerEvents(new ShootEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new RpgDamageEvent(), inst);

@@ -17,13 +17,13 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
-import me.Vark123.EpicRPG.RuneSystem.RuneDamage;
+import me.Vark123.EpicRPG.FightSystem.RuneDamage;
 
 public class EksplozjaLodu extends ARune {
 
@@ -37,18 +37,25 @@ public class EksplozjaLodu extends ARune {
 		loc.getWorld().playSound(loc, Sound.BLOCK_RESPAWN_ANCHOR_DEPLETE, 1.5f, 1.5F);
 
 		Collection<Entity> tmpList = loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar());
-		for(Entity entity : tmpList) {
-			if(!entity.equals(p) && entity instanceof LivingEntity) {
-				if(entity instanceof Player || entity.hasMetadata("NPC")) {
-					RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-					ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(entity.getLocation()));
-					if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
-						continue;
-				}
-				loc.getWorld().playSound(entity.getLocation(), Sound.ENTITY_PLAYER_HURT_FREEZE, 0.8f, 0.5F);
-				RuneDamage.damageNormal(p, (LivingEntity)entity, dr);
+		
+		tmpList.parallelStream().filter(e -> {
+			if(e.equals(p) || !(e instanceof LivingEntity))
+				return false;
+			if(e instanceof Player) {
+				RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+				ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+				State flag = set.queryValue(null, Flags.PVP);
+				if(flag != null && flag.equals(State.ALLOW)
+						&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+					return false;
 			}
-		}
+			if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+				return false;
+			return true;
+		}).forEach(e -> {
+			loc.getWorld().playSound(e.getLocation(), Sound.ENTITY_PLAYER_HURT_FREEZE, 0.8f, 0.5F);
+			RuneDamage.damageNormal(p, (LivingEntity)e, dr);
+		});
 		
 		List<Vector> directions = new LinkedList<>();
 		double r = 2;

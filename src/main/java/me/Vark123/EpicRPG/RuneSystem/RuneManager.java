@@ -37,10 +37,12 @@ public class RuneManager {
 	
 	private final List<Player> globalCd;
 	private final Map<Player,Map<String, ItemStackRune>> playerRuneCd;
+	private final Map<Player, Date> playerObszarowkiCd;
 	
 	private RuneManager() {
 		globalCd = new ArrayList<>();
 		playerRuneCd = new ConcurrentHashMap<>();
+		playerObszarowkiCd = new ConcurrentHashMap<>();
 	}
 	
 	public static RuneManager getInstance() {
@@ -255,6 +257,10 @@ public class RuneManager {
 	public boolean silaZywiolowEffect() {
 		Random rand = new Random();
 		return (rand.nextInt(100) < 5);
+	}
+
+	public Map<Player, Date> getObszarowkiCd() {
+		return playerObszarowkiCd;
 	}
 	
 	public ARune getRune(ItemStackRune dr, Player p, Material material, String name) {

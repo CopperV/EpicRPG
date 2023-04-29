@@ -8,8 +8,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
-import org.bukkit.Sound;
 import org.bukkit.Particle.DustOptions;
+import org.bukkit.Sound;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -23,14 +23,15 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.FightSystem.RuneDamage;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
-import me.Vark123.EpicRPG.RuneSystem.RuneDamage;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class RytualKrwi extends ARune {
 
@@ -41,8 +42,8 @@ public class RytualKrwi extends ARune {
 	@Override
 	public void castSpell() {
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_HURT_SWEET_BERRY_BUSH, 1, 0.8f);
-		RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
-		rpg.setRytualKrwi(true);
+		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
+		rpg.getModifiers().setRytualKrwi(true);
 		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
 		
 		new BukkitRunnable() {
@@ -81,7 +82,7 @@ public class RytualKrwi extends ARune {
 					p.getWorld().spawnParticle(Particle.REDSTONE, loc, 15, 0.5f, 0.5f, 0.5f, 0.2f, dust);
 					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, 1, 1.7f);
-					rpg.setRytualKrwi(false);
+					rpg.getModifiers().setRytualKrwi(false);
 					this.cancel();
 					return;
 				}
@@ -112,17 +113,25 @@ public class RytualKrwi extends ARune {
 		}
 		
 		Collection<Entity> tmpList = loc.getWorld().getNearbyEntities(loc,dr.getObszar(), dr.getObszar(), dr.getObszar());
-		for(Entity entity : tmpList) {
-			if(!entity.equals(p) && entity instanceof LivingEntity) {
-				if(entity instanceof Player || entity.hasMetadata("NPC")) {
-					RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-					ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(entity.getLocation()));
-					if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
-						continue;
-				}
-				RuneDamage.damageNormal(p, (LivingEntity)entity, dr);
+		
+		tmpList.parallelStream().filter(e -> {
+			if(e.equals(p) || !(e instanceof LivingEntity))
+				return false;
+			if(e instanceof Player) {
+				RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+				ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+				State flag = set.queryValue(null, Flags.PVP);
+				if(flag != null && flag.equals(State.ALLOW)
+						&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+					return false;
 			}
-		}
+			if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+				return false;
+			return true;
+		}).forEach(e -> {
+			RuneDamage.damageNormal(p, (LivingEntity) e, dr);
+		});
+		
 	}
 
 }

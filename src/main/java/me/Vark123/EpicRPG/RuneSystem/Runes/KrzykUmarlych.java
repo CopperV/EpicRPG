@@ -1,8 +1,5 @@
 package me.Vark123.EpicRPG.RuneSystem.Runes;
 
-import java.util.Collection;
-import java.util.Iterator;
-
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -19,6 +16,7 @@ import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import io.lumine.mythic.api.adapters.AbstractEntity;
@@ -26,10 +24,12 @@ import io.lumine.mythic.api.adapters.AbstractPlayer;
 import io.lumine.mythic.api.adapters.AbstractVector;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.FightSystem.RuneDamage;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
+import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
-import me.Vark123.EpicRPG.RuneSystem.RuneDamage;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import net.minecraft.world.phys.AxisAlignedBB;
 
 public class KrzykUmarlych extends ARune {
@@ -44,48 +44,46 @@ public class KrzykUmarlych extends ARune {
 	@Override
 	public void castSpell() {
 		
-		RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
-		if(rpg.getPresent_mana() < 1)
+		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
+		RpgStats stats = rpg.getStats();
+		if(stats.getPresentMana() < 1)
 			return;
-		dmg = rpg.getPresent_mana() * 3;
-		rpg.removePresentMana(rpg.getPresent_mana());
+		dmg = stats.getPresentMana() * 3;
+		stats.removePresentMana(stats.getPresentMana());
 		
 		AbstractPlayer ap = BukkitAdapter.adapt(p);
 		
-		double maxLength = 0;
-		
-		Collection<Entity> collection = p.getWorld().getNearbyEntities(p.getLocation(), 35, 35, 35);
-		Iterator<Entity> iterator = collection.iterator();
-		while(iterator.hasNext()) {
-			Entity en = iterator.next();
-			if(en.equals(p) || !(en instanceof LivingEntity))
-				continue;
-			if(en instanceof Player || en.hasMetadata("NPC")) {
-				Location loc = en.getLocation();
+		p.getWorld().getNearbyEntities(p.getLocation(), 35, 35, 35, e -> {
+			if(e.equals(p) || !(e instanceof LivingEntity))
+				return false;
+			if(e instanceof Player) {
 				RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-				ApplicableRegionSet set = query.getApplicableRegions(com.sk89q.worldedit.bukkit.BukkitAdapter.adapt(en.getLocation()));
-				if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
-					continue;
+				ApplicableRegionSet set = query.getApplicableRegions(com.sk89q.worldedit.bukkit.BukkitAdapter.adapt(e.getLocation()));
+				State flag = set.queryValue(null, Flags.PVP);
+				if(flag != null && flag.equals(State.ALLOW)
+						&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+					return false;
 			}
-			AbstractEntity ae = BukkitAdapter.adapt(en);
+			if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+				return false;
+			AbstractEntity ae = BukkitAdapter.adapt(e);
 			AbstractVector entityVector = ap.getEyeLocation().toVector();
 			AbstractVector targetVector = ae.getEyeLocation().toVector();
 			AbstractVector headDirection = ap.getEyeLocation().getDirection();
 			AbstractVector targetDirection = targetVector.subtract(entityVector).normalize();
 			double targetAngle = Math.toDegrees((double)targetDirection.angle(headDirection));
 			if(targetAngle > 30)
-				continue;
-			if(target == null) {
-				target = en;
-				maxLength = en.getLocation().distance(p.getLocation());
-			} else {
-				double lenght = en.getLocation().distance(p.getLocation());
-				if(lenght < maxLength) {
-					maxLength = lenght;
-					target = en;
-				}
-			}
-		}
+				return false;
+			return true;
+		}).parallelStream().min((e1, e2) -> {
+			double dist1 = e1.getLocation().distanceSquared(p.getLocation());
+			double dist2 = e2.getLocation().distanceSquared(p.getLocation());
+			if(dist1 == dist2)
+				return 0;
+			return dist1 < dist2 ? -1 : 1;
+		}).ifPresent(e -> {
+			target = e;
+		});
 		
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_SKELETON_HORSE_HURT, 2.5f, 0.4f);
 
@@ -116,23 +114,40 @@ public class KrzykUmarlych extends ARune {
 					}
 					loc.add(dir);
 					p.getWorld().spawnParticle(Particle.REDSTONE, loc, 8, 0.3f, 0.3f, 0.3f, 0, dust);
-					for(Entity e : loc.getWorld().getNearbyEntities(loc, 3, 3, 3)) {
+					
+					loc.getWorld().getNearbyEntities(loc, 3, 3, 3, e -> {
 						AxisAlignedBB aabb = ((CraftEntity)e).getHandle().cw();
 						AxisAlignedBB aabb2 = new AxisAlignedBB(loc.getX()-0.8, loc.getY()-1.5, loc.getZ()-0.8, loc.getX()+0.8, loc.getY()+1.5, loc.getZ()+0.8);
-						if(aabb.c(aabb2)) {
-							if(!e.equals(p) && e instanceof LivingEntity) {
-								if(e instanceof Player || e.hasMetadata("NPC")) {
-									RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-									ApplicableRegionSet set = query.getApplicableRegions(com.sk89q.worldedit.bukkit.BukkitAdapter.adapt(e.getLocation()));
-									if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
-										continue;
-								}
-								spellEffect(loc, dmg);
-								this.cancel();
-								return;
-							}
+						if(!aabb.c(aabb2))
+							return false;
+						if(e.equals(p) || !(e instanceof LivingEntity))
+							return false;
+						if(e instanceof Player) {
+							RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+							ApplicableRegionSet set = query.getApplicableRegions(com.sk89q.worldedit.bukkit.BukkitAdapter.adapt(e.getLocation()));
+							State flag = set.queryValue(null, Flags.PVP);
+							if(flag != null && flag.equals(State.ALLOW)
+									&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+								return false;
 						}
+						if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+							return false;
+						return true;
+					}).parallelStream().min((e1, e2) -> {
+						double dist1 = e1.getLocation().distanceSquared(loc);
+						double dist2 = e2.getLocation().distanceSquared(loc);
+						if(dist1 == dist2)
+							return 0;
+						return dist1 < dist2 ? -1 : 1;
+					}).ifPresent(e -> {
+						spellEffect(loc, dmg);
+						cancel();
+					});
+					
+					if(this.isCancelled()) {
+						return;
 					}
+					
 					if(loc.getBlock().getType().isSolid() && !loc.getBlock().isLiquid() || !casterInCastWorld()) {
 						spellEffect(loc, dmg);
 						this.cancel();
@@ -156,23 +171,40 @@ public class KrzykUmarlych extends ARune {
 					t += 0.6;
 					loc.add(dir);
 					p.getWorld().spawnParticle(Particle.REDSTONE, loc, 8, 0.3f, 0.3f, 0.3f, 0, dust);
-					for(Entity e : loc.getWorld().getNearbyEntities(loc, 3, 3, 3)) {
+
+					loc.getWorld().getNearbyEntities(loc, 3, 3, 3, e -> {
 						AxisAlignedBB aabb = ((CraftEntity)e).getHandle().cw();
 						AxisAlignedBB aabb2 = new AxisAlignedBB(loc.getX()-0.8, loc.getY()-1.5, loc.getZ()-0.8, loc.getX()+0.8, loc.getY()+1.5, loc.getZ()+0.8);
-						if(aabb.c(aabb2)) {
-							if(!e.equals(p) && e instanceof LivingEntity) {
-								if(e instanceof Player || e.hasMetadata("NPC")) {
-									RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-									ApplicableRegionSet set = query.getApplicableRegions(com.sk89q.worldedit.bukkit.BukkitAdapter.adapt(e.getLocation()));
-									if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
-										continue;
-								}
-								spellEffect(loc, dmg);
-								this.cancel();
-								return;
-							}
+						if(!aabb.c(aabb2))
+							return false;
+						if(e.equals(p) || !(e instanceof LivingEntity))
+							return false;
+						if(e instanceof Player) {
+							RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+							ApplicableRegionSet set = query.getApplicableRegions(com.sk89q.worldedit.bukkit.BukkitAdapter.adapt(e.getLocation()));
+							State flag = set.queryValue(null, Flags.PVP);
+							if(flag != null && flag.equals(State.ALLOW)
+									&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+								return false;
 						}
+						if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+							return false;
+						return true;
+					}).parallelStream().min((e1, e2) -> {
+						double dist1 = e1.getLocation().distanceSquared(loc);
+						double dist2 = e2.getLocation().distanceSquared(loc);
+						if(dist1 == dist2)
+							return 0;
+						return dist1 < dist2 ? -1 : 1;
+					}).ifPresent(e -> {
+						spellEffect(loc, dmg);
+						cancel();
+					});
+					
+					if(this.isCancelled()) {
+						return;
 					}
+					
 					if(loc.getBlock().getType().isSolid() && !loc.getBlock().isLiquid() || !casterInCastWorld()) {
 						spellEffect(loc, dmg);
 						this.cancel();

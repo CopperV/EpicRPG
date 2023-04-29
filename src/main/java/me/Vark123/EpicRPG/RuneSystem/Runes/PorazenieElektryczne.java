@@ -18,13 +18,13 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
-import me.Vark123.EpicRPG.RuneSystem.RuneDamage;
+import me.Vark123.EpicRPG.FightSystem.RuneDamage;
 import net.minecraft.world.phys.AxisAlignedBB;
 
 public class PorazenieElektryczne extends ARune {
@@ -44,84 +44,62 @@ public class PorazenieElektryczne extends ARune {
 			Vector vec = loc.getDirection().normalize();
 			@Override
 			public void run() {
-				t+=0.5;
-				double x = vec.getX()*t;
-				double y = vec.getY()*t+1.5;
-				double z = vec.getZ()*t;
-				loc.add(x,y,z);
-				p.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, loc, 10,0.1F,0.1F,0.1F,0.01F);
-				
-				for(Entity e:loc.getWorld().getNearbyEntities(loc, 10, 10, 10)) {
-					AxisAlignedBB aabb = ((CraftEntity)e).getHandle().cw();
-					AxisAlignedBB aabb2 = new AxisAlignedBB(loc.getX()-1, loc.getY()-1, loc.getZ()-1, loc.getX()+1, loc.getY()+1, loc.getZ()+1);
-					if(aabb.c(aabb2)) {
-						if(!e.equals(p) && e instanceof LivingEntity) {
-							if(e instanceof Player || e.hasMetadata("NPC")) {
-								Location loc = e.getLocation();
-								RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-								ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
-								if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
-									continue;
-							}
-							if(RuneDamage.damageNormal(p, (LivingEntity)e, dr)) {
-								entitiesList.add(e);
-								spellEffect(e);
-								p.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, loc, 10,1F,1F,1F,0.2F);
-								e.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1, 1);
-								this.cancel();
-								return;
-							}
+				for(int i = 0; i < 2; ++i) {
+					t+=0.5;
+					double x = vec.getX()*t;
+					double y = vec.getY()*t+1.5;
+					double z = vec.getZ()*t;
+					loc.add(x,y,z);
+					p.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, loc, 10,0.1F,0.1F,0.1F,0.01F);
+
+					loc.getWorld().getNearbyEntities(loc, 4, 4, 4, e -> {
+						AxisAlignedBB aabb = ((CraftEntity)e).getHandle().cw();
+						AxisAlignedBB aabb2 = new AxisAlignedBB(loc.getX()-1, loc.getY()-1, loc.getZ()-1, loc.getX()+1, loc.getY()+1, loc.getZ()+1);
+						if(!aabb.c(aabb2))
+							return false;
+						if(e.equals(p) || !(e instanceof LivingEntity))
+							return false;
+						if(e instanceof Player) {
+							RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+							ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+							State flag = set.queryValue(null, Flags.PVP);
+							if(flag != null && flag.equals(State.ALLOW)
+									&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+								return false;
 						}
+						if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+							return false;
+						return true;
+					}).parallelStream().min((e1, e2) -> {
+						double dist1 = e1.getLocation().distanceSquared(loc);
+						double dist2 = e2.getLocation().distanceSquared(loc);
+						if(dist1 == dist2)
+							return 0;
+						return dist1 < dist2 ? -1 : 1;
+					}).ifPresent(e -> {
+						if(RuneDamage.damageNormal(p, (LivingEntity)e, dr)) {
+							entitiesList.add(e);
+							spellEffect(e);
+							p.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, loc, 10,1F,1F,1F,0.2F);
+							e.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1, 1);
+							this.cancel();
+							return;
+						}
+					});
+					
+					if(this.isCancelled()) {
+						return;
 					}
-				}
-				
-				if(loc.getBlock().getType().isSolid() && !loc.getBlock().isLiquid()) {
-//					if(!loc.getBlock().getType().equals(Material.AIR)) {
+					
+					if(loc.getBlock().getType().isSolid() && !loc.getBlock().isLiquid()) {
+							this.cancel();
+							return;
+					}
+					loc.subtract(x, y, z);
+					if(t>30 || !casterInCastWorld()) {
 						this.cancel();
 						return;
-				}
-				loc.subtract(x, y, z);
-				if(t>30 || !casterInCastWorld()) {
-					this.cancel();
-					return;
-				}
-				t+=0.5;
-				x = vec.getX()*t;
-				y = vec.getY()*t+1.5;
-				z = vec.getZ()*t;
-				loc.add(x,y,z);
-				p.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, loc, 10,0.1F,0.1F,0.1F,0.01F);
-				for(Entity e:loc.getWorld().getNearbyEntities(loc, 10, 10, 10)) {
-					AxisAlignedBB aabb = ((CraftEntity)e).getHandle().cw();
-					AxisAlignedBB aabb2 = new AxisAlignedBB(loc.getX()-1, loc.getY()-1, loc.getZ()-1, loc.getX()+1, loc.getY()+1, loc.getZ()+1);
-					if(aabb.c(aabb2)) {
-						if(!e.equals(p) && e instanceof LivingEntity) {
-							if(e instanceof Player || e.hasMetadata("NPC")) {
-								RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-								ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
-								if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
-									continue;
-							}
-							if(RuneDamage.damageNormal(p, (LivingEntity)e, dr)) {
-								entitiesList.add(e);
-								spellEffect(e);
-								p.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, loc, 10,1F,1F,1F,0.2F);
-								e.getWorld().playSound(loc, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1, 1);
-								this.cancel();
-								return;
-							}
-						}
 					}
-				}
-				if(loc.getBlock().getType().isSolid() && !loc.getBlock().isLiquid()) {
-//					if(!loc.getBlock().getType().equals(Material.AIR)) {
-					this.cancel();
-					return;
-				}
-				loc.subtract(x, y, z);
-				if(t>30 || !casterInCastWorld()) {
-					this.cancel();
-					return;
 				}
 			}
 		}.runTaskTimer(Main.getInstance(), 0, 1);
@@ -130,8 +108,8 @@ public class PorazenieElektryczne extends ARune {
 
 	private void spellEffect(Entity entity) {
 		new BukkitRunnable() {
-			Entity tmp = entity;
 			Location loc1;
+			Location loc2;
 			double t = 1;
 			@Override
 			public void run() {
@@ -140,40 +118,41 @@ public class PorazenieElektryczne extends ARune {
 					return;
 				}
 				++t;
-				loc1 = tmp.getLocation();
 				Collection<Entity> lista = loc1.getWorld().getNearbyEntities(loc1, 5, 5, 5);
-				Location loc2 = null;
 				
-				double distance = 10;
-				Entity e = null;
-				for(Entity en : lista) {
-					if(entitiesList.contains(en)) continue;
-					if(en.equals(p)) continue;
-					if(!(en instanceof LivingEntity)) continue;
-					if(en instanceof Player || en.hasMetadata("NPC")) {
-						Location loc = en.getLocation();
+				lista.parallelStream().filter(e -> {
+					if(e.equals(p) || !(e instanceof LivingEntity))
+						return false;
+					if(entitiesList.contains(e))
+						return false;
+					if(e.getLocation().distance(loc1) > 5)
+						return false;
+					if(e instanceof Player) {
 						RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(en.getLocation()));
-						if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
-							continue;
+						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+						State flag = set.queryValue(null, Flags.PVP);
+						if(flag != null && flag.equals(State.ALLOW)
+								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+							return false;
 					}
-					if(Math.abs(en.getLocation().distance(loc1)) >= distance) continue;
-					
-					loc2 = en.getLocation();
-					distance = loc2.distance(loc1);
-					e = en;
-				}
-				
-				if(loc2 == null) return;
-				if(RuneDamage.damageNormal(p, (LivingEntity)e, dr)) {
-					entitiesList.add(e);
-					drawLine(loc1.clone().add(0,1,0), loc2.clone().add(0,1,0));
-					p.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, loc2, 10,1F,1F,1F,0.2F);
-					tmp = e;
-					loc1 = loc2;
-				}else {
-					--t;
-				}
+					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+						return false;
+					return true;
+				}).min((e1, e2) -> {
+					double dist1 = e1.getLocation().distanceSquared(loc1);
+					double dist2 = e2.getLocation().distanceSquared(loc1);
+					if(dist1 == dist2)
+						return 0;
+					return dist1 < dist2 ? -1 : 1;
+				}).ifPresent(e -> {
+					loc2 = e.getLocation();
+					if(RuneDamage.damageNormal(p, (LivingEntity)e, dr)) {
+						entitiesList.add(e);
+						drawLine(loc1.clone().add(0,1,0), loc2.clone().add(0,1,0));
+						p.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, loc2, 10,1F,1F,1F,0.2F);
+						loc1 = loc2;
+					}
+				});
 					
 			}
 		}.runTaskTimer(Main.getInstance(),0 , 5);

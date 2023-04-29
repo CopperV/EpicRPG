@@ -21,15 +21,14 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import me.Vark123.EpicRPG.Main;
-import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
+import me.Vark123.EpicRPG.FightSystem.RuneDamage;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
-import me.Vark123.EpicRPG.RuneSystem.RuneDamage;
-import me.Vark123.EpicRPG.RuneSystem.ARunesTimerCheck;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
+import me.Vark123.EpicRPG.RuneSystem.RuneManager;
 
 public class KrwawyDeszcz extends ARune {
 
@@ -77,60 +76,66 @@ public class KrwawyDeszcz extends ARune {
 				spellEffect(l4);
 				
 				Collection<Entity> tmpList = loc.getWorld().getNearbyEntities(loc,dr.getObszar(), dr.getObszar(), dr.getObszar());
-				for(Entity en : tmpList) {
-					if(entitiesList.contains(en)) continue;
-					entitiesList.add(en);
-					if(!en.equals(p) && en instanceof LivingEntity) {
-						if(en instanceof Player || en.hasMetadata("NPC")) {
-							RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-							ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(en.getLocation()));
-							if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
-								continue;
-						}
-						le = (LivingEntity) en;
-						RuneDamage.damageNormal(p, le, dr, (p,le,dr)->{
-							Bukkit.getScheduler().runTaskLater(Main.getInstance(), ()->{
-								new BukkitRunnable() {
-									double t = 0;
-									DustOptions dust = new DustOptions(Color.RED, 1f);
-									double dmg = dr.getDamage()/50.0;
-									@Override
-									public void run() {
-										
-										if(t>15 || !casterInCastWorld() || !entityInCastWorld(en)) {
-											this.cancel();
-											return;
-										}
-										++t;
-										
-										if(le.isDead()) {
-											this.cancel();
-											return;
-										}
-										
-										if(!RuneDamage.damageTiming(p, le, dr, dmg)) {
-											this.cancel();
-											return;
-										}
-										Location loc = le.getLocation().clone().add(0, 1, 0);
-										loc.getWorld().playSound(loc, Sound.ENTITY_SLIME_ATTACK, 1, 1.2f);
-										loc.getWorld().spawnParticle(Particle.REDSTONE, loc, 2, 0.2, 0.2, 0.2, 0.1, dust);
-										
-										
-									}
-								}.runTaskTimer(Main.getInstance(), 0, 20);
-							}, 20);
-						});
-						
-						
+				
+				tmpList.parallelStream().filter(e -> {
+					if(e.equals(p) || !(e instanceof LivingEntity))
+						return false;
+					if(entitiesList.contains(e))
+						return false;
+					if(e instanceof Player) {
+						RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+						State flag = set.queryValue(null, Flags.PVP);
+						if(flag != null && flag.equals(State.ALLOW)
+								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+							return false;
 					}
-				}
+					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+						return false;
+					return true;
+				}).forEach(e -> {
+					entitiesList.add(e);
+					le = (LivingEntity) e;
+					RuneDamage.damageNormal(p, le, dr, (p,le,dr)->{
+						Bukkit.getScheduler().runTaskLater(Main.getInstance(), ()->{
+							new BukkitRunnable() {
+								double t = 0;
+								DustOptions dust = new DustOptions(Color.RED, 1f);
+								double dmg = dr.getDamage()/50.0;
+								@Override
+								public void run() {
+									
+									if(t>15 || !casterInCastWorld() || !entityInCastWorld(e)) {
+										this.cancel();
+										return;
+									}
+									++t;
+									
+									if(le.isDead()) {
+										this.cancel();
+										return;
+									}
+									
+									if(!RuneDamage.damageTiming(p, le, dr, dmg)) {
+										this.cancel();
+										return;
+									}
+									Location loc = le.getLocation().clone().add(0, 1, 0);
+									loc.getWorld().playSound(loc, Sound.ENTITY_SLIME_ATTACK, 1, 1.2f);
+									loc.getWorld().spawnParticle(Particle.REDSTONE, loc, 2, 0.2, 0.2, 0.2, 0.1, dust);
+									
+									
+								}
+							}.runTaskTimer(Main.getInstance(), 0, 20);
+						}, 20);
+					});
+				});
 				
 			}
 			
 		}.runTaskTimer(Main.getInstance(), 0, 10);
 
-		RunesTimerCheck.getObszarowkiCd().put(p.getUniqueId(), new Date());
+		RuneManager.getInstance().getObszarowkiCd().put(p, new Date());
 	}
 	
 	private void spellEffect(Location loc) {
@@ -142,7 +147,6 @@ public class KrwawyDeszcz extends ARune {
 		Vector p1 = new Vector(loc.getX(), loc.getY(), loc.getZ());
 		Vector p2 = new Vector(loc2.getX(), loc2.getY(), loc2.getZ());
 		Vector vec = p1.clone().subtract(p2).normalize();
-//		Bukkit.broadcastMessage(vec.toString());
 		new BukkitRunnable() {
 			
 			Location loc3 = loc2.clone();
@@ -151,8 +155,6 @@ public class KrwawyDeszcz extends ARune {
 			
 			@Override
 			public void run() {
-				
-//				p.sendMessage(distance+" : "+loc3.distance(loc2));
 				
 				if(loc3.distance(loc2) > distance || !casterInCastWorld()) {
 					this.cancel();

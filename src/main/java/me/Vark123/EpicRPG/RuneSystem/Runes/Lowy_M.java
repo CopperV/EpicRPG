@@ -6,7 +6,6 @@ import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -18,13 +17,13 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
-import me.Vark123.EpicRPG.RuneSystem.RuneDamage;
+import me.Vark123.EpicRPG.FightSystem.RuneDamage;
 import net.minecraft.world.phys.AxisAlignedBB;
 
 public class Lowy_M extends ARune {
@@ -44,9 +43,7 @@ public class Lowy_M extends ARune {
 		Location loc = p.getLocation().add(0, 1.25, 0);
 		Location loc2 = p.getLocation().add(0, 1.25, 0);
 		double gravity = 0.04;
-		
-//		Bukkit.broadcastMessage("§aPoczatkowa lokalizacja: §e"+loc.toString());
-		
+				
 		new BukkitRunnable() {
 			
 			DustOptions dust = new DustOptions(Color.fromRGB(0, 128, 0), 2);
@@ -56,7 +53,6 @@ public class Lowy_M extends ARune {
 				if(loc.getBlock().getType().isSolid() || !casterInCastWorld()) {
 					loc.setY(Math.ceil(loc.getY())+0.25);
 					preparation(loc);
-//					Bukkit.broadcastMessage("§4Koncowa lokalizacja: §6"+loc.toString());
 					this.cancel();
 					return;
 				}
@@ -78,7 +74,6 @@ public class Lowy_M extends ARune {
 				if(loc2.getBlock().getType().isSolid() || !casterInCastWorld()) {
 					loc2.setY(Math.ceil(loc2.getY())+0.25);
 					preparation(loc2);
-//					Bukkit.broadcastMessage("§4Koncowa lokalizacja: §6"+loc.toString());
 					this.cancel();
 					return;
 				}
@@ -101,32 +96,45 @@ public class Lowy_M extends ARune {
 			@Override
 			public void run() {
 				
-				for(Entity entity : loc.getWorld().getNearbyEntities(loc, 2, 5, 2)){
-					AxisAlignedBB aabb = ((CraftEntity)entity).getHandle().cw();
+				loc.getWorld().getNearbyEntities(loc, 2, 5, 2, e -> {
+					AxisAlignedBB aabb = ((CraftEntity)e).getHandle().cw();
 					AxisAlignedBB aabb2 = new AxisAlignedBB(loc.getX()-0.75, loc.getY()-3, loc.getZ()-0.75, loc.getX()+0.75, loc.getY()+3, loc.getZ()+0.75);
-					if(aabb.c(aabb2)) {
-						if(!entity.equals(p) && entity instanceof LivingEntity) {
-							if(entity instanceof Player || entity.hasMetadata("NPC")) {
-								RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-								ApplicableRegionSet set1 = query.getApplicableRegions(BukkitAdapter.adapt(entity.getLocation()));
-								ApplicableRegionSet set2 = query.getApplicableRegions(BukkitAdapter.adapt(p.getLocation()));
-								if(set1.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY)
-										|| set2.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY))
-									continue;
-							}
-							le = (LivingEntity) entity;
-							if(RuneDamage.damageNormal(p, le, dr, (p,le,dr)->{
-								p.getWorld().playSound(le.getLocation(), Sound.ENTITY_EVOKER_CAST_SPELL, 1, .5f);
-								le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20*dr.getDurationTime(), 7));
-								le.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 20*dr.getDurationTime(), 7));
-								le.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*dr.getDurationTime(), 7));
-								trapEffect(le.getLocation().add(0, 1, 0));
-							})) {
-								this.cancel();
-								return;
-							}
-						}
+					if(!aabb.c(aabb2))
+						return false;
+					if(e.equals(p) || !(e instanceof LivingEntity))
+						return false;
+					if(e instanceof Player) {
+						RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+						State flag = set.queryValue(null, Flags.PVP);
+						if(flag != null && flag.equals(State.ALLOW)
+								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+							return false;
 					}
+					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+						return false;
+					return true;
+				}).parallelStream().min((e1, e2) -> {
+					double dist1 = e1.getLocation().distanceSquared(loc);
+					double dist2 = e2.getLocation().distanceSquared(loc);
+					if(dist1 == dist2)
+						return 0;
+					return dist1 < dist2 ? -1 : 1;
+				}).ifPresent(e -> {
+					le = (LivingEntity) e;
+					if(RuneDamage.damageNormal(p, le, dr, (p,le,dr)->{
+						p.getWorld().playSound(le.getLocation(), Sound.ENTITY_EVOKER_CAST_SPELL, 1, .5f);
+						le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20*dr.getDurationTime(), 7));
+						le.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 20*dr.getDurationTime(), 7));
+						le.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20*dr.getDurationTime(), 7));
+						trapEffect(le.getLocation().add(0, 1, 0));
+					})) {
+						this.cancel();
+					}
+				});
+				
+				if(this.isCancelled()) {
+					return;
 				}
 				
 				if(timer <= 0 || !casterInCastWorld()) {

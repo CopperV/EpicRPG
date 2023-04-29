@@ -1,6 +1,9 @@
 package me.Vark123.EpicRPG.Players.Components;
 
+import java.util.Date;
+
 import me.Vark123.EpicRPG.Players.RpgPlayer;
+import me.Vark123.EpicRPG.RuneSystem.RuneManager;
 
 public class RpgModifiers {
 
@@ -109,7 +112,12 @@ public class RpgModifiers {
 	}
 
 	public boolean hasModifier2_lock() {
-		return modifier2_lock;
+		if(!RuneManager.getInstance().getObszarowkiCd().containsKey(rpg.getPlayer()))
+			return false;
+		Date date = RuneManager.getInstance().getObszarowkiCd().get(rpg.getPlayer());
+		if((new Date().getTime()) - date.getTime() < 1000*5)
+			return true;
+		return false;
 	}
 
 	public boolean hasWyostrzoneZmysly() {

@@ -12,7 +12,6 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -20,11 +19,13 @@ import io.lumine.mythic.api.adapters.AbstractPlayer;
 import io.lumine.mythic.api.mobs.MythicMob;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
+import io.lumine.mythic.bukkit.utils.lib.lang3.mutable.MutableBoolean;
 import io.lumine.mythic.core.mobs.ActiveMob;
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class Zryw extends ARune {
 
@@ -34,40 +35,43 @@ public class Zryw extends ARune {
 
 	@Override
 	public void castSpell() {
-		RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
+		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		p.getWorld().playSound(p.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 0.8f);
-		rpg.setZryw(true);
+		rpg.getModifiers().setZryw(true);
 		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
 		
 		List<Entity> tmpTargets = new ArrayList<>();
 		List<Entity> entities = p.getNearbyEntities(dr.getObszar(), dr.getObszar(), dr.getObszar());
-		for(Entity entity : entities) {
-			if(entity instanceof Player) continue;
-			if(!(entity instanceof LivingEntity)) continue;
-			if(entity.hasMetadata("NPC")) continue;
-			
-			tmpTargets.add(entity);
-			Prowokacja.getTargets().put(entity, p);
-			
-			ActiveMob mob = MythicBukkit.inst().getAPIHelper().getMythicMobInstance(entity);
-			if(mob == null) continue;
-//			Bukkit.broadcastMessage(mob.getDisplayName());
-			AbstractPlayer aPlayer = BukkitAdapter.adapt(p);
+
+		AbstractPlayer aPlayer = BukkitAdapter.adapt(p);
+		entities.parallelStream().filter(e -> {
+			if(e instanceof Player || !(e instanceof LivingEntity))
+				return false;
+			if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+				return false;
+			ActiveMob mob = MythicBukkit.inst().getAPIHelper().getMythicMobInstance(e);
+			if(mob == null) 
+				return false;
+			return true;
+		}).forEach(e -> {
+			ActiveMob mob = MythicBukkit.inst().getAPIHelper().getMythicMobInstance(e);
 			if(mob.hasThreatTable()) {
 				mob.getThreatTable().Taunt(aPlayer);
 				mob.getThreatTable().targetHighestThreat();
-				continue;
+				tmpTargets.add(e);
+				Prowokacja.getTargets().put(e, p);
+				return;
 			}
 			MythicMob mMob = mob.getType();
-			boolean canTargeting = false;
+			MutableBoolean canTargeting = new MutableBoolean(false);
 			List<String> AI = mMob.getAIGoalSelectors();
 			List<String> AI2 = mMob.getAITargetSelectors();
 			if((AI == null || AI.isEmpty()) && (AI2 == null || AI2.isEmpty())) {
-				if(entity instanceof Monster)
-					canTargeting = true;
+				if(BukkitAdapter.adapt(e).isMonster())
+					canTargeting.setValue(true);
 			} else {
-				if(AI2 == null || AI2.isEmpty() || AI2.contains("players") || AI2.contains("attacker"))
-					for(String s : mMob.getAIGoalSelectors()) {
+				if(AI2 == null || AI2.isEmpty() || AI2.contains("players")) {
+					AI.parallelStream().filter(s -> {
 						if(s.contains("meleeattack") 
 								|| s.contains("arrowattack") 
 								|| s.contains("spiderattack")
@@ -76,15 +80,21 @@ public class Zryw extends ARune {
 								|| s.contains("bowshoot")
 								|| s.contains("bowmaster")
 								|| s.contains("crossbowAttack")) {
-							canTargeting = true;
-							break;
+							return true;
 						}
-					}
+						return false;
+					}).findAny().ifPresent(s -> {
+						canTargeting.setValue(true);
+					});
+				}
 			}
-			if(!canTargeting) continue;
+			
+			if(!canTargeting.booleanValue())
+				return;
 			mob.setTarget(aPlayer);
-			continue;
-		}
+			tmpTargets.add(e);
+			Prowokacja.getTargets().put(e, p);
+		});
 		
 		new BukkitRunnable() {
 			
@@ -104,10 +114,12 @@ public class Zryw extends ARune {
 					
 					p.getWorld().playSound(p.getLocation(), Sound.BLOCK_ANVIL_DESTROY, 1, 0.8f);
 					p.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, p.getLocation().add(0,1,0), 15, 0.5f, 0.5f, 0.5f, 0.1f);
-					rpg.setZryw(false);
-					for(Entity entity : tmpTargets) {
-						if(Prowokacja.getTargets().containsKey(entity)) Prowokacja.getTargets().remove(entity);
-					}
+					rpg.getModifiers().setZryw(false);
+					tmpTargets.parallelStream().filter(e -> {
+						return Prowokacja.getTargets().containsKey(e) && Prowokacja.getTargets().get(e).equals(p);
+					}).forEach(e -> {
+						if(Prowokacja.getTargets().containsKey(e)) Prowokacja.getTargets().remove(e);
+					});
 					tmpTargets.clear();
 					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					

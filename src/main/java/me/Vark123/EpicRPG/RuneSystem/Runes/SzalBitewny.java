@@ -13,9 +13,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
+import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class SzalBitewny extends ARune{
 
@@ -26,10 +28,11 @@ public class SzalBitewny extends ARune{
 
 	@Override
 	public void castSpell() {
-		RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
+		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
+		RpgModifiers modifiers = rpg.getModifiers();
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
-		rpg.setSzalBitewny(true);
-		rpg.setModifier1_lock(true);
+		modifiers.setSzalBitewny(true);
+		modifiers.setModifier1_lock(true);
 		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
 		
 		new BukkitRunnable() {
@@ -50,8 +53,8 @@ public class SzalBitewny extends ARune{
 					bar.setVisible(false);
 					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GHAST_SHOOT, 1, 1);
-					rpg.setSzalBitewny(false);
-					rpg.setModifier1_lock(false);
+					modifiers.setSzalBitewny(false);
+					modifiers.setModifier1_lock(false);
 					Location loc = p.getLocation();
 					for(double y = 0.1;y<=2.2;y+=0.1) {
 						for(double t = 0;t<=2*Math.PI;t+=(Math.PI/16)) {
@@ -73,27 +76,6 @@ public class SzalBitewny extends ARune{
 			}
 		}.runTaskTimer(Main.getInstance(), 0, 20);
 		
-//		new BukkitRunnable(){
-//			DustOptions dust = new DustOptions(Color.RED, 1);
-//			@Override
-//			public void run() {
-//				p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
-//				p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GHAST_SHOOT, 1, 1);
-//				rpg.setSzalBitewny(false);
-//				rpg.setModifier1_lock(false);
-//				Location loc = p.getLocation();
-//				for(double y = 0.1;y<=2.2;y+=0.1) {
-//					for(double t = 0;t<=2*Math.PI;t+=(Math.PI/16)) {
-//						double x = Math.sin(t);
-//						double z = Math.cos(t);
-//						loc.add(x,y,z);
-//						p.getWorld().spawnParticle(Particle.REDSTONE, loc, 1,0,0,0,0, dust);
-//						loc.subtract(x, y, z);
-//					}
-//				}
-//			}
-//			
-//		}.runTaskLater(Main.getInstance(), 20*dr.getDurationTime());
 	}
 	
 }

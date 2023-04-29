@@ -9,10 +9,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 //import org.bukkit.util.Vector;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.HealthSystem.RpgPlayerHealEvent;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.Healing.RpgPlayerHealEvent;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class Leczenie extends ARune{
 
@@ -22,11 +23,11 @@ public class Leczenie extends ARune{
 
 	@Override
 	public void castSpell() {
-		RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
-		double amount = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()*0.1*rpg.getKrag();
+		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
+		double amount = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()*0.1*rpg.getStats().getKrag();
 		if(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() > (amount+p.getHealth())) {
 //			p.setHealth((int)(p.getHealth()+p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()*0.1*rpg.getKrag()));
-			p.sendMessage("§7[§6EpicRPG§7] §6Uleczyles sie w "+(10*rpg.getKrag())+"%");
+			p.sendMessage("§7[§6EpicRPG§7] §6Uleczyles sie w "+(10*rpg.getStats().getKrag())+"%");
 		}else {
 //			p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 			p.sendMessage("§7[§6EpicRPG§7] §6Uleczyles sie w pelni");

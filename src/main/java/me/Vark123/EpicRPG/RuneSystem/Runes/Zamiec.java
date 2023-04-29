@@ -16,19 +16,16 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import me.Vark123.EpicRPG.Main;
-import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
+import me.Vark123.EpicRPG.FightSystem.RuneDamage;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
-import me.Vark123.EpicRPG.RuneSystem.RuneDamage;
-import me.Vark123.EpicRPG.RuneSystem.ARunesTimerCheck;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
+import me.Vark123.EpicRPG.RuneSystem.RuneManager;
 
 public class Zamiec extends ARune {
-	
-//	List<Entity> entitiesList = new ArrayList<>();
 
 	public Zamiec(ItemStackRune dr, Player p) {
 		super(dr, p);
@@ -72,27 +69,29 @@ public class Zamiec extends ARune {
 				}
 				
 				Collection<Entity> tmpList = loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar());
-//				Bukkit.broadcastMessage(dr.getObszar()+" "+tmpList.size());
-				for(Entity en : tmpList) {
-//					if(entitiesList.contains(en)) 
-//						continue;
-//					entitiesList.add(en);
-					if(!en.equals(p) && en instanceof LivingEntity) {
-						if(en instanceof Player || en.hasMetadata("NPC")) {
-							RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-							ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(en.getLocation()));
-							if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
-								continue;
-						}
-						loc.getWorld().playSound(loc, Sound.ENTITY_PLAYER_HURT_FREEZE, 0.75F, .5F);
-						RuneDamage.damageNormal(p, (LivingEntity) en, dr);
+				tmpList.parallelStream().filter(e -> {
+					if(e.equals(p) || !(e instanceof LivingEntity))
+						return false;
+					if(e instanceof Player) {
+						RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+						State flag = set.queryValue(null, Flags.PVP);
+						if(flag != null && flag.equals(State.ALLOW)
+								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+							return false;
 					}
-				}
+					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+						return false;
+					return true;
+				}).forEach(e -> {
+					loc.getWorld().playSound(e.getLocation(), Sound.ENTITY_PLAYER_HURT_FREEZE, 0.75F, .5F);
+					RuneDamage.damageNormal(p, (LivingEntity) e, dr);
+				});
 				
 			}
 		}.runTaskTimer(Main.getInstance(), 0, 20);
 
-		RunesTimerCheck.getObszarowkiCd().put(p.getUniqueId(), new Date());
+		RuneManager.getInstance().getObszarowkiCd().put(p, new Date());
 	}
 	
 	private void randomParticle(Location loc) {

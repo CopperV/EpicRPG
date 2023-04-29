@@ -21,14 +21,15 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.HealthSystem.RpgPlayerHealEvent;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.Healing.RpgPlayerHealEvent;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class ZyciodajnaZiemia extends ARune {
 	
@@ -53,11 +54,13 @@ public class ZyciodajnaZiemia extends ARune {
 			@Override
 			public void run() {
 				if(timer <= 0 || !casterInCastWorld()) {
-					for(Player p : effected) {
-						if(!p.isOnline()) continue;
-						RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
-						if(rpg.hasZyciodajnaZiemia()) rpg.setZyciodajnaZiemia(false);
-					}
+					effected.parallelStream().filter(tmp -> {
+						return tmp.isOnline();
+					}).forEach(tmp -> {
+						RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(tmp);
+						if(rpg.getModifiers().hasZyciodajnaZiemia()) 
+							rpg.getModifiers().setZyciodajnaZiemia(false);
+					});
 					debuff.addAll(debuff_tmp);
 					effected.clear();
 					this.cancel();
@@ -65,37 +68,43 @@ public class ZyciodajnaZiemia extends ARune {
 				}
 
 				List<Player> tmp = new ArrayList<>(effected);
-				for(Player p : tmp) {
-					if(!p.isOnline()) continue;
-					
-					if(p.getWorld().getName().equalsIgnoreCase(loc.getWorld().getName())
-							&& p.getLocation().distance(loc) <= dr.getObszar()) continue;
-					
-					effected.remove(p);
-					RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
-					if(rpg.hasZyciodajnaZiemia()) rpg.setZyciodajnaZiemia(false);
-					
-				}
+				tmp.parallelStream().filter(temp -> {
+					if(temp.getWorld().getName().equalsIgnoreCase(loc.getWorld().getName())
+							&& temp.getLocation().distance(loc) <= dr.getObszar())
+						return false;
+					return true;
+				}).forEach(temp -> {
+					effected.remove(temp);
+					RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(temp);
+					if(rpg.getModifiers().hasZyciodajnaZiemia()) 
+						rpg.getModifiers().setZyciodajnaZiemia(false);
+				});
 				
 				Collection<Entity> entities = loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar());
-				for(Entity e : entities) {
-					if(!(e instanceof Player)) continue;
-					Player p = (Player) e;
-					if(debuff.contains(p)) continue;
-					if(effected.contains(p)) continue;
-					if(!p.equals(p)) {
+				entities.parallelStream().filter(e -> {
+					if(!(e instanceof Player))
+						return false;
+					Player temp = (Player) e;
+					if(debuff.contains(temp))
+						return false;
+					if(effected.contains(temp))
+						return false;
+					if(!temp.equals(p)) {
 						RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(p.getLocation()));
-						if(set.queryValue(null, Flags.PVP).equals(StateFlag.State.ALLOW)) {
-							continue;
-						}
+						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+						State flag = set.queryValue(null, Flags.PVP);
+						if(flag != null && flag.equals(State.ALLOW)
+								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+							return false;
 					}
-					
-					if(!debuff_tmp.contains(p)) debuff_tmp.add(p);
-					effected.add(p);
-					RpgPlayer rpg = Main.getListaRPG().get(p.getUniqueId().toString());
-					rpg.setZyciodajnaZiemia(true);
-				}
+					return true;
+				}).forEach(e -> {
+					Player temp = (Player) e;
+					if(!debuff_tmp.contains(temp))
+						debuff_tmp.add(temp);
+					RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(temp);
+					rpg.getModifiers().setZyciodajnaZiemia(true);
+				});
 				
 				--timer;
 			}
@@ -105,15 +114,15 @@ public class ZyciodajnaZiemia extends ARune {
 			DustOptions dust = new DustOptions(Color.RED, 1);
 			@Override
 			public void run() {
-				for(Player p : debuff_tmp) {
-					if(debuff.contains(p))
-						debuff.remove(p);
-					if(!p.isOnline())
-						continue;
-					p.sendMessage("§7[§6EpicRPG§7] §aDebuff runy "+dr.getName()+" skonczyl sie");
-					p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 5, 1.5f);
-					p.getWorld().spawnParticle(Particle.REDSTONE, p.getLocation(), 10, 0.5f, 0.5f, 0.5f, 0.1f,dust);
-				}
+				debuff_tmp.parallelStream().forEach(tmp -> {
+					if(debuff.contains(tmp))
+						debuff.remove(tmp);
+					if(!tmp.isOnline())
+						return;
+					tmp.sendMessage("§7[§6EpicRPG§7] §aDebuff runy "+dr.getName()+" skonczyl sie");
+					tmp.playSound(p.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 5, 1.5f);
+					tmp.getWorld().spawnParticle(Particle.REDSTONE, tmp.getLocation(), 10, 0.5f, 0.5f, 0.5f, 0.1f,dust);
+				});
 			}
 		}.runTaskLater(Main.getInstance(), 60*10*20);
 		
@@ -127,33 +136,36 @@ public class ZyciodajnaZiemia extends ARune {
 				}
 				
 				Collection<Entity> entities = loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar());
-				for(Entity e : entities) {
-					if(!(e instanceof Player)) continue;
-					Player tmp = (Player) e;
-					
-					if(debuff.contains(p)) continue;
-						
-					if(!tmp.equals(p)) {
+				entities.parallelStream().filter(e -> {
+					if(!(e instanceof Player))
+						return false;
+					Player temp = (Player) e;
+					if(debuff.contains(temp))
+						return false;
+					if(!temp.equals(p)) {
 						RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(tmp.getLocation()));
-						if(set.queryValue(null, Flags.PVP).equals(StateFlag.State.ALLOW)) {
-							continue;
-						}
+						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+						State flag = set.queryValue(null, Flags.PVP);
+						if(flag != null && flag.equals(State.ALLOW)
+								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+							return false;
 					}
-					
-					RpgPlayer rpg = Main.getListaRPG().get(tmp.getUniqueId().toString());
+					return true;
+				}).forEach(e -> {
+					Player tmp = (Player) e;
+					RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(tmp);
 					double hpAmount = tmp.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()*0.08;
-					int manaAmount = (int) (rpg.getFinalmana()*0.08);
+					int manaAmount = (int) (rpg.getStats().getFinalMana()*0.08);
 					
 					RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg, hpAmount);
 					Bukkit.getPluginManager().callEvent(event);
 					
-					rpg.addPresentManaSmart(manaAmount);
+					rpg.getStats().addPresentManaSmart(manaAmount);
 					
 					tmp.getWorld().spawnParticle(Particle.HEART, tmp.getLocation().add(0,1,0),2,0.3F,0.3F,0.3F,0.1F);
 					tmp.getWorld().spawnParticle(Particle.END_ROD, tmp.getLocation().add(0,1,0),2,0.3F,0.3F,0.3F,0.1F);
 					tmp.getWorld().spawnParticle(Particle.BLOCK_CRACK, tmp.getLocation().add(0,1,0),2,0.3F,0.3F,0.3F,0.1F,data);
-				}
+				});
 				
 				--timer;
 			}

@@ -3,7 +3,6 @@ package me.Vark123.EpicRPG.RuneSystem.Runes;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -22,7 +21,6 @@ public class Swiatlo extends ARune {
 	@Override
 	public void castSpell() {
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1.5f);
-//		p.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 20*dr.getDurationTime(), 0));
 		//Particles
 		new BukkitRunnable() {
 			
@@ -54,12 +52,14 @@ public class Swiatlo extends ARune {
 					return;
 				}
 				--timer;
-				for(Entity e : p.getWorld().getNearbyEntities(p.getLocation(), 8, 8, 8)) {
-					if(!(e instanceof Player))
-						continue;
+				
+				p.getWorld().getNearbyEntities(p.getLocation(), 8, 8, 8).parallelStream().filter(e -> {
+					return e instanceof Player;
+				}).forEach(e -> {
 					Player tmp = (Player) e;
 					tmp.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 20, 0));
-				}
+				});
+				
 			}
 		}.runTaskTimer(Main.getInstance(), 0, 20);
 //		

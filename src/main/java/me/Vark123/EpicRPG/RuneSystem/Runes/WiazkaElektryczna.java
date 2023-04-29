@@ -18,13 +18,13 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
-import me.Vark123.EpicRPG.RuneSystem.RuneDamage;
+import me.Vark123.EpicRPG.FightSystem.RuneDamage;
 import net.minecraft.world.phys.AxisAlignedBB;
 
 public class WiazkaElektryczna extends ARune {
@@ -45,88 +45,68 @@ public class WiazkaElektryczna extends ARune {
 			Vector vec = loc.getDirection().normalize();
 			LivingEntity le;
 			public void run() {
-				t+=0.75;
-				double x = vec.getX()*t;
-				double y = vec.getY()*t+1.5;
-				double z = vec.getZ()*t;
-				loc.add(x,y,z);
-				p.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, loc,10,0.1F,0.1F,0.1F,0);
-				
-				for(Entity e:loc.getWorld().getNearbyEntities(loc, 10, 10, 10)) {
-					AxisAlignedBB aabb = ((CraftEntity)e).getHandle().cw();
-					AxisAlignedBB aabb2 = new AxisAlignedBB(loc.getX()-1, loc.getY()-1, loc.getZ()-1, loc.getX()+1, loc.getY()+1, loc.getZ()+1);
-					if(aabb.c(aabb2)) {
-						if(!e.equals(p) && e instanceof LivingEntity && !shooted.contains(e) && shooted.size()<5) {
-							if(e instanceof Player || e.hasMetadata("NPC")) {
-								RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-								ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
-								if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
-									continue;
-							}
-							shooted.add(e);
-							le = (LivingEntity) e;
-							RuneDamage.damageNormal(p, le, dr, (p,le,dr)->{
-								spellEffect(e);
-							});
+				for(int i = 0; i < 2; ++i) {
+					t+=0.75;
+					double x = vec.getX()*t;
+					double y = vec.getY()*t+1.5;
+					double z = vec.getZ()*t;
+					loc.add(x,y,z);
+					p.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, loc,10,0.1F,0.1F,0.1F,0);
+
+					loc.getWorld().getNearbyEntities(loc, 5, 5, 5, e -> {
+						AxisAlignedBB aabb = ((CraftEntity)e).getHandle().cw();
+						AxisAlignedBB aabb2 = new AxisAlignedBB(loc.getX()-1, loc.getY()-1, loc.getZ()-1, loc.getX()+1, loc.getY()+1, loc.getZ()+1);
+						if(!aabb.c(aabb2))
+							return false;
+						if(e.equals(p) || !(e instanceof LivingEntity))
+							return false;
+						if(shooted.contains(e))
+							return false;
+						if(shooted.size() >= 5)
+							return false;
+						if(e instanceof Player) {
+							RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+							ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+							State flag = set.queryValue(null, Flags.PVP);
+							if(flag != null && flag.equals(State.ALLOW)
+									&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+								return false;
 						}
-					}
-				}
-				if(loc.getBlock().getType().isSolid() && !loc.getBlock().isLiquid()) {
-//				if(!loc.getBlock().getType().equals(Material.AIR)) {
-					this.cancel();
-					return;
-				}
-				loc.subtract(x, y, z);
-				if(t>50 || !casterInCastWorld()) {
-					this.cancel();
-					return;
-				}
-				t+=0.75;
-				x = vec.getX()*t;
-				y = vec.getY()*t+1.5;
-				z = vec.getZ()*t;
-				loc.add(x,y,z);
-				p.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, loc,10,0.1F,0.1F,0.1F,0);
-//				loc.getWorld().playSound(loc, Sound.FIRE_IGNITE, 1, 1);
-				for(Entity e:loc.getWorld().getNearbyEntities(loc, 10, 10, 10)) {
-					AxisAlignedBB aabb = ((CraftEntity)e).getHandle().cw();
-					AxisAlignedBB aabb2 = new AxisAlignedBB(loc.getX()-1, loc.getY()-1, loc.getZ()-1, loc.getX()+1, loc.getY()+1, loc.getZ()+1);
-					if(aabb.c(aabb2)) {
-						if(!e.equals(p) && e instanceof LivingEntity && !shooted.contains(e) && shooted.size()<5) {
-							if(e instanceof Player || e.hasMetadata("NPC")) {
-								RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
-								ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
-								if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
-									continue;
-							}
-							shooted.add(e);
+						if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+							return false;
+						return true;
+					}).parallelStream().min((e1, e2) -> {
+						double dist1 = e1.getLocation().distanceSquared(loc);
+						double dist2 = e2.getLocation().distanceSquared(loc);
+						if(dist1 == dist2)
+							return 0;
+						return dist1 < dist2 ? -1 : 1;
+					}).ifPresent(e -> {
+						shooted.add(e);
+						le = (LivingEntity) e;
+						RuneDamage.damageNormal(p, le, dr, (p,le,dr)->{
 							spellEffect(e);
-						}
+						});
+					});
+					
+					if(loc.getBlock().getType().isSolid() && !loc.getBlock().isLiquid()) {
+						this.cancel();
+						return;
 					}
-				}
-				if(loc.getBlock().getType().isSolid() && !loc.getBlock().isLiquid()) {
-//				if(!loc.getBlock().getType().equals(Material.AIR)) {
-					this.cancel();
-					return;
-				}
-				loc.subtract(x, y, z);
-				if(t>50 || !casterInCastWorld()) {
-					this.cancel();
-					return;
+					loc.subtract(x, y, z);
+					if(t>50 || !casterInCastWorld()) {
+						this.cancel();
+						return;
+					}
 				}
 			}
 		}.runTaskTimer(Main.getInstance(), 0, 1);
 	}
 	
 	private void spellEffect(Entity e) {
-//		Location loc = e.getLocation();
-//		loc.getWorld().strikeLightningEffect(loc);
-//		((LivingEntity)e).setLastDamageCause(new EntityDamageEvent(p, DamageCause.CUSTOM, dr.getDamage()));
-//		((LivingEntity)e).damage(dr.getDamage(), p);
 		Location loc = e.getLocation();
 		Random rand = new Random();
 		Location sLoc = new Location(loc.getWorld(), loc.getX()+rand.nextInt(20)-10, loc.getY()+40, loc.getZ()+rand.nextInt(20)-10);
-//		Location sLoc = b.getLocation().add(rand.nextInt(20)-10, 40, rand.nextInt(20)-10);
 		Vector vec = (new Vector(loc.getX()-sLoc.getX(), loc.getY()-sLoc.getY(), loc.getZ()-sLoc.getZ())).normalize();
 		double temp = 0;
 		for(double k = sLoc.getBlockY(); k>= loc.getBlockY(); k-=0.5) {
