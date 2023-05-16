@@ -31,13 +31,13 @@ public class Poswiecenie extends ARune {
 		RpgModifiers modifiers = rpg.getModifiers();
 		modifiers.setPoswiecenie(true);
 		modifiers.setModifier1_lock(true);
-		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
+		p.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½aUzyles runy "+dr.getName());
 		
 		new BukkitRunnable() {
 			
 			double time = dr.getDurationTime();
 			double timer = dr.getDurationTime();
-			BossBar bar = Bukkit.createBossBar("§3Poswiecenie§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
+			BossBar bar = Bukkit.createBossBar("ï¿½3Poswiecenieï¿½f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
 				bar.setVisible(true);
 				bar.addPlayer(p);
 				bar.setProgress(timer/time);
@@ -52,7 +52,7 @@ public class Poswiecenie extends ARune {
 					return;
 				}
 				
-				bar.setTitle("§3Poswiecenie§f: "+(int)timer+" sekund");
+				bar.setTitle("ï¿½3Poswiecenieï¿½f: "+(int)timer+" sekund");
 				bar.setProgress(timer/time);
 				
 				--timer;
@@ -64,7 +64,7 @@ public class Poswiecenie extends ARune {
 			@Override
 			public void run() {
 				if(timer <= 0 || !casterInCastWorld()) {
-					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+					p.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1.5f);
 					modifiers.setPoswiecenie(false);
 					modifiers.setModifier1_lock(false);

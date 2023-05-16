@@ -33,7 +33,7 @@ public class AuraCzystosci extends ARune {
 			
 			double time = dr.getDurationTime();
 			double timer = dr.getDurationTime();
-			BossBar bar = Bukkit.createBossBar("§3Aura czystosci§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
+			BossBar bar = Bukkit.createBossBar("ï¿½3Aura czystosciï¿½f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
 				bar.setVisible(true);
 				bar.addPlayer(p);
 				bar.setProgress(timer/time);
@@ -50,7 +50,7 @@ public class AuraCzystosci extends ARune {
 					
 					p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 1, 1f);
 					p.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, p.getLocation().add(0,1,0), 15, 0.75f, 1f, 0.75f, 0.1f);
-					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+					p.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					
 					if(p.getAbsorptionAmount() < amount)
 						p.setAbsorptionAmount(0);
@@ -61,7 +61,7 @@ public class AuraCzystosci extends ARune {
 					return;
 				}
 				
-				bar.setTitle("§3Aura czystosci§f: "+(int)timer+" sekund");
+				bar.setTitle("ï¿½3Aura czystosciï¿½f: "+(int)timer+" sekund");
 				bar.setProgress(timer/time);
 				
 				--timer;

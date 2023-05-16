@@ -45,13 +45,13 @@ public class CienAssasyna extends ARune {
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
 		rpg.getModifiers().setCienAssasyna(true);
-		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
+		p.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½aUzyles runy "+dr.getName());
 		
 		new BukkitRunnable() {
 			
 			double time = dr.getDurationTime();
 			double timer = dr.getDurationTime();
-			BossBar bar = Bukkit.createBossBar("§a§lCien assasyna§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
+			BossBar bar = Bukkit.createBossBar("ï¿½aï¿½lCien assasynaï¿½f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
 				bar.setVisible(true);
 				bar.addPlayer(p);
 				bar.setProgress(timer/time);
@@ -66,7 +66,7 @@ public class CienAssasyna extends ARune {
 					return;
 				}
 				
-				bar.setTitle("§a§lCien assasyna§f: "+(int)timer+" sekund");
+				bar.setTitle("ï¿½aï¿½lCien assasynaï¿½f: "+(int)timer+" sekund");
 				bar.setProgress(timer/time);
 				
 				--timer;
@@ -78,7 +78,7 @@ public class CienAssasyna extends ARune {
 			@Override
 			public void run() {
 				if(timer <= 0 || !casterInCastWorld()) {
-					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+					p.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GHAST_SHOOT, 1, 1.7f);
 					rpg.getModifiers().setCienAssasyna(false);
 					this.cancel();
@@ -118,7 +118,8 @@ public class CienAssasyna extends ARune {
 							State flag = set.queryValue(null, Flags.PVP);
 							if(flag != null && flag.equals(State.ALLOW)
 									&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
-								return false;
+								return true;
+							return false;
 						}
 						if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 							return false;

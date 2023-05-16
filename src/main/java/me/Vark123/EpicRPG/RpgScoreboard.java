@@ -22,7 +22,7 @@ public class RpgScoreboard {
 			return;
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		Scoreboard board = rpg.getBoard();
-		Objective obj = board.registerNewObjective("test", "dummy", ChatColor.translateAlternateColorCodes('&', ChatColor.of(new Color(132, 165, 184)).toString()+""+ChatColor.BOLD+"Archolos &9&l&o#1"));
+		Objective obj = board.registerNewObjective("test", "dummy", ChatColor.translateAlternateColorCodes('&', ChatColor.of(new Color(132, 165, 184)).toString()+""+ChatColor.BOLD+"Archolos &o#1"));
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 		
 		board.registerNewTeam("rpg_info");
@@ -65,8 +65,6 @@ public class RpgScoreboard {
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		Scoreboard board = rpg.getBoard();
 
-//		board.clearSlot(DisplaySlot.SIDEBAR);
-//		if(board.getEntries() != null && !board.getEntries().isEmpty())
 		board.getEntries().stream().forEach(s -> {
 			board.resetScores(s);
 		});
@@ -83,7 +81,7 @@ public class RpgScoreboard {
 		if(playerInfo.getLevel() > 10 && !playerInfo.getProffesion().toLowerCase().contains("obywatel")) {
 			
 			Team team = board.getTeam("rpg_info");
-			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&3》 "+ChatColor.of(new Color(66, 104, 124)).toString() + "" + ChatColor.BOLD + "INFO &3《"));
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&3=> "+ChatColor.of(new Color(66, 104, 124)).toString() + "" + ChatColor.BOLD + "INFO &3<="));
 			team.addEntry(ChatColor.BLUE+""+ChatColor.WHITE);
 			obj.getScore(ChatColor.BLUE+""+ChatColor.WHITE).setScore(15);
 			
@@ -135,7 +133,7 @@ public class RpgScoreboard {
 			obj.getScore(ChatColor.YELLOW+""+ChatColor.LIGHT_PURPLE).setScore(11);
 			
 			team = board.getTeam("rpg_zasoby");
-			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&3》 "+ChatColor.of(new Color(66, 104, 124)).toString() + "" + ChatColor.BOLD + "ZASOBY &3《"));
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&3=> "+ChatColor.of(new Color(66, 104, 124)).toString() + "" + ChatColor.BOLD + "ZASOBY &3<="));
 			team.addEntry(ChatColor.BLUE+""+ChatColor.GRAY);
 			obj.getScore(ChatColor.BLUE+""+ChatColor.GRAY).setScore(10);
 			
@@ -160,7 +158,7 @@ public class RpgScoreboard {
 			obj.getScore(ChatColor.GOLD+""+ChatColor.BLUE).setScore(6);
 
 			team = board.getTeam("rpg_staty");
-			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&3》 "+ChatColor.of(new Color(66, 104, 124)).toString() + "" + ChatColor.BOLD + "STATY &3《"));
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&3=> "+ChatColor.of(new Color(66, 104, 124)).toString() + "" + ChatColor.BOLD + "STATY &3<="));
 			team.addEntry(ChatColor.BLUE+""+ChatColor.BLACK);
 			obj.getScore(ChatColor.BLUE+""+ChatColor.BLACK).setScore(5);
 			

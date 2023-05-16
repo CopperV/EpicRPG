@@ -100,7 +100,6 @@ public class DBOperations {
 		UUID id = rpg.getPlayer().getUniqueId();
 		String polecenie;
 		polecenie = "SELECT players.UUID from players WHERE players.UUID = \""+id.toString()+"\";";
-//		Bukkit.broadcastMessage("test1 "+rpg.toString());
 		ResultSet set;
 		try {
 			set = c.createStatement().executeQuery(polecenie);

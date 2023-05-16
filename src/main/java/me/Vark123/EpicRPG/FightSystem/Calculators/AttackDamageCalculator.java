@@ -2,11 +2,12 @@ package me.Vark123.EpicRPG.FightSystem.Calculators;
 
 import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Particle;
-import org.bukkit.Sound;
 import org.bukkit.Particle.DustOptions;
+import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -22,12 +23,14 @@ import de.tr7zw.nbtapi.NBTItem;
 import me.Vark123.EpicClans.EpicClansApi;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.FightSystem.DamageUtils;
+import me.Vark123.EpicRPG.HealthSystem.RpgPlayerHealEvent;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 import me.Vark123.EpicRPG.Players.Components.RpgSkills;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
+import me.Vark123.EpicRPG.RuneSystem.Runes.CienAssasyna;
 import me.Vark123.EpicRPG.Stats.ChangeStats;
 import me.Vark123.EpicRPG.Stats.CheckStats;
 import net.md_5.bungee.api.ChatColor;
@@ -196,25 +199,24 @@ public class AttackDamageCalculator implements DamageCalculator {
 			if(modifiers.hasZyciodajnaZiemia_m()) {
 				dmgZyciodajnaZiemia_M = dmg * 0.25;
 			}
-			//TODO
-//			if(modifiers.hasWampiryzm()) {
-//				double restoreHp = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.015;
-//				RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg, restoreHp);
-//				Bukkit.getPluginManager().callEvent(event);
-//				p.getWorld().spawnParticle(Particle.HEART, p.getLocation(), 5, 0.5F, 0.5F, 0.5F, 0.1f);
-//			}
-//			if(modifiers.hasWampiryzm_h()) {
-//				double restoreHp = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.02;
-//				RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg, restoreHp);
-//				Bukkit.getPluginManager().callEvent(event);
-//				p.getWorld().spawnParticle(Particle.HEART, p.getLocation(), 5, 0.5F, 0.5F, 0.5F, 0.1f);
-//			}
-//			if(modifiers.hasWampiryzm_m()) {
-//				double restoreHp = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.03;
-//				RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg, restoreHp);
-//				Bukkit.getPluginManager().callEvent(event);
-//				p.getWorld().spawnParticle(Particle.HEART, p.getLocation(), 5, 0.5F, 0.5F, 0.5F, 0.1f);
-//			}
+			if(modifiers.hasWampiryzm()) {
+				double restoreHp = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.015;
+				RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg, restoreHp);
+				Bukkit.getPluginManager().callEvent(event);
+				p.getWorld().spawnParticle(Particle.HEART, p.getLocation(), 5, 0.5F, 0.5F, 0.5F, 0.1f);
+			}
+			if(modifiers.hasWampiryzm_h()) {
+				double restoreHp = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.02;
+				RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg, restoreHp);
+				Bukkit.getPluginManager().callEvent(event);
+				p.getWorld().spawnParticle(Particle.HEART, p.getLocation(), 5, 0.5F, 0.5F, 0.5F, 0.1f);
+			}
+			if(modifiers.hasWampiryzm_m()) {
+				double restoreHp = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.03;
+				RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg, restoreHp);
+				Bukkit.getPluginManager().callEvent(event);
+				p.getWorld().spawnParticle(Particle.HEART, p.getLocation(), 5, 0.5F, 0.5F, 0.5F, 0.1f);
+			}
 			if(modifiers.hasRytualWzniesienia()) {
 				int restoreMana = stats.getFinalMana() / 20;
 				stats.addPresentManaSmart(restoreMana);
@@ -236,7 +238,6 @@ public class AttackDamageCalculator implements DamageCalculator {
 					p.getWorld().spawnParticle(Particle.SWEEP_ATTACK, p.getLocation().add(0,1,0), 7, .5f, .5f, .5f, .05f);
 					dmgCiosWPlecy = dmg * 1.25;
 				}
-//				Bukkit.broadcastMessage("Angle: "+angleInDegrees);
 			}
 			if(modifiers.hasMord()) {
 				dmgMord = dmg * 0.9;
@@ -245,13 +246,12 @@ public class AttackDamageCalculator implements DamageCalculator {
 			dmg = dmg + dmgPotZr + dmgPotStr + dmgTrans + dmgSzal + dmgSkrytobojstwo + dmgZadzaKrwi + dmgZyciodajnaZiemia + 
 					dmgZyciodajnaZiemia_M + dmgGniew + dmgCiosWPlecy + dmgMord;	
 
-			//TODO
-//			if(modifiers.hasCienAssasyna()) {
-//				int chance = new Random().nextInt(100);
-//				if(chance < 10) {
-//					CienAssasyna.spellEffect(rpg.getPlayer(), victim, dmg*0.2);
-//				}
-//			}
+			if(modifiers.hasCienAssasyna()) {
+				int chance = new Random().nextInt(100);
+				if(chance < 10) {
+					CienAssasyna.spellEffect(rpg.getPlayer(), victim, dmg*0.2);
+				}
+			}
 			if(crit && skills.hasCiosKrytyczny()) {
 				dmg *= 1.2;
 			}

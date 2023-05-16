@@ -95,7 +95,8 @@ public class ZyciodajnaZiemia_M extends ARune {
 						State flag = set.queryValue(null, Flags.PVP);
 						if(flag != null && flag.equals(State.ALLOW)
 								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
-							return false;
+							return true;
+						return false;
 					}
 					return true;
 				}).forEach(e -> {
@@ -119,7 +120,7 @@ public class ZyciodajnaZiemia_M extends ARune {
 						debuff.remove(tmp);
 					if(!tmp.isOnline())
 						return;
-					tmp.sendMessage("§7[§6EpicRPG§7] §aDebuff runy "+dr.getName()+" skonczyl sie");
+					tmp.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½aDebuff runy "+dr.getName()+" skonczyl sie");
 					tmp.playSound(p.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 5, 1.5f);
 					tmp.getWorld().spawnParticle(Particle.REDSTONE, tmp.getLocation(), 10, 0.5f, 0.5f, 0.5f, 0.1f,dust);
 				});
@@ -148,7 +149,8 @@ public class ZyciodajnaZiemia_M extends ARune {
 						State flag = set.queryValue(null, Flags.PVP);
 						if(flag != null && flag.equals(State.ALLOW)
 								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
-							return false;
+							return true;
+						return false;
 					}
 					return true;
 				}).forEach(e -> {

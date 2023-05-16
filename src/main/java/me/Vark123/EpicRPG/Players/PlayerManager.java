@@ -52,6 +52,8 @@ public class PlayerManager {
 			DBOperations.savePlayer(rpg);
 		}
 		
+		ChangeStats.change(rpg);
+		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), ()->{
 			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(rpg.getStats().getFinalHealth());
 			p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
@@ -65,8 +67,6 @@ public class PlayerManager {
 		p.setHealthScale(20);
 		
 		addPlayer(rpg);
-		
-		ChangeStats.change(rpg);
 		rpg.createScoreboard();
 		
 		return rpg;

@@ -57,7 +57,7 @@ public class AuraRozproszenia extends ARune {
 		});
 		
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, 1.5f, .2f);
-		BossBar bar = Bukkit.createBossBar("§c§oAura rozproszenia§f: "+dr.getDurationTime()+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);
+		BossBar bar = Bukkit.createBossBar("ï¿½cï¿½oAura rozproszeniaï¿½f: "+dr.getDurationTime()+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);
 		bar.setProgress(1);
 		bar.setVisible(true);
 		
@@ -79,7 +79,7 @@ public class AuraRozproszenia extends ARune {
 					return;
 				}
 				
-				bar.setTitle("§c§oAura rozproszenia§f: "+(int)timer+" sekund");
+				bar.setTitle("ï¿½cï¿½oAura rozproszeniaï¿½f: "+(int)timer+" sekund");
 				bar.setProgress(timer/time);
 				
 				--timer;
@@ -95,7 +95,7 @@ public class AuraRozproszenia extends ARune {
 					effected.parallelStream().forEach(tmp -> {
 						if(!tmp.isOnline())
 							return;
-						tmp.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+						tmp.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 						RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(tmp);
 						rpg.getModifiers().setAuraRozproszenia(false);
 					});

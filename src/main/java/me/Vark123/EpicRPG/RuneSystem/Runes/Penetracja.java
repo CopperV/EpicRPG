@@ -31,13 +31,13 @@ public class Penetracja extends ARune {
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ILLUSIONER_CAST_SPELL, 1, 1.2f);
 		modifiers.setPenetracja(true);
 		modifiers.setModifier1_lock(true);
-		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
+		p.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½aUzyles runy "+dr.getName());
 		
 		new BukkitRunnable() {
 			
 			double time = dr.getDurationTime();
 			double timer = dr.getDurationTime();
-			BossBar bar = Bukkit.createBossBar("§aPenetracja§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
+			BossBar bar = Bukkit.createBossBar("ï¿½aPenetracjaï¿½f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
 				bar.setVisible(true);
 				bar.addPlayer(p);
 				bar.setProgress(timer/time);
@@ -52,7 +52,7 @@ public class Penetracja extends ARune {
 					return;
 				}
 				
-				bar.setTitle("§aPenetracja§f: "+(int)timer+" sekund");
+				bar.setTitle("ï¿½aPenetracjaï¿½f: "+(int)timer+" sekund");
 				bar.setProgress(timer/time);
 				
 				--timer;
@@ -64,7 +64,7 @@ public class Penetracja extends ARune {
 			@Override
 			public void run() {
 				if(timer <= 0 || !casterInCastWorld()) {
-					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+					p.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GHAST_SHOOT, 1, 1.7f);
 					modifiers.setPenetracja(false);
 					modifiers.setModifier1_lock(false);

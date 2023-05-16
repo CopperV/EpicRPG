@@ -54,9 +54,9 @@ public class GrupoweLeczenie extends ARune {
 			double amount = pl.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()*0.1*rpg.getStats().getKrag();
 			
 			if(pl.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() > (amount+pl.getHealth())) {
-				pl.sendMessage("§7[§6EpicRPG§7] §6Uleczyles sie w "+(10*rpg.getStats().getKrag())+"%");
+				pl.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½6Uleczyles sie w "+(10*rpg.getStats().getKrag())+"%");
 			}else {
-				pl.sendMessage("§7[§6EpicRPG§7] §6Uleczyles sie w pelni");
+				pl.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½6Uleczyles sie w pelni");
 			}
 			
 			RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg2, amount);

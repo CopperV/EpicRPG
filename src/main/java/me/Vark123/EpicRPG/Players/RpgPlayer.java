@@ -1,5 +1,6 @@
 package me.Vark123.EpicRPG.Players;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -7,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Scoreboard;
 
@@ -23,8 +25,12 @@ import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import me.Vark123.EpicRPG.Players.Components.RpgVault;
 import me.Vark123.EpicRPG.Stats.ChangeStats;
 import me.Vark123.EpicRPG.Utils.Utils;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 
-public class RpgPlayer {
+public class RpgPlayer implements Serializable {
+
+	private static final long serialVersionUID = 7700189518575363277L;
 
 	private Player player;
 	
@@ -50,12 +56,10 @@ public class RpgPlayer {
 		this.modifiers = new RpgModifiers(this);
 		this.skills = new RpgSkills(this);
 		this.vault = new RpgVault(this);
-		//TODO
 		this.jewelry = new RpgJewelry(this);
 		this.reputation = new RpgReputation(this);
 		board = Bukkit.getScoreboardManager().getNewScoreboard();
 		
-//		createScoreboard();
 		createDisplay();
 	}
 	
@@ -69,7 +73,6 @@ public class RpgPlayer {
 			this.modifiers = new RpgModifiers(this);
 			this.skills = new RpgSkills(this, set);
 			this.vault = new RpgVault(this, set);
-			//TODO
 			this.jewelry = new RpgJewelry(this);
 			this.reputation = new RpgReputation(this, set);
 		} catch (SQLException e) {
@@ -78,7 +81,6 @@ public class RpgPlayer {
 		}
 		board = Bukkit.getScoreboardManager().getNewScoreboard();
 		
-//		createScoreboard();
 		createDisplay();
 	}
 	
@@ -90,16 +92,13 @@ public class RpgPlayer {
 		this.modifiers = new RpgModifiers(this);
 		this.skills = new RpgSkills(this, fYml);
 		this.vault = new RpgVault(this, fYml);
-		//TODO
 		this.jewelry = new RpgJewelry(this);
 		this.reputation = new RpgReputation(this, fYml);
 		board = Bukkit.getScoreboardManager().getNewScoreboard();
 		
-//		createScoreboard();
 		createDisplay();
 	}
 	
-	//TODO
 	public void createScoreboard() {
 		if(score != null && !score.isCancelled())
 			return;
@@ -109,14 +108,24 @@ public class RpgPlayer {
 		}, 0, 60);
 	}
 	
-	//TODO
 	private void createDisplay() {
-		
+		this.display = new BukkitRunnable() {
+			
+			@Override
+			public void run() {
+				displayUpdate();
+			}
+		}.runTaskTimer(Main.getInstance(), 0, 20*2);
 	}
 	
-	//TODO
 	public void displayUpdate() {
-		
+		player.spigot().sendMessage(ChatMessageType.ACTION_BAR, 
+				TextComponent.fromLegacyText("§4🗡 "+stats.getFinalObrazenia()
+						+"  §c❤ "+((int)player.getHealth())+"/"
+						+((int)player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())
+						+(player.getAbsorptionAmount() >= 1 ? "§6§l♰ §6"+((int)player.getAbsorptionAmount()):"")
+						+"  §b✺ "+stats.getPresentMana()+"/"+stats.getFinalMana()
+						+"  §7§l🛡 §7"+stats.getFinalOchrona()));
 	}
 	
 	//TODO

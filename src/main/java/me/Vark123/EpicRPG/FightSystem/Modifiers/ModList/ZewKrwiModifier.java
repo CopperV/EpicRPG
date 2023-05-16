@@ -23,10 +23,8 @@ public class ZewKrwiModifier implements DamageModifier {
 		
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		RpgModifiers modifiers = rpg.getModifiers();
-		if(!modifiers.hasZewKrwi())
-			return damage;
-		
-		modifiers.addZewKrwiMod(1);
+		if(modifiers.hasZewKrwi())
+			modifiers.addZewKrwiMod(1);
 		
 		return damage;
 	}

@@ -10,6 +10,8 @@ import me.Vark123.EpicRPG.FightSystem.Modifiers.DamageModifier;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
+import me.Vark123.EpicRPG.RuneSystem.Runes.RytualKrwi;
 
 public class RytualKrwiModifier implements DamageModifier {
 
@@ -32,10 +34,9 @@ public class RytualKrwiModifier implements DamageModifier {
 		if(rune == null)
 			return damage;
 
-		//TODO
-//		DynamicRune dr = new DynamicRune(rune);
-//		RytualKrwi runa = new RytualKrwi(dr, p);
-//		runa.castEffect();
+		ItemStackRune ir = new ItemStackRune(rune);
+		RytualKrwi runa = new RytualKrwi(ir, p);
+		runa.castEffect();
 		
 		return damage;
 	}

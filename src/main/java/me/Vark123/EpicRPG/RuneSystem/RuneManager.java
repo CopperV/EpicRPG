@@ -26,6 +26,7 @@ import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.FightSystem.ManualDamage;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
@@ -103,16 +104,17 @@ public class RuneManager {
 				spendHp(rpg, ir);
 			else
 				spendMana(rpg, ir);
+			createRuneCd(p, ir);
 		} else {
 			p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 0.5f);
 			p.getWorld().spawnParticle(Particle.NAUTILUS, p.getLocation().add(0, 1, 0), 20, 0.75, 0.5, 0.75, 0.2);
 		}
 
 		
-//		rpg.displayUpdate();
+		rpg.displayUpdate();
 		r.castSpell();
-//		if(rpg.hasLodowyBlok() && LodowyBlok.getEffected().contains(p) && !(r instanceof LodowyBlok))
-//			LodowyBlok.getEffected().remove(p);
+		if(rpg.getModifiers().hasLodowyBlok() && LodowyBlok.getEffected().contains(p) && !(r instanceof LodowyBlok))
+			LodowyBlok.getEffected().remove(p);
 		
 		return true;
 	}
@@ -127,6 +129,12 @@ public class RuneManager {
 				globalCd.remove(p);
 			}
 		}.runTaskLater(Main.getInstance(), 15);
+	}
+	
+	public void createRuneCd(Player p, ItemStackRune ir) {
+		Map<String, ItemStackRune> cds = playerRuneCd.getOrDefault(p, new ConcurrentHashMap<>());
+		cds.put(ir.getName(), ir);
+		playerRuneCd.put(p, cds);
 	}
 
 	public boolean hasGlobalCd(Player p) {
@@ -183,7 +191,7 @@ public class RuneManager {
 		int price = ir.getPrice();
 		if(rpg.getModifiers().hasZrodloNatury())
 			price *= 0.8;
-		
+
 		if(stats.getPresentMana() >= price)
 			return true;
 		
@@ -202,7 +210,8 @@ public class RuneManager {
 			}
 			return true;
 		}
-		
+
+		p.sendMessage("§7[§6EpicRPG§7] §cMasz za malo many by uzyc tej runy!");
 		return false;
 	}
 
@@ -234,11 +243,11 @@ public class RuneManager {
 		}
 		
 		double hpPrice = price * 0.5;
-		EntityDamageEvent event = new EntityDamageEvent(rpg.getPlayer(), DamageCause.CONTACT, hpPrice);
+		Player p = rpg.getPlayer();
+		EntityDamageEvent event = new EntityDamageEvent(p, DamageCause.CONTACT, hpPrice);
 		Bukkit.getPluginManager().callEvent(event);
 		
-		//TODO
-//		ManualDamage.doDamage(p, newPrice, event);
+		ManualDamage.doDamage(p, hpPrice, event);
 	}
 	
 	public void spendHp(RpgPlayer rpg, ItemStackRune ir) {
@@ -250,8 +259,7 @@ public class RuneManager {
 		EntityDamageEvent event = new EntityDamageEvent(p, DamageCause.CONTACT, price);
 		Bukkit.getPluginManager().callEvent(event);
 		
-		//TODO
-//		ManualDamage.doDamage(p, newPrice, event);
+		ManualDamage.doDamage(p, price, event);
 	}
 	
 	public boolean silaZywiolowEffect() {
@@ -264,6 +272,7 @@ public class RuneManager {
 	}
 	
 	public ARune getRune(ItemStackRune dr, Player p, Material material, String name) {
+		name = name.toLowerCase();
 		switch(material) {
 			case MUSIC_DISC_MELLOHI:
 				switch(name) {
@@ -342,6 +351,7 @@ public class RuneManager {
 					case "§3barbarzynski szal":	return new BarbarzynskiSzal(dr, p);
 					case "§3sila jednosci":		return new SilaJednosci(dr, p);
 					case "§3zryw":				return new Zryw(dr, p);
+					case "§3§lfala dezorientacyjna":return new FalaDezorientacyjna(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_MALL:
@@ -365,6 +375,7 @@ public class RuneManager {
 					case "§acios w plecy":		return new CiosWPlecy(dr, p);
 					case "§amord":				return new Mord(dr, p);
 					case "§aodwrocenie uwagi":	return new OdwrocenieUwagi(dr, p);
+					case "§a§leksplodujaca strzala":return new EksplodujacaStrzala(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_STAL:
@@ -475,6 +486,7 @@ public class RuneManager {
 					case "§x§e§7§e§7§e§7§oswiatlo":		return new Swiatlo(dr, p);
 					case "§7czystka":					return new Czystka(dr, p);
 					case "§x§0§0§f§f§f§fwlocznia elysian":	return new WloczniaElysian(dr, p);
+					case "§7§lkamienny obserwator":		return new KamiennyObserwator(dr, p);
 				}
 			case MUSIC_DISC_PIGSTEP:
 				switch(name) {
@@ -484,6 +496,10 @@ public class RuneManager {
 					case "§x§9§a§0§3§4§3krew przodkow":		return new KrewPrzodkow(dr, p);
 					case "§x§8§a§0§3§0§3§ogniew":			return new Gniew(dr, p);
 					case "§x§e§e§0§5§0§5§ltransfuzja":		return new Transfuzja(dr, p);
+				}
+			case MUSIC_DISC_OTHERSIDE:
+				switch(name) {
+					case "§f§lsila rownowagi":			return new SilaRownowagi(dr, p);
 				}
 			default:
 				System.out.println(name);

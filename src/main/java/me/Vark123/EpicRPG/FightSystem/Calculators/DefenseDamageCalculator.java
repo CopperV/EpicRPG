@@ -1,21 +1,27 @@
 package me.Vark123.EpicRPG.FightSystem.Calculators;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.clan.api.Clan;
 import de.simonsator.partyandfriends.clan.api.ClansManager;
 import me.Vark123.EpicClans.EpicClansApi;
+import me.Vark123.EpicRPG.FightSystem.ManualDamage;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
-import me.Vark123.EpicRPG.Players.Components.RpgSkills;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
+import me.Vark123.EpicRPG.RuneSystem.Runes.SilaJednosci;
 import net.md_5.bungee.api.ChatColor;
 
 public class DefenseDamageCalculator implements DamageCalculator {
@@ -32,7 +38,6 @@ public class DefenseDamageCalculator implements DamageCalculator {
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		RpgStats stats = rpg.getStats();
 		RpgPlayerInfo info = rpg.getInfo();
-		RpgSkills skills = rpg.getSkills();
 		RpgModifiers modifiers = rpg.getModifiers();
 		
 		if(damager instanceof Player 
@@ -111,31 +116,27 @@ public class DefenseDamageCalculator implements DamageCalculator {
 				dmgZyciodajnaZiemia_M = dmg*0.2;
 			}
 			
-			//TODO
-//			if(modifiers.hasSilaJednosci() && SilaJednosci.getGlobalEffected().containsKey(rpg.getP())) {
-//				SilaJednosci rune = SilaJednosci.getGlobalEffected().get(rpg.getP());
-//				Player caster = rune.getCaster();
-//				Location castLoc = rune.getLoc();
-////				Bukkit.broadcastMessage("Test2: "+caster.isOnline()+" "+caster.getWorld().getUID().equals(castLoc.getWorld().getUID())+" "+(caster.getLocation().distance(castLoc) <= rune.getRune().getObszar()));
-//				if(caster.isOnline() && caster.getWorld().getUID().equals(castLoc.getWorld().getUID())
-//						&& caster.getLocation().distance(castLoc) <= rune.getRune().getObszar()) {
-////					Bukkit.broadcastMessage("Test3");
-//					dmgSilaJednosci = toReturn * 0.4;
-////					toReturn = dmgSilaJednosci;
-//					
-//					EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(damager, caster, DamageCause.CONTACT, toReturn - dmgSilaJednosci);
-//					Bukkit.getPluginManager().callEvent(event);
-//					if(damager instanceof LivingEntity)
-//						ManualDamage.doDamage((LivingEntity) damager, caster, event.getDamage(), event);
-//					else
-//						ManualDamage.doDamage(caster, event.getDamage(), event);
-//					
-//					caster.getWorld().playSound(caster.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 0.9f);
-//					victim.getWorld().playSound(victim.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 0.9f);
-//					caster.getWorld().spawnParticle(Particle.WAX_ON, caster.getLocation().add(0,1,0), 8, 0.5f, 0.5f, 0.5f, 0.1f);
-//					victim.getWorld().spawnParticle(Particle.WAX_OFF, victim.getLocation().add(0,1,0), 8, 0.5f, 0.5f, 0.5f, 0.1f);
-//				}
-//			}
+			if(modifiers.hasSilaJednosci() && SilaJednosci.getGlobalEffected().containsKey(rpg.getPlayer())) {
+				SilaJednosci rune = SilaJednosci.getGlobalEffected().get(rpg.getPlayer());
+				Player caster = rune.getCaster();
+				Location castLoc = rune.getLoc();
+				if(caster.isOnline() && caster.getWorld().getUID().equals(castLoc.getWorld().getUID())
+						&& caster.getLocation().distance(castLoc) <= rune.getRune().getObszar()) {
+					dmgSilaJednosci = dmg * 0.4;
+
+					EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(damager, caster, DamageCause.CONTACT, dmg - dmgSilaJednosci);
+					Bukkit.getPluginManager().callEvent(event);
+					if(damager instanceof LivingEntity)
+						ManualDamage.doDamage((LivingEntity) damager, caster, event.getDamage(), event);
+					else
+						ManualDamage.doDamage(caster, event.getDamage(), event);
+					
+					caster.getWorld().playSound(caster.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 0.9f);
+					victim.getWorld().playSound(victim.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 0.9f);
+					caster.getWorld().spawnParticle(Particle.WAX_ON, caster.getLocation().add(0,1,0), 8, 0.5f, 0.5f, 0.5f, 0.1f);
+					victim.getWorld().spawnParticle(Particle.WAX_OFF, victim.getLocation().add(0,1,0), 8, 0.5f, 0.5f, 0.5f, 0.1f);
+				}
+			}
 
 			dmg = dmg - dmgPotion - dmgGruboskornosc - dmgTotemObronny 
 					- dmgAuraRozproszenia - dmgZyciodajnaZiemia 
@@ -159,36 +160,34 @@ public class DefenseDamageCalculator implements DamageCalculator {
 				dmg = info.getLevel()/10.+2;
 			}
 			
-			//TODO
-//			if(modifiers.hasSfera()) {
-//				if(!(damager instanceof Player && PlayerManager.getInstance().playerExists((Player) damager)) 
-//						&& PlayerManager.getInstance().getRpgPlayer((Player) damager).getModifiers().hasSfera()) {
-//					double tmpDmg = dmg * 0.25;
-//					if(modifiers.hasInkantacja()) tmpDmg *= 1.3;
-//					
-//					EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(victim, damager, DamageCause.CONTACT, tmpDmg);
-//					Bukkit.getPluginManager().callEvent(event);
-//					if(!event.isCancelled()) {
-//						ManualDamage.doDamage((Player) victim, (LivingEntity) damager, tmpDmg, event);
-//						victim.playSound(victim.getLocation(), Sound.ENTITY_GHAST_SHOOT, 1, 1);
-//					}
-//
-//					
-//				}
-//			}
+			if(modifiers.hasSfera()) {
+				if(!(damager instanceof Player && PlayerManager.getInstance().playerExists((Player) damager)) 
+						&& PlayerManager.getInstance().getRpgPlayer((Player) damager).getModifiers().hasSfera()) {
+					double tmpDmg = dmg * 0.25;
+					if(modifiers.hasInkantacja()) tmpDmg *= 1.3;
+					
+					EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(victim, damager, DamageCause.CONTACT, tmpDmg);
+					Bukkit.getPluginManager().callEvent(event);
+					if(!event.isCancelled()) {
+						ManualDamage.doDamage((Player) victim, (LivingEntity) damager, tmpDmg, event);
+						victim.getWorld().playSound(victim.getLocation(), Sound.ENTITY_GHAST_SHOOT, 1, 1);
+					}
 
-			//TODO
-//			if(modifiers.hasTotemObronny()) {
-//				if(!(damager instanceof Player && PlayerManager.getInstance().playerExists((Player) damager)) 
-//						&& PlayerManager.getInstance().getRpgPlayer((Player) damager).getModifiers().hasTotemObronny()) {
-//					EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(victim, damager, DamageCause.CONTACT, dmg * 0.25);
-//					Bukkit.getPluginManager().callEvent(event);
-//					if(!event.isCancelled()) {
-//						ManualDamage.doDamage((Player) victim, (LivingEntity) damager, dmg * 0.25, event);
-//						victim.playSound(victim.getLocation(), Sound.ENTITY_EVOKER_CAST_SPELL, 1, 0.5f);
-//					}
-//				}
-//			}
+					
+				}
+			}
+
+			if(modifiers.hasTotemObronny()) {
+				if(!(damager instanceof Player && PlayerManager.getInstance().playerExists((Player) damager)) 
+						&& PlayerManager.getInstance().getRpgPlayer((Player) damager).getModifiers().hasTotemObronny()) {
+					EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(victim, damager, DamageCause.CONTACT, dmg * 0.25);
+					Bukkit.getPluginManager().callEvent(event);
+					if(!event.isCancelled()) {
+						ManualDamage.doDamage((Player) victim, (LivingEntity) damager, dmg * 0.25, event);
+						victim.getWorld().playSound(victim.getLocation(), Sound.ENTITY_EVOKER_CAST_SPELL, 1, 0.5f);
+					}
+				}
+			}
 			
 		}
 		

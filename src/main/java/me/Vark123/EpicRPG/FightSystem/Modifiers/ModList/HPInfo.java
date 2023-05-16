@@ -45,7 +45,8 @@ public class HPInfo implements DamageModifier {
 			return damage;
 		Player p = (Player) damager;
 		
-		if(victim.getName().toLowerCase().contains("boss") && !victim.getName().toLowerCase().contains("miniboss")) return damage;
+		if(victim.getName().toLowerCase().contains("boss") && !victim.getName().toLowerCase().contains("miniboss"))
+			return damage;
 		
 		BossBar bar;
 		if(entitiesHPBars.containsKey(p)) {
@@ -55,11 +56,19 @@ public class HPInfo implements DamageModifier {
 		}else {
 			bar = Bukkit.createBossBar(" ", BarColor.WHITE, BarStyle.SEGMENTED_10);
 		}
-		bar.setTitle(victim.getName()+" §7- §c"+(int)(((LivingEntity)victim).getHealth()-damage<0?0:Math.ceil(((LivingEntity)victim).getHealth()-damage))+" §4❤");
-		if((((LivingEntity)victim).getHealth()-damage<0?0:((LivingEntity)victim).getHealth()-damage)>((LivingEntity)victim).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())
+		
+		LivingEntity lVictim = (LivingEntity) victim;
+		
+		bar.setTitle(victim.getName()+" §7- §c"
+				+(int)((lVictim).getHealth() - damage < 0 ? 
+						0 : Math.ceil((lVictim.getHealth() - damage))+" §4❤"));
+		
+		if(((lVictim).getHealth() - damage < 0 ?
+				0 : (lVictim).getHealth() - damage) > (lVictim).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())
 			bar.setProgress(1);
 		else
-			bar.setProgress((((LivingEntity)victim).getHealth()-damage<0?0:((LivingEntity)victim).getHealth()-damage)/((LivingEntity)victim).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+			bar.setProgress(((lVictim).getHealth() - damage < 0 ?
+					0 : (lVictim).getHealth() - damage) / (lVictim).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 		bar.setVisible(true);
 		bar.addPlayer(p);
 

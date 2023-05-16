@@ -31,13 +31,13 @@ public class ZakazanyRytual_H extends ARune {
 		RpgModifiers modifiers = rpg.getModifiers();
 		modifiers.setZakazanyRytual_h(true);
 		modifiers.setModifier1_lock(true);
-		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
+		p.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½aUzyles runy "+dr.getName());
 		
 		new BukkitRunnable() {
 			
 			double time = dr.getDurationTime();
 			double timer = dr.getDurationTime();
-			BossBar bar = Bukkit.createBossBar("§5§lZakazany rytual I§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
+			BossBar bar = Bukkit.createBossBar("ï¿½5ï¿½lZakazany rytual Iï¿½f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
 				bar.setVisible(true);
 				bar.addPlayer(p);
 				bar.setProgress(timer/time);
@@ -52,7 +52,7 @@ public class ZakazanyRytual_H extends ARune {
 					return;
 				}
 				
-				bar.setTitle("§5§lZakazany rytual I§f: "+(int)timer+" sekund");
+				bar.setTitle("ï¿½5ï¿½lZakazany rytual Iï¿½f: "+(int)timer+" sekund");
 				bar.setProgress(timer/time);
 				
 				--timer;
@@ -64,7 +64,7 @@ public class ZakazanyRytual_H extends ARune {
 			@Override
 			public void run() {
 				if(timer <= 0 || !casterInCastWorld()) {
-					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+					p.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, 1, 1.7f);
 					modifiers.setZakazanyRytual_h(false);
 					modifiers.setModifier1_lock(false);

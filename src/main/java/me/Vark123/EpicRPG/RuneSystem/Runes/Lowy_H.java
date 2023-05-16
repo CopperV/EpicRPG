@@ -74,7 +74,7 @@ public class Lowy_H extends ARune {
 				if(loc2.getBlock().getType().isSolid() || !casterInCastWorld()) {
 					loc2.setY(Math.ceil(loc2.getY())+0.25);
 					preparation(loc2);
-//					Bukkit.broadcastMessage("§4Koncowa lokalizacja: §6"+loc.toString());
+//					Bukkit.broadcastMessage("ï¿½4Koncowa lokalizacja: ï¿½6"+loc.toString());
 					this.cancel();
 					return;
 				}
@@ -110,7 +110,8 @@ public class Lowy_H extends ARune {
 						State flag = set.queryValue(null, Flags.PVP);
 						if(flag != null && flag.equals(State.ALLOW)
 								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
-							return false;
+							return true;
+						return false;
 					}
 					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 						return false;

@@ -36,13 +36,13 @@ public class LodowyBlok extends ARune {
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ILLUSIONER_PREPARE_MIRROR, 1, 1.25f);
 		rpg.getModifiers().setLodowyBlok(true);
-		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
+		p.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½aUzyles runy "+dr.getName());
 		
 		new BukkitRunnable() {
 			
 			double time = dr.getDurationTime();
 			double timer = dr.getDurationTime();
-			BossBar bar = Bukkit.createBossBar("§b§oLodowy blok§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
+			BossBar bar = Bukkit.createBossBar("ï¿½bï¿½oLodowy blokï¿½f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
 				bar.setVisible(true);
 				bar.addPlayer(p);
 				bar.setProgress(timer/time);
@@ -61,13 +61,13 @@ public class LodowyBlok extends ARune {
 					p.getWorld().spawnParticle(Particle.SNOWFLAKE, p.getLocation().add(0,1,0), 30, 0.5f, 1f, 0.5f, 0.1f);
 					rpg.getModifiers().setLodowyBlok(false);
 					effected.remove(p);
-					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+					p.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					
 					this.cancel();
 					return;
 				}
 				
-				bar.setTitle("§b§oLodowy blok§f: "+(int)timer+" sekund");
+				bar.setTitle("ï¿½bï¿½oLodowy blokï¿½f: "+(int)timer+" sekund");
 				bar.setProgress(timer/time);
 				
 				--timer;

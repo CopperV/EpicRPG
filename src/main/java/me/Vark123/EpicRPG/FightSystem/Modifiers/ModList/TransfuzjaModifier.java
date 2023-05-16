@@ -1,5 +1,7 @@
 package me.Vark123.EpicRPG.FightSystem.Modifiers.ModList;
 
+import org.bukkit.EntityEffect;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -8,6 +10,7 @@ import me.Vark123.EpicRPG.FightSystem.Modifiers.DamageModifier;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Transfuzja;
 
 public class TransfuzjaModifier implements DamageModifier {
 
@@ -26,16 +29,16 @@ public class TransfuzjaModifier implements DamageModifier {
 		if(!modifiers.hasTransfuzja())
 			return damage;
 
-		//TODO
-//		if(!Transfuzja.getEffected().contains(p))
-//			return damage;
-//		
-//		if(p.getHealth() - damage >= 1.0D)
-//			return damage;
-//		
-//		p.playEffect(EntityEffect.TOTEM_RESURRECT);
-//		p.playEffect(EntityEffect.HURT);
-//		Transfuzja.getEffected().remove(p);
+		if(!Transfuzja.getEffected().contains(p))
+			return damage;
+		
+		if(p.getHealth() - damage >= 1.0D)
+			return damage;
+		
+		rpg.getStats().createRegenHpTask(3, p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()*0.05);
+		p.playEffect(EntityEffect.TOTEM_RESURRECT);
+		p.playEffect(EntityEffect.HURT);
+		Transfuzja.getEffected().remove(p);
 		return -1;
 	}
 

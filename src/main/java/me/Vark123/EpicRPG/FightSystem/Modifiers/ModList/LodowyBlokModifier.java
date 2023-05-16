@@ -9,6 +9,7 @@ import me.Vark123.EpicRPG.FightSystem.Modifiers.DamageModifier;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
+import me.Vark123.EpicRPG.RuneSystem.Runes.LodowyBlok;
 
 public class LodowyBlokModifier implements DamageModifier {
 
@@ -16,7 +17,6 @@ public class LodowyBlokModifier implements DamageModifier {
 	public double modifyDamage(Entity damager, Entity victim, double damage, DamageCause cause) {
 		
 		if(victim instanceof Player) {
-//			Bukkit.broadcastMessage("Victim: "+victim.getName());
 			if(!PlayerManager.getInstance().playerExists((Player) victim))
 				return damage;
 			
@@ -25,9 +25,8 @@ public class LodowyBlokModifier implements DamageModifier {
 			if(!modifier.hasLodowyBlok())
 				return damage;
 
-			//TODO
-//			if(!LodowyBlok.getEffected().contains((Player) victim))
-//				return damage;
+			if(!LodowyBlok.getEffected().contains((Player) victim))
+				return damage;
 			
 			victim.getWorld().playSound(victim.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_SET_SPAWN, 1, 2);
 			return -1;
@@ -35,7 +34,6 @@ public class LodowyBlokModifier implements DamageModifier {
 
 		if(damager instanceof Player) {
 			Player p = (Player) damager;
-//			Bukkit.broadcastMessage("Damager: "+damager.getName());
 			if(!PlayerManager.getInstance().playerExists(p))
 				return damage;
 
@@ -44,11 +42,9 @@ public class LodowyBlokModifier implements DamageModifier {
 			if(!modifier.hasLodowyBlok())
 				return damage;
 
-			//TODO
-//			if(!LodowyBlok.getEffected().contains(p))
-//				return damage;
-//			
-//			LodowyBlok.getEffected().remove(p);
+			if(LodowyBlok.getEffected().contains(p))
+				LodowyBlok.getEffected().remove(p);
+			
 			return damage;
 		}
 		

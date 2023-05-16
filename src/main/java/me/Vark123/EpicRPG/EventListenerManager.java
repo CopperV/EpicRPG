@@ -27,6 +27,13 @@ import me.Vark123.EpicRPG.FightSystem.Modifiers.ModList.ZewKrwiModifier;
 import me.Vark123.EpicRPG.HealthSystem.PlayerHealEvent;
 import me.Vark123.EpicRPG.Players.BaseEvents.PlayerJoinEvent;
 import me.Vark123.EpicRPG.Players.BaseEvents.PlayerQuitEvent;
+import me.Vark123.EpicRPG.Potions.PotionDrinkEvent;
+import me.Vark123.EpicRPG.RuneSystem.RuneInteractEvent;
+import me.Vark123.EpicRPG.RuneSystem.Events.EksplodujacaStrzalaHitEffectEvent;
+import me.Vark123.EpicRPG.RuneSystem.Events.GradStrzalLaunchEvent;
+import me.Vark123.EpicRPG.RuneSystem.Events.KamiennyObserwatorEvent;
+import me.Vark123.EpicRPG.RuneSystem.Events.LodowyBlokDisableMoveEvent;
+import me.Vark123.EpicRPG.RuneSystem.Events.WedrownyCienTargetEvent;
 
 public class EventListenerManager {
 
@@ -44,6 +51,15 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new RpgDeathEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new DamageModifyEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new LavaDamageEvent(), inst);
+
+		Bukkit.getPluginManager().registerEvents(new RuneInteractEvent(), inst);
+		Bukkit.getPluginManager().registerEvents(new PotionDrinkEvent(), inst);
+		
+		Bukkit.getPluginManager().registerEvents(new EksplodujacaStrzalaHitEffectEvent(), inst);
+		Bukkit.getPluginManager().registerEvents(new GradStrzalLaunchEvent(), inst);
+		Bukkit.getPluginManager().registerEvents(new KamiennyObserwatorEvent(), inst);
+		Bukkit.getPluginManager().registerEvents(new LodowyBlokDisableMoveEvent(), inst);
+		Bukkit.getPluginManager().registerEvents(new WedrownyCienTargetEvent(), inst);
 		
 		
 		//Damage Modifiers

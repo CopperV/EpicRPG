@@ -37,13 +37,13 @@ public class Transfuzja extends ARune {
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_MAGMA_CUBE_JUMP, 1, 0.6f);
 		rpg.getModifiers().setTransfuzja(true);
-		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
+		p.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½aUzyles runy "+dr.getName());
 		
 		new BukkitRunnable() {
 			
 			double time = dr.getDurationTime();
 			double timer = dr.getDurationTime();
-			BossBar bar = Bukkit.createBossBar("§x§e§e§0§5§0§5§lTransfuzja§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
+			BossBar bar = Bukkit.createBossBar("ï¿½xï¿½eï¿½eï¿½0ï¿½5ï¿½0ï¿½5ï¿½lTransfuzjaï¿½f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
 				bar.setVisible(true);
 				bar.addPlayer(p);
 				bar.setProgress(timer/time);
@@ -61,13 +61,13 @@ public class Transfuzja extends ARune {
 					p.getWorld().spawnParticle(Particle.REDSTONE, p.getLocation().add(0,1,0), 20, 0.5f, 0.5f, 0.5f, 0.1f, dust);
 					rpg.getModifiers().setTransfuzja(false);
 					effected.remove(p);
-					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+					p.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					
 					this.cancel();
 					return;
 				}
 				
-				bar.setTitle("§x§e§e§0§5§0§5§lTransfuzja§f: "+(int)timer+" sekund");
+				bar.setTitle("ï¿½xï¿½eï¿½eï¿½0ï¿½5ï¿½0ï¿½5ï¿½lTransfuzjaï¿½f: "+(int)timer+" sekund");
 				bar.setProgress(timer/time);
 				
 				--timer;

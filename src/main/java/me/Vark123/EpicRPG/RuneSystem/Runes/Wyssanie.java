@@ -64,7 +64,8 @@ public class Wyssanie extends ARune{
 						State flag = set.queryValue(null, Flags.PVP);
 						if(flag != null && flag.equals(State.ALLOW)
 								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
-							return false;
+							return true;
+						return false;
 					}
 					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 						return false;
@@ -109,9 +110,9 @@ public class Wyssanie extends ARune{
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_CAT_HISS, 1, 0.9f);
 		double amount = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()*0.07*rpg.getStats().getKrag();
 		if(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() > (amount+p.getHealth())) {
-			p.sendMessage("§7[§6EpicRPG§7] §6Uleczyles sie w "+(7*rpg.getStats().getKrag())+"%");
+			p.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½6Uleczyles sie w "+(7*rpg.getStats().getKrag())+"%");
 		}else {
-			p.sendMessage("§7[§6EpicRPG§7] §6Uleczyles sie w pelni");
+			p.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½6Uleczyles sie w pelni");
 		}
 		
 		RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg, amount);

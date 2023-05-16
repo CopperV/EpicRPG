@@ -27,10 +27,10 @@ public class Leczenie extends ARune{
 		double amount = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()*0.1*rpg.getStats().getKrag();
 		if(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() > (amount+p.getHealth())) {
 //			p.setHealth((int)(p.getHealth()+p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()*0.1*rpg.getKrag()));
-			p.sendMessage("§7[§6EpicRPG§7] §6Uleczyles sie w "+(10*rpg.getStats().getKrag())+"%");
+			p.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½6Uleczyles sie w "+(10*rpg.getStats().getKrag())+"%");
 		}else {
 //			p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-			p.sendMessage("§7[§6EpicRPG§7] §6Uleczyles sie w pelni");
+			p.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½6Uleczyles sie w pelni");
 		}
 		
 		RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg, amount);

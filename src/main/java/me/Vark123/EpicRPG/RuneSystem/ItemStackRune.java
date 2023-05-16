@@ -25,6 +25,7 @@ public class ItemStackRune {
 	private String magicType;
 	
 	public ItemStackRune(ItemStack it) {
+		name = it.getItemMeta().getDisplayName();
 		it.getItemMeta().getLore().parallelStream().filter(s -> {
 			if(!s.contains(": "))
 				return false;
@@ -43,7 +44,7 @@ public class ItemStackRune {
 				klasa = ChatColor.stripColor(s).split(": ")[1];
 				reqKlasa = true;
 			}
-			if(s.contains("Koszt: ")) {
+			if(s.contains("Koszt ")) {
 				if(s.contains("zycia"))
 					hpInsteadMana = true;
 				price = Integer.parseInt(ChatColor.stripColor(s).split(": ")[1]);
@@ -52,10 +53,10 @@ public class ItemStackRune {
 				obszar = Integer.parseInt(ChatColor.stripColor(s).split(": ")[1]);
 			}
 			if(s.contains("Czas trwania: ")) {
-				durationTime = Integer.parseInt(ChatColor.stripColor(s).split(": ")[1]);
+				durationTime = Integer.parseInt(ChatColor.stripColor(s).split(": ")[1].split(" ")[0]);
 			}
 			if(s.contains("Czas regeneracji: ")) {
-				int seconds = Integer.parseInt(ChatColor.stripColor(s).split(": ")[1]);
+				int seconds = Integer.parseInt(ChatColor.stripColor(s).split(": ")[1].split(" ")[0]);
 				regenTime = 1000 * seconds;
 			}
 			if(s.contains("Wplyw umyslu: ")) {

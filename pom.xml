@@ -134,5 +134,11 @@
 			<version>1.0.0</version>
 			<systemPath>${env.USERPROFILE}\Desktop\plugins\EffectLib-9.0.jar</systemPath>
 		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.26</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 </project>

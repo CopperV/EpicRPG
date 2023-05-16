@@ -71,7 +71,7 @@ public class PoteznaRunaDomisia extends ARune {
 			
 			double time = dr.getDurationTime();
 			double timer = dr.getDurationTime();
-			BossBar bar = Bukkit.createBossBar("§5§lPotezna Runa Domisia§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
+			BossBar bar = Bukkit.createBossBar("ï¿½5ï¿½lPotezna Runa Domisiaï¿½f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
 				bar.setVisible(true);
 				bar.addPlayer(p);
 				bar.setProgress(timer/time);
@@ -86,7 +86,7 @@ public class PoteznaRunaDomisia extends ARune {
 					return;
 				}
 				
-				bar.setTitle("§5§lPotezna Runa Domisia§f: "+(int)timer+" sekund");
+				bar.setTitle("ï¿½5ï¿½lPotezna Runa Domisiaï¿½f: "+(int)timer+" sekund");
 				bar.setProgress(timer/time);
 				
 				--timer;
@@ -99,7 +99,7 @@ public class PoteznaRunaDomisia extends ARune {
 			@Override
 			public void run() {
 				if(timer <= 0) {
-					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+					p.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 5, 1f);
 					this.cancel();
 					return;
@@ -138,7 +138,7 @@ public class PoteznaRunaDomisia extends ARune {
 				
 				double time = dr.getDurationTime();
 				double timer = dr.getDurationTime();
-				BossBar bar = Bukkit.createBossBar("§5§lPotezna Runa Domisia§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
+				BossBar bar = Bukkit.createBossBar("ï¿½5ï¿½lPotezna Runa Domisiaï¿½f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
 					bar.setVisible(true);
 					bar.addPlayer(tmp);
 					bar.setProgress(timer/time);
@@ -153,7 +153,7 @@ public class PoteznaRunaDomisia extends ARune {
 						return;
 					}
 					
-					bar.setTitle("§5§lPotezna Runa Domisia§f: "+(int)timer+" sekund");
+					bar.setTitle("ï¿½5ï¿½lPotezna Runa Domisiaï¿½f: "+(int)timer+" sekund");
 					bar.setProgress(timer/time);
 					
 					--timer;
@@ -166,7 +166,7 @@ public class PoteznaRunaDomisia extends ARune {
 				@Override
 				public void run() {
 					if(timer <= 0) {
-						tmp.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+						tmp.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 						tmp.playSound(tmp.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 5, 1f);
 						this.cancel();
 						return;
@@ -212,7 +212,7 @@ public class PoteznaRunaDomisia extends ARune {
 				
 				double time = dr.getDurationTime();
 				double timer = dr.getDurationTime();
-				BossBar bar = Bukkit.createBossBar("§5§lPotezna Runa Domisia§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
+				BossBar bar = Bukkit.createBossBar("ï¿½5ï¿½lPotezna Runa Domisiaï¿½f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
 					bar.setVisible(true);
 					bar.addPlayer(tmp);
 					bar.setProgress(timer/time);
@@ -227,7 +227,7 @@ public class PoteznaRunaDomisia extends ARune {
 						return;
 					}
 					
-					bar.setTitle("§5§lPotezna Runa Domisia§f: "+(int)timer+" sekund");
+					bar.setTitle("ï¿½5ï¿½lPotezna Runa Domisiaï¿½f: "+(int)timer+" sekund");
 					bar.setProgress(timer/time);
 					
 					--timer;
@@ -240,7 +240,7 @@ public class PoteznaRunaDomisia extends ARune {
 				@Override
 				public void run() {
 					if(timer <= 0) {
-						tmp.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+						tmp.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 						tmp.playSound(tmp.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 5, 1f);
 						this.cancel();
 						return;

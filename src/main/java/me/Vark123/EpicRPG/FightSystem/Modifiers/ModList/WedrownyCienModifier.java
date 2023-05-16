@@ -10,6 +10,7 @@ import me.Vark123.EpicRPG.FightSystem.Modifiers.DamageModifier;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
+import me.Vark123.EpicRPG.RuneSystem.Runes.WedrownyCien;
 
 public class WedrownyCienModifier implements DamageModifier {
 
@@ -27,11 +28,9 @@ public class WedrownyCienModifier implements DamageModifier {
 		if(!modifiers.hasWedrownyCien())
 			return damage;
 
-		//TODO
-//		if(!WedrownyCien.getEffected().contains(p))
-//			return damage;
-//
-//		WedrownyCien.getEffected().remove(p);
+		if(WedrownyCien.getEffected().contains(p))
+			WedrownyCien.getEffected().remove(p);
+
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1.85f);
 		p.getWorld().spawnParticle(Particle.SMOKE_NORMAL, p.getLocation().add(0,1,0), 25, 0.5f, 0.75f, 0.5f, 0.1f);
 		

@@ -10,10 +10,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import de.tr7zw.nbtapi.NBTItem;
-import me.Vark123.EpicRPG.Main;
-import me.Vark123.EpicRPG.Stats.ChangeStats;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
+import me.Vark123.EpicRPG.Stats.ChangeStats;
 import net.md_5.bungee.api.ChatColor;
 
 public class JewerlyMenuCloseEvent implements Listener {

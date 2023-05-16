@@ -1,7 +1,11 @@
 package me.Vark123.EpicRPG.FightSystem.Calculators;
 
+import java.util.Optional;
+
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -11,6 +15,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.flags.Flags;
+import com.sk89q.worldguard.protection.flags.StateFlag.State;
+import com.sk89q.worldguard.protection.regions.RegionQuery;
+
 import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
 import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
 import de.simonsator.partyandfriends.clan.api.Clan;
@@ -18,12 +29,15 @@ import de.simonsator.partyandfriends.clan.api.ClansManager;
 import me.Vark123.EpicClans.EpicClansApi;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.FightSystem.DamageUtils;
+import me.Vark123.EpicRPG.FightSystem.RuneDamage;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 import me.Vark123.EpicRPG.Players.Components.RpgSkills;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
+import me.Vark123.EpicRPG.RuneSystem.RuneTimeEffect;
+import me.Vark123.EpicRPG.RuneSystem.RuneUtils;
 import me.Vark123.EpicRPG.Stats.ChangeStats;
 import me.Vark123.EpicRPG.Stats.CheckStats;
 import net.md_5.bungee.api.ChatColor;
@@ -91,6 +105,7 @@ public class ProjectileDamageCalculator implements DamageCalculator {
 				double dmgZyciodajnaZiemia = 0;
 				double dmgZyciodajnaZiemia_M = 0;
 				double dmgKrwawa = 0;
+				double dmgEksplodujaca = 0;
 				
 				if(victim instanceof Player) {
 					if(crit) {
@@ -189,23 +204,32 @@ public class ProjectileDamageCalculator implements DamageCalculator {
 					dmgZmysly = dmg*0.15;
 				}
 				
-				//TODO
-//				if(modifiers.hasOgnistaStrzala()) {
-//					dmgOgien = dmg*0.20;
-//					if(RuneDamage.damageOgnistaStrzala(p, (LivingEntity) victim, dmgOgien)) {
-//						Location loc2 = victim.getLocation().add(0, 1, 0);
-//						loc2.getWorld().spawnParticle(Particle.FLAME, loc2, 15, 0.2, 0.2, 0.2, 0.05);
-//					}
-//				}
+				if(modifiers.hasOgnistaStrzala()) {
+					dmgOgien = dmg*0.075;
+					
+					if(RuneDamage.directDamageEffect(p, (LivingEntity) victim, 
+							Optional.of(dmgOgien), RuneUtils.getCustomTimeEffect(dmg, RuneTimeEffect.FIRE))) {
+						Location loc2 = victim.getLocation().add(0, 1, 0);
+						loc2.getWorld().spawnParticle(Particle.FLAME, loc2, 15, 0.2, 0.2, 0.2, 0.05);
+					}
+				}
 				
-				//TODO
-//				if(modifiers.hasZatrutaStrzala()) {
-//					dmgPoison = dmg*0.10;
-//					if(RuneDamage.damageZatrutaStrzala(p, (LivingEntity) victim, dmgPoison)) {
-//						Location loc2 = victim.getLocation().add(0, 1, 0);
-//						loc2.getWorld().spawnParticle(Particle.SLIME, loc2, 15, 0.2, 0.2, 0.2, 0.05);
-//					}
-//				}
+				if(modifiers.hasZatrutaStrzala()) {
+					dmgPoison = dmg*0.03;
+					
+					if(RuneDamage.directDamageEffect(p, (LivingEntity) victim, 
+							Optional.of(dmgPoison), RuneUtils.getCustomTimeEffect(dmg, RuneTimeEffect.POISON))) {
+						Location loc2 = victim.getLocation().add(0, 1, 0);
+						loc2.getWorld().spawnParticle(Particle.SLIME, loc2, 15, 0.2, 0.2, 0.2, 0.05);
+					}
+				}
+
+				if(modifiers.hasKrwawaStrzala()) {
+					double bleeding = dmg * 0.05;
+					
+					RuneDamage.directDamageEffect(p, (LivingEntity) victim, 
+							Optional.of(bleeding), RuneUtils.getCustomTimeEffect(dmg, RuneTimeEffect.BLOOD));
+				}
 				
 				if(modifiers.hasPrecyzyjnyStrzal()) {
 					dmgStrzal = dmg*0.5;
@@ -244,10 +268,19 @@ public class ProjectileDamageCalculator implements DamageCalculator {
 					dmgZyciodajnaZiemia_M = dmg * 0.25;
 				}
 				
+				if(modifiers.hasEksplodujacaStrzala()) {
+					if(bow.getType().equals(Material.CROSSBOW)) {
+						int enchant = bow.getEnchantmentLevel(Enchantment.QUICK_CHARGE);
+						dmgEksplodujaca = dmg * (0.45 - 0.05*enchant);
+					} else {
+						dmgEksplodujaca = dmg * 0.3;
+					}
+				}
+				
 				dmg = dmg + dmgLod + dmgOgien + dmgPoison + dmgStrzal 
 						+ dmgZmysly + dmgPotZr + dmgPotZd + dmgZadzaKrwi 
 						+ dmgSwieta + dmgZyciodajnaZiemia 
-						+ dmgZyciodajnaZiemia_M + dmgKrwawa;
+						+ dmgZyciodajnaZiemia_M + dmgKrwawa + dmgEksplodujaca;
 				
 				if(crit && skills.hasCiosKrytyczny()) {
 					dmg *= 1.15;
@@ -261,22 +294,29 @@ public class ProjectileDamageCalculator implements DamageCalculator {
 					dmg *= 1.15;
 				}
 
-				//TODO
-//				if(modifiers.hasSwietaStrzala()) {
-//					for(Entity e : victim.getNearbyEntities(4, 4, 4)) {
-//						if(e.equals(p) || e.equals(victim) || !(e instanceof LivingEntity))
-//							continue;
-//						if(e.getLocation().distance(victim.getLocation()) > 4)
-//							continue;
-//						RuneDamage.damageSwietaStrzala(p, (LivingEntity) e, dmg*0.25);
-//					}
-//				}
-
-				//TODO
-//				if(modifiers.hasKrwawaStrzala()) {
-//					double bleeding = dmg * 0.075;
-//					RuneDamage.damageKrwawaStrzala(p, (LivingEntity) victim, bleeding);
-//				}
+				if(modifiers.hasSwietaStrzala()) {
+					final double holyDmg = dmg * 0.25;
+					victim.getWorld().getNearbyEntities(victim.getLocation(), 4, 4, 4, e -> {
+						if(e.equals(p) || !(e instanceof LivingEntity))
+							return false;
+						if(e.equals(victim))
+							return false;
+						if(e instanceof Player) {
+							RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+							ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
+							State flag = set.queryValue(null, Flags.PVP);
+							if(flag != null && flag.equals(State.ALLOW)
+									&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+								return true;
+							return false;
+						}
+						if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
+							return false;
+						return true;
+					}).parallelStream().forEach(e -> {
+						RuneDamage.directDamageEffect(p, (LivingEntity) e, Optional.of(holyDmg), Optional.empty());
+					});
+				}
 			} else {
 				double tmpDmg = ((AbstractArrow) projectile).getDamage();
 				if(tmpDmg >= 0)

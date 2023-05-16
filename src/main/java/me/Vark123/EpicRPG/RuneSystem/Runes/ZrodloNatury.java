@@ -27,13 +27,13 @@ public class ZrodloNatury extends ARune {
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1.25f);
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		rpg.getModifiers().setZrodloNatury(true);
-		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
+		p.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½aUzyles runy "+dr.getName());
 		
 		new BukkitRunnable() {
 			
 			double time = dr.getDurationTime();
 			double timer = dr.getDurationTime();
-			BossBar bar = Bukkit.createBossBar("§x§0§0§9§a§0§0§lZrodlo natury§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
+			BossBar bar = Bukkit.createBossBar("ï¿½xï¿½0ï¿½0ï¿½9ï¿½aï¿½0ï¿½0ï¿½lZrodlo naturyï¿½f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
 				bar.setVisible(true);
 				bar.addPlayer(p);
 				bar.setProgress(timer/time);
@@ -48,7 +48,7 @@ public class ZrodloNatury extends ARune {
 					return;
 				}
 				
-				bar.setTitle("§x§0§0§9§a§0§0§lZrodlo natury§f: "+(int)timer+" sekund");
+				bar.setTitle("ï¿½xï¿½0ï¿½0ï¿½9ï¿½aï¿½0ï¿½0ï¿½lZrodlo naturyï¿½f: "+(int)timer+" sekund");
 				bar.setProgress(timer/time);
 				
 				--timer;
@@ -60,7 +60,7 @@ public class ZrodloNatury extends ARune {
 			@Override
 			public void run() {
 				if(timer <= 0 || !casterInCastWorld()) {
-					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+					p.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_WOLF_HOWL, 1, 1.8f);
 					rpg.getModifiers().setZrodloNatury(false);
 					this.cancel();

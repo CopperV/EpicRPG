@@ -1,5 +1,7 @@
 package me.Vark123.EpicRPG.FightSystem;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -13,17 +15,22 @@ import org.bukkit.Sound;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import me.Vark123.EpicRPG.EpicRPGMobManager;
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.FightSystem.Modifiers.DamageModifier;
+import me.Vark123.EpicRPG.FightSystem.Modifiers.DamageModifierManager;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
+import me.Vark123.EpicRPG.Utils.Pair;
 
 public class DamageUtils {
 
@@ -136,6 +143,19 @@ public class DamageUtils {
 		});
 		
 		return dmg.doubleValue();
+	}
+	
+	public static Pair<Boolean,Double> runThroughModifiers(Entity damager, Entity victim, double dmg, EntityDamageByEntityEvent e) {
+		Map<EventPriority,List<DamageModifier>> modifiers = DamageModifierManager.getInstance().getModifiers();
+		for(EventPriority priority : modifiers.keySet()) {
+			for(DamageModifier modifier : modifiers.get(priority)){
+				dmg = modifier.modifyDamage(damager, victim, dmg, e.getCause());
+				if(dmg < 0){
+					return new Pair<Boolean, Double>(false, dmg);
+				}
+			}
+		}
+		return new Pair<Boolean, Double>(true, dmg);
 	}
 	
 }

@@ -91,8 +91,9 @@ public class BankaEnergii extends ARune {
 						if(flag != null && flag.equals(State.ALLOW)
 								&& !e.getWorld().getName().toLowerCase().contains("dungeon")){
 							tmp.add(e);
-							return false;
+							return true;
 						}
+						return false;
 					}
 					if(e.getLocation().distance(loc) > dr.getObszar()) {
 						tmp.add(e);

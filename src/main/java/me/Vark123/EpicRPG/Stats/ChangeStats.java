@@ -31,6 +31,7 @@ public class ChangeStats {
 		
 		RpgJewelry jewelry = rpg.getJewelry();
 		RpgStats stats = rpg.getStats();
+		rpg.updateHp();
 		stats.setFinalInteligencja(stats.getInteligencja()+stats.getPotionInteligencja());
 		stats.setFinalSila(stats.getSila()+stats.getPotionSila());
 		stats.setFinalWytrzymalosc(stats.getWytrzymalosc()+stats.getPotionWytrzymalosc());

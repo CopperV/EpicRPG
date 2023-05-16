@@ -3,8 +3,16 @@ package me.Vark123.EpicRPG.Players.Components;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
+import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.HealthSystem.RpgPlayerHealEvent;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 
 public class RpgStats {
@@ -46,6 +54,9 @@ public class RpgStats {
 	
 	private int presentMana = 7;
 	private int krag;
+	
+	private BukkitTask regenHpTask;
+	private BukkitTask regenManaTask;
 	
 	public RpgStats(RpgPlayer rpg) {
 		this.rpg = rpg;
@@ -109,6 +120,49 @@ public class RpgStats {
 		
 		this.presentMana = fYml.getInt("present_mana");
 		this.krag = fYml.getInt("krag");
+	}
+	
+	public void createRegenHpTask(int seconds, double hp) {
+		if(regenHpTask != null && !regenHpTask.isCancelled()) {
+			regenHpTask.cancel();
+		}
+		regenHpTask = new BukkitRunnable() {
+			
+			@Override
+			public void run() {
+				if(seconds <= 0) {
+					Player p = rpg.getPlayer();
+					p.sendMessage(Main.getInstance().getPrefix()+" §eEfekt czasowej mikstury zycia skonczyl sie!");
+					p.spawnParticle(Particle.HEART, p.getLocation().add(0,1,0), 25, .6, .6, .6, 0.2);
+					p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_HURT_FREEZE, 1, 1.25f);
+					this.cancel();
+					return;
+				}
+				RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg, hp);
+				Bukkit.getPluginManager().callEvent(event);
+			}
+		}.runTaskTimer(Main.getInstance(), 0, 20);
+	}
+	
+	public void createRegenManaTask(int seconds, int mana) {
+		if(regenManaTask != null && !regenManaTask.isCancelled()) {
+			regenManaTask.cancel();
+		}
+		regenManaTask = new BukkitRunnable() {
+			
+			@Override
+			public void run() {
+				if(seconds <= 0) {
+					Player p = rpg.getPlayer();
+					p.sendMessage(Main.getInstance().getPrefix()+" §eEfekt czasowej mikstury many skonczyl sie!");
+					p.spawnParticle(Particle.NAUTILUS, p.getLocation().add(0,1,0), 25, .6, .6, .6, 0.2);
+					p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_HURT_SWEET_BERRY_BUSH, 1, 1.25f);
+					this.cancel();
+					return;
+				}
+				addPresentManaSmart(mana);
+			}
+		}.runTaskTimer(Main.getInstance(), 0, 20);
 	}
 
 	public RpgPlayer getRpg() {
@@ -375,7 +429,7 @@ public class RpgStats {
 		if(presentMana + this.presentMana > this.finalMana) {
 			this.presentMana = this.finalMana;
 		}else {
-			this.presentMana -= presentMana;
+			this.presentMana += presentMana;
 		}
 	}
 	

@@ -88,7 +88,8 @@ public class FalaUderzeniowa extends ARune {
 						State flag = set.queryValue(null, Flags.PVP);
 						if(flag != null && flag.equals(State.ALLOW)
 								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
-							return false;
+							return true;
+						return false;
 					}
 					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 						return false;

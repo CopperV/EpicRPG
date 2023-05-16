@@ -38,7 +38,7 @@ public class Zryw extends ARune {
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		p.getWorld().playSound(p.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 0.8f);
 		rpg.getModifiers().setZryw(true);
-		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
+		p.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½aUzyles runy "+dr.getName());
 		
 		List<Entity> tmpTargets = new ArrayList<>();
 		List<Entity> entities = p.getNearbyEntities(dr.getObszar(), dr.getObszar(), dr.getObszar());
@@ -100,7 +100,7 @@ public class Zryw extends ARune {
 			
 			double time = dr.getDurationTime();
 			double timer = dr.getDurationTime();
-			BossBar bar = Bukkit.createBossBar("§3Zryw§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
+			BossBar bar = Bukkit.createBossBar("ï¿½3Zrywï¿½f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
 				bar.setVisible(true);
 				bar.addPlayer(p);
 				bar.setProgress(timer/time);
@@ -121,13 +121,13 @@ public class Zryw extends ARune {
 						if(Prowokacja.getTargets().containsKey(e)) Prowokacja.getTargets().remove(e);
 					});
 					tmpTargets.clear();
-					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+					p.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					
 					this.cancel();
 					return;
 				}
 				
-				bar.setTitle("§3Zryw§f: "+(int)timer+" sekund");
+				bar.setTitle("ï¿½3Zrywï¿½f: "+(int)timer+" sekund");
 				bar.setProgress(timer/time);
 				
 				--timer;

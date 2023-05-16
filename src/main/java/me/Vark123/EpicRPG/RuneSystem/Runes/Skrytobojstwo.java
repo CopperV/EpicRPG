@@ -33,7 +33,7 @@ public class Skrytobojstwo extends ARune{
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_VEX_AMBIENT, 4, 0.2f);
 		PotionEffect potion = new PotionEffect(PotionEffectType.SPEED, 20*dr.getDurationTime(), 1);
 		p.addPotionEffect(potion);
-		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
+		p.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½aUzyles runy "+dr.getName());
 		modifiers.setSkrytobojstwo(true);
 		modifiers.setModifier1_lock(true);
 		
@@ -41,7 +41,7 @@ public class Skrytobojstwo extends ARune{
 			
 			double time = dr.getDurationTime();
 			double timer = dr.getDurationTime();
-			BossBar bar = Bukkit.createBossBar("§a§lSkrytobojstwo§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
+			BossBar bar = Bukkit.createBossBar("ï¿½aï¿½lSkrytobojstwoï¿½f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
 				bar.setVisible(true);
 				bar.addPlayer(p);
 				bar.setProgress(timer/time);
@@ -56,7 +56,7 @@ public class Skrytobojstwo extends ARune{
 					return;
 				}
 				
-				bar.setTitle("§a§lSkrytobojstwo§f: "+(int)timer+" sekund");
+				bar.setTitle("ï¿½aï¿½lSkrytobojstwoï¿½f: "+(int)timer+" sekund");
 				bar.setProgress(timer/time);
 				
 				--timer;
@@ -68,7 +68,7 @@ public class Skrytobojstwo extends ARune{
 			@Override
 			public void run() {
 				if(timer <= 0 || !casterInCastWorld()) {
-					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+					p.sendMessage("ï¿½7[ï¿½6EpicRPGï¿½7] ï¿½aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_VEX_AMBIENT, 4, 1.8f);
 					modifiers.setSkrytobojstwo(false);
 					modifiers.setModifier1_lock(false);

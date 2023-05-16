@@ -49,7 +49,7 @@ public class Utils {
 	public static boolean isRune(ItemStack item) {
 		if(!MythicBukkit.inst().getItemManager().isMythicItem(item))
 			return false;
-		if(item.getType().name().contains("RECORD")) 
+		if(item.getType().name().contains("MUSIC_DISC")) 
 			return true;
 		else 
 			return false;

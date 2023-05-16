@@ -11,6 +11,7 @@ public class RpgModifiers {
 	
 	private float bowPower;
 	private boolean modifier1_lock;
+	@SuppressWarnings("unused")
 	private boolean modifier2_lock;
 	
 	private boolean wyostrzoneZmysly;
@@ -59,6 +60,8 @@ public class RpgModifiers {
 	private boolean wedrownyCien;
 	private boolean ciosWPlecy;
 	private boolean mord;
+	private boolean eksplodujacaStrzala = false;
+	private boolean silaRownowagi = false;
 	
 	private int potionSila;
 	private int potionZrecznosc;
@@ -530,5 +533,21 @@ public class RpgModifiers {
 
 	public void setMord(boolean mord) {
 		this.mord = mord;
+	}
+
+	public boolean hasEksplodujacaStrzala() {
+		return eksplodujacaStrzala;
+	}
+
+	public void setEksplodujacaStrzala(boolean eksplodujacaStrzala) {
+		this.eksplodujacaStrzala = eksplodujacaStrzala;
+	}
+
+	public boolean hasSilaRownowagi() {
+		return silaRownowagi;
+	}
+
+	public void setSilaRownowagi(boolean silaRownowagi) {
+		this.silaRownowagi = silaRownowagi;
 	}
 }
