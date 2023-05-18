@@ -31,13 +31,13 @@ public class EksplodujacaStrzala extends ARune {
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
 		modifiers.setEksplodujacaStrzala(true);
 		modifiers.setModifier1_lock(true);
-		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
+		p.sendMessage("Â§7[Â§6EpicRPGÂ§7] Â§aUzyles runy "+dr.getName());
 		
 		new BukkitRunnable() {
 			
 			double time = dr.getDurationTime();
 			double timer = dr.getDurationTime();
-			BossBar bar = Bukkit.createBossBar("§a§lEksplodujaca strzala§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
+			BossBar bar = Bukkit.createBossBar("Â§aÂ§lEksplodujaca strzalaÂ§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
 				bar.setVisible(true);
 				bar.addPlayer(p);
 				bar.setProgress(timer/time);
@@ -48,7 +48,7 @@ public class EksplodujacaStrzala extends ARune {
 				if(timer <= 0 || !casterInCastWorld()) {
 					bar.removeAll();
 					bar.setVisible(false);
-					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+					p.sendMessage("Â§7[Â§6EpicRPGÂ§7] Â§aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GHAST_SHOOT, 1, 1);
 					modifiers.setEksplodujacaStrzala(false);
 					modifiers.setModifier1_lock(false);
@@ -66,7 +66,7 @@ public class EksplodujacaStrzala extends ARune {
 					return;
 				}
 				
-				bar.setTitle("§a§lEksplodujaca strzala§f: "+(int)timer+" sekund");
+				bar.setTitle("Â§aÂ§lEksplodujaca strzalaÂ§f: "+(int)timer+" sekund");
 				bar.setProgress(timer/time);
 				
 				--timer;

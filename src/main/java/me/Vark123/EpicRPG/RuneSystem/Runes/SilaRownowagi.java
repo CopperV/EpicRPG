@@ -31,13 +31,13 @@ public class SilaRownowagi extends ARune {
 		RpgModifiers modifiers = rpg.getModifiers();
 		modifiers.setSilaRownowagi(true);
 		modifiers.setModifier1_lock(true);
-		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
+		p.sendMessage("Â§7[Â§6EpicRPGÂ§7] Â§aUzyles runy "+dr.getName());
 		
 		new BukkitRunnable() {
 			
 			double time = dr.getDurationTime();
 			double timer = dr.getDurationTime();
-			BossBar bar = Bukkit.createBossBar("§f§lSila rownowagi§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
+			BossBar bar = Bukkit.createBossBar("Â§fÂ§lSila rownowagiÂ§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
 				bar.setVisible(true);
 				bar.addPlayer(p);
 				bar.setProgress(timer/time);
@@ -52,7 +52,7 @@ public class SilaRownowagi extends ARune {
 					return;
 				}
 				
-				bar.setTitle("§f§lSila rownowagi§f: "+(int)timer+" sekund");
+				bar.setTitle("Â§fÂ§lSila rownowagiÂ§f: "+(int)timer+" sekund");
 				bar.setProgress(timer/time);
 				
 				--timer;
@@ -64,7 +64,7 @@ public class SilaRownowagi extends ARune {
 			@Override
 			public void run() {
 				if(timer <= 0 || !casterInCastWorld()) {
-					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+					p.sendMessage("Â§7[Â§6EpicRPGÂ§7] Â§aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 1, 0.65f);
 					modifiers.setSilaRownowagi(false);
 					modifiers.setModifier1_lock(false);

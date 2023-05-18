@@ -29,7 +29,7 @@ public class KamiennyObserwator extends ARune {
 		Location loc = p.getLocation();
 		World w = p.getWorld();
 		if(!w.getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE).booleanValue()) {
-			p.sendMessage(Main.getInstance().getPrefix()+" §cW tym swiecie nie mozna zmieniac czasu!");
+			p.sendMessage(Main.getInstance().getPrefix()+" Â§cW tym swiecie nie mozna zmieniac czasu!");
 			p.getWorld().playSound(loc, Sound.ENTITY_VILLAGER_HURT, 2, 0.6f);
 			w.spawnParticle(Particle.VILLAGER_ANGRY, loc, 25, 0f, 1f, 0f, 0.1f);
 			w.spawnParticle(Particle.SMOKE_LARGE, loc, 25, 0f, 1f, 0f, 0.1f);
@@ -44,7 +44,7 @@ public class KamiennyObserwator extends ARune {
 	@Deprecated
 	public static void openMenu(Player p) {
 		Inventory inv = Bukkit.createInventory(new KamiennyObserwatorMenu(), 
-				54, "§7§lKamienny obserwator");
+				54, "Â§7Â§lKamienny obserwator");
 		
 		ItemStack it = new ItemStack(Material.CLOCK, 1);
 		
@@ -60,7 +60,7 @@ public class KamiennyObserwator extends ARune {
 				nbt.applyNBT(clock);
 				
 				ItemMeta im = clock.getItemMeta();
-				im.setDisplayName("§a§lGODZINA: §e§l"+getTime(hour));
+				im.setDisplayName("Â§aÂ§lGODZINA: Â§eÂ§l"+getTime(hour));
 				clock.setItemMeta(im);
 				
 				inv.setItem(9*row - 1 + 2*slot, clock);

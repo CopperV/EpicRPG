@@ -1,7 +1,13 @@
 package me.Vark123.EpicRPG.Utils;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import io.lumine.mythic.bukkit.MythicBukkit;
@@ -53,6 +59,20 @@ public class Utils {
 			return true;
 		else 
 			return false;
+	}
+	
+	public static void dropItemStack(Player p, ItemStack it) {
+		Inventory inv = p.getInventory();
+		int freeSlot = inv.firstEmpty();
+		if(freeSlot >= 0 && freeSlot < 36) {
+			inv.setItem(freeSlot, it);
+		} else {
+			p.getWorld().dropItem(p.getLocation(), it);
+		}
+	}
+	
+	public static List<Integer> intArrayToList(int[] arr){
+		return Arrays.stream(arr).boxed().collect(Collectors.toList());
 	}
 	
 }

@@ -15,7 +15,7 @@ public class ChatToggleCommand implements CommandExecutor {
 			return false;
 		if(!sender.hasPermission("rpg.chatonoff")) {
 			sender.sendMessage(Main.getInstance().getPrefix()
-					+" §cNie masz uprawnien do tej komendy");
+					+" Â§cNie masz uprawnien do tej komendy");
 			return false;
 		}
 		boolean state = !ChatManager.getInstance().isChatToggle();
@@ -30,7 +30,7 @@ public class ChatToggleCommand implements CommandExecutor {
 				}
 		ChatManager.getInstance().setChatToggle(state);
 		Bukkit.broadcastMessage(Main.getInstance().getPrefix()
-				+" §e"+sender.getName()+" §e"+(state ? "wlaczyl" : "wylaczyl")+" czat");
+				+" Â§e"+sender.getName()+" Â§e"+(state ? "wlaczyl" : "wylaczyl")+" czat");
 		return true;
 	}
 

@@ -15,7 +15,7 @@ import me.Vark123.EpicRPG.Players.RpgPlayer;
 
 public class JewerlyMenu {
 	
-	private static final String title = "§6§lBizuteria";
+	private static final String title = "Â§6Â§lBizuteria";
 	private static final int slots = 18;
 	private static final ItemStack baseAmulet = new ItemStack(Material.FLINT, 1);
 	private static final ItemStack baseRing = new ItemStack(Material.DIAMOND, 1);
@@ -27,17 +27,17 @@ public class JewerlyMenu {
 	static {
 		{
 			ItemMeta im = baseAmulet.getItemMeta();
-			im.setDisplayName("§e§lAMULET");
+			im.setDisplayName("Â§eÂ§lAMULET");
 			baseAmulet.setItemMeta(im);
 		}
 		{
 			ItemMeta im = baseRing.getItemMeta();
-			im.setDisplayName("§6§lPIERSCIEN");
+			im.setDisplayName("Â§6Â§lPIERSCIEN");
 			baseRing.setItemMeta(im);
 		}
 		{
 			ItemMeta im = baseGloves.getItemMeta();
-			im.setDisplayName("§c§lREKAWICE");
+			im.setDisplayName("Â§cÂ§lREKAWICE");
 			baseGloves.setItemMeta(im);
 		}
 		{
@@ -47,7 +47,7 @@ public class JewerlyMenu {
 		}
 		{
 			ItemMeta im = jewerlyItem.getItemMeta();
-			im.setDisplayName("§6§lBizuteria");
+			im.setDisplayName("Â§6Â§lBizuteria");
 			jewerlyItem.setItemMeta(im);
 		}
 	}

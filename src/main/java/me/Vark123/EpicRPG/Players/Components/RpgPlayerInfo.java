@@ -1,13 +1,21 @@
 package me.Vark123.EpicRPG.Players.Components;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import lombok.Getter;
+import me.Vark123.EpicRPG.Core.ExpSystem;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
+import me.Vark123.EpicRPG.Utils.ChatPrintable;
 
-public class RpgPlayerInfo {
+@Getter
+public class RpgPlayerInfo implements Serializable, ChatPrintable{
+
+	private static final long serialVersionUID = -2792105691050716953L;
 
 	private RpgPlayer rpg;
 	
@@ -15,7 +23,7 @@ public class RpgPlayerInfo {
 	private int exp = 0;
 	private int nextLevel;
 	private int pn = 10;
-	private String proffesion = "�aobywatel";
+	private String proffesion = "§aobywatel";
 	
 	private boolean drop = false;
 	private boolean tutorial = true;
@@ -63,41 +71,9 @@ public class RpgPlayerInfo {
 			this.drop = false;
 		}
 	}
-
-	public RpgPlayer getRpg() {
-		return rpg;
-	}
-
-	public int getLevel() {
-		return level;
-	}
-
-	public int getExp() {
-		return exp;
-	}
-
-	public int getNextLevel() {
-		return nextLevel;
-	}
-
-	public int getPn() {
-		return pn;
-	}
-
-	public String getProffesion() {
-		return proffesion;
-	}
 	
 	public String getShortProf() {
 		return proffesion.substring(0, 5);
-	}
-
-	public boolean isDrop() {
-		return drop;
-	}
-
-	public boolean isTutorial() {
-		return tutorial;
 	}
 	
 	public void addXP(int xp) {
@@ -130,5 +106,18 @@ public class RpgPlayerInfo {
 
 	public void setTutorial(boolean tutorial) {
 		this.tutorial = tutorial;
+	}
+
+	@Override
+	public void print(CommandSender sender) {
+		sender.sendMessage("§e§l========================= ");
+		sender.sendMessage("    §2Nick: §a"+rpg.getPlayer().getName()
+				+"        §2Klasa: §a"+proffesion);
+		sender.sendMessage("    §2Poziom: §a"+level
+				+"        §2Doswiadczenie: §a"+exp+"§7/§a"+nextLevel
+				+" §7(§a"+String.format("%.2f", (((double)(exp - ExpSystem.getInstance().getNextLevelExp(level - 1)))
+						/ ((double)(nextLevel - ExpSystem.getInstance().getNextLevelExp(level - 1)))
+						* 100.0)) + "%§7)");
+		sender.sendMessage("    §2Punkty nauki: §a"+pn);
 	}
 }

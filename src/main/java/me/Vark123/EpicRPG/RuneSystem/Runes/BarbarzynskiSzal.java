@@ -34,7 +34,7 @@ public class BarbarzynskiSzal extends ARune {
 			
 			double time = dr.getDurationTime();
 			double timer = dr.getDurationTime();
-			BossBar bar = Bukkit.createBossBar("�3Barbarzynski szal�f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
+			BossBar bar = Bukkit.createBossBar("§3Barbarzynski szal§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
 				bar.setVisible(true);
 				bar.addPlayer(p);
 				bar.setProgress(timer/time);
@@ -49,7 +49,7 @@ public class BarbarzynskiSzal extends ARune {
 					return;
 				}
 				
-				bar.setTitle("�3Barbarzynski szal�f: "+(int)timer+" sekund");
+				bar.setTitle("§3Barbarzynski szal§f: "+(int)timer+" sekund");
 				bar.setProgress(timer/time);
 				
 				--timer;
@@ -64,7 +64,7 @@ public class BarbarzynskiSzal extends ARune {
 				--timer;
 				Location loc = p.getLocation().add(0,1.25,0);
 				if(timer<0 || !casterInCastWorld()) {
-					p.sendMessage("�7[�6EpicRPG�7] �aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 1.5f, 1.1f);
 					rpg.getModifiers().setBarbarzynskiSzal(false);
 					this.cancel();

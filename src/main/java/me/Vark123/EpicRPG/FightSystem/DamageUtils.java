@@ -67,8 +67,8 @@ public class DamageUtils {
 	public static double conditionalDebuffDamage(Player damager, Entity victim, double damage) {
 		
 		if(damager.isInsideVehicle() && damager.getVehicle() instanceof AbstractHorse) {
-			damager.sendMessage(Main.getInstance().getPrefix()+" §cZbyt ciezko walczy sie na koniu!");
-			damager.sendMessage(Main.getInstance().getPrefix()+" §cNie moge zadac skutecznych obrazen!");
+			damager.sendMessage(Main.getInstance().getPrefix()+" Â§cZbyt ciezko walczy sie na koniu!");
+			damager.sendMessage(Main.getInstance().getPrefix()+" Â§cNie moge zadac skutecznych obrazen!");
 			damage /= 4.;
 			damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20*2, 2));
 			damager.playSound(damager.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 1, 1);
@@ -78,16 +78,16 @@ public class DamageUtils {
 		Material m2 = damager.getLocation().getBlock().getType();
 		if(m.equals(Material.WATER) || m.equals(Material.LAVA)) {
 			if(!EpicRPGMobManager.getInstance().isWaterMob(victim.getName())) {
-				damager.sendMessage(Main.getInstance().getPrefix()+" §cWoda stawia straszny opor w walce...");
-				damager.sendMessage(Main.getInstance().getPrefix()+" §cNie moge tak walczyc!");
+				damager.sendMessage(Main.getInstance().getPrefix()+" Â§cWoda stawia straszny opor w walce...");
+				damager.sendMessage(Main.getInstance().getPrefix()+" Â§cNie moge tak walczyc!");
 				damage /= 20.;
 				damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20*2, 2));
 				damager.playSound(damager.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 1, 1);
 			}
 		}else if(m2.equals(Material.WATER) || m2.equals(Material.LAVA)) {
 			if(!EpicRPGMobManager.getInstance().isWaterMob(victim.getName())) {
-				damager.sendMessage(Main.getInstance().getPrefix()+" §cWoda stawia straszny opor w walce...");
-				damager.sendMessage(Main.getInstance().getPrefix()+" §cNie moge tak walczyc!");
+				damager.sendMessage(Main.getInstance().getPrefix()+" Â§cWoda stawia straszny opor w walce...");
+				damager.sendMessage(Main.getInstance().getPrefix()+" Â§cNie moge tak walczyc!");
 				damage /= 20.;
 				damager.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20*2, 2));
 				damager.playSound(damager.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 1, 1);
@@ -135,7 +135,7 @@ public class DamageUtils {
 			return dmg.doubleValue();
 		
 		it.getItemMeta().getLore().parallelStream().filter(s -> {
-			return s.contains("§4- §8Obrazenia: §7");
+			return s.contains("Â§4- Â§8Obrazenia: Â§7");
 		}).anyMatch(s -> {
 			double damage = Integer.parseInt(ChatColor.stripColor(s).split(": ")[1]);
 			dmg.setValue(damage);

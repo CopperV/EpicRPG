@@ -1,19 +1,26 @@
 package me.Vark123.EpicRPG.Players.Components;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import lombok.Getter;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Reputation.Reputation;
 import me.Vark123.EpicRPG.Reputation.ReputationContainer;
 import me.Vark123.EpicRPG.Reputation.ReputationLevels;
+import me.Vark123.EpicRPG.Utils.ChatPrintable;
 
-public class RpgReputation {
+@Getter
+public class RpgReputation implements Serializable, ChatPrintable {
 	
+	private static final long serialVersionUID = -8529352962442361007L;
+
 	private RpgPlayer rpg;
 
 	private Map<String, Reputation> reputacja;
@@ -63,12 +70,13 @@ public class RpgReputation {
 		return toReturn;
 	}
 
-	public RpgPlayer getRpg() {
-		return rpg;
-	}
-
-	public Map<String, Reputation> getReputacja() {
-		return reputacja;
+	@Override
+	public void print(CommandSender sender) {
+		sender.sendMessage("§6§l========================= ");
+		reputacja.values().forEach(rep -> {
+			sender.sendMessage("    §2Reputacja "+rep.getDisplayFraction()+"§2: §a"+rep.getReputationLevel().getName()
+					+" §7(§a"+rep.getReputationAmount()+"§7/§a"+rep.getReputationLevel().getAmount()+"§7)");
+		});
 	}
 	
 }

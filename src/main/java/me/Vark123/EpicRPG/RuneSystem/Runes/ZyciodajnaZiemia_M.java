@@ -120,7 +120,7 @@ public class ZyciodajnaZiemia_M extends ARune {
 						debuff.remove(tmp);
 					if(!tmp.isOnline())
 						return;
-					tmp.sendMessage("�7[�6EpicRPG�7] �aDebuff runy "+dr.getName()+" skonczyl sie");
+					tmp.sendMessage("§7[§6EpicRPG§7] §aDebuff runy "+dr.getName()+" skonczyl sie");
 					tmp.playSound(p.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 5, 1.5f);
 					tmp.getWorld().spawnParticle(Particle.REDSTONE, tmp.getLocation(), 10, 0.5f, 0.5f, 0.5f, 0.1f,dust);
 				});

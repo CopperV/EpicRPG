@@ -74,7 +74,7 @@ public class Lowy_H extends ARune {
 				if(loc2.getBlock().getType().isSolid() || !casterInCastWorld()) {
 					loc2.setY(Math.ceil(loc2.getY())+0.25);
 					preparation(loc2);
-//					Bukkit.broadcastMessage("�4Koncowa lokalizacja: �6"+loc.toString());
+//					Bukkit.broadcastMessage("§4Koncowa lokalizacja: §6"+loc.toString());
 					this.cancel();
 					return;
 				}

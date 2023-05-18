@@ -88,7 +88,7 @@ public class ChangeStats {
 		}
 		
 		itemy.forEach((slot, item) -> {
-			p.sendMessage("§cNie mozesz zalozyc "+item.getItemMeta().getDisplayName()+" §cna siebie!");
+			p.sendMessage("Â§cNie mozesz zalozyc "+item.getItemMeta().getDisplayName()+" Â§cna siebie!");
 			if(akcesoria.containsKey(slot+1000) && akcesoria.get(slot+1000).equals(item)) {
 				dropAkcesoria(jewelry, item, slot);
 			} else {
@@ -137,9 +137,9 @@ public class ChangeStats {
 			return;
 		
 		item.getItemMeta().getLore().parallelStream().filter(s -> {
-			if(!s.contains(": §7"))
+			if(!s.contains(": Â§7"))
 				return false;
-			if(!s.contains("§4- §8"))
+			if(!s.contains("Â§4- Â§8"))
 				return false;
 			if(s.contains("Klasa") || s.contains("Krag"))
 				return false;
@@ -147,7 +147,7 @@ public class ChangeStats {
 		}).forEach(s -> {
 			s = s.replace("+", "");
 			int toAdd = Integer.parseInt(ChatColor.stripColor(s.split(": ")[1]));
-			s = s.replace("§4- §8", "");
+			s = s.replace("Â§4- Â§8", "");
 			s = s.split(":")[0];
 			s = Utils.convertToClassConvention(s);
 			

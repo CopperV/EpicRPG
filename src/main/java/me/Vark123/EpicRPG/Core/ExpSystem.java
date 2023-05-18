@@ -102,7 +102,7 @@ public class ExpSystem {
 							
 							info.addXP(copyClanExp);
 							checkLvl(info);
-							tmp.getPlayer().sendMessage("§7[§b§o"+klan.getClanTag()+"§7] §a+"+ copyClanExp +" xp §7[§a"+info.getExp()+" xp§7/§a"+info.getNextLevel()+" xp§7]");
+							tmp.getPlayer().sendMessage("Â§7[Â§bÂ§o"+klan.getClanTag()+"Â§7] Â§a+"+ copyClanExp +" xp Â§7[Â§a"+info.getExp()+" xpÂ§7/Â§a"+info.getNextLevel()+" xpÂ§7]");
 						});
 					}
 				}.runTaskAsynchronously(Main.getInstance());
@@ -117,7 +117,7 @@ public class ExpSystem {
 			}
 			info.addXP(xp);
 			checkLvl(info);
-			rpg.getPlayer().sendMessage("§a+"+ xp +" xp §7[§a"+info.getExp()+" xp§7/§a"+info.getNextLevel()+" xp§7]");
+			rpg.getPlayer().sendMessage("Â§a+"+ xp +" xp Â§7[Â§a"+info.getExp()+" xpÂ§7/Â§a"+info.getNextLevel()+" xpÂ§7]");
 		} else {
 			info.setXP((int) (0.9 * (getNextLevelExp(MAX_LEVEL) - getNextLevelExp(MAX_LEVEL-1))) + getNextLevelExp(MAX_LEVEL-1));
 		}
@@ -151,8 +151,8 @@ public class ExpSystem {
 		info.addLevel(1);
 		info.setNextLevel(getNextLevelExp(info.getLevel()));
 		
-		p.sendTitle("§6§lGRATULACJE!", "§aAwansowales na §6"+(info.getLevel())+" §apoziom", 5, 10, 15);
-		Bukkit.broadcastMessage("§6§lGracz " + p.getName() + " awansowal na " + (info.getLevel()) + " poziom!!!");
+		p.sendTitle("Â§6Â§lGRATULACJE!", "Â§aAwansowales na Â§6"+(info.getLevel())+" Â§apoziom", 5, 10, 15);
+		Bukkit.broadcastMessage("Â§6Â§lGracz " + p.getName() + " awansowal na " + (info.getLevel()) + " poziom!!!");
 		
 		p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1, 1);
 		

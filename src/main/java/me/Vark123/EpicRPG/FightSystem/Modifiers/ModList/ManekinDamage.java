@@ -21,8 +21,8 @@ public class ManekinDamage implements DamageModifier {
 			default:
 				send = damager;
 		}
-		if(victim.getName().equalsIgnoreCase("§b§oManekin treningowy"))
-			send.sendMessage("§7[§c§lTRENING§7] §aZadales §e"+(int)damage+" §aobrazen.");
+		if(victim.getName().equalsIgnoreCase("Â§bÂ§oManekin treningowy"))
+			send.sendMessage("Â§7[Â§cÂ§lTRENINGÂ§7] Â§aZadales Â§e"+(int)damage+" Â§aobrazen.");
 		return damage;
 	}
 

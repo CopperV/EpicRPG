@@ -29,13 +29,13 @@ public class KrewPrzodkow extends ARune {
 		p.getWorld().playSound(p.getLocation(), Sound.ITEM_FLINTANDSTEEL_USE, 1, 0.75f);
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		rpg.getModifiers().setKrewPrzodkow(true);
-		p.sendMessage("�7[�6EpicRPG�7] �aUzyles runy "+dr.getName());
+		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
 		
 		new BukkitRunnable() {
 			
 			double time = dr.getDurationTime();
 			double timer = dr.getDurationTime();
-			BossBar bar = Bukkit.createBossBar("�9�a�0�3�4�3�lKrew przodkow�f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
+			BossBar bar = Bukkit.createBossBar("§9§a§0§3§4§3§lKrew przodkow§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
 				bar.setVisible(true);
 				bar.addPlayer(p);
 				bar.setProgress(timer/time);
@@ -50,7 +50,7 @@ public class KrewPrzodkow extends ARune {
 					return;
 				}
 				
-				bar.setTitle("�9�a�0�3�4�3�lKrew przodkow�f: "+(int)timer+" sekund");
+				bar.setTitle("§9§a§0§3§4§3§lKrew przodkow§f: "+(int)timer+" sekund");
 				bar.setProgress(timer/time);
 				
 				--timer;
@@ -65,7 +65,7 @@ public class KrewPrzodkow extends ARune {
 					Location loc = p.getLocation().add(0,1,0);
 					DustOptions dust = new DustOptions(Color.fromRGB(154, 3, 67), 1.25f);
 					p.getWorld().spawnParticle(Particle.REDSTONE, loc, 20, 0.5f, 0.5f, 0.5f, 0.2f, dust);
-					p.sendMessage("�7[�6EpicRPG�7] �aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ITEM_FLINTANDSTEEL_USE, 1, 0.6f);
 					rpg.getModifiers().setKrewPrzodkow(false);
 					this.cancel();

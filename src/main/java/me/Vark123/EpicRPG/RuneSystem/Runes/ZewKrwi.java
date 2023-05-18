@@ -35,13 +35,13 @@ public class ZewKrwi extends ARune {
 		modifiers.resetZewKrwiMod();
 		modifiers.addZewKrwiMod(1);
 		modifiers.setModifier1_lock(true);
-		p.sendMessage("�7[�6EpicRPG�7] �aUzyles runy "+dr.getName());
+		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
 		
 		new BukkitRunnable() {
 			
 			double time = dr.getDurationTime();
 			double timer = dr.getDurationTime();
-			BossBar bar = Bukkit.createBossBar("�d�a�0�3�0�3�lZew krwi �7(�c�o"+modifiers.getZewKrwiMod()+"%�7)�f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
+			BossBar bar = Bukkit.createBossBar("§d§a§0§3§0§3§lZew krwi §7(§c§o"+modifiers.getZewKrwiMod()+"%§7)§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
 				bar.setVisible(true);
 				bar.addPlayer(p);
 				bar.setProgress(timer/time);
@@ -56,7 +56,7 @@ public class ZewKrwi extends ARune {
 					return;
 				}
 				
-				bar.setTitle("�d�a�0�3�0�3�lZew krwi �7(�c�o"+modifiers.getZewKrwiMod()+"%�7)�f: "+(int)timer+" sekund");
+				bar.setTitle("§d§a§0§3§0§3§lZew krwi §7(§c§o"+modifiers.getZewKrwiMod()+"%§7)§f: "+(int)timer+" sekund");
 				bar.setProgress(timer/time);
 				
 				--timer;
@@ -71,7 +71,7 @@ public class ZewKrwi extends ARune {
 					Location loc = p.getLocation().add(0,1,0);
 					DustOptions dust = new DustOptions(Color.fromRGB(128, 0, 0), 2);
 					p.getWorld().spawnParticle(Particle.REDSTONE, loc, 15, 0.5f, 0.5f, 0.5f, 0.2f, dust);
-					p.sendMessage("�7[�6EpicRPG�7] �aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, 1, 1.7f);
 					modifiers.setZewKrwi(false);
 					modifiers.resetZewKrwiMod();

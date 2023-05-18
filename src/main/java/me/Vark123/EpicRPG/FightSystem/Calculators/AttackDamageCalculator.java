@@ -49,7 +49,7 @@ public class AttackDamageCalculator implements DamageCalculator {
 			if(p.getInventory().getItemInMainHand() != null){
 				ChangeStats.change(rpg);
 				if(!CheckStats.check(rpg, p.getInventory().getItemInMainHand())) {
-					p.sendMessage(Main.getInstance().getPrefix()+" §cNie mozesz uzywac tej broni");
+					p.sendMessage(Main.getInstance().getPrefix()+" Â§cNie mozesz uzywac tej broni");
 					return -1;
 				}
 			}
@@ -57,7 +57,7 @@ public class AttackDamageCalculator implements DamageCalculator {
 			if(p.getInventory().getItemInMainHand().getType().equals(Material.BOW) ||
 					p.getInventory().getItemInMainHand().getType().equals(Material.CROSSBOW)) {
 				if(!(victim instanceof LivingEntity) || dmg < ((LivingEntity)victim).getHealth()) {
-					p.sendMessage(Main.getInstance().getPrefix()+" §cNie mozna bic bronia dystansowa!");
+					p.sendMessage(Main.getInstance().getPrefix()+" Â§cNie mozna bic bronia dystansowa!");
 					return -1;
 				}
 			}

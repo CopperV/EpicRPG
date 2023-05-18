@@ -1,10 +1,12 @@
 package me.Vark123.EpicRPG.Players.Components;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -12,11 +14,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
+import lombok.AccessLevel;
+import lombok.Setter;
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.RpgScoreboard;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
+import me.Vark123.EpicRPG.Utils.ChatPrintable;
 
-public class RpgSkills {
+@Setter
+public class RpgSkills implements Serializable, ChatPrintable {
 
+	private static final long serialVersionUID = -902953845411975906L;
+
+	@Setter(value = AccessLevel.NONE)
 	private RpgPlayer rpg;
 	
 	private boolean hungerless;
@@ -29,8 +39,10 @@ public class RpgSkills {
 	private boolean silaZywiolow;
 	private boolean polnocnyBarbarzynca;
 	private boolean rozprucie;
-	
+
+	@Setter(value = AccessLevel.NONE)
 	private BukkitTask manaRegTask;
+	@Setter(value = AccessLevel.NONE)
 	private BukkitTask magnetyzmTask;
 	
 	public RpgSkills(RpgPlayer rpg) {
@@ -97,8 +109,40 @@ public class RpgSkills {
 		if(this.magnetyzm)
 			createMagnetyzmTask();
 	}
+
+	@Override
+	public void print(CommandSender sender) {
+		StringBuilder builder = new StringBuilder();
+		if(hungerless)
+			builder.append("§aWiecznie najedzony§7, ");
+		if(unlimitedArrows)
+			builder.append("§aBezdenny kolczan§7, ");
+		if(manaReg)
+			builder.append("§aRegeneracja many§7, ");
+		if(slugaBeliara)
+			builder.append("§aSluga Beliara§7, ");
+		if(ciosKrytyczny)
+			builder.append("§aCios krytyczny§7, ");
+		if(magKrwi)
+			builder.append("§aMag krwi§7, ");
+		if(polnocnyBarbarzynca)
+			builder.append("§aPolnocny barbarzynca§7, ");
+		if(rozprucie)
+			builder.append("§aRozprucie§7, ");
+		if(silaZywiolow)
+			builder.append("§aSila zywiolow§7, ");
+		if(magnetyzm)
+			builder.append("§aMagnetyzm§7, ");
+		
+		if(!builder.isEmpty())
+			builder.setLength(builder.length() - 4);
+		
+		sender.sendMessage("§6§l========================= ");
+		sender.sendMessage("    §2Wyuczone umiejetnosci: "+(builder.isEmpty() ? 
+				"§cZADNE" :
+					builder.toString()));
+	}
 	
-	//TODO
 	public void createManaRegTask() {
 		if(!manaReg)
 			return;
@@ -109,7 +153,7 @@ public class RpgSkills {
 				int tmp = (int)(stats.getFinalMana() * 0.0125);
 				if(tmp == 0) tmp = 1;
 				stats.addPresentManaSmart(tmp);
-//				RpgScoreBoard.createScore(this.p);
+				RpgScoreboard.updateScore(rpg.getPlayer());
 			}
 			
 		}, 0, 10);
@@ -148,80 +192,41 @@ public class RpgSkills {
 		return hungerless;
 	}
 
-	public void setHungerless(boolean hungerless) {
-		this.hungerless = hungerless;
-	}
-
 	public boolean hasUnlimitedArrows() {
 		return unlimitedArrows;
-	}
-
-	public void setUnlimitedArrows(boolean unlimitedArrows) {
-		this.unlimitedArrows = unlimitedArrows;
 	}
 
 	public boolean hasManaReg() {
 		return manaReg;
 	}
 
-	public void setManaReg(boolean manaReg) {
-		this.manaReg = manaReg;
-	}
-
 	public boolean hasSlugaBeliara() {
 		return slugaBeliara;
-	}
-
-	public void setSlugaBeliara(boolean slugaBeliara) {
-		this.slugaBeliara = slugaBeliara;
 	}
 
 	public boolean hasMagKrwi() {
 		return magKrwi;
 	}
 
-	public void setMagKrwi(boolean magKrwi) {
-		this.magKrwi = magKrwi;
-	}
-
 	public boolean hasCiosKrytyczny() {
 		return ciosKrytyczny;
-	}
-
-	public void setCiosKrytyczny(boolean ciosKrytyczny) {
-		this.ciosKrytyczny = ciosKrytyczny;
 	}
 
 	public boolean hasMagnetyzm() {
 		return magnetyzm;
 	}
 
-	public void setMagnetyzm(boolean magnetyzm) {
-		this.magnetyzm = magnetyzm;
-	}
 
 	public boolean hasSilaZywiolow() {
 		return silaZywiolow;
-	}
-
-	public void setSilaZywiolow(boolean silaZywiolow) {
-		this.silaZywiolow = silaZywiolow;
 	}
 
 	public boolean hasPolnocnyBarbarzynca() {
 		return polnocnyBarbarzynca;
 	}
 
-	public void setPolnocnyBarbarzynca(boolean polnocnyBarbarzynca) {
-		this.polnocnyBarbarzynca = polnocnyBarbarzynca;
-	}
-
 	public boolean hasRozprucie() {
 		return rozprucie;
-	}
-
-	public void setRozprucie(boolean rozprucie) {
-		this.rozprucie = rozprucie;
 	}
 	
 }

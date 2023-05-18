@@ -1,14 +1,21 @@
 package me.Vark123.EpicRPG.Players.Components;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import lombok.Setter;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
+import me.Vark123.EpicRPG.Utils.ChatPrintable;
 
-public class RpgRzemiosla {
+@Setter
+public class RpgRzemiosla implements Serializable, ChatPrintable {
 	
+	private static final long serialVersionUID = -7348456492743263474L;
+
 	private RpgPlayer rpg;
 	
 	private boolean alchemia;
@@ -48,40 +55,44 @@ public class RpgRzemiosla {
 		return alchemia;
 	}
 
-	public void setAlchemia(boolean alchemia) {
-		this.alchemia = alchemia;
-	}
-
 	public boolean hasKowalstwo() {
 		return kowalstwo;
-	}
-
-	public void setKowalstwo(boolean kowalstwo) {
-		this.kowalstwo = kowalstwo;
 	}
 
 	public boolean hasPlatnerstwo() {
 		return platnerstwo;
 	}
 
-	public void setPlatnerstwo(boolean platnerstwo) {
-		this.platnerstwo = platnerstwo;
-	}
-
 	public boolean hasLuczarstwo() {
 		return luczarstwo;
-	}
-
-	public void setLuczarstwo(boolean luczarstwo) {
-		this.luczarstwo = luczarstwo;
 	}
 
 	public boolean hasJubilerstwo() {
 		return jubilerstwo;
 	}
 
-	public void setJubilerstwo(boolean jubilerstwo) {
-		this.jubilerstwo = jubilerstwo;
+	@Override
+	public void print(CommandSender sender) {
+		StringBuilder learned = new StringBuilder();
+		if(alchemia)
+			learned.append("§aAlchemia§7, ");
+		if(kowalstwo)
+			learned.append("§aKowalstwo§7, ");
+		if(platnerstwo)
+			learned.append("§aPlatnerstwo§7, ");
+		if(luczarstwo)
+			learned.append("§aLuczarstwo§7, ");
+		if(jubilerstwo)
+			learned.append("§aJubilerstwo§7, ");
+		
+		if(!learned.isEmpty())
+			learned.setLength(learned.length()-4);
+		
+		sender.sendMessage("§6§l========================= ");
+		sender.sendMessage("    §2Nauczone rzemiosla: "+(learned.isEmpty() ? 
+				"§cZADNE" :
+				learned.toString()));
+		
 	}
 	
 }

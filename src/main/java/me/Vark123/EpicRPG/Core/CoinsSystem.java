@@ -45,7 +45,7 @@ public class CoinsSystem {
 		}
 		
 		vault.addDragonCoins(amount);
-		p.sendMessage("§c§o+"+ amount +" Smoczych Monet §7[§c§o"+vault.getDragonCoins()+" Smoczych Monet§7]");
+		p.sendMessage("Â§cÂ§o+"+ amount +" Smoczych Monet Â§7[Â§cÂ§o"+vault.getDragonCoins()+" Smoczych MonetÂ§7]");
 	}
 
 }

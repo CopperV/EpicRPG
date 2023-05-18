@@ -6,12 +6,14 @@ import java.sql.SQLException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Scoreboard;
 
+import lombok.Getter;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.RpgScoreboard;
 import me.Vark123.EpicRPG.Core.ExpSystem;
@@ -24,11 +26,13 @@ import me.Vark123.EpicRPG.Players.Components.RpgSkills;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import me.Vark123.EpicRPG.Players.Components.RpgVault;
 import me.Vark123.EpicRPG.Stats.ChangeStats;
+import me.Vark123.EpicRPG.Utils.ChatPrintable;
 import me.Vark123.EpicRPG.Utils.Utils;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
-public class RpgPlayer implements Serializable {
+@Getter
+public class RpgPlayer implements Serializable, ChatPrintable {
 
 	private static final long serialVersionUID = 7700189518575363277L;
 
@@ -125,7 +129,7 @@ public class RpgPlayer implements Serializable {
 						+((int)player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())
 						+(player.getAbsorptionAmount() >= 1 ? "§6§l♰ §6"+((int)player.getAbsorptionAmount()):"")
 						+"  §b✺ "+stats.getPresentMana()+"/"+stats.getFinalMana()
-						+"  §7§l🛡 §7"+stats.getFinalOchrona()));
+						+"  §2§l🛡 §2"+stats.getFinalOchrona()));
 	}
 	
 	//TODO
@@ -163,52 +167,14 @@ public class RpgPlayer implements Serializable {
 		player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(stats.getFinalHealth());
 	}
 
-	public Player getPlayer() {
-		return player;
-	}
-
-	public BukkitTask getDisplay() {
-		return display;
-	}
-
-	public BukkitTask getScore() {
-		return score;
-	}
-
-	public RpgPlayerInfo getInfo() {
-		return info;
-	}
-
-	public RpgStats getStats() {
-		return stats;
-	}
-
-	public RpgRzemiosla getRzemiosla() {
-		return rzemiosla;
-	}
-
-	public RpgModifiers getModifiers() {
-		return modifiers;
-	}
-
-	public RpgSkills getSkills() {
-		return skills;
-	}
-
-	public RpgVault getVault() {
-		return vault;
-	}
-
-	public RpgJewelry getJewelry() {
-		return jewelry;
-	}
-
-	public RpgReputation getReputation() {
-		return reputation;
-	}
-
-	public Scoreboard getBoard() {
-		return board;
+	@Override
+	public void print(CommandSender sender) {
+		info.print(sender);
+		stats.print(sender);
+		rzemiosla.print(sender);
+		skills.print(sender);
+		reputation.print(sender);
+		vault.print(sender);
 	}
 	
 }

@@ -33,13 +33,13 @@ public class Gniew extends ARune {
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 1, 1);
 		modifiers.setGniew(true);
 		modifiers.setModifier1_lock(true);
-		p.sendMessage("�7[�6EpicRPG�7] �aUzyles runy "+dr.getName());
+		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
 		
 		new BukkitRunnable() {
 			
 			double time = dr.getDurationTime();
 			double timer = dr.getDurationTime();
-			BossBar bar = Bukkit.createBossBar("�x�8�a�0�3�0�3�oGniew�f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
+			BossBar bar = Bukkit.createBossBar("§x§8§a§0§3§0§3§oGniew§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
 				bar.setVisible(true);
 				bar.addPlayer(p);
 				bar.setProgress(timer/time);
@@ -51,7 +51,7 @@ public class Gniew extends ARune {
 				if(timer <= 0 || !casterInCastWorld()) {
 					bar.removeAll();
 					bar.setVisible(false);
-					p.sendMessage("�7[�6EpicRPG�7] �aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 1, 0.3f);
 					modifiers.setGniew(false);
 					modifiers.setModifier1_lock(false);
@@ -62,7 +62,7 @@ public class Gniew extends ARune {
 				Location loc = p.getLocation().add(0,1,0);
 				p.getWorld().spawnParticle(Particle.REDSTONE, loc, 4, 0.5f, 0.5f, 0.5f, 0.1f, dust);
 				
-				bar.setTitle("�x�8�a�0�3�0�3�oGniew�f: "+(int)timer+" sekund");
+				bar.setTitle("§x§8§a§0§3§0§3§oGniew§f: "+(int)timer+" sekund");
 				bar.setProgress(timer/time);
 				
 				--timer;

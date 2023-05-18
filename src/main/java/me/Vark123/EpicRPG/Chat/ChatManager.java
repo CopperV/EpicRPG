@@ -13,8 +13,8 @@ public class ChatManager {
 	
 	private ChatManager() {
 		this.chatToggle = true;
-		MOD_COLOR = "งxงaงdงfงfง2งf";
-		PLAYER_COLOR = "งr";
+		MOD_COLOR = "ยงxยงaยงdยงfยงfยง2ยงf";
+		PLAYER_COLOR = "ยงr";
 	}
 
 	public boolean isChatToggle() {

@@ -30,40 +30,40 @@ public class CheckStats {
 		RpgStats stats = rpg.getStats();
 		MutableBoolean check = new MutableBoolean(true);
 		item.getItemMeta().getLore().parallelStream().filter(s -> {
-			if(s.contains("ง4- ง8Klasa: ") 
-					|| s.contains("ง4- ง8Krag: ง7"))
+			if(s.contains("ยง4- ยง8Klasa: ") 
+					|| s.contains("ยง4- ยง8Krag: ยง7"))
 				return true;
-			if(!s.contains(": งc"))
+			if(!s.contains(": ยงc"))
 				return false;
 			return true;
 		}).takeWhile(s -> {
 			return check.booleanValue();
 		}).forEach(s -> {
-//			Bukkit.broadcastMessage(s+" งr"+s.replace("ง", "&"));
-			if(s.contains("ง4- ง8Klasa: ")) {
-				s = s.replace("ง4- ง8Klasa: ", "");
+//			Bukkit.broadcastMessage(s+" ยงr"+s.replace("ยง", "&"));
+			if(s.contains("ยง4- ยง8Klasa: ")) {
+				s = s.replace("ยง4- ยง8Klasa: ", "");
 				String proffesion = ChatColor.stripColor(info.getProffesion());
 				if(!proffesion.equalsIgnoreCase(ChatColor.stripColor(s))) {
 					check.setValue(false);
 				}
 				return;
-			} else if(s.contains("ง4- ง8Krag: ง7")) {
-				s = s.replace("ง4- ง8Krag: ง7", "");
+			} else if(s.contains("ยง4- ยง8Krag: ยง7")) {
+				s = s.replace("ยง4- ยง8Krag: ยง7", "");
 				if(stats.getKrag() < Integer.parseInt(ChatColor.stripColor(s))) {
 					check.setValue(false);
 				}
 				return;
-			} else if(s.contains("ง4- ง8Poziom: งc")) {
-				s = s.replace("ง4- ง8Poziom: งc", "");
+			} else if(s.contains("ยง4- ยง8Poziom: ยงc")) {
+				s = s.replace("ยง4- ยง8Poziom: ยงc", "");
 				if(info.getLevel() < Integer.parseInt(ChatColor.stripColor(s))) {
 					check.setValue(false);
 				}
 				return;
 			}
-			s = s.replace("ง4- ง8", "");
+			s = s.replace("ยง4- ยง8", "");
 			int toCheck = Integer.parseInt(ChatColor.stripColor(s.split(": ")[1]));
 //			int toCheck = Integer.parseInt(s.replace(": ", ChatColor.stripColor(s)));
-//			int toCheck = Integer.parseInt(s.replace(": งc", ""));
+//			int toCheck = Integer.parseInt(s.replace(": ยงc", ""));
 			int result;
 			s = s.split(":")[0];
 			s = Utils.convertToClassConvention(s);

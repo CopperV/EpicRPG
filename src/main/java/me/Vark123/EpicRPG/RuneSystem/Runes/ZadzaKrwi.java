@@ -52,14 +52,14 @@ public class ZadzaKrwi extends ARune {
 			RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 			effected.add(p);
 			p.addPotionEffect(effect);
-			p.sendMessage("§7[§6EpicRPG§7] §cKrew Ciebie zalewa - Twoi przeciwnicy zaczynaja drzec ze strachu...");
+			p.sendMessage("Â§7[Â§6EpicRPGÂ§7] Â§cKrew Ciebie zalewa - Twoi przeciwnicy zaczynaja drzec ze strachu...");
 			rpg.getModifiers().setZadzaKrwi(true);
 			
 			new BukkitRunnable() {
 				
 				double time = dr.getDurationTime();
 				double timer = dr.getDurationTime();
-				BossBar bar = Bukkit.createBossBar("§9§lZadza krwi§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
+				BossBar bar = Bukkit.createBossBar("Â§9Â§lZadza krwiÂ§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
 					bar.setVisible(true);
 					bar.addPlayer(p);
 					bar.setProgress(timer/time);
@@ -74,7 +74,7 @@ public class ZadzaKrwi extends ARune {
 						return;
 					}
 					
-					bar.setTitle("§9§lZadza krwi§f: "+(int)timer+" sekund");
+					bar.setTitle("Â§9Â§lZadza krwiÂ§f: "+(int)timer+" sekund");
 					bar.setProgress(timer/time);
 					
 					--timer;
@@ -87,7 +87,7 @@ public class ZadzaKrwi extends ARune {
 				@Override
 				public void run() {
 					if(timer <= 0 || !casterInCastWorld()) {
-						p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+						p.sendMessage("Â§7[Â§6EpicRPGÂ§7] Â§aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 						p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 5, 1f);
 						rpg.getModifiers().setZadzaKrwi(false);
 						this.cancel();
@@ -107,7 +107,7 @@ public class ZadzaKrwi extends ARune {
 				DustOptions dust = new DustOptions(Color.YELLOW, 1);
 				@Override
 				public void run() {
-					p.sendMessage("§7[§6EpicRPG§7] §aDebuff runy "+dr.getName()+" skonczyl sie");
+					p.sendMessage("Â§7[Â§6EpicRPGÂ§7] Â§aDebuff runy "+dr.getName()+" skonczyl sie");
 					p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 5, 1.5f);
 					p.getWorld().spawnParticle(Particle.REDSTONE, p.getLocation(), 10, 0.5f, 0.5f, 0.5f, 0.1f,dust);
 					effected.remove(p);
@@ -140,7 +140,7 @@ public class ZadzaKrwi extends ARune {
 			tmp.playSound(tmp.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 5, 0.1f);
 			effected.add(tmp);
 			tmp.addPotionEffect(effect);
-			tmp.sendMessage("§7[§6EpicRPG§7] §cKrew Ciebie zalewa - Twoi przeciwnicy zaczynaja drzec ze strachu...");
+			tmp.sendMessage("Â§7[Â§6EpicRPGÂ§7] Â§cKrew Ciebie zalewa - Twoi przeciwnicy zaczynaja drzec ze strachu...");
 			rpg.getModifiers().setZadzaKrwi(true);
 			new BukkitRunnable() {
 				int timer = dr.getDurationTime()*4;
@@ -148,7 +148,7 @@ public class ZadzaKrwi extends ARune {
 				@Override
 				public void run() {
 					if(timer <= 0 || !entityInCastWorld(tmp)) {
-						tmp.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+						tmp.sendMessage("Â§7[Â§6EpicRPGÂ§7] Â§aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 						tmp.playSound(tmp.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 5, 1f);
 						rpg.getModifiers().setZadzaKrwi(false);
 						this.cancel();
@@ -165,7 +165,7 @@ public class ZadzaKrwi extends ARune {
 				DustOptions dust = new DustOptions(Color.YELLOW, 1);
 				@Override
 				public void run() {
-					tmp.sendMessage("§7[§6EpicRPG§7] §aDebuff runy "+dr.getName()+" skonczyl sie");
+					tmp.sendMessage("Â§7[Â§6EpicRPGÂ§7] Â§aDebuff runy "+dr.getName()+" skonczyl sie");
 					tmp.playSound(tmp.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 5, 1.5f);
 					tmp.getWorld().spawnParticle(Particle.REDSTONE, p.getLocation(), 10, 0.5f, 0.5f, 0.5f, 0.1f,dust);
 					effected.remove(tmp);

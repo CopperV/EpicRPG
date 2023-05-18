@@ -24,25 +24,25 @@ public class ReputationModCommand implements CommandExecutor {
 		String prefix = Main.getInstance().getPrefix();
 		
 		if(!sender.hasPermission("epicrpg.gm")) {
-			sender.sendMessage(prefix+" §cNie masz uprawnien, by uzyc tej komendy!");
+			sender.sendMessage(prefix+" Â§cNie masz uprawnien, by uzyc tej komendy!");
 			return false;
 		}
 		
 		if(args.length < 4) {
-			sender.sendMessage(prefix+" §cPoprawne uzycie komendy: §c§o/repmod add/remove <nick> <ilosc> <frakcja>");
+			sender.sendMessage(prefix+" Â§cPoprawne uzycie komendy: Â§cÂ§o/repmod add/remove <nick> <ilosc> <frakcja>");
 			return false;
 		}
 		
 		if(Bukkit.getPlayerExact(args[1])==null) {
-			sender.sendMessage(Main.getInstance().getPrefix()+" §cGracz §a§o"+args[1]+" §cjest offline");
+			sender.sendMessage(Main.getInstance().getPrefix()+" Â§cGracz Â§aÂ§o"+args[1]+" Â§cjest offline");
 			return false;
 		}
 		if(!StringUtils.isNumeric(args[2])){
-			sender.sendMessage(Main.getInstance().getPrefix()+args[2]+" §cnie jest liczba");
+			sender.sendMessage(Main.getInstance().getPrefix()+args[2]+" Â§cnie jest liczba");
 			return false;
 		}
 		if(!ReputationContainer.getInstance().getContainer().containsKey(args[3].toLowerCase())) {
-			sender.sendMessage(Main.getInstance().getPrefix()+"§cFrakcja §r"+args[3]+" §cnie istnieje");
+			sender.sendMessage(Main.getInstance().getPrefix()+"Â§cFrakcja Â§r"+args[3]+" Â§cnie istnieje");
 			return false;
 		}
 		
@@ -54,15 +54,15 @@ public class ReputationModCommand implements CommandExecutor {
 		switch(args[0].toLowerCase()) {
 			case "add":
 				rpg.getReputation().getReputacja().get(frakcja).addSmartReputation(cena);
-				sender.sendMessage(prefix+" §7"+p.getName()+" otrzymal §f"+cena+" §7 pkt reputacji do frakcji §r"+rpg.getReputation().getReputacja().get(frakcja).getDisplayFraction());
+				sender.sendMessage(prefix+" Â§7"+p.getName()+" otrzymal Â§f"+cena+" Â§7 pkt reputacji do frakcji Â§r"+rpg.getReputation().getReputacja().get(frakcja).getDisplayFraction());
 				return true;
 			case "remove":
-				sender.sendMessage(prefix+" §7"+p.getName()+" stracil §f"+cena+" §7 pkt reputacji z frakcji §r"+rpg.getReputation().getReputacja().get(frakcja).getDisplayFraction());
+				sender.sendMessage(prefix+" Â§7"+p.getName()+" stracil Â§f"+cena+" Â§7 pkt reputacji z frakcji Â§r"+rpg.getReputation().getReputacja().get(frakcja).getDisplayFraction());
 				rpg.getReputation().getReputacja().get(frakcja).removeSmartReputation(cena);
 				return true;
 		}
 		
-		sender.sendMessage(prefix+" §cPoprawne uzycie komendy: §c§o/repmod add/remove <nick> <ilosc> <frakcja>");
+		sender.sendMessage(prefix+" Â§cPoprawne uzycie komendy: Â§cÂ§o/repmod add/remove <nick> <ilosc> <frakcja>");
 		return false;
 	}
 

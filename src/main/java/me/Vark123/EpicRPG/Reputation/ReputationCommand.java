@@ -20,7 +20,7 @@ public class ReputationCommand implements CommandExecutor {
 		String prefix = Main.getInstance().getPrefix();
 		
 		if(!(sender instanceof Player)) {
-			sender.sendMessage(prefix+" §cTylko gracz moze uzywac tej komendy!");
+			sender.sendMessage(prefix+" Â§cTylko gracz moze uzywac tej komendy!");
 			return false;
 		}
 		
@@ -32,11 +32,11 @@ public class ReputationCommand implements CommandExecutor {
 		}
 
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
-		tmp.sendMessage(prefix+" §2Reputacja gracza §7"+p.getName());
+		tmp.sendMessage(prefix+" Â§2Reputacja gracza Â§7"+p.getName());
 		rpg.getReputation().getReputacja().forEach((id, rep) -> {
-			tmp.sendMessage("§4> §r"+rep.getDisplayFraction()+"§7: "
-					+ "§a"+rep.getReputationLevel().getName()+" "
-					+ "§7(§a"+rep.getReputationAmount()+"§7/§a"+rep.getReputationLevel().getAmount()+"§7)");
+			tmp.sendMessage("Â§4> Â§r"+rep.getDisplayFraction()+"Â§7: "
+					+ "Â§a"+rep.getReputationLevel().getName()+" "
+					+ "Â§7(Â§a"+rep.getReputationAmount()+"Â§7/Â§a"+rep.getReputationLevel().getAmount()+"Â§7)");
 		});
 		
 		return true;

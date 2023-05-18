@@ -40,7 +40,7 @@ public class WedrownyCien extends ARune {
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 0.8f);
 		rpg.getModifiers().setWedrownyCien(true);
-		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
+		p.sendMessage("Â§7[Â§6EpicRPGÂ§7] Â§aUzyles runy "+dr.getName());
 		
 		Collection<Entity> targetList = p.getWorld().getNearbyEntities(p.getLocation(), 40, 40, 40);
 		targetList.parallelStream().filter(e -> {
@@ -65,7 +65,7 @@ public class WedrownyCien extends ARune {
 			
 			double time = dr.getDurationTime();
 			double timer = dr.getDurationTime();
-			BossBar bar = Bukkit.createBossBar("§aWedrowny cien§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
+			BossBar bar = Bukkit.createBossBar("Â§aWedrowny cienÂ§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
 				bar.setVisible(true);
 				bar.addPlayer(p);
 				bar.setProgress(timer/time);
@@ -80,7 +80,7 @@ public class WedrownyCien extends ARune {
 					return;
 				}
 				
-				bar.setTitle("§aWedrowny cien§f: "+(int)timer+" sekund");
+				bar.setTitle("Â§aWedrowny cienÂ§f: "+(int)timer+" sekund");
 				bar.setProgress(timer/time);
 				
 				--timer;
@@ -92,7 +92,7 @@ public class WedrownyCien extends ARune {
 			@Override
 			public void run() {
 				if(timer <= 0 || !casterInCastWorld() || !effected.contains(p)) {
-					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+					p.sendMessage("Â§7[Â§6EpicRPGÂ§7] Â§aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1.5f);
 					rpg.getModifiers().setWedrownyCien(false);
 					this.cancel();

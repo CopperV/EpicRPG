@@ -11,9 +11,9 @@ public class ReputationContainer {
 	
 	private ReputationContainer() {
 		
-		BaseReputation r1 = new BaseReputation("archolos", "§e§lEkspedycja Archolos");
-		BaseReputation r2 = new BaseReputation("klan", "§9§lKlan Mlota");
-		BaseReputation r3 = new BaseReputation("witcher", "§c§lCech Niedzwiedzia");
+		BaseReputation r1 = new BaseReputation("archolos", "Â§eÂ§lEkspedycja Archolos");
+		BaseReputation r2 = new BaseReputation("klan", "Â§9Â§lKlan Mlota");
+		BaseReputation r3 = new BaseReputation("witcher", "Â§cÂ§lCech Niedzwiedzia");
 		
 		container.put(r1.getName(), r1);
 		container.put(r2.getName(), r2);

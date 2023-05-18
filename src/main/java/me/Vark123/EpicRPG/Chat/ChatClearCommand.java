@@ -15,14 +15,14 @@ public class ChatClearCommand implements CommandExecutor {
 			return false;
 		if(!sender.hasPermission("rpg.chatclear")) {
 			sender.sendMessage(Main.getInstance().getPrefix()
-					+" §cNie masz uprawnien do tej komendy");
+					+" Â§cNie masz uprawnien do tej komendy");
 			return false;
 		}
 		for(int i = 0; i < 100; ++i) {
 			Bukkit.broadcastMessage("");
 		}
 		Bukkit.broadcastMessage(Main.getInstance().getPrefix()
-				+" §e"+sender.getName()+" §awyczyscil czat");
+				+" Â§e"+sender.getName()+" Â§awyczyscil czat");
 		return true;
 	}
 

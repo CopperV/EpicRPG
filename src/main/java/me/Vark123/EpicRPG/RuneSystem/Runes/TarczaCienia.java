@@ -32,7 +32,7 @@ public class TarczaCienia extends ARune {
 			
 			double time = dr.getDurationTime();
 			double timer = dr.getDurationTime();
-			BossBar bar = Bukkit.createBossBar("�8�lTarcza cienia�f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
+			BossBar bar = Bukkit.createBossBar("§8§lTarcza cienia§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
 				bar.setVisible(true);
 				bar.addPlayer(p);
 				bar.setProgress(timer/time);
@@ -47,7 +47,7 @@ public class TarczaCienia extends ARune {
 					return;
 				}
 				
-				bar.setTitle("�8�lTarcza cienia�f: "+(int)timer+" sekund");
+				bar.setTitle("§8§lTarcza cienia§f: "+(int)timer+" sekund");
 				bar.setProgress(timer/time);
 				
 				--timer;
@@ -64,7 +64,7 @@ public class TarczaCienia extends ARune {
 				p.getWorld().spawnParticle(Particle.SQUID_INK, loc, 2, 0.4F, 0.4F, 0.4F, 0);
 				loc.subtract(0, 1.5, 0);
 				if(licznik>=20*dr.getDurationTime() || !casterInCastWorld()) {
-					p.sendMessage("�7[�6EpicRPG�7] �aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GHAST_SHOOT, 1, 1.7f);
 					rpg.getModifiers().setTarczaCienia(false);
 					this.cancel();

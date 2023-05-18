@@ -61,7 +61,7 @@ public class HPInfo implements DamageModifier {
 		
 		bar.setTitle(victim.getName()+" §7- §c"
 				+(int)((lVictim).getHealth() - damage < 0 ? 
-						0 : Math.ceil((lVictim.getHealth() - damage))+" §4❤"));
+						0 : Math.ceil((lVictim.getHealth() - damage)))+" §4❤");
 		
 		if(((lVictim).getHealth() - damage < 0 ?
 				0 : (lVictim).getHealth() - damage) > (lVictim).getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())

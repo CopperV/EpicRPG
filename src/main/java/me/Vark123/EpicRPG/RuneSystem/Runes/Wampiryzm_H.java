@@ -34,7 +34,7 @@ public class Wampiryzm_H extends ARune {
 			
 			double time = dr.getDurationTime();
 			double timer = dr.getDurationTime();
-			BossBar bar = Bukkit.createBossBar("§9§lWampiryzm I§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
+			BossBar bar = Bukkit.createBossBar("Â§9Â§lWampiryzm IÂ§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
 				bar.setVisible(true);
 				bar.addPlayer(p);
 				bar.setProgress(timer/time);
@@ -49,7 +49,7 @@ public class Wampiryzm_H extends ARune {
 					return;
 				}
 				
-				bar.setTitle("§9§lWampiryzm I§f: "+(int)timer+" sekund");
+				bar.setTitle("Â§9Â§lWampiryzm IÂ§f: "+(int)timer+" sekund");
 				bar.setProgress(timer/time);
 				
 				--timer;

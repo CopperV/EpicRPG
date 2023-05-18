@@ -48,7 +48,7 @@ public class Prowokacja extends ARune {
 		p.getWorld().playSound(p.getLocation(), Sound.BLOCK_ANVIL_USE, 1, 0.8f);
 		modifiers.setProwokacja(true);
 		modifiers.setModifier1_lock(true);
-		p.sendMessage("�7[�6EpicRPG�7] �aUzyles runy "+dr.getName());
+		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
 		p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20*dr.getDurationTime(), 0));
 		
 		List<Entity> tmpTargets = new ArrayList<>();
@@ -111,7 +111,7 @@ public class Prowokacja extends ARune {
 			
 			double time = dr.getDurationTime();
 			double timer = dr.getDurationTime();
-			BossBar bar = Bukkit.createBossBar("�9�lProwokacja�f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
+			BossBar bar = Bukkit.createBossBar("§9§lProwokacja§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
 				bar.setVisible(true);
 				bar.addPlayer(p);
 				bar.setProgress(timer/time);
@@ -138,13 +138,13 @@ public class Prowokacja extends ARune {
 						targets.remove(e);
 					});
 					tmpTargets.clear();
-					p.sendMessage("�7[�6EpicRPG�7] �aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					
 					this.cancel();
 					return;
 				}
 				
-				bar.setTitle("�9�lProwokacja�f: "+(int)timer+" sekund");
+				bar.setTitle("§9§lProwokacja§f: "+(int)timer+" sekund");
 				bar.setProgress(timer/time);
 				
 				--timer;

@@ -1,11 +1,14 @@
 package me.Vark123.EpicRPG.Players.Components;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.RuneSystem.RuneManager;
 
-public class RpgModifiers {
+public class RpgModifiers implements Serializable {
+
+	private static final long serialVersionUID = -9173795626376278411L;
 
 	private RpgPlayer rpg;
 	

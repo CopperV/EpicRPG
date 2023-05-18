@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
+import lombok.Getter;
 import me.Vark123.EpicRPG.Files.FileOperations;
 import me.Vark123.EpicRPG.MySQL.DBOperations;
 import me.Vark123.EpicRPG.Placeholders.PlayerPlaceholders;
@@ -20,7 +22,10 @@ public class Main extends JavaPlugin {
 	
 	private static PlaceholderExpansion playerPlaceholders;
 	
-	private final String prefix = "§7[§bEpicRPG§7]";
+	private final String prefix = "Â§7[Â§bEpicRPGÂ§7]";
+	
+	@Getter
+	private InventoryManager manager;
 	
 	@Override
 	public void onEnable() {
@@ -38,6 +43,8 @@ public class Main extends JavaPlugin {
 		playerPlaceholders = new PlayerPlaceholders();
 		playerPlaceholders.register();
 		
+		manager = new InventoryManager(instance);
+		manager.invoke();
 		// TODO Auto-generated method stub
 		super.onEnable();
 	}

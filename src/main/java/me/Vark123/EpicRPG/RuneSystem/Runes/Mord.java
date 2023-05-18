@@ -35,14 +35,14 @@ public class Mord extends ARune {
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
 		modifiers.setMord(true);
 		modifiers.setModifier1_lock(true);
-		p.sendMessage("�7[�6EpicRPG�7] �aUzyles runy "+dr.getName());
+		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
 		p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20*dr.getDurationTime(), 1));
 		
 		new BukkitRunnable() {
 			
 			double time = dr.getDurationTime();
 			double timer = dr.getDurationTime();
-			BossBar bar = Bukkit.createBossBar("�aMord�f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
+			BossBar bar = Bukkit.createBossBar("§aMord§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
 				bar.setVisible(true);
 				bar.addPlayer(p);
 				bar.setProgress(timer/time);
@@ -57,7 +57,7 @@ public class Mord extends ARune {
 					return;
 				}
 				
-				bar.setTitle("�aMord�f: "+(int)timer+" sekund");
+				bar.setTitle("§aMord§f: "+(int)timer+" sekund");
 				bar.setProgress(timer/time);
 				
 				--timer;
@@ -70,7 +70,7 @@ public class Mord extends ARune {
 			@Override
 			public void run() {
 				if(timer <= 0 || !casterInCastWorld()) {
-					p.sendMessage("�7[�6EpicRPG�7] �aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GHAST_SHOOT, 1, 1.7f);
 					p.removePotionEffect(PotionEffectType.SPEED);
 					modifiers.setMord(false);

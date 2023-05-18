@@ -36,7 +36,7 @@ public class DBOperations {
 		try {
 			c = DriverManager.getConnection("jdbc:mysql://"+fc.getString("DB.ip")+"/"+fc.getString("DB.database")+"?useSSL=false&autoReconnect=true&failOverReadOnly=false&maxReconnects=10",prop);
 		} catch (SQLException e) {
-			System.out.println("§c§lBlad laczenia z baza danych: "+e.getMessage());
+			System.out.println("Â§cÂ§lBlad laczenia z baza danych: "+e.getMessage());
 			return;
 		}
 		isInit = true;
@@ -329,7 +329,7 @@ public class DBOperations {
 				+ "p_str,p_wytrz,p_zr,p_zd,p_mana,p_int,p_walka,p_krag,"
 				+ "potion_str,potion_wytrz,potion_zr,potion_zd,potion_mana,potion_int,potion_walka,"
 				+ "p_stygia,p_coins,p_brylki) VALUES "
-				+"("+db_id+",\"§2Gracz\",\""+playerInfo.getProffesion()+"\","+playerInfo.getLevel()+","+playerInfo.getExp()+","+playerInfo.getNextLevel()+","+playerInfo.getPn()+","
+				+"("+db_id+",\"Â§2Gracz\",\""+playerInfo.getProffesion()+"\","+playerInfo.getLevel()+","+playerInfo.getExp()+","+playerInfo.getNextLevel()+","+playerInfo.getPn()+","
 				+stats.getSila()+","+stats.getWytrzymalosc()+","+stats.getZrecznosc()+","+stats.getZdolnosci()+","+stats.getMana()+","+stats.getInteligencja()+","+stats.getWalka()+","+stats.getKrag()+","
 				+stats.getPotionSila()+","+stats.getPotionWytrzymalosc()+","+stats.getPotionZrecznosc()+","+stats.getPotionZdolnosci()+","+stats.getPotionMana()+","+stats.getPotionInteligencja()+","+stats.getPotionWalka()+","
 				+vault.getStygia()+","+vault.getDragonCoins()+","+vault.getBrylkiRudy()+");";

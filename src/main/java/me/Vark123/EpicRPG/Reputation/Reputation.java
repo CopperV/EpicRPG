@@ -58,14 +58,14 @@ public class Reputation {
 			if(nextLevel == null) {
 //				Bukkit.broadcastMessage("null");
 				this.reputationAmount = ReputationLevels.getReputationLevelById(reputationLevel.getId()-1).getAmount();
-				player.sendMessage(Main.getInstance().getPrefix()+" §6§lReputacja §r"+displayFraction+" §a"+oldLevel.getName()+" -> "+reputationLevel.getName());
+				player.sendMessage(Main.getInstance().getPrefix()+" Â§6Â§lReputacja Â§r"+displayFraction+" Â§a"+oldLevel.getName()+" -> "+reputationLevel.getName());
 				return;
 			}
 //			Bukkit.broadcastMessage(nextLevel.getName()+" "+nextLevel.getId());
 			this.reputationLevel = nextLevel;
 		} while(this.reputationAmount >= nextLevel.getAmount());
 		
-		player.sendMessage(Main.getInstance().getPrefix()+" §6§lReputacja §r"+displayFraction+" §a"+oldLevel.getName()+" -> "+nextLevel.getName());
+		player.sendMessage(Main.getInstance().getPrefix()+" Â§6Â§lReputacja Â§r"+displayFraction+" Â§a"+oldLevel.getName()+" -> "+nextLevel.getName());
 	}
 	
 	public void removeSmartReputation(int amount) {
@@ -98,7 +98,7 @@ public class Reputation {
 			this.reputationLevel = ReputationLevels.getReputationLevelById(this.reputationLevel.getId()-1);
 		}
 		
-		player.sendMessage(Main.getInstance().getPrefix()+" §6§lReputacja §r"+displayFraction+" §a"+oldLevel.getName()+" -> "+reputationLevel.getName());
+		player.sendMessage(Main.getInstance().getPrefix()+" Â§6Â§lReputacja Â§r"+displayFraction+" Â§a"+oldLevel.getName()+" -> "+reputationLevel.getName());
 	}
 
 }

@@ -81,7 +81,7 @@ public class RpgScoreboard {
 		if(playerInfo.getLevel() > 10 && !playerInfo.getProffesion().toLowerCase().contains("obywatel")) {
 			
 			Team team = board.getTeam("rpg_info");
-			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&3=> "+ChatColor.of(new Color(66, 104, 124)).toString() + "" + ChatColor.BOLD + "INFO &3<="));
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&3》 "+ChatColor.of(new Color(66, 104, 124)).toString() + "" + ChatColor.BOLD + "INFO &3《"));
 			team.addEntry(ChatColor.BLUE+""+ChatColor.WHITE);
 			obj.getScore(ChatColor.BLUE+""+ChatColor.WHITE).setScore(15);
 			
@@ -133,7 +133,7 @@ public class RpgScoreboard {
 			obj.getScore(ChatColor.YELLOW+""+ChatColor.LIGHT_PURPLE).setScore(11);
 			
 			team = board.getTeam("rpg_zasoby");
-			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&3=> "+ChatColor.of(new Color(66, 104, 124)).toString() + "" + ChatColor.BOLD + "ZASOBY &3<="));
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&3》 "+ChatColor.of(new Color(66, 104, 124)).toString() + "" + ChatColor.BOLD + "ZASOBY &3《"));
 			team.addEntry(ChatColor.BLUE+""+ChatColor.GRAY);
 			obj.getScore(ChatColor.BLUE+""+ChatColor.GRAY).setScore(10);
 			
@@ -158,7 +158,7 @@ public class RpgScoreboard {
 			obj.getScore(ChatColor.GOLD+""+ChatColor.BLUE).setScore(6);
 
 			team = board.getTeam("rpg_staty");
-			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&3=> "+ChatColor.of(new Color(66, 104, 124)).toString() + "" + ChatColor.BOLD + "STATY &3<="));
+			team.setSuffix(ChatColor.translateAlternateColorCodes('&', "&3》 "+ChatColor.of(new Color(66, 104, 124)).toString() + "" + ChatColor.BOLD + "STATY &3《"));
 			team.addEntry(ChatColor.BLUE+""+ChatColor.BLACK);
 			obj.getScore(ChatColor.BLUE+""+ChatColor.BLACK).setScore(5);
 			

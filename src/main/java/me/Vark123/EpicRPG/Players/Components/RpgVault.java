@@ -1,14 +1,21 @@
 package me.Vark123.EpicRPG.Players.Components;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import lombok.Getter;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
+import me.Vark123.EpicRPG.Utils.ChatPrintable;
 
-public class RpgVault {
+@Getter
+public class RpgVault implements Serializable, ChatPrintable {
+
+	private static final long serialVersionUID = -2277804457326795470L;
 
 	private RpgPlayer rpg;
 	
@@ -41,10 +48,6 @@ public class RpgVault {
 		}
 		
 	}
-
-	public RpgPlayer getRpg() {
-		return rpg;
-	}
 	
 	public double getMoney() {
 		return Main.eco.getBalance(rpg.getPlayer());
@@ -61,10 +64,6 @@ public class RpgVault {
 	public void addMoney(double money) {
 		Main.eco.depositPlayer(rpg.getPlayer(), money);
 	}
-
-	public int getStygia() {
-		return stygia;
-	}
 	
 	public boolean hasEnoughStygia(int stygia) {
 		return stygia<=this.stygia;
@@ -76,10 +75,6 @@ public class RpgVault {
 	
 	public void addStygia(int stygia) {
 		this.stygia += stygia;
-	}
-
-	public int getDragonCoins() {
-		return dragonCoins;
 	}
 	
 	public boolean hasEnoughDragonCoins(int coins) {
@@ -93,10 +88,6 @@ public class RpgVault {
 	public void removeDragonCoins(int coins) {
 		this.dragonCoins -= coins;
 	}
-
-	public int getBrylkiRudy() {
-		return brylkiRudy;
-	}
 	
 	public boolean hasEnoughBrylkiRudy(int brylkiRudy) {
 		return brylkiRudy <= this.brylkiRudy;
@@ -108,6 +99,15 @@ public class RpgVault {
 	
 	public void removeBrylkiRudy(int brylkiRudy) {
 		this.brylkiRudy -= brylkiRudy;
+	}
+
+	@Override
+	public void print(CommandSender sender) {
+		sender.sendMessage("§6§l========================= ");
+		sender.sendMessage("    §2Kasa: §e"+String.format("%.2f", getMoney())+" $"
+				+"        §2Smocze monety: §4"+dragonCoins);
+		sender.sendMessage("    §2Stygia: §3"+stygia
+				+"        §2Brylki rudy: §9"+brylkiRudy);
 	}
 	
 }

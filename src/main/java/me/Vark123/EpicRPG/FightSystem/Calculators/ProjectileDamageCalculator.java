@@ -76,18 +76,18 @@ public class ProjectileDamageCalculator implements DamageCalculator {
 				RpgModifiers modifiers = rpg.getModifiers();
 				
 				if(!projectile.hasMetadata("rpg_bow")) {
-					damager.sendMessage(Main.getInstance().getPrefix()+" §cBlad z Metadata strzaly. Zglos ten blad administratorowi");
+					damager.sendMessage(Main.getInstance().getPrefix()+" Â§cBlad z Metadata strzaly. Zglos ten blad administratorowi");
 					return -1;
 				}
 				if(!projectile.hasMetadata("rpg_force")) {
-					damager.sendMessage(Main.getInstance().getPrefix()+" §cBlad z Metadata force. Zglos ten blad administratorowi");
+					damager.sendMessage(Main.getInstance().getPrefix()+" Â§cBlad z Metadata force. Zglos ten blad administratorowi");
 					return -1;
 				}
 				
 				ItemStack bow = (ItemStack) projectile.getMetadata("rpg_bow").get(0).value();
 				ChangeStats.change(rpg, bow);
 				if(!CheckStats.check(rpg, bow)) {
-					damager.sendMessage(Main.getInstance().getPrefix()+" §cNie mozesz uzywac "+bow.getItemMeta().getDisplayName());
+					damager.sendMessage(Main.getInstance().getPrefix()+" Â§cNie mozesz uzywac "+bow.getItemMeta().getDisplayName());
 					return -1;
 				}
 				

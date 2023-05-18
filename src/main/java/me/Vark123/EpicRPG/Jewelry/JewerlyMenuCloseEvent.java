@@ -36,7 +36,7 @@ public class JewerlyMenuCloseEvent implements Listener {
 			}
 			
 			if(!isJewerlyItem(it)) {
-				p.sendMessage(it.getItemMeta().getDisplayName()+" §cnie jest amuletem, pierscieniem ani rekawicami!");
+				p.sendMessage(it.getItemMeta().getDisplayName()+"Â§cnie jest amuletem, pierscieniem ani rekawicami!");
 				int firstEmpty = pInv.firstEmpty();
 				if(firstEmpty < 0 || firstEmpty > 35) {
 					p.getWorld().dropItem(p.getLocation(), it);
@@ -50,7 +50,7 @@ public class JewerlyMenuCloseEvent implements Listener {
 			}
 			
 			if(!isCorrectJewerlySlotType(it, item)) {
-				p.sendMessage(it.getItemMeta().getDisplayName()+" §czalozyles na niepoprawny slot!");
+				p.sendMessage(it.getItemMeta().getDisplayName()+"Â§czalozyles na niepoprawny slot!");
 				int firstEmpty = pInv.firstEmpty();
 				if(firstEmpty < 0 || firstEmpty > 35) {
 					p.getWorld().dropItem(p.getLocation(), it);

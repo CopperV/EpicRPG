@@ -111,7 +111,7 @@ public class PotionUtils {
 					potion.getItemMeta().getLore().stream().filter(s -> {
 						return s.contains("Przywrocona mana");
 					}).findAny().ifPresent(s -> {
-						mana.setValue(Integer.parseInt(ChatColor.stripColor(s.replace("ง4- ง3Przywrocona mana: ง7", ""))));
+						mana.setValue(Integer.parseInt(ChatColor.stripColor(s.replace("ยง4- ยง3Przywrocona mana: ยง7", ""))));
 					});
 					rpg.getStats().addPresentManaSmart(mana.intValue());
 				};
@@ -122,7 +122,7 @@ public class PotionUtils {
 					potion.getItemMeta().getLore().stream().filter(s -> {
 						return s.contains("Przywrocone zycie");
 					}).findAny().ifPresent(s -> {
-						hp.setValue(Integer.parseInt(ChatColor.stripColor(s.replace("ง4- ง3Przywrocone zycie: ง7", ""))));
+						hp.setValue(Integer.parseInt(ChatColor.stripColor(s.replace("ยง4- ยง3Przywrocone zycie: ยง7", ""))));
 					});
 					RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg, hp.intValue());
 					Bukkit.getPluginManager().callEvent(event);
@@ -137,11 +137,11 @@ public class PotionUtils {
 					}).findAny().ifPresent(s -> {
 						if(s.contains("Przywrocona mana")) {
 							mana.setValue(Integer.parseInt(ChatColor.stripColor(
-									s.replace("ง4- ง3Przywrocona mana na sekunde: ง7", ""))));
+									s.replace("ยง4- ยง3Przywrocona mana na sekunde: ยง7", ""))));
 							return;
 						}
 						time.setValue(Integer.parseInt(ChatColor.stripColor(
-								s.replace("ง4- ง3Czas trwania: ง7", ""))));
+								s.replace("ยง4- ยง3Czas trwania: ยง7", ""))));
 					});
 					rpg.getStats().createRegenManaTask(time.intValue(), mana.intValue());
 				};
@@ -155,11 +155,11 @@ public class PotionUtils {
 					}).findAny().ifPresent(s -> {
 						if(s.contains("Przywrocone zycie")) {
 							hp.setValue(Integer.parseInt(ChatColor.stripColor(
-									s.replace("ง4- ง3Przywrocone zycie na sekunde: ง7", ""))));
+									s.replace("ยง4- ยง3Przywrocone zycie na sekunde: ยง7", ""))));
 							return;
 						}
 						time.setValue(Integer.parseInt(ChatColor.stripColor(
-								s.replace("ง4- ง3Czas trwania: ง7", ""))));
+								s.replace("ยง4- ยง3Czas trwania: ยง7", ""))));
 					});
 					rpg.getStats().createRegenHpTask(time.intValue(), hp.intValue());
 				};
@@ -172,10 +172,10 @@ public class PotionUtils {
 						return s.contains("Przywrocona mana") || s.contains("Przywrocone zycie");
 					}).findAny().ifPresent(s -> {
 						if(s.contains("Przywrocona mana")) {
-							mana.setValue(Integer.parseInt(ChatColor.stripColor(s.replace("ง4- ง3Przywrocona mana: ง7", ""))));
+							mana.setValue(Integer.parseInt(ChatColor.stripColor(s.replace("ยง4- ยง3Przywrocona mana: ยง7", ""))));
 							return;
 						}
-						hp.setValue(Integer.parseInt(ChatColor.stripColor(s.replace("ง4- ง3Przywrocone zycie: ง7", ""))));
+						hp.setValue(Integer.parseInt(ChatColor.stripColor(s.replace("ยง4- ยง3Przywrocone zycie: ยง7", ""))));
 					});
 					rpg.getStats().addPresentManaSmart(mana.intValue());
 					RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg, hp.intValue());
@@ -194,14 +194,14 @@ public class PotionUtils {
 					}).findAny().ifPresent(s -> {
 						if(s.contains("Przywrocona mana")) {
 							mana.setValue(Integer.parseInt(ChatColor.stripColor(
-									s.replace("ง4- ง3Przywrocona mana na sekunde: ง7", ""))));							return;
+									s.replace("ยง4- ยง3Przywrocona mana na sekunde: ยง7", ""))));							return;
 						} else if(s.contains("Przywrocone zycie")) {
 							hp.setValue(Integer.parseInt(ChatColor.stripColor(
-									s.replace("ง4- ง3Przywrocone zycie na sekunde: ง7", ""))));
+									s.replace("ยง4- ยง3Przywrocone zycie na sekunde: ยง7", ""))));
 							return;
 						}
 						time.setValue(Integer.parseInt(ChatColor.stripColor(
-								s.replace("ง4- ง3Czas trwania: ง7", ""))));
+								s.replace("ยง4- ยง3Czas trwania: ยง7", ""))));
 					});
 					rpg.getStats().createRegenHpTask(time.intValue(), hp.intValue());
 					rpg.getStats().createRegenManaTask(time.intValue(), mana.intValue());
@@ -219,7 +219,7 @@ public class PotionUtils {
 					try {
 						method = modClass.getMethod(strMethod, int.class);
 						method.invoke(modifiers, level);
-						rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()+" งaWypiles wywar "+plName+". Za ง760 งasekund przestanie dzialac.");
+						rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()+" ยงaWypiles wywar "+plName+". Za ยง760 ยงasekund przestanie dzialac.");
 					} catch (NoSuchMethodException 
 							| SecurityException 
 							| IllegalAccessException 
@@ -235,7 +235,7 @@ public class PotionUtils {
 						public void run() {
 							try {
 								method.invoke(modifiers, 0);
-								rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()+"งcWywar "+plName+" wlasnie przestal dzialac.");
+								rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()+"ยงcWywar "+plName+" wlasnie przestal dzialac.");
 							} catch (IllegalAccessException 
 									| IllegalArgumentException 
 									| InvocationTargetException e) {
@@ -255,67 +255,67 @@ public class PotionUtils {
 							stats.addPotionMana(2);
 							stats.addPresentManaSmart(2);
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
-									+" ง2Otrzymales 2 punkty many. Obecnie posiadasz งa"+(stats.getMana()+stats.getPotionMana())+" ง2punktow many.");
+									+" ยง2Otrzymales 2 punkty many. Obecnie posiadasz ยงa"+(stats.getMana()+stats.getPotionMana())+" ยง2punktow many.");
 							break;
 						case "Sily":
 							stats.addPotionSila(1);
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
-									+" ง2Otrzymales 1 punkty sily.");
+									+" ยง2Otrzymales 1 punkty sily.");
 							break;
 						case "Zrecznosci":
 							stats.addPotionZrecznosc(1);
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
-									+" ง2Otrzymales 1 punkty zrecznosci.");
+									+" ยง2Otrzymales 1 punkty zrecznosci.");
 							break;
 						case "Umyslu":
 							stats.addPotionInteligencja(1);
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
-									+" ง2Otrzymales 1 punkty inteligencji.");
+									+" ยง2Otrzymales 1 punkty inteligencji.");
 							break;
 						case "Mysliwska":
 							stats.addPotionZdolnosci(1);
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
-									+" ง2Otrzymales 1 punkty zdolnosci mysliwskich.");
+									+" ยง2Otrzymales 1 punkty zdolnosci mysliwskich.");
 							break;
 						case "Wytrzymalosci":
 							stats.addPotionWytrzymalosc(1);
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
-									+" ง2Otrzymales 1 punkty wytrzymalosci.");
+									+" ยง2Otrzymales 1 punkty wytrzymalosci.");
 							break;
 						case "Walki":
 							stats.addPotionWalka(1);
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
-									+" ง2Otrzymales 1 punkty walki.");
+									+" ยง2Otrzymales 1 punkty walki.");
 							break;
 						case "Wojownika":
 							stats.addPotionSila(1);
 							stats.addPotionWytrzymalosc(1);
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
-									+" ง2Otrzymales 1 punkty sily.");
+									+" ยง2Otrzymales 1 punkty sily.");
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
-									+" ง2Otrzymales 1 punkty walki.");
+									+" ยง2Otrzymales 1 punkty walki.");
 							break;
 						case "Mysliwego":
 							stats.addPotionZrecznosc(1);
 							stats.addPotionZdolnosci(1);
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
-									+" ง2Otrzymales 1 punkty zrecznosci.");
+									+" ยง2Otrzymales 1 punkty zrecznosci.");
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
-									+" ง2Otrzymales 1 punkty zdolnosci mysliwskich.");
+									+" ยง2Otrzymales 1 punkty zdolnosci mysliwskich.");
 							break;
 						case "Maga":
 							stats.addPotionMana(2);
 							stats.addPresentManaSmart(2);
 							stats.addPotionInteligencja(1);
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
-									+" ง2Otrzymales 1 punkty inteligencji.");
+									+" ยง2Otrzymales 1 punkty inteligencji.");
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
-									+" ง2Otrzymales 2 punkty many. Obecnie posiadasz งa"+(stats.getMana()+stats.getPotionMana())+" ง2punktow many.");
+									+" ยง2Otrzymales 2 punkty many. Obecnie posiadasz ยงa"+(stats.getMana()+stats.getPotionMana())+" ยง2punktow many.");
 							break;
 						case "Szalu":
 							stats.addPotionWalka(2);
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
-									+" ง2Otrzymales 2 punkty walki.");
+									+" ยง2Otrzymales 2 punkty walki.");
 							break;
 					}
 				};

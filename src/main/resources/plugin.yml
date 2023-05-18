@@ -6,6 +6,9 @@ depend: [CalendarEvents,MythicMobs,NBTAPI,Clans,PartyAndFriends,ProtocolLib]
 softdepend: [EpicClans]
 api-version: 1.18
 
+libraries:
+  - io.github.rysefoxx.inventory:RyseInventory-Plugin:1.6.2
+
 commands:
   staty:
     aliases: [stats, statystyki]

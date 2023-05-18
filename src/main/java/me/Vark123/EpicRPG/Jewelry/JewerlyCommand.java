@@ -15,7 +15,7 @@ public class JewerlyCommand implements CommandExecutor {
 		if(!cmd.getName().equalsIgnoreCase("bizuteria"))
 			return false;
 		if(!(sender instanceof Player)) {
-			sender.sendMessage(Main.getInstance().getPrefix()+" §cKomenda tylko dla graczy");
+			sender.sendMessage(Main.getInstance().getPrefix()+" Â§cKomenda tylko dla graczy");
 			return false;
 		}
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "rpgmenu "+sender.getName()+" 15");

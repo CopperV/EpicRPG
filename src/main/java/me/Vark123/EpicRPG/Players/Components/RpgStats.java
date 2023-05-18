@@ -1,22 +1,33 @@
 package me.Vark123.EpicRPG.Players.Components;
 
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.HealthSystem.RpgPlayerHealEvent;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
+import me.Vark123.EpicRPG.Utils.ChatPrintable;
 
-public class RpgStats {
+@Data
+public class RpgStats implements Serializable, ChatPrintable {
 
+	private static final long serialVersionUID = -7990732324947933468L;
+
+	@Setter(value = AccessLevel.NONE)
 	private RpgPlayer rpg;
 	
 	private int ochrona;
@@ -30,15 +41,25 @@ public class RpgStats {
 	private int inteligencja = 3;
 	private int health = 100;
 
+	@Setter(value = AccessLevel.NONE)
 	private int potionOchrona;
+	@Setter(value = AccessLevel.NONE)
 	private int potionObrazenia;
+	@Setter(value = AccessLevel.NONE)
 	private int potionSila;
+	@Setter(value = AccessLevel.NONE)
 	private int potionZrecznosc;
+	@Setter(value = AccessLevel.NONE)
 	private int potionWytrzymalosc;
+	@Setter(value = AccessLevel.NONE)
 	private int potionZdolnosci;
+	@Setter(value = AccessLevel.NONE)
 	private int potionWalka;
+	@Setter(value = AccessLevel.NONE)
 	private int potionMana;
+	@Setter(value = AccessLevel.NONE)
 	private int potionInteligencja;
+	@Setter(value = AccessLevel.NONE)
 	private int potionHealth;
 
 	private int finalOchrona;
@@ -51,11 +72,17 @@ public class RpgStats {
 	private int finalMana;
 	private int finalInteligencja;
 	private int finalHealth;
-	
+
+	@Setter(value = AccessLevel.NONE)
 	private int presentMana = 7;
+	@Setter(value = AccessLevel.NONE)
 	private int krag;
-	
+
+	@Setter(value = AccessLevel.NONE)
+	@Getter(value = AccessLevel.NONE)
 	private BukkitTask regenHpTask;
+	@Setter(value = AccessLevel.NONE)
+	@Getter(value = AccessLevel.NONE)
 	private BukkitTask regenManaTask;
 	
 	public RpgStats(RpgPlayer rpg) {
@@ -89,7 +116,7 @@ public class RpgStats {
 		boolean checkHP = set.getBoolean("player_info.check_hp");
 		if(!checkHP) {
 			int hpPerLevel = 5;
-			if(rpg.getInfo().getProffesion().equalsIgnoreCase("�5mag"))
+			if(rpg.getInfo().getProffesion().equalsIgnoreCase("§5mag"))
 				hpPerLevel = 6;
 			int maxHp = rpg.getInfo().getLevel()*hpPerLevel - hpPerLevel + 100;
 			if(maxHp != health)
@@ -132,7 +159,7 @@ public class RpgStats {
 			public void run() {
 				if(seconds <= 0) {
 					Player p = rpg.getPlayer();
-					p.sendMessage(Main.getInstance().getPrefix()+" �eEfekt czasowej mikstury zycia skonczyl sie!");
+					p.sendMessage(Main.getInstance().getPrefix()+" §eEfekt czasowej mikstury zycia skonczyl sie!");
 					p.spawnParticle(Particle.HEART, p.getLocation().add(0,1,0), 25, .6, .6, .6, 0.2);
 					p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_HURT_FREEZE, 1, 1.25f);
 					this.cancel();
@@ -154,7 +181,7 @@ public class RpgStats {
 			public void run() {
 				if(seconds <= 0) {
 					Player p = rpg.getPlayer();
-					p.sendMessage(Main.getInstance().getPrefix()+" �eEfekt czasowej mikstury many skonczyl sie!");
+					p.sendMessage(Main.getInstance().getPrefix()+" §eEfekt czasowej mikstury many skonczyl sie!");
 					p.spawnParticle(Particle.NAUTILUS, p.getLocation().add(0,1,0), 25, .6, .6, .6, 0.2);
 					p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_HURT_SWEET_BERRY_BUSH, 1, 1.25f);
 					this.cancel();
@@ -163,218 +190,6 @@ public class RpgStats {
 				addPresentManaSmart(mana);
 			}
 		}.runTaskTimer(Main.getInstance(), 0, 20);
-	}
-
-	public RpgPlayer getRpg() {
-		return rpg;
-	}
-
-	public int getOchrona() {
-		return ochrona;
-	}
-
-	public int getObrazenia() {
-		return obrazenia;
-	}
-
-	public int getSila() {
-		return sila;
-	}
-
-	public int getZrecznosc() {
-		return zrecznosc;
-	}
-
-	public int getWytrzymalosc() {
-		return wytrzymalosc;
-	}
-
-	public int getZdolnosci() {
-		return zdolnosci;
-	}
-
-	public int getWalka() {
-		return walka;
-	}
-
-	public int getMana() {
-		return mana;
-	}
-
-	public int getInteligencja() {
-		return inteligencja;
-	}
-
-	public int getHealth() {
-		return health;
-	}
-
-	public int getPotionOchrona() {
-		return potionOchrona;
-	}
-
-	public int getPotionObrazenia() {
-		return potionObrazenia;
-	}
-
-	public int getPotionSila() {
-		return potionSila;
-	}
-
-	public int getPotionZrecznosc() {
-		return potionZrecznosc;
-	}
-
-	public int getPotionWytrzymalosc() {
-		return potionWytrzymalosc;
-	}
-
-	public int getPotionZdolnosci() {
-		return potionZdolnosci;
-	}
-
-	public int getPotionWalka() {
-		return potionWalka;
-	}
-
-	public int getPotionMana() {
-		return potionMana;
-	}
-
-	public int getPotionInteligencja() {
-		return potionInteligencja;
-	}
-
-	public int getPotionHealth() {
-		return potionHealth;
-	}
-
-	public int getFinalOchrona() {
-		return finalOchrona;
-	}
-
-	public int getFinalObrazenia() {
-		return finalObrazenia;
-	}
-
-	public int getFinalSila() {
-		return finalSila;
-	}
-
-	public int getFinalZrecznosc() {
-		return finalZrecznosc;
-	}
-
-	public int getFinalWytrzymalosc() {
-		return finalWytrzymalosc;
-	}
-
-	public int getFinalZdolnosci() {
-		return finalZdolnosci;
-	}
-
-	public int getFinalWalka() {
-		return finalWalka;
-	}
-
-	public int getFinalMana() {
-		return finalMana;
-	}
-
-	public int getFinalInteligencja() {
-		return finalInteligencja;
-	}
-
-	public int getFinalHealth() {
-		return finalHealth;
-	}
-
-	public int getPresentMana() {
-		return presentMana;
-	}
-
-	public int getKrag() {
-		return krag;
-	}
-
-	public void setOchrona(int ochrona) {
-		this.ochrona = ochrona;
-	}
-
-	public void setObrazenia(int obrazenia) {
-		this.obrazenia = obrazenia;
-	}
-
-	public void setSila(int sila) {
-		this.sila = sila;
-	}
-
-	public void setZrecznosc(int zrecznosc) {
-		this.zrecznosc = zrecznosc;
-	}
-
-	public void setWytrzymalosc(int wytrzymalosc) {
-		this.wytrzymalosc = wytrzymalosc;
-	}
-
-	public void setZdolnosci(int zdolnosci) {
-		this.zdolnosci = zdolnosci;
-	}
-
-	public void setWalka(int walka) {
-		this.walka = walka;
-	}
-
-	public void setMana(int mana) {
-		this.mana = mana;
-	}
-
-	public void setInteligencja(int inteligencja) {
-		this.inteligencja = inteligencja;
-	}
-
-	public void setHealth(int health) {
-		this.health = health;
-	}
-
-	public void setFinalOchrona(int finalOchrona) {
-		this.finalOchrona = finalOchrona;
-	}
-
-	public void setFinalObrazenia(int finalObrazenia) {
-		this.finalObrazenia = finalObrazenia;
-	}
-
-	public void setFinalSila(int finalSila) {
-		this.finalSila = finalSila;
-	}
-
-	public void setFinalZrecznosc(int finalZrecznosc) {
-		this.finalZrecznosc = finalZrecznosc;
-	}
-
-	public void setFinalWytrzymalosc(int finalWytrzymalosc) {
-		this.finalWytrzymalosc = finalWytrzymalosc;
-	}
-
-	public void setFinalZdolnosci(int finalZdolnosci) {
-		this.finalZdolnosci = finalZdolnosci;
-	}
-
-	public void setFinalWalka(int finalWalka) {
-		this.finalWalka = finalWalka;
-	}
-
-	public void setFinalMana(int finalMana) {
-		this.finalMana = finalMana;
-	}
-
-	public void setFinalInteligencja(int finalInteligencja) {
-		this.finalInteligencja = finalInteligencja;
-	}
-
-	public void setFinalHealth(int finalHealth) {
-		this.finalHealth = finalHealth;
 	}
 
 	public void addPotionOchrona(int potionOchrona) {
@@ -443,6 +258,24 @@ public class RpgStats {
 
 	public void addKrag(int krag) {
 		this.krag += krag;
+	}
+
+	@Override
+	public void print(CommandSender sender) {
+		int bonusKryt = rpg.getInfo().getShortProf().equalsIgnoreCase("mys") ? 10 : 0;
+		sender.sendMessage("§e§l========================= ");
+		sender.sendMessage("    §2Obrazenia: §a"+obrazenia+"§7/§a"+potionObrazenia+"§7/§a"+finalObrazenia
+				+"        §2Ochrona: §a"+ochrona+"§7/§a"+potionOchrona+"§7§a"+finalOchrona);
+		sender.sendMessage("    §2Sila: §a"+sila+"§7/§a"+potionSila+"§7/§a"+finalSila
+				+"        §2Wytrzymalosc: §a"+wytrzymalosc+"§7/§a"+potionWytrzymalosc+"§7§a"+finalWytrzymalosc);
+		sender.sendMessage("    §2Zrecznosc: §a"+zrecznosc+"§7/§a"+potionZrecznosc+"§7/§a"+finalZrecznosc
+				+"        §2Zdolnosci mysliwskie: §a"+zdolnosci+"§7/§a"+potionZdolnosci+"§7§a"+finalZdolnosci);
+		sender.sendMessage("    §2Inteligencja: §a"+inteligencja+"§7/§a"+potionInteligencja+"§7/§a"+finalInteligencja
+				+"        §2Mana: §a"+presentMana+" §7§l/ §7(§a"+mana+"§7/§a"+potionMana+"§7§a"+finalMana+"§7)");
+		sender.sendMessage("    §2Walka: §a"+walka+"§7/§a"+potionWalka+"§7/§a"+finalWalka
+				+"        §2Krytyk: §a"+String.format("%.1f",finalWalka/5.0+bonusKryt)+"%");
+		sender.sendMessage("    §2Zycie: §a"+health+"§7/§a"+potionHealth+"§7/§a"+finalHealth);
+		sender.sendMessage("    §2Krag: §a:"+krag);
 	}
 	
 }

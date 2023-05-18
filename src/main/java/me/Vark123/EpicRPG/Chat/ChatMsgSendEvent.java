@@ -30,9 +30,9 @@ public class ChatMsgSendEvent implements Listener {
 			return;
 		
 		if(!ChatManager.getInstance().isChatToggle() && !p.hasPermission("rpg.chatoff")){
-			p.sendMessage("ง6==========");
-			p.sendMessage("งcChat jest wylaczony. Nie mozesz na nim pisac!");
-			p.sendMessage("ง6==========");
+			p.sendMessage("ยง6==========");
+			p.sendMessage("ยงcChat jest wylaczony. Nie mozesz na nim pisac!");
+			p.sendMessage("ยง6==========");
 			e.setCancelled(true);
 			return;
 		}
@@ -43,10 +43,10 @@ public class ChatMsgSendEvent implements Listener {
 		Clan klan = ClansManager.getInstance().getClan(pafPlayer);
 		String color = p.hasPermission("rpg.mod") ? ChatManager.getInstance().MOD_COLOR : ChatManager.getInstance().PLAYER_COLOR;
 		
-		StringBuilder sb = new StringBuilder("ง8[งeงl" + info.getLevel() + "ง8] [" + info.getShortProf() + "ง8]");
+		StringBuilder sb = new StringBuilder("ยง8[ยงeยงl" + info.getLevel() + "ยง8] [" + info.getShortProf() + "ยง8]");
 		if(klan != null)
-			sb.append(" [ง9"+klan.getColoredClanTag()+"ง8]");
-		sb.append(" งr%sง7: "+color+"%s");
+			sb.append(" [ยง9"+klan.getColoredClanTag()+"ยง8]");
+		sb.append(" ยงr%sยง7: "+color+"%s");
 		
 		e.setFormat(sb.toString());
 		

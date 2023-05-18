@@ -44,7 +44,7 @@ public class StygiaSystem {
 		Player p = rpg.getPlayer();
 		int stygia = xp/400;
 		vault.addStygia(stygia);
-		p.sendMessage("§3§o+"+ stygia +" stygia §7[§3§o"+vault.getStygia()+" stygia§7]");
+		p.sendMessage("Â§3Â§o+"+ stygia +" stygia Â§7[Â§3Â§o"+vault.getStygia()+" stygiaÂ§7]");
 	}
 	
 }
