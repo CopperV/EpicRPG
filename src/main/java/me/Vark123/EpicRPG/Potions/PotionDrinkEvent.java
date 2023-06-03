@@ -29,9 +29,10 @@ public class PotionDrinkEvent implements Listener {
 		Player p = e.getPlayer();
 		if(!PotionManager.getInstance().canDrinkPotion(p))
 			return;
+		if(!PotionManager.getInstance().drinkPotion(p, e.getHand()))
+			return;
 		e.setUseInteractedBlock(Result.DENY);
 		e.setUseItemInHand(Result.DENY);
-		PotionManager.getInstance().drinkPotion(p, e.getHand());
 	}
 	
 }

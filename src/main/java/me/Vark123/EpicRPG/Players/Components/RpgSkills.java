@@ -109,6 +109,20 @@ public class RpgSkills implements Serializable, ChatPrintable {
 		if(this.magnetyzm)
 			createMagnetyzmTask();
 	}
+	
+	public void reset() {
+		endTasks();
+		this.hungerless = false;
+		this.unlimitedArrows = false;
+		this.manaReg = false;
+		this.slugaBeliara = false;
+		this.magKrwi = false;
+		this.ciosKrytyczny = false;
+		this.magnetyzm = false;
+		this.silaZywiolow = false;
+		this.polnocnyBarbarzynca = false;
+		this.rozprucie = false;
+	}
 
 	@Override
 	public void print(CommandSender sender) {

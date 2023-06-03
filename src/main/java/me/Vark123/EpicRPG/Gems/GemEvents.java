@@ -2,7 +2,6 @@ package me.Vark123.EpicRPG.Gems;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.bukkit.Material;
@@ -16,14 +15,13 @@ import org.bukkit.inventory.ItemStack;
 import de.tr7zw.nbtapi.NBTItem;
 import io.github.rysefoxx.inventory.plugin.other.EventCreator;
 import io.lumine.mythic.bukkit.MythicBukkit;
-import io.lumine.mythic.core.items.MythicItem;
 import lombok.Getter;
 import me.Vark123.EpicRPG.Utils.Utils;
 
 @Getter
 public class GemEvents {
 	
-private static final GemEvents container = new GemEvents();
+	private static final GemEvents container = new GemEvents();
 	
 	private final EventCreator<InventoryClickEvent> powerfulClickEvent;
 	private final EventCreator<InventoryCloseEvent> powerfulCloseEvent;
@@ -119,16 +117,15 @@ private static final GemEvents container = new GemEvents();
 			sb.setCharAt(mmId.length()-1, Character.forDigit(gemLevel, 10));
 			mmId = sb.toString();
 			
-			Optional<MythicItem> oGem = MythicBukkit.inst().getItemManager().getItem(mmId);
-			if(oGem.isEmpty()) {
+			ItemStack newGem = MythicBukkit.inst().getItemManager().getItemStack(mmId);
+			if(newGem == null) {
 				p.closeInventory();
 				return;
 			}
 			
 			inv.clear();
-			ItemStack toReturn = oGem.get().getCachedMenuItem();
 			p.closeInventory();
-			Utils.dropItemStack(p, toReturn);
+			Utils.dropItemStack(p, newGem);
 		};
 		
 		EventCreator<InventoryClickEvent> creator = new EventCreator<>(InventoryClickEvent.class, event);
@@ -222,6 +219,7 @@ private static final GemEvents container = new GemEvents();
 				katedraNBT.add(nbtIt.getString("Katedra"));
 			}
 			
+			inv.clear();
 			p.closeInventory();
 			ItemStack annihilus = GemManager.getInstance().getAnnihilus(gem1, gem2);
 			Utils.dropItemStack(p, annihilus);

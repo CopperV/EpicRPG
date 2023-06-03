@@ -32,12 +32,14 @@ public class PotionManager {
 		return instance;
 	}
 	
-	public void drinkPotion(Player p, EquipmentSlot potionSlot) {
+	public boolean drinkPotion(Player p, EquipmentSlot potionSlot) {
 		if(!PlayerManager.getInstance().playerExists(p))
-			return;
+			return false;
 		
 		ItemStack potion = p.getInventory().getItem(potionSlot);
 		RpgPotionType type = PotionUtils.getPotionType(potion);
+		if(type.equals(RpgPotionType.NONE))
+			return false;
 		RpgPotionEffect effect = PotionUtils.getPotionEffect(type, potion);
 		
 		PlayerInventory inv = p.getInventory();
@@ -50,6 +52,7 @@ public class PotionManager {
 		playDrinkEffect(p);
 		addPotionEffect(p, effect);
 		potionCooldown.put(p.getUniqueId(), System.currentTimeMillis());
+		return true;
 	}
 	
 	public void playDrinkEffect(Player p) {

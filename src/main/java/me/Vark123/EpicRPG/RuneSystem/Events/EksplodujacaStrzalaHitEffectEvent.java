@@ -29,10 +29,12 @@ import com.sk89q.worldguard.protection.regions.RegionQuery;
 import me.Vark123.EpicRPG.FightSystem.ManualDamage;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
+import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 
 public class EksplodujacaStrzalaHitEffectEvent implements Listener {
 	
 	private static final double DEFAULT_EXPLOSION_DMG_MOD = 0.2;
+	private static final double DEFAULT_EXPLOSION_DMG_MOD_H = 0.26;
 
 	@EventHandler
 	public void onHit(ProjectileHitEvent e) {
@@ -52,7 +54,9 @@ public class EksplodujacaStrzalaHitEffectEvent implements Listener {
 			return;
 		
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
-		if(!rpg.getModifiers().hasEksplodujacaStrzala())
+		RpgModifiers modifiers = rpg.getModifiers();
+		if(!modifiers.hasEksplodujacaStrzala()
+				&& !modifiers.hasEksplodujacaStrzala_h())
 			return;
 		
 		if(!arrow.hasMetadata("rpg_bow") || !arrow.hasMetadata("rpg_force"))
@@ -61,9 +65,13 @@ public class EksplodujacaStrzalaHitEffectEvent implements Listener {
 		boolean hitEntity = e.getHitEntity() != null;
 		ItemStack bow = (ItemStack) arrow.getMetadata("rpg_bow").get(0).value();
 		double dmg = arrow.getDamage();
-//		double power = bowInfo.getPower();
 		
-		MutableDouble baseDmg = new MutableDouble(dmg*DEFAULT_EXPLOSION_DMG_MOD);
+		MutableDouble baseDmg;
+		if(modifiers.hasEksplodujacaStrzala()) {
+			baseDmg = new MutableDouble(dmg*DEFAULT_EXPLOSION_DMG_MOD);
+		} else {
+			baseDmg = new MutableDouble(dmg*DEFAULT_EXPLOSION_DMG_MOD_H);
+		}
 		if(bow.getType().equals(Material.CROSSBOW)) {
 			double enchantMod = 0;
 			int enchant = bow.getEnchantmentLevel(Enchantment.QUICK_CHARGE);

@@ -106,6 +106,7 @@ public class ProjectileDamageCalculator implements DamageCalculator {
 				double dmgZyciodajnaZiemia_M = 0;
 				double dmgKrwawa = 0;
 				double dmgEksplodujaca = 0;
+				double dmgEksplodujaca_H = 0;
 				
 				if(victim instanceof Player) {
 					if(crit) {
@@ -276,11 +277,20 @@ public class ProjectileDamageCalculator implements DamageCalculator {
 						dmgEksplodujaca = dmg * 0.3;
 					}
 				}
+				if(modifiers.hasEksplodujacaStrzala_h()) {
+					if(bow.getType().equals(Material.CROSSBOW)) {
+						int enchant = bow.getEnchantmentLevel(Enchantment.QUICK_CHARGE);
+						dmgEksplodujaca_H = dmg * (0.52 - 0.06*enchant);
+					} else {
+						dmgEksplodujaca_H = dmg * 0.34;
+					}
+				}
 				
 				dmg = dmg + dmgLod + dmgOgien + dmgPoison + dmgStrzal 
 						+ dmgZmysly + dmgPotZr + dmgPotZd + dmgZadzaKrwi 
 						+ dmgSwieta + dmgZyciodajnaZiemia 
-						+ dmgZyciodajnaZiemia_M + dmgKrwawa + dmgEksplodujaca;
+						+ dmgZyciodajnaZiemia_M + dmgKrwawa + dmgEksplodujaca
+						+ dmgEksplodujaca_H;
 				
 				if(crit && skills.hasCiosKrytyczny()) {
 					dmg *= 1.15;

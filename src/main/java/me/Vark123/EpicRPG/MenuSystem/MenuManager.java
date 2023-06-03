@@ -5,6 +5,10 @@ import org.bukkit.entity.Player;
 import lombok.Getter;
 import me.Vark123.EpicRPG.Backpacks.BackpackManager;
 import me.Vark123.EpicRPG.Gems.GemManager;
+import me.Vark123.EpicRPG.Klejnoty.KlejnotyManager;
+import me.Vark123.EpicRPG.KosturSystem.KosturMenuManager;
+import me.Vark123.EpicRPG.Stats.ResetStatsMenuManager;
+import me.Vark123.EpicRPG.SzponBeliara.SzponBeliaraManager;
 
 @Getter
 public class MenuManager {
@@ -27,6 +31,21 @@ public class MenuManager {
 				return true;
 			case 3:
 				GemManager.getInstance().openAnnihilusGemCreator(p);
+				return true;
+			case 4:
+				KlejnotyManager.getInstance().openInsertMenu(p);
+				return true;
+			case 6:
+				SzponBeliaraManager.getInstance().openSzponAwakeningMenu(p);
+				return true;
+			case 7:
+				KlejnotyManager.getInstance().openRemoveMenu(p);
+				return true;
+			case 8:
+				KosturMenuManager.getInstance().openMenu(p);
+				return true;
+			case 9:
+				ResetStatsMenuManager.getInstance().open(p);
 				return true;
 		}
 		return false;

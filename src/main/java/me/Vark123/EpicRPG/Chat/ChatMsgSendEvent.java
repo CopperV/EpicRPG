@@ -1,6 +1,5 @@
 package me.Vark123.EpicRPG.Chat;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,7 +18,6 @@ public class ChatMsgSendEvent implements Listener {
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent e) {
 		String msg = e.getMessage();
-		Bukkit.broadcastMessage(msg);
 		if(msg.contains("${")) {
 			e.setCancelled(true);
 			return;

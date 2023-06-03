@@ -127,6 +127,7 @@ public class RuneDamageCalculator implements DamageCalculator {
 		double dmgZewKrwi = 0;
 		double dmgPelnia = 0;
 		double dmgSilaRownowagi = 0;
+		double dmgSilaRownowagi_H = 0;
 		
 		switch(modifiers.getPotionInteligencja()) {
 			case 1:
@@ -175,10 +176,16 @@ public class RuneDamageCalculator implements DamageCalculator {
 			else
 				dmgSilaRownowagi = dmg * 0.2;
 		}
+		if(modifiers.hasSilaRownowagi_h()) {
+			if(dr.getMagicType().equalsIgnoreCase("rownowaga"))
+				dmgSilaRownowagi_H = dmg * 0.42;
+			else
+				dmgSilaRownowagi_H = dmg * 0.25;
+		}
 		dmg = dmg + dmgPotionInt + dmgZadzaKrwi + dmgInkantacja + dmgPoswiecenie
 				+ dmgZyciodajnaZiemia + dmgZakazanyRytual
 				+ dmgZakazanyRytual_H + dmgZyciodajnaZiemia_M + dmgZakazanyRytual_M 
-				+ dmgZewKrwi + dmgPelnia + dmgSilaRownowagi;
+				+ dmgZewKrwi + dmgPelnia + dmgSilaRownowagi + dmgSilaRownowagi_H;
 		
 		if(modifiers.hasProwokacja()) {
 			dmg /= 100;

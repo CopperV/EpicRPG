@@ -63,8 +63,10 @@ public class RpgModifiers implements Serializable {
 	private boolean wedrownyCien;
 	private boolean ciosWPlecy;
 	private boolean mord;
-	private boolean eksplodujacaStrzala = false;
-	private boolean silaRownowagi = false;
+	private boolean eksplodujacaStrzala;
+	private boolean silaRownowagi;
+	private boolean eksplodujacaStrzala_h;
+	private boolean silaRownowagi_h;
 	
 	private int potionSila;
 	private int potionZrecznosc;
@@ -552,5 +554,21 @@ public class RpgModifiers implements Serializable {
 
 	public void setSilaRownowagi(boolean silaRownowagi) {
 		this.silaRownowagi = silaRownowagi;
+	}
+
+	public boolean hasEksplodujacaStrzala_h() {
+		return eksplodujacaStrzala_h;
+	}
+
+	public void setEksplodujacaStrzala_h(boolean eksplodujacaStrzala_h) {
+		this.eksplodujacaStrzala_h = eksplodujacaStrzala_h;
+	}
+
+	public boolean hasSilaRownowagi_h() {
+		return silaRownowagi_h;
+	}
+
+	public void setSilaRownowagi_h(boolean silaRownowagi_h) {
+		this.silaRownowagi_h = silaRownowagi_h;
 	}
 }

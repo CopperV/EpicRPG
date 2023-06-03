@@ -138,8 +138,12 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 		skills.endTasks();
 	}
 	
-	//TODO
 	public void resetStats() {
+		rzemiosla.reset();
+		skills.reset();
+		stats.reset();
+		
+		info.setPN(info.getLevel() * 10);
 		
 		ChangeStats.change(this);
 	}

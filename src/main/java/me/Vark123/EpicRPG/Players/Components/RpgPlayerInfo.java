@@ -91,6 +91,10 @@ public class RpgPlayerInfo implements Serializable, ChatPrintable{
 	public void setNextLevel(int xp) {
 		this.nextLevel = xp;
 	}
+	
+	public void setPN(int pn) {
+		this.pn = pn;
+	}
 
 	public void addPN(int pn) {
 		this.pn += pn;

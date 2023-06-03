@@ -4,9 +4,11 @@ import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import lombok.Getter;
 import lombok.Setter;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Utils.ChatPrintable;
@@ -16,6 +18,7 @@ public class RpgRzemiosla implements Serializable, ChatPrintable {
 	
 	private static final long serialVersionUID = -7348456492743263474L;
 
+	@Getter
 	private RpgPlayer rpg;
 	
 	private boolean alchemia;
@@ -47,10 +50,6 @@ public class RpgRzemiosla implements Serializable, ChatPrintable {
 		this.jubilerstwo = fYml.getBoolean("jubilerstwo");
 	}
 
-	public RpgPlayer getRpg() {
-		return rpg;
-	}
-
 	public boolean hasAlchemia() {
 		return alchemia;
 	}
@@ -69,6 +68,21 @@ public class RpgRzemiosla implements Serializable, ChatPrintable {
 
 	public boolean hasJubilerstwo() {
 		return jubilerstwo;
+	}
+	
+	public void reset() {
+		this.alchemia = false;
+		this.platnerstwo = false;
+		this.kowalstwo = false;
+		this.luczarstwo = false;
+		this.jubilerstwo = false;
+		
+		String name = rpg.getPlayer().getName();
+		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "lp user "+name+" permission unset Skill.Platnerstwo");
+		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "lp user "+name+" permission unset Skill.Kowalstwo");
+		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "lp user "+name+" permission unset Skill.Luczarstwo");
+		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "lp user "+name+" permission unset Skill.Alchemia");
+		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "lp user "+name+" permission unset Skill.Jubilerstwo");
 	}
 
 	@Override

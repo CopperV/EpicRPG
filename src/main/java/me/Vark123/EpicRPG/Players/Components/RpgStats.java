@@ -260,6 +260,18 @@ public class RpgStats implements Serializable, ChatPrintable {
 		this.krag += krag;
 	}
 
+	public void reset() {
+		this.sila = 3;
+		this.zrecznosc = 3;
+		this.wytrzymalosc = 3;
+		this.zdolnosci = 3;
+		this.walka = 0;
+		this.mana = 7;
+		this.presentMana = 7;
+		this.inteligencja = 3;
+		this.krag = 0;
+	}
+	
 	@Override
 	public void print(CommandSender sender) {
 		int bonusKryt = rpg.getInfo().getShortProf().equalsIgnoreCase("mys") ? 10 : 0;
