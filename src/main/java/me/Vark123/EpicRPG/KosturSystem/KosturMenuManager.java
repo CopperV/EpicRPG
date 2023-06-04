@@ -1,6 +1,7 @@
 package me.Vark123.EpicRPG.KosturSystem;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.bukkit.Material;
@@ -28,14 +29,18 @@ public class KosturMenuManager {
 	private static final KosturMenuManager instance = new KosturMenuManager();
 	
 	private final InventoryProvider kosturProvider;
+	private final InventoryProvider createProvider;
 	private final int[] kosturFreeSlots;
 	private final int[] runesFreeSlots;
+	private final int[] createFreeSlots;
 	private final String[] runeSlots;
 	
 	@Getter(value = AccessLevel.NONE)
 	private final ItemStack empty;
 	@Getter(value = AccessLevel.NONE)
 	private final ItemStack create;
+	@Getter(value = AccessLevel.NONE)
+	private final ItemStack modify;
 	@Getter(value = AccessLevel.NONE)
 	private final ItemStack kostur;
 
@@ -49,6 +54,15 @@ public class KosturMenuManager {
 	private final ItemStack pllIt;
 
 	@Getter(value = AccessLevel.NONE)
+	private final ItemStack kosturPart1;
+	@Getter(value = AccessLevel.NONE)
+	private final ItemStack kosturPart2;
+	@Getter(value = AccessLevel.NONE)
+	private final ItemStack kosturPart3;
+	@Getter(value = AccessLevel.NONE)
+	private final ItemStack kamienie;
+
+	@Getter(value = AccessLevel.NONE)
 	private final ItemExecutor manag;
 	
 	private KosturMenuManager() {
@@ -56,6 +70,8 @@ public class KosturMenuManager {
 				
 		kosturFreeSlots = new int[] {13};
 		runesFreeSlots = new int[] {10, 12, 14, 16};
+		createFreeSlots = new int[] {10, 19, 11, 20, 12, 21, 
+				14, 15, 16, 23, 24, 25};
 		runeSlots = new String[] {"PPP","PPL","PLP","PLL"};
 		
 		empty = new ItemStack(Material.BLACK_STAINED_GLASS_PANE, 1);{
@@ -65,8 +81,13 @@ public class KosturMenuManager {
 		}
 		create = new ItemStack(Material.EMERALD, 1);{
 			ItemMeta im = create.getItemMeta();
-			im.setDisplayName("§6§lModyfikuj");
+			im.setDisplayName("§6§lStworz");
 			create.setItemMeta(im);
+		}
+		modify = new ItemStack(Material.EMERALD, 1);{
+			ItemMeta im = modify.getItemMeta();
+			im.setDisplayName("§6§lModyfikuj");
+			modify.setItemMeta(im);
 		}
 		kostur = new ItemStack(Material.BLAZE_ROD, 1);{
 			ItemMeta im = kostur.getItemMeta();
@@ -98,6 +119,17 @@ public class KosturMenuManager {
 			im.setLore(Arrays.asList("§aUmozliwia rzucanie efektu runy","§auzywajac kombinacji myszy", "§aprawy-lewy-lewy"));
 			pllIt.setItemMeta(im);
 		}
+
+		kamienie = MythicBukkit.inst().getItemManager().getItemStack("Opal");{
+			ItemMeta im = kamienie.getItemMeta();
+			im.setDisplayName("§b§lKamienie Szlachetne");
+			im.setLore(new LinkedList<>());
+			kamienie.setItemMeta(im);
+		}
+		
+		kosturPart1 = MythicBukkit.inst().getItemManager().getItemStack("Runiczny_Kostur_1");
+		kosturPart2 = MythicBukkit.inst().getItemManager().getItemStack("Runiczny_Kostur_2");
+		kosturPart3 = MythicBukkit.inst().getItemManager().getItemStack("Runiczny_Kostur_3");
 		
 		kosturProvider = new InventoryProvider() {
 			@Override
@@ -107,11 +139,44 @@ public class KosturMenuManager {
 					if(tmpList.contains(i))
 						continue;
 					if(i == 22) {
-						contents.set(i, create);
+						contents.set(i, modify);
 						continue;
 					}
 					if(i == 4) {
 						contents.set(i, kostur);
+						continue;
+					}
+					contents.set(i, empty);
+				}
+			}
+		};
+		
+		createProvider = new InventoryProvider() {
+
+			@Override
+			public void init(Player player, InventoryContents contents) {
+				List<Integer> tmpList = Utils.intArrayToList(createFreeSlots);
+				for(int i = 0; i < 36; ++i) {
+					if(tmpList.contains(i))
+						continue;
+					if(i == 31) {
+						contents.set(i, create);
+						continue;
+					}
+					if(i == 1) {
+						contents.set(i, kosturPart1);
+						continue;
+					}
+					if(i == 2) {
+						contents.set(i, kosturPart2);
+						continue;
+					}
+					if(i == 3) {
+						contents.set(i, kosturPart3);
+						continue;
+					}
+					if(i == 6) {
+						contents.set(i, kamienie);
 						continue;
 					}
 					contents.set(i, empty);
@@ -152,6 +217,22 @@ public class KosturMenuManager {
 			.listener(KosturMenuEvents.getEvents().getKosturModifyClickEvent())
 			.listener(KosturMenuEvents.getEvents().getKosturModifyCloseEvent())
 			.provider(getRuneProvider(kostur))
+			.build(Main.getInstance())
+			.open(p);
+	}
+	
+	public void openCreateMenu(Player p) {
+		RyseInventory.builder()
+			.title("§3§lTworzenie kostura")
+			.size(36)
+			.ignoredSlots(createFreeSlots)
+			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
+			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
+			.disableUpdateTask()
+			.listener(KosturMenuEvents.getEvents().getKosturCreateClickEvent())
+			.listener(KosturMenuEvents.getEvents().getKosturCreateCloseEvent())
+			.provider(createProvider)
 			.build(Main.getInstance())
 			.open(p);
 	}

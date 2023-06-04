@@ -1,5 +1,6 @@
 package me.Vark123.EpicRPG.KosturSystem;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -28,12 +29,16 @@ public class KosturMenuEvents {
 	private final EventCreator<InventoryCloseEvent> kosturCloseEvent;
 	private final EventCreator<InventoryClickEvent> kosturModifyClickEvent;
 	private final EventCreator<InventoryCloseEvent> kosturModifyCloseEvent;
+	private final EventCreator<InventoryClickEvent> kosturCreateClickEvent;
+	private final EventCreator<InventoryCloseEvent> kosturCreateCloseEvent;
 	
 	private KosturMenuEvents() {
 		kosturClickEvent = kosturClickEventCreator();
 		kosturCloseEvent = kosturCloseEventCreator();
 		kosturModifyClickEvent = kosturModifyClickEventCreator();
 		kosturModifyCloseEvent = kosturModifyCloseEventCreator();
+		kosturCreateClickEvent = kosturCreateClickEventCreator();
+		kosturCreateCloseEvent = kosturCreateCloseEventCreator();
 	}
 	
 	public static final KosturMenuEvents getEvents() {
@@ -151,6 +156,96 @@ public class KosturMenuEvents {
 			toReturn.forEach(it -> {
 				Utils.dropItemStack(p, it);
 			});
+		};
+		
+		EventCreator<InventoryCloseEvent> creator = new EventCreator<>(InventoryCloseEvent.class, event);
+		return creator;
+	}
+	
+	private EventCreator<InventoryClickEvent> kosturCreateClickEventCreator() {
+		Consumer<InventoryClickEvent> event = e -> {
+			if(e.isCancelled())
+				return;
+			
+			int slot = e.getSlot();
+			if(slot != 31)
+				return;
+			
+			Inventory inv = e.getView().getTopInventory();
+			Player p = (Player) e.getWhoClicked();
+			
+			final int[] freeSlots = KosturMenuManager.getInstance().getCreateFreeSlots();
+			for(int i = 0; i < 6; ++i) {
+				int checkSlot = freeSlots[i];
+				ItemStack it = inv.getItem(checkSlot);
+				if(it == null
+						|| it.getType().equals(Material.AIR)) {
+					p.closeInventory();
+					return;
+				}
+				
+				NBTItem nbt = new NBTItem(it);
+				if(!nbt.hasTag("soulbind")
+						|| !nbt.getString("soulbind").equalsIgnoreCase(p.getName())) {
+					p.closeInventory();
+					return;
+				}
+				
+				int kosturPart = i/2 + 1;
+				if(!nbt.hasTag("RozdzkaPart")
+						|| !nbt.getString("RozdzkaPart").equalsIgnoreCase(kosturPart+"")) {
+					p.closeInventory();
+					return;
+				}
+			}
+			
+			List<String> klejnoty = new ArrayList<>();
+			for(int i = 6; i < 12; ++i) {
+				int checkSlot = freeSlots[i];
+				ItemStack it = inv.getItem(checkSlot);
+				if(it == null
+						|| it.getType().equals(Material.AIR)) {
+					p.closeInventory();
+					return;
+				}
+				
+				NBTItem nbt = new NBTItem(it);
+				if(!nbt.hasTag("cave")
+						|| nbt.getString("cave").equalsIgnoreCase("crimson")) {
+					p.closeInventory();
+					return;
+				}
+				
+				String klejnot = nbt.getString("cave");
+				if(klejnoty.contains(klejnot)) {
+					p.closeInventory();
+					return;
+				}
+				
+				klejnoty.add(klejnot);
+			}
+			
+			inv.clear();
+			p.closeInventory();
+			ItemStack kostur = MythicBukkit.inst().getItemManager().getItemStack("Runiczny_Kostur");
+			Utils.dropItemStack(p, kostur);
+		};
+		
+		EventCreator<InventoryClickEvent> creator = new EventCreator<>(InventoryClickEvent.class, event);
+		return creator;
+	}
+	
+	private EventCreator<InventoryCloseEvent> kosturCreateCloseEventCreator() {
+		Consumer<InventoryCloseEvent> event = e -> {
+			Inventory inv = e.getView().getTopInventory();
+			Player p = (Player) e.getPlayer();
+			for(int slot : KosturMenuManager.getInstance().getCreateFreeSlots()) {
+				ItemStack it = inv.getItem(slot);
+				if(it == null 
+						|| it.getType().equals(Material.AIR))
+					continue;
+				Utils.dropItemStack(p, it);
+			}
 		};
 		
 		EventCreator<InventoryCloseEvent> creator = new EventCreator<>(InventoryCloseEvent.class, event);

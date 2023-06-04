@@ -7,6 +7,7 @@ import me.Vark123.EpicRPG.Backpacks.BackpackManager;
 import me.Vark123.EpicRPG.Gems.GemManager;
 import me.Vark123.EpicRPG.Klejnoty.KlejnotyManager;
 import me.Vark123.EpicRPG.KosturSystem.KosturMenuManager;
+import me.Vark123.EpicRPG.RubySystem.RubyMenuManager;
 import me.Vark123.EpicRPG.Stats.ResetStatsMenuManager;
 import me.Vark123.EpicRPG.SzponBeliara.SzponBeliaraManager;
 
@@ -46,6 +47,15 @@ public class MenuManager {
 				return true;
 			case 9:
 				ResetStatsMenuManager.getInstance().open(p);
+				return true;
+			case 10:
+				RubyMenuManager.getInstance().openWarpedMenu(p);
+				return true;
+			case 11:
+				RubyMenuManager.getInstance().openKyrianMenu(p);
+				return true;
+			case 12:
+				KosturMenuManager.getInstance().openCreateMenu(p);
 				return true;
 		}
 		return false;
