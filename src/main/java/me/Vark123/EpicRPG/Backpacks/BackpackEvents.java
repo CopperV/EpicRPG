@@ -27,10 +27,12 @@ public class BackpackEvents {
 	
 	private final EventCreator<InventoryClickEvent> clickEvent;
 	private final EventCreator<InventoryCloseEvent> closeEvent;
+	private final EventCreator<InventoryCloseEvent> repairCloseEvent;
 	
 	private BackpackEvents() {
 		clickEvent = clickEventCreator();
 		closeEvent = closeEventCreator();
+		repairCloseEvent = repairCloseEventCreator();
 	}
 	
 	public static BackpackEvents getEvents() {
@@ -150,6 +152,60 @@ public class BackpackEvents {
 					continue;
 				Utils.dropItemStack(p, it);
 			}
+		};
+		
+		EventCreator<InventoryCloseEvent> creator = new EventCreator<>(InventoryCloseEvent.class, event);
+		return creator;
+	}
+	
+	private EventCreator<InventoryCloseEvent> repairCloseEventCreator(){
+		
+		Consumer<InventoryCloseEvent> event = e -> {
+			Inventory inv = e.getView().getTopInventory();
+			Player p = (Player) e.getPlayer();
+			ItemStack backpack = inv.getItem(BackpackManager.getInstance().getRepairFreeSlots()[0]);
+			
+			if(backpack == null
+					|| backpack.getType().equals(Material.AIR))
+				return;
+			
+			List<ItemStack> toDrop = new LinkedList<>();
+			if(BackpackUtils.isBuggedBackpack(backpack)) {
+				NBTItem nbt = new NBTItem(backpack);
+				int slotsAmount = nbt.getInteger("SlotsAmount");
+				Bukkit.broadcastMessage(slotsAmount+"");
+				int type = 1;
+				switch(slotsAmount) {
+					case 9:
+						type = 1;
+						break;
+					case 18:
+						type = 2;
+						break;
+					case 27:
+						type = 3;
+						break;
+					case 54:
+						type = 4;
+						break;
+				}
+				for(int i = 0; i < slotsAmount; ++i) {
+					ItemStack it = BackpackUtils.itemstackFromBase64(nbt.getString(i+""));
+					if(it == null 
+							|| it.getType().equals(Material.AIR)) {
+						continue;
+					}
+					toDrop.add(it);
+				}
+				
+				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "fb give "+p.getName()+" "+type);
+			} else {
+				toDrop.add(backpack);
+			}
+			
+			toDrop.parallelStream().forEach(it -> {
+				Utils.dropItemStack(p, it);
+			});
 		};
 		
 		EventCreator<InventoryCloseEvent> creator = new EventCreator<>(InventoryCloseEvent.class, event);

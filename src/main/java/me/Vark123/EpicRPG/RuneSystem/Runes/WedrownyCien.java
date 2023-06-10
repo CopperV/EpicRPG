@@ -43,7 +43,7 @@ public class WedrownyCien extends ARune {
 		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
 		
 		Collection<Entity> targetList = p.getWorld().getNearbyEntities(p.getLocation(), 40, 40, 40);
-		targetList.parallelStream().filter(e -> {
+		targetList.stream().filter(e -> {
 			if(!(e instanceof Creature))
 				return false;
 			Creature creature = (Creature) e;

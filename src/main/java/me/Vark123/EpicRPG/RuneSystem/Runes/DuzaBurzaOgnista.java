@@ -74,7 +74,7 @@ public class DuzaBurzaOgnista extends ARune {
 					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 						return false;
 					return true;
-				}).parallelStream().min((e1, e2) -> {
+				}).stream().min((e1, e2) -> {
 					double dist1 = e1.getLocation().distanceSquared(loc);
 					double dist2 = e2.getLocation().distanceSquared(loc);
 					if(dist1 == dist2)
@@ -138,7 +138,7 @@ public class DuzaBurzaOgnista extends ARune {
 			p.getWorld().spawnParticle(Particle.FLAME, tmp, 0, x, y, z, 0.35);
 		}
 		
-		loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar()).parallelStream().filter(e -> {
+		loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar()).stream().filter(e -> {
 			if(e.equals(p) || !(e instanceof LivingEntity))
 				return false;
 			if(shooted.contains(e))

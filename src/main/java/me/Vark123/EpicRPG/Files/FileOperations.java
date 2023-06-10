@@ -4,14 +4,18 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import me.Vark123.EpicRPG.EpicRPGMobManager;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
+import me.Vark123.EpicRPG.Players.Components.RpgJewelry;
 import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 import me.Vark123.EpicRPG.Players.Components.RpgReputation;
 import me.Vark123.EpicRPG.Players.Components.RpgRzemiosla;
@@ -194,25 +198,21 @@ public class FileOperations {
 		}
 	}
 	
-	public static void loadPlayerJewelry(RpgPlayer rpg, Player p) {
+	public static void loadPlayerJewelry(RpgJewelry jewelry, Player p) {
 		File f = getPlayerJewelryFile(p);
 		if(f == null)
 			return;
 		YamlConfiguration fYml = YamlConfiguration.loadConfiguration(f);
 		if(!fYml.contains("slots"))
 			return;
-		if(fYml.contains("slots.0")) {
-			rpg.getJewelry().getAkcesoria().get(0).setItem(fYml.getItemStack("slots.0"));
-		}
-		if(fYml.contains("slots.1")) {
-			rpg.getJewelry().getAkcesoria().get(1).setItem(fYml.getItemStack("slots.1"));
-		}
-		if(fYml.contains("slots.2")) {
-			rpg.getJewelry().getAkcesoria().get(2).setItem(fYml.getItemStack("slots.2"));
-		}
-		if(fYml.contains("slots.3")) {
-			rpg.getJewelry().getAkcesoria().get(3).setItem(fYml.getItemStack("slots.3"));
-		}
+		ConfigurationSection section = fYml.getConfigurationSection("slots");
+		section.getKeys(false).forEach(key -> {
+			if(!StringUtils.isNumeric(key))
+				return;
+			int slot = Integer.parseInt(key);
+			ItemStack it = section.getItemStack(key);
+			jewelry.getAkcesoria().get(slot).setItem(it);
+		});
 	}
 	
 	public static void savePlayerJewerly(RpgPlayer rpg) {

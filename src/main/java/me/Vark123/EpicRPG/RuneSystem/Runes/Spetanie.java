@@ -89,7 +89,7 @@ public class Spetanie extends ARune {
 					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 						return false;
 					return true;
-				}).parallelStream().forEach(e -> {
+				}).stream().forEach(e -> {
 					((LivingEntity) e).addPotionEffect(stun);
 					if(RuneDamage.damageNormal(p, (LivingEntity) e, dr)) {
 						loc.getWorld().playSound(e.getLocation(), Sound.ENTITY_ILLUSIONER_CAST_SPELL, 1, 1);

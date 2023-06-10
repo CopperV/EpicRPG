@@ -94,7 +94,7 @@ public class KrwawaFala extends ARune {
 					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 						return false;
 					return true;
-				}).parallelStream().forEach(e -> {
+				}).stream().forEach(e -> {
 					le = (LivingEntity) e;
 					RuneDamage.damageNormal(p, le, dr, (p,le,dr)->{
 						Bukkit.getScheduler().runTaskLater(Main.getInstance(), ()->{

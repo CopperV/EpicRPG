@@ -154,10 +154,10 @@ public class RpgStats implements Serializable, ChatPrintable {
 			regenHpTask.cancel();
 		}
 		regenHpTask = new BukkitRunnable() {
-			
+			int sec = seconds;
 			@Override
 			public void run() {
-				if(seconds <= 0) {
+				if(sec <= 0) {
 					Player p = rpg.getPlayer();
 					p.sendMessage(Main.getInstance().getPrefix()+" §eEfekt czasowej mikstury zycia skonczyl sie!");
 					p.spawnParticle(Particle.HEART, p.getLocation().add(0,1,0), 25, .6, .6, .6, 0.2);
@@ -165,6 +165,7 @@ public class RpgStats implements Serializable, ChatPrintable {
 					this.cancel();
 					return;
 				}
+				--sec;
 				RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg, hp);
 				Bukkit.getPluginManager().callEvent(event);
 			}
@@ -176,10 +177,10 @@ public class RpgStats implements Serializable, ChatPrintable {
 			regenManaTask.cancel();
 		}
 		regenManaTask = new BukkitRunnable() {
-			
+			int sec = seconds;
 			@Override
 			public void run() {
-				if(seconds <= 0) {
+				if(sec <= 0) {
 					Player p = rpg.getPlayer();
 					p.sendMessage(Main.getInstance().getPrefix()+" §eEfekt czasowej mikstury many skonczyl sie!");
 					p.spawnParticle(Particle.NAUTILUS, p.getLocation().add(0,1,0), 25, .6, .6, .6, 0.2);
@@ -187,6 +188,7 @@ public class RpgStats implements Serializable, ChatPrintable {
 					this.cancel();
 					return;
 				}
+				--sec;
 				addPresentManaSmart(mana);
 			}
 		}.runTaskTimer(Main.getInstance(), 0, 20);

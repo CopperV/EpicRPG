@@ -43,7 +43,7 @@ public class SilaJednosci extends ARune {
 			public void run() {
 				if(timer <= 0 || !casterInCastWorld()) {
 					
-					localEffected.parallelStream().forEach(tmp -> {
+					localEffected.stream().forEach(tmp -> {
 						if(!tmp.isOnline())
 							return;
 						RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(tmp);
@@ -62,7 +62,7 @@ public class SilaJednosci extends ARune {
 				}
 				
 				List<Player> tmp = new LinkedList<>(localEffected);
-				tmp.parallelStream().forEach(temp -> {
+				tmp.stream().forEach(temp -> {
 					if(!temp.isOnline())
 						return;
 					if(!globalEffected.containsKey(temp) || !globalEffected.get(temp).equals(inst)) {
@@ -80,7 +80,7 @@ public class SilaJednosci extends ARune {
 				
 				Collection<Entity> entities = loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar());
 				
-				entities.parallelStream().filter(e -> {
+				entities.stream().filter(e -> {
 					if(!(e instanceof Player))
 						return false;
 					if(e.equals(p))

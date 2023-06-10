@@ -53,7 +53,7 @@ public class Swiatlo extends ARune {
 				}
 				--timer;
 				
-				p.getWorld().getNearbyEntities(p.getLocation(), 8, 8, 8).parallelStream().filter(e -> {
+				p.getWorld().getNearbyEntities(p.getLocation(), 8, 8, 8).stream().filter(e -> {
 					return e instanceof Player;
 				}).forEach(e -> {
 					Player tmp = (Player) e;

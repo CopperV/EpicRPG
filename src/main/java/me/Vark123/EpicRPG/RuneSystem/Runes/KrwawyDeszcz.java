@@ -77,7 +77,7 @@ public class KrwawyDeszcz extends ARune {
 				
 				Collection<Entity> tmpList = loc.getWorld().getNearbyEntities(loc,dr.getObszar(), dr.getObszar(), dr.getObszar());
 				
-				tmpList.parallelStream().filter(e -> {
+				tmpList.stream().filter(e -> {
 					if(e.equals(p) || !(e instanceof LivingEntity))
 						return false;
 					if(entitiesList.contains(e))

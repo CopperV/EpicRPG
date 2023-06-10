@@ -75,7 +75,7 @@ public class FalaUderzeniowa extends ARune {
 					p.getWorld().spawnParticle(Particle.BLOCK_CRACK, tmp, 2, 0.2F, 0.2F, 0.2F, 0.05F, data);
 				}
 				
-				loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar()).parallelStream().filter(e -> {
+				loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar()).stream().filter(e -> {
 					if(e.equals(p) || !(e instanceof LivingEntity))
 						return false;
 					if(shooted.contains(e))

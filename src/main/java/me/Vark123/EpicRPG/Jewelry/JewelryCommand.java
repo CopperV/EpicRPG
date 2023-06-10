@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 import me.Vark123.EpicRPG.Main;
 
-public class JewerlyCommand implements CommandExecutor {
+public class JewelryCommand implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

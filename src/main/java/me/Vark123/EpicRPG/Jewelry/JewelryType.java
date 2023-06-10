@@ -1,6 +1,6 @@
 package me.Vark123.EpicRPG.Jewelry;
 
-public enum JewerlyType {
+public enum JewelryType {
 
 	RING,
 	AMULET,

@@ -45,7 +45,7 @@ public class TotemObronny extends ARune {
 			@Override
 			public void run() {
 				if(timer <= 0 || !casterInCastWorld()) {
-					defense.parallelStream().filter(tmp -> {
+					defense.stream().filter(tmp -> {
 						return tmp.isOnline();
 					}).forEach(tmp -> {
 						RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(tmp);
@@ -58,7 +58,7 @@ public class TotemObronny extends ARune {
 				}
 
 				List<Player> tmp = new ArrayList<>(defense);
-				tmp.parallelStream().filter(temp -> {
+				tmp.stream().filter(temp -> {
 					if(!temp.isOnline())
 						return false;
 					if(temp.getLocation().distance(loc) <= dr.getObszar())
@@ -72,7 +72,7 @@ public class TotemObronny extends ARune {
 				});
 				
 				Collection<Entity> entities = loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar());
-				entities.parallelStream().filter(e -> {
+				entities.stream().filter(e -> {
 					if(!(e instanceof Player))
 						return false;
 					Player temp = (Player) e;

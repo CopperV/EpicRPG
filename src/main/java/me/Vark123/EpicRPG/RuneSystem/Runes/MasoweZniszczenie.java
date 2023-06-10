@@ -64,7 +64,7 @@ public class MasoweZniszczenie extends ARune {
 					p.getWorld().spawnParticle(Particle.REDSTONE, l, 2, 0.2f, 0.2f, 0.2f, 0.1f, dust);
 				}
 				
-				loc.getWorld().getNearbyEntities(loc, t, t, t).parallelStream().filter(e -> {
+				loc.getWorld().getNearbyEntities(loc, t, t, t).stream().filter(e -> {
 					if(e.equals(p) || !(e instanceof LivingEntity))
 						return false;
 					if(shooted.contains(e))

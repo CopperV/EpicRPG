@@ -53,7 +53,7 @@ public class ZlodziejEnergii extends ARune {
 				List<Player> players = new ArrayList<>();
 				List<Entity> entitiesList = new ArrayList<>();
 				
-				entities.parallelStream().forEach(e -> {
+				entities.stream().forEach(e -> {
 					if(!(e instanceof LivingEntity))
 						return;
 					if(!(e instanceof Player)) {
@@ -73,11 +73,11 @@ public class ZlodziejEnergii extends ARune {
 				});
 				
 				if(!entitiesList.isEmpty() && !players.isEmpty()) {
-					entities.parallelStream().forEach(e -> {
+					entities.stream().forEach(e -> {
 						e.getWorld().spawnParticle(Particle.SOUL, e.getLocation().add(0, 1, 0), 10, 0.3f, 0.3f, 0.3f, 0.1f);
 						RuneDamage.damageNormal(p, (LivingEntity) e, dr);
 					});
-					players.parallelStream().forEach(tmp -> {
+					players.stream().forEach(tmp -> {
 						RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(tmp);
 						double amount = tmp.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()*0.02;
 						

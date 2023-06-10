@@ -1,15 +1,18 @@
 package me.Vark123.EpicRPG.Jewelry;
 
-import org.bukkit.entity.Player;
+import java.util.List;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 
+import me.Vark123.EpicRPG.Utils.Utils;
 import net.md_5.bungee.api.ChatColor;
 
-public class JewerlyMenuInteractEvent implements Listener {
+@Deprecated
+public class JewelryMenuInteractEvent implements Listener {
 	
 	@EventHandler
 	public void onClick(InventoryClickEvent e) {
@@ -17,14 +20,10 @@ public class JewerlyMenuInteractEvent implements Listener {
 		String title = ChatColor.stripColor(e.getView().getTitle().toLowerCase());
 		if(!title.equalsIgnoreCase("bizuteria")) return;
 		Inventory inv = e.getClickedInventory();
-		if(inv.getHolder() != null && inv.getHolder() instanceof BaseJewerlyMenu 
-				&& e.getCurrentItem() != null && e.getCurrentItem().equals(JewerlyMenu.getJewerlyitem())) {
-			JewerlyMenu.openMenu((Player) e.getWhoClicked());
-			return;
-		}
 		if(e.getClickedInventory() == null || !e.getClickedInventory().getType().equals(InventoryType.CHEST)) return;
 		
-		if(!JewerlyMenu.freeSlots.contains(e.getSlot())) {
+		List<Integer> tmpList = Utils.intArrayToList(JewelryMenuManager.getInstance().getFreeSlots());
+		if(!tmpList.contains(e.getSlot())) {
 			e.setCancelled(true);
 			return;
 		}

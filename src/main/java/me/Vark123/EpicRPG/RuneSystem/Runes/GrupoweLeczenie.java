@@ -46,7 +46,7 @@ public class GrupoweLeczenie extends ARune {
 		}
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		
-		entities.parallelStream().filter(e -> {
+		entities.stream().filter(e -> {
 			return e instanceof Player;
 		}).forEach(e -> {
 			Player pl = (Player) e;

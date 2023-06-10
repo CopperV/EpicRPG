@@ -30,7 +30,7 @@ public class Czystka extends ARune {
 	public void castSpell() {
 		List<Entity> list = new LinkedList<>();
 		
-		p.getWorld().getNearbyEntities(p.getLocation(), dr.getObszar(), dr.getObszar(), dr.getObszar()).parallelStream()
+		p.getWorld().getNearbyEntities(p.getLocation(), dr.getObszar(), dr.getObszar(), dr.getObszar()).stream()
 		.filter(e -> {
 			if(e.equals(p) || !(e instanceof LivingEntity))
 				return false;
@@ -57,7 +57,7 @@ public class Czystka extends ARune {
 
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, .4f);
 		double dmg = (double)dr.getDamage()/(double)list.size();
-		list.parallelStream().forEach(e -> {
+		list.stream().forEach(e -> {
 			e.getWorld().spawnParticle(Particle.SNEEZE, e.getLocation().add(0, 1, 0), 12, .4f, .4f, .4f, .15f);
 			RuneDamage.damageNormal(p, (LivingEntity)e, dr, dmg);
 		});

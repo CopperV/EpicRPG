@@ -32,7 +32,7 @@ public class Rozprucie extends ARune {
 		DustOptions dust = new DustOptions(Color.fromRGB(154, 3, 3), 3);
 		p.getWorld().spawnParticle(Particle.REDSTONE, loc, 12*dr.getObszar(),dr.getObszar(),dr.getObszar(),dr.getObszar(),0.05F, dust);
 		
-		loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar()).parallelStream().filter(e -> {
+		loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar()).stream().filter(e -> {
 			if(e.equals(p) || !(e instanceof LivingEntity))
 				return false;
 			if(e instanceof Player) {

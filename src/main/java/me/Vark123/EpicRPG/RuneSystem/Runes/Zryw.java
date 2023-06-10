@@ -44,7 +44,7 @@ public class Zryw extends ARune {
 		List<Entity> entities = p.getNearbyEntities(dr.getObszar(), dr.getObszar(), dr.getObszar());
 
 		AbstractPlayer aPlayer = BukkitAdapter.adapt(p);
-		entities.parallelStream().filter(e -> {
+		entities.stream().filter(e -> {
 			if(e instanceof Player || !(e instanceof LivingEntity))
 				return false;
 			if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
@@ -71,7 +71,7 @@ public class Zryw extends ARune {
 					canTargeting.setValue(true);
 			} else {
 				if(AI2 == null || AI2.isEmpty() || AI2.contains("players")) {
-					AI.parallelStream().filter(s -> {
+					AI.stream().filter(s -> {
 						if(s.contains("meleeattack") 
 								|| s.contains("arrowattack") 
 								|| s.contains("spiderattack")
@@ -115,7 +115,7 @@ public class Zryw extends ARune {
 					p.getWorld().playSound(p.getLocation(), Sound.BLOCK_ANVIL_DESTROY, 1, 0.8f);
 					p.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, p.getLocation().add(0,1,0), 15, 0.5f, 0.5f, 0.5f, 0.1f);
 					rpg.getModifiers().setZryw(false);
-					tmpTargets.parallelStream().filter(e -> {
+					tmpTargets.stream().filter(e -> {
 						return Prowokacja.getTargets().containsKey(e) && Prowokacja.getTargets().get(e).equals(p);
 					}).forEach(e -> {
 						if(Prowokacja.getTargets().containsKey(e)) Prowokacja.getTargets().remove(e);

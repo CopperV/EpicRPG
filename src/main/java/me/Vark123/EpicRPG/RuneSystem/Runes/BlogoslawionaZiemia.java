@@ -43,7 +43,7 @@ public class BlogoslawionaZiemia extends ARune {
 				}
 				--timer;
 				Collection<Entity> entities = loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar());
-				entities.parallelStream().filter(e -> {
+				entities.stream().filter(e -> {
 					if(!(e instanceof Player))
 						return false;
 					if(!e.equals(p)) {

@@ -92,7 +92,7 @@ public class Lowy extends ARune {
 					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 						return false;
 					return true;
-				}).parallelStream().min((e1, e2) -> {
+				}).stream().min((e1, e2) -> {
 					double dist1 = e1.getLocation().distanceSquared(loc);
 					double dist2 = e2.getLocation().distanceSquared(loc);
 					if(dist1 == dist2)

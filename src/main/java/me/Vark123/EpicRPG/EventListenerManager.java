@@ -61,7 +61,6 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new LodowyBlokDisableMoveEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new WedrownyCienTargetEvent(), inst);
 		
-		
 		//Damage Modifiers
 		DamageModifierManager.getInstance().registerModifier(new WedrownyCienModifier(), EventPriority.LOWEST);
 		DamageModifierManager.getInstance().registerModifier(new WeaknessModifier(), EventPriority.LOW);

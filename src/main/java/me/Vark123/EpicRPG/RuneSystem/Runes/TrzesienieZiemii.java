@@ -49,7 +49,7 @@ public class TrzesienieZiemii extends ARune {
 					return;
 				}
 				
-				loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar()).parallelStream().filter(e -> {
+				loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar()).stream().filter(e -> {
 					if(e.equals(p) || !(e instanceof LivingEntity))
 						return false;
 					if(e instanceof Player) {
@@ -100,7 +100,7 @@ public class TrzesienieZiemii extends ARune {
 					z = loc.getZ() + r * Math.cos(theta);
 				}
 				
-				loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar()).parallelStream().filter(e -> {
+				loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar()).stream().filter(e -> {
 					if(e.equals(p) || !(e instanceof LivingEntity))
 						return false;
 					if(e instanceof Player) {

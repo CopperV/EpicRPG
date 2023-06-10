@@ -71,7 +71,7 @@ public class PorazenieElektryczne extends ARune {
 						if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 							return false;
 						return true;
-					}).parallelStream().min((e1, e2) -> {
+					}).stream().min((e1, e2) -> {
 						double dist1 = e1.getLocation().distanceSquared(loc);
 						double dist2 = e2.getLocation().distanceSquared(loc);
 						if(dist1 == dist2)
@@ -121,7 +121,7 @@ public class PorazenieElektryczne extends ARune {
 				++t;
 				Collection<Entity> lista = loc1.getWorld().getNearbyEntities(loc1, 5, 5, 5);
 				
-				lista.parallelStream().filter(e -> {
+				lista.stream().filter(e -> {
 					if(e.equals(p) || !(e instanceof LivingEntity))
 						return false;
 					if(entitiesList.contains(e))

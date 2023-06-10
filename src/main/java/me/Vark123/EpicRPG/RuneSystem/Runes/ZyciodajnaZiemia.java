@@ -54,7 +54,7 @@ public class ZyciodajnaZiemia extends ARune {
 			@Override
 			public void run() {
 				if(timer <= 0 || !casterInCastWorld()) {
-					effected.parallelStream().filter(tmp -> {
+					effected.stream().filter(tmp -> {
 						return tmp.isOnline();
 					}).forEach(tmp -> {
 						RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(tmp);
@@ -68,7 +68,7 @@ public class ZyciodajnaZiemia extends ARune {
 				}
 
 				List<Player> tmp = new ArrayList<>(effected);
-				tmp.parallelStream().filter(temp -> {
+				tmp.stream().filter(temp -> {
 					if(temp.getWorld().getName().equalsIgnoreCase(loc.getWorld().getName())
 							&& temp.getLocation().distance(loc) <= dr.getObszar())
 						return false;
@@ -81,7 +81,7 @@ public class ZyciodajnaZiemia extends ARune {
 				});
 				
 				Collection<Entity> entities = loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar());
-				entities.parallelStream().filter(e -> {
+				entities.stream().filter(e -> {
 					if(!(e instanceof Player))
 						return false;
 					Player temp = (Player) e;
@@ -115,7 +115,7 @@ public class ZyciodajnaZiemia extends ARune {
 			DustOptions dust = new DustOptions(Color.RED, 1);
 			@Override
 			public void run() {
-				debuff_tmp.parallelStream().forEach(tmp -> {
+				debuff_tmp.stream().forEach(tmp -> {
 					if(debuff.contains(tmp))
 						debuff.remove(tmp);
 					if(!tmp.isOnline())
@@ -137,7 +137,7 @@ public class ZyciodajnaZiemia extends ARune {
 				}
 				
 				Collection<Entity> entities = loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar());
-				entities.parallelStream().filter(e -> {
+				entities.stream().filter(e -> {
 					if(!(e instanceof Player))
 						return false;
 					Player temp = (Player) e;

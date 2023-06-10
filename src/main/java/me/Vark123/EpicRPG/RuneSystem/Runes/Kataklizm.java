@@ -148,7 +148,7 @@ public class Kataklizm extends ARune {
 					loc.getWorld().playSound(loc, Sound.ENTITY_GENERIC_EXPLODE, 0.2f, 1);
 					p.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, loc, 1, 0, 0, 0, 0);
 					
-					loc.getWorld().getNearbyEntities(loc, 4, 4, 4).parallelStream().filter(e -> {
+					loc.getWorld().getNearbyEntities(loc, 4, 4, 4).stream().filter(e -> {
 						AxisAlignedBB aabb = ((CraftEntity)e).getHandle().cw();
 						AxisAlignedBB aabb2 = new AxisAlignedBB(loc.getX()-1, loc.getY()-5, loc.getZ()-1, loc.getX()+1, loc.getY()+5, loc.getZ()+1);
 						if(!aabb.c(aabb2))
@@ -239,7 +239,7 @@ public class Kataklizm extends ARune {
 				}
 				--timer;
 				
-				loc.getWorld().getNearbyEntities(loc, obszar, obszar, obszar).parallelStream().filter(e -> {
+				loc.getWorld().getNearbyEntities(loc, obszar, obszar, obszar).stream().filter(e -> {
 					if(e.equals(p) || !(e instanceof LivingEntity))
 						return false;
 					if(e.getLocation().distance(loc) > obszar)
@@ -273,7 +273,7 @@ public class Kataklizm extends ARune {
 				}
 				--timer;
 				
-				loc.getWorld().getNearbyEntities(loc, obszar, obszar, obszar).parallelStream().filter(e -> {
+				loc.getWorld().getNearbyEntities(loc, obszar, obszar, obszar).stream().filter(e -> {
 					if(e.equals(p) || !(e instanceof LivingEntity))
 						return false;
 					if(e.getLocation().distance(loc) > obszar)
@@ -328,7 +328,7 @@ public class Kataklizm extends ARune {
 				--timer;
 				List<Entity> list = p.getNearbyEntities(dr.getObszar(), dr.getObszar(), dr.getObszar());
 				
-				list.parallelStream().filter(e -> {
+				list.stream().filter(e -> {
 					if(e.equals(p) || !(e instanceof LivingEntity))
 						return false;
 					if(e instanceof Player) {
@@ -437,7 +437,7 @@ public class Kataklizm extends ARune {
 					loc.add(x,0,z);
 					p.getWorld().spawnParticle(Particle.FLAME, loc, 15, 0.3f, 1.5f, 0.3f, 0.1f);
 					
-					loc.getWorld().getNearbyEntities(loc, 4, 4, 4).parallelStream().filter(e -> {
+					loc.getWorld().getNearbyEntities(loc, 4, 4, 4).stream().filter(e -> {
 						AxisAlignedBB aabb = ((CraftEntity)e).getHandle().cw();
 						AxisAlignedBB aabb2 = new AxisAlignedBB(loc.getX()-1, loc.getY()-5, loc.getZ()-1, loc.getX()+1, loc.getY()+5, loc.getZ()+1);
 						if(!aabb.c(aabb2))
@@ -526,7 +526,7 @@ public class Kataklizm extends ARune {
 				effect5Tornado(loc1,alfa);
 				effect5Tornado(loc2,alfa);
 				
-				loc1.getWorld().getNearbyEntities(loc1, 3, 3, 3).parallelStream().filter(e -> {
+				loc1.getWorld().getNearbyEntities(loc1, 3, 3, 3).stream().filter(e -> {
 					AxisAlignedBB aabb = ((CraftEntity)e).getHandle().cw();
 					AxisAlignedBB aabb2 = new AxisAlignedBB(loc1.getX()-1, loc1.getY()-5, loc1.getZ()-1, loc1.getX()+1, loc1.getY()+5, loc1.getZ()+1);
 					if(!aabb.c(aabb2))
@@ -565,7 +565,7 @@ public class Kataklizm extends ARune {
 					}
 				});
 				
-				loc2.getWorld().getNearbyEntities(loc2, 3, 3, 3).parallelStream().filter(e -> {
+				loc2.getWorld().getNearbyEntities(loc2, 3, 3, 3).stream().filter(e -> {
 					AxisAlignedBB aabb = ((CraftEntity)e).getHandle().cw();
 					AxisAlignedBB aabb2 = new AxisAlignedBB(loc2.getX()-1, loc2.getY()-5, loc2.getZ()-1, loc2.getX()+1, loc2.getY()+5, loc2.getZ()+1);
 					if(!aabb.c(aabb2))
@@ -695,7 +695,7 @@ public class Kataklizm extends ARune {
 					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 						return false;
 					return true;
-				}).parallelStream().min((e1, e2) -> {
+				}).stream().min((e1, e2) -> {
 					double dist1 = e1.getLocation().distanceSquared(loc);
 					double dist2 = e2.getLocation().distanceSquared(loc);
 					if(dist1 == dist2)

@@ -25,7 +25,11 @@ public class BackpackManager {
 	private static final BackpackManager instance = new BackpackManager();
 	
 	private final InventoryProvider creatorProvider;
+	private final InventoryProvider repairProvider;
+	
 	private final int[] freeSlots;
+	private final int[] repairFreeSlots;
+	
 	private final List<String> bigBackpack;
 	private final List<String> mediumBackpack;
 	private final List<String> smallBackpack;
@@ -38,6 +42,8 @@ public class BackpackManager {
 	private BackpackManager() {
 		
 		freeSlots = new int[] {12,13,14,21,22,23,30,31,32,39,40,41};
+		repairFreeSlots = new int[] {4};
+		
 		bigBackpack = Arrays.asList("arena16","arena18","arena10","arena15"
 				,"arena5","arena13","arena3","arena12"
 				,"arena2","arena1","arena14","arena6");
@@ -71,6 +77,17 @@ public class BackpackManager {
 				}
 			}
 		};
+		
+		repairProvider = new InventoryProvider() {
+			@Override
+			public void init(Player player, InventoryContents contents) {
+				for(int i = 0; i < 9; ++i) {
+					if(i == 4)
+						continue;
+					contents.set(i, empty);
+				}
+			}
+		};
 	}
 	
 	public static BackpackManager getInstance() {
@@ -89,6 +106,21 @@ public class BackpackManager {
 			.listener(BackpackEvents.getEvents().getClickEvent())
 			.listener(BackpackEvents.getEvents().getCloseEvent())
 			.provider(creatorProvider)
+			.build(Main.getInstance())
+			.open(p);
+	}
+	
+	public void openBackpackRepairMenu(Player p) {
+		RyseInventory.builder()
+			.title("§3§lNaprawa plecaka")
+			.size(9)
+			.ignoredSlots(repairFreeSlots)
+			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
+			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
+			.disableUpdateTask()
+			.listener(BackpackEvents.getEvents().getRepairCloseEvent())
+			.provider(repairProvider)
 			.build(Main.getInstance())
 			.open(p);
 	}

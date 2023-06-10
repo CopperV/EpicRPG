@@ -72,7 +72,7 @@ public class ToksycznaChmura extends ARune {
 				}
 				--timer;
 				
-				loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar()).parallelStream().filter(e -> {
+				loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar()).stream().filter(e -> {
 					if(e.equals(p) || !(e instanceof LivingEntity))
 						return false;
 					if(e.getLocation().distance(loc) > dr.getObszar())

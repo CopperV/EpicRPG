@@ -104,8 +104,8 @@ public class CienAssasyna extends ARune {
 				List<Entity> newTargets = new ArrayList<>();
 				Map<Entity, Location> locations = new ConcurrentHashMap<>();
 				
-				last.parallelStream().forEach(en -> {
-					en.getNearbyEntities(3, 3, 3).parallelStream().filter(e -> {
+				last.stream().forEach(en -> {
+					en.getNearbyEntities(3, 3, 3).stream().filter(e -> {
 						if(shooted.contains(e) || last.contains(e) || newTargets.contains(e))
 							return false;
 						if(!(e instanceof LivingEntity))

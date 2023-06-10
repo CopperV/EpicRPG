@@ -44,7 +44,7 @@ public class OdwrocenieUwagi extends ARune {
 		
 		Collection<Entity> targetList = p.getWorld().getNearbyEntities(p.getLocation(), dr.getObszar(), dr.getObszar(), dr.getObszar());
 		
-		targetList.parallelStream().filter(e -> {
+		targetList.stream().filter(e -> {
 			if(e.equals(p) || !(e instanceof LivingEntity))
 				return false;
 			if(e instanceof Player)
@@ -82,7 +82,7 @@ public class OdwrocenieUwagi extends ARune {
 				}
 				--timer;
 				
-				localEffected.keySet().parallelStream().filter(e -> {
+				localEffected.keySet().stream().filter(e -> {
 					if(e == null || e.isDead())
 						return false;
 					if(!globalEffected.containsKey(e))
@@ -108,7 +108,7 @@ public class OdwrocenieUwagi extends ARune {
 			@Override
 			public void run() {
 				
-				localEffected.keySet().parallelStream().filter(e -> {
+				localEffected.keySet().stream().filter(e -> {
 					if(!globalEffected.containsKey(e))
 						return false;
 					if(!globalEffected.get(e).equals(inst))

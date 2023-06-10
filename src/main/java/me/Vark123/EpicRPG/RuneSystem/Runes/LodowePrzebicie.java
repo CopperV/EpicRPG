@@ -39,7 +39,7 @@ public class LodowePrzebicie extends ARune {
 		
 		Collection<Entity> tmpList = loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar());
 		
-		tmpList.parallelStream().filter(e -> {
+		tmpList.stream().filter(e -> {
 			if(e.equals(p) || !(e instanceof LivingEntity))
 				return false;
 			if(e instanceof Player) {
@@ -94,7 +94,7 @@ public class LodowePrzebicie extends ARune {
 					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 						return false;
 					return true;
-				}).parallelStream().min((e1, e2) -> {
+				}).stream().min((e1, e2) -> {
 					double dist1 = e1.getLocation().distanceSquared(loc);
 					double dist2 = e2.getLocation().distanceSquared(loc);
 					if(dist1 == dist2)

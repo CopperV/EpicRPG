@@ -57,7 +57,7 @@ public class WstrzasElektryczny extends ARune {
 			if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 				return false;
 			return true;
-		}).parallelStream().takeWhile(e -> {
+		}).stream().takeWhile(e -> {
 			return tmp.size() < 5;
 		}).forEach(e -> {
 			tmp.add(e);
@@ -73,7 +73,7 @@ public class WstrzasElektryczny extends ARune {
 	
 	private void spellEffect(List<Entity> list) {
 		entitiesList.addAll(list);
-		list.parallelStream().forEach(e -> {
+		list.stream().forEach(e -> {
 			RuneDamage.damageNormal(p, (LivingEntity)e, dr);
 		});
 		new BukkitRunnable() {
@@ -81,7 +81,7 @@ public class WstrzasElektryczny extends ARune {
 			@Override
 			public void run() {
 				
-				list.parallelStream().forEach(e -> {
+				list.stream().forEach(e -> {
 					List<Entity> tmp = new LinkedList<>();
 					e.getWorld().getNearbyEntities(e.getLocation(), dr.getObszar(), dr.getObszar(), dr.getObszar(), en -> {
 						if(en.equals(p) || !(en instanceof LivingEntity))
@@ -101,7 +101,7 @@ public class WstrzasElektryczny extends ARune {
 						if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(en).isDamageable())
 							return false;
 						return true;
-					}).parallelStream().takeWhile(en -> {
+					}).stream().takeWhile(en -> {
 						return tmp.size() < 5;
 					}).forEach(en -> {
 						tmp.add(en);

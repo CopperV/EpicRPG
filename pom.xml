@@ -146,7 +146,7 @@
 		<dependency>
 			<groupId>io.github.rysefoxx.inventory</groupId>
 			<artifactId>RyseInventory-Plugin</artifactId>
-			<version>1.6.2</version>
+			<version>1.6.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>

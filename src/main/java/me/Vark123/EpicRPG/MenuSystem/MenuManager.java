@@ -4,10 +4,14 @@ import org.bukkit.entity.Player;
 
 import lombok.Getter;
 import me.Vark123.EpicRPG.Backpacks.BackpackManager;
+import me.Vark123.EpicRPG.FishSystem.FishSellManager;
 import me.Vark123.EpicRPG.Gems.GemManager;
+import me.Vark123.EpicRPG.Jewelry.JewelryMenuManager;
 import me.Vark123.EpicRPG.Klejnoty.KlejnotyManager;
 import me.Vark123.EpicRPG.KosturSystem.KosturMenuManager;
+import me.Vark123.EpicRPG.MMExtension.RepairSystem.MMRepairManager;
 import me.Vark123.EpicRPG.RubySystem.RubyMenuManager;
+import me.Vark123.EpicRPG.RuneSystem.Runes.KamiennyObserwator;
 import me.Vark123.EpicRPG.Stats.ResetStatsMenuManager;
 import me.Vark123.EpicRPG.SzponBeliara.SzponBeliaraManager;
 
@@ -23,6 +27,7 @@ public class MenuManager {
 	}
 	
 	public boolean openMenu(Player p, int id) {
+		p.closeInventory();
 		switch(id) {
 			case 1:
 				BackpackManager.getInstance().openBackpackCreatorMenu(p);
@@ -57,6 +62,20 @@ public class MenuManager {
 			case 12:
 				KosturMenuManager.getInstance().openCreateMenu(p);
 				return true;
+			case 13:
+				FishSellManager.getInstance().open(p);
+				return true;
+			case 14:
+				MMRepairManager.getInstance().open(p);
+				return true;
+			case 15:
+				JewelryMenuManager.getInstance().openMenu(p);
+				return true;
+			case 16:
+				BackpackManager.getInstance().openBackpackRepairMenu(p);
+				return true;
+			case 17:
+				KamiennyObserwator.openRyseMenu(p);
 		}
 		return false;
 	}

@@ -110,7 +110,7 @@ public class RuneDamage {
 		Bukkit.getPluginManager().callEvent(event);
 		if(event.isCancelled())
 			return false;
-		
+
 		RpgModifiers modifiers = rpg.getModifiers();
 		if(modifiers.hasRytualWzniesienia()) {
 			double restoreHp = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.03;
@@ -119,7 +119,7 @@ public class RuneDamage {
 			p.getWorld().spawnParticle(Particle.DAMAGE_INDICATOR, p.getLocation().add(0,1,0), 12, 0.4F, 0.4F, 0.4F, 0.05f);
 			p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_HURT_SWEET_BERRY_BUSH, 1, .7f);
 		}
-		
+
 		if(e.getHealth() - event.getDamage() < 1.0D 
 				&& modifiers.hasKrewPrzodkow() 
 				&& dr.getMagicType().equalsIgnoreCase("krew")) {
@@ -127,11 +127,12 @@ public class RuneDamage {
 		}
 
 		ManualDamage.doDamage(p, e, event.getDamage(), event);
-		
+
 		if(effect != null 
 				&& e.getHealth() > 1
-				&& !e.isDead())
+				&& !e.isDead()) {
 			effect.playEffect(p, e, dr);
+		}
 		
 		return true;
 	}

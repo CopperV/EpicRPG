@@ -77,7 +77,7 @@ public class FalaElektryczna extends ARune {
 				
 				Collection<Entity> entities = loc.getWorld().getNearbyEntities(loc, t, t, t);
 				
-				entities.parallelStream().filter(e -> {
+				entities.stream().filter(e -> {
 					if(e.equals(p) || !(e instanceof LivingEntity))
 						return false;
 					if(shooted.contains(e))

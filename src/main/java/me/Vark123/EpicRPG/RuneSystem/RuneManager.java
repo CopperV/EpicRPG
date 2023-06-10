@@ -244,7 +244,7 @@ public class RuneManager {
 		
 		double hpPrice = price * 0.5;
 		Player p = rpg.getPlayer();
-		EntityDamageEvent event = new EntityDamageEvent(p, DamageCause.CONTACT, hpPrice);
+		EntityDamageEvent event = new EntityDamageEvent(p, DamageCause.MAGIC, hpPrice);
 		Bukkit.getPluginManager().callEvent(event);
 		
 		ManualDamage.doDamage(p, hpPrice, event);
@@ -256,7 +256,7 @@ public class RuneManager {
 		if(rpg.getModifiers().hasZrodloNatury()){
 			price *= 0.8;
 		}
-		EntityDamageEvent event = new EntityDamageEvent(p, DamageCause.CONTACT, price);
+		EntityDamageEvent event = new EntityDamageEvent(p, DamageCause.MAGIC, price);
 		Bukkit.getPluginManager().callEvent(event);
 		
 		ManualDamage.doDamage(p, price, event);

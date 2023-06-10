@@ -61,7 +61,7 @@ public class SzalPustki extends ARune {
 				
 				Collection<Entity> entities = loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar());
 				
-				entities.parallelStream().filter(e -> {
+				entities.stream().filter(e -> {
 					if(e.equals(p) || !(e instanceof LivingEntity))
 						return false;
 					if(e instanceof Player) {

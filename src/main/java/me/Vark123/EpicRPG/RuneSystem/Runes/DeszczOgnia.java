@@ -60,7 +60,7 @@ public class DeszczOgnia extends ARune{
 				
 				Collection<Entity> tmpList = loc.getWorld().getNearbyEntities(loc,dr.getObszar(), dr.getObszar(), dr.getObszar());
 				
-				tmpList.parallelStream().filter(e -> {
+				tmpList.stream().filter(e -> {
 					if(entitiesList.contains(e))
 						return false;
 					entitiesList.add(e);

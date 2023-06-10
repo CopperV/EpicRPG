@@ -55,7 +55,7 @@ public class Prowokacja extends ARune {
 		List<Entity> entities = p.getNearbyEntities(dr.getObszar(), dr.getObszar(), dr.getObszar());
 
 		AbstractPlayer aPlayer = BukkitAdapter.adapt(p);
-		entities.parallelStream().filter(e -> {
+		entities.stream().filter(e -> {
 			if(e instanceof Player || !(e instanceof LivingEntity))
 				return false;
 			if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
@@ -82,7 +82,7 @@ public class Prowokacja extends ARune {
 					canTargeting.setValue(true);
 			} else {
 				if(AI2 == null || AI2.isEmpty() || AI2.contains("players")) {
-					AI.parallelStream().filter(s -> {
+					AI.stream().filter(s -> {
 						if(s.contains("meleeattack") 
 								|| s.contains("arrowattack") 
 								|| s.contains("spiderattack")
@@ -128,7 +128,7 @@ public class Prowokacja extends ARune {
 					modifiers.setProwokacja(false);
 					modifiers.setModifier1_lock(false);
 					
-					tmpTargets.parallelStream().filter(e -> {
+					tmpTargets.stream().filter(e -> {
 						if(!targets.containsKey(e))
 							return false;
 						if(!targets.get(e).equals(p))

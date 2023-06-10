@@ -4,17 +4,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
-public class BaseJewerlyMenu implements InventoryHolder {
+public class BaseJewelryMenu implements InventoryHolder {
 
 	private Player viewer;
 	private Player owner;
 	
-	public BaseJewerlyMenu(Player viewer, Player owner) {
+	public BaseJewelryMenu(Player viewer, Player owner) {
 		this.viewer = viewer;
 		this.owner = owner;
 	}
 	
-	public BaseJewerlyMenu(Player owner) {
+	public BaseJewelryMenu(Player owner) {
 		this(owner, owner);
 	}
 	

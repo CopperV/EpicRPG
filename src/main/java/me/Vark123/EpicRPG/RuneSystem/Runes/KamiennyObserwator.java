@@ -14,12 +14,50 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import de.tr7zw.nbtapi.NBTItem;
+import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
+import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
+import io.github.rysefoxx.inventory.plugin.enums.Action;
+import io.github.rysefoxx.inventory.plugin.enums.DisabledEvents;
+import io.github.rysefoxx.inventory.plugin.enums.DisabledInventoryClick;
+import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
 import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
+import me.Vark123.EpicRPG.RuneSystem.Events.KamiennyObserwatorEvent;
 
 public class KamiennyObserwator extends ARune {
 
+	private static final InventoryProvider provider;
+	private static final int[] clockSlots;
+	private static final ItemStack clock;
+	
+	static {
+		clockSlots = new int[] {1,3,5,7, 10,12,14,16, 19,21,23,25,
+				28,30,32,34, 37,39,41,43, 46,48,50,52};
+		clock = new ItemStack(Material.CLOCK, 1);
+		provider = new InventoryProvider() {
+			@Override
+			public void init(Player player, InventoryContents contents) {
+				for(int i = 0; i < clockSlots.length; ++i) {
+					ItemStack newClock = clock.clone();
+					
+					int hour = i + 1;
+					newClock.setAmount(hour);
+					int time = hour < 6 ? 24_000 + (hour - 6)*1000 : (hour - 6)*1000;
+					NBTItem nbt = new NBTItem(newClock);
+					nbt.setInteger("clock_time", time);
+					nbt.applyNBT(newClock);
+					
+					ItemMeta im = newClock.getItemMeta();
+					im.setDisplayName("§a§lGODZINA: §e§l"+getTime(hour));
+					newClock.setItemMeta(im);
+					
+					contents.set(clockSlots[i], newClock);
+				}
+			}
+		};
+	}
+	
 	public KamiennyObserwator(ItemStackRune dr, Player p) {
 		super(dr, p);
 	}
@@ -38,7 +76,7 @@ public class KamiennyObserwator extends ARune {
 		}
 		
 		p.getWorld().playSound(loc, Sound.ENTITY_PLAYER_LEVELUP, 1, .5f);
-		openMenu(p);
+		openRyseMenu(p);
 	}
 	
 	@Deprecated
@@ -68,6 +106,20 @@ public class KamiennyObserwator extends ARune {
 		}
 		
 		p.openInventory(inv);
+	}
+	
+	public static void openRyseMenu(Player p) {
+		RyseInventory.builder()
+			.title("§7§lKamienny obserwator")
+			.size(54)
+			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
+			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
+			.listener(KamiennyObserwatorEvent.getClickEvent())
+			.disableUpdateTask()
+			.provider(provider)
+			.build(Main.getInstance())
+			.open(p);
 	}
 	
 	@Deprecated

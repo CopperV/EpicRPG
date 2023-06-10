@@ -29,7 +29,7 @@ public class SferaCorristo extends ARune {
 		Location loc = p.getLocation();
 		p.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, loc,5*dr.getObszar(),dr.getObszar(),dr.getObszar(),dr.getObszar(),0.05F);
 		
-		loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar()).parallelStream().filter(e -> {
+		loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar()).stream().filter(e -> {
 			if(e.equals(p) || !(e instanceof LivingEntity))
 				return false;
 			if(e instanceof Player) {

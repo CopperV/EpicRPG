@@ -97,7 +97,7 @@ public class Meteor extends ARune {
 					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 						return false;
 					return true;
-				}).parallelStream().forEach(e -> {
+				}).stream().forEach(e -> {
 					RuneDamage.damageNormal(p, (LivingEntity)e, dr);
 					shooted.add(e);
 				});

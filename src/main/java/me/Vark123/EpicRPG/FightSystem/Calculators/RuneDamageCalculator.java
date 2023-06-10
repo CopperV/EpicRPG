@@ -90,13 +90,13 @@ public class RuneDamageCalculator implements DamageCalculator {
 			if(crit) {
 				dmg *= 1.75;
 				wplyw *= 1.25;
-				
-				addDmg = wplyw * stats.getFinalInteligencja() * dmg / 100.0;
-				dmg += addDmg;
-				
-				dmgLevel = dmg * 0.005 * info.getLevel();
-				dmgMana = dmg * 0.0003 * stats.getFinalMana();
 			}
+				
+			addDmg = wplyw * stats.getFinalInteligencja() * dmg / 100.0;
+			dmg += addDmg;
+				
+			dmgLevel = dmg * 0.005 * info.getLevel();
+			dmgMana = dmg * 0.0003 * stats.getFinalMana();
 		}
 		
 		dmgKrag = dmg * 0.05 * stats.getKrag();

@@ -124,7 +124,7 @@ public class ZadzaKrwi extends ARune {
 		
 		Collection<Entity> entities = p.getWorld().getNearbyEntities(p.getLocation(), dr.getObszar(), dr.getObszar(), dr.getObszar());
 		
-		entities.parallelStream().filter(e -> {
+		entities.stream().filter(e -> {
 			if(!(e instanceof Player))
 				return false;
 			Player tmp = (Player) e;

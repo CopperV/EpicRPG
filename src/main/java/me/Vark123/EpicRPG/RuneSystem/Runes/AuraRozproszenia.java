@@ -37,7 +37,7 @@ public class AuraRozproszenia extends ARune {
 		List<Player> effected = new LinkedList<>();
 		effected.add(p);
 		
-		p.getWorld().getNearbyEntities(p.getLocation(), dr.getObszar(), dr.getObszar(), dr.getObszar()).parallelStream().filter(e -> {
+		p.getWorld().getNearbyEntities(p.getLocation(), dr.getObszar(), dr.getObszar(), dr.getObszar()).stream().filter(e -> {
 			if(!(e instanceof Player))
 				return false;
 			if(e.equals(p))
@@ -61,7 +61,7 @@ public class AuraRozproszenia extends ARune {
 		bar.setProgress(1);
 		bar.setVisible(true);
 		
-		effected.parallelStream().forEach(tmp -> {
+		effected.stream().forEach(tmp -> {
 			bar.addPlayer(tmp);
 		});
 		
@@ -92,7 +92,7 @@ public class AuraRozproszenia extends ARune {
 			@Override
 			public void run() {
 				if(timer <= 0 || !casterInCastWorld()) {
-					effected.parallelStream().forEach(tmp -> {
+					effected.stream().forEach(tmp -> {
 						if(!tmp.isOnline())
 							return;
 						tmp.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");

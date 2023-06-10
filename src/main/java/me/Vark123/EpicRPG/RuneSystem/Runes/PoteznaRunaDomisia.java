@@ -112,7 +112,7 @@ public class PoteznaRunaDomisia extends ARune {
 			}
 		}.runTaskTimer(Main.getInstance(), 0, 5);
 		
-		p.getNearbyEntities(dr.getObszar(), dr.getObszar(), dr.getObszar()).parallelStream().filter(e -> {
+		p.getNearbyEntities(dr.getObszar(), dr.getObszar(), dr.getObszar()).stream().filter(e -> {
 			if(!(e instanceof Player))
 				return false;
 			RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
@@ -192,7 +192,7 @@ public class PoteznaRunaDomisia extends ARune {
 			set.addAll(klan.getAllOnlineClanPlayers());
 		}
 		
-		set.parallelStream().filter(paf -> {
+		set.stream().filter(paf -> {
 			if(paf.equals(pafPlayer))
 				return false;
 			return true;

@@ -75,7 +75,7 @@ public class BankaEnergii extends ARune {
 				Collection<Entity> entities = loc.getWorld().getNearbyEntities(circle, dr.getObszar(), dr.getObszar(), dr.getObszar());
 				List<Entity> tmp = new LinkedList<>();
 
-				entities.parallelStream().filter(e -> {
+				entities.stream().filter(e -> {
 					if(e.equals(p) || !(e instanceof LivingEntity)){
 						tmp.add(e);
 						return false;

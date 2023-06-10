@@ -38,7 +38,7 @@ public class MasowaPirokineza extends ARune {
 		p.addPotionEffect(slow);
 		Location loc = p.getLocation();
 		
-		loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar()).parallelStream().filter(e -> {
+		loc.getWorld().getNearbyEntities(loc, dr.getObszar(), dr.getObszar(), dr.getObszar()).stream().filter(e -> {
 			if(e.equals(p) || !(e instanceof LivingEntity))
 				return false;
 			if(e.getLocation().distance(loc) > dr.getObszar())
