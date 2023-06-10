@@ -25,6 +25,10 @@ import me.Vark123.EpicRPG.FightSystem.Modifiers.ModList.WeaknessModifier;
 import me.Vark123.EpicRPG.FightSystem.Modifiers.ModList.WedrownyCienModifier;
 import me.Vark123.EpicRPG.FightSystem.Modifiers.ModList.ZewKrwiModifier;
 import me.Vark123.EpicRPG.HealthSystem.PlayerHealEvent;
+import me.Vark123.EpicRPG.MMExtension.CustomConditionLoadEvent;
+import me.Vark123.EpicRPG.MMExtension.CustomMechanicsLoadEvent;
+import me.Vark123.EpicRPG.MMExtension.CustomTargeterLoadEvent;
+import me.Vark123.EpicRPG.MMExtension.Misc.ProtectorDropKillEvent;
 import me.Vark123.EpicRPG.Players.BaseEvents.PlayerJoinEvent;
 import me.Vark123.EpicRPG.Players.BaseEvents.PlayerQuitEvent;
 import me.Vark123.EpicRPG.Potions.PotionDrinkEvent;
@@ -60,6 +64,11 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new KamiennyObserwatorEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new LodowyBlokDisableMoveEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new WedrownyCienTargetEvent(), inst);
+		
+		Bukkit.getPluginManager().registerEvents(new CustomMechanicsLoadEvent(), inst);
+		Bukkit.getPluginManager().registerEvents(new CustomTargeterLoadEvent(), inst);
+		Bukkit.getPluginManager().registerEvents(new CustomConditionLoadEvent(), inst);
+		Bukkit.getPluginManager().registerEvents(new ProtectorDropKillEvent(), inst);
 		
 		//Damage Modifiers
 		DamageModifierManager.getInstance().registerModifier(new WedrownyCienModifier(), EventPriority.LOWEST);
