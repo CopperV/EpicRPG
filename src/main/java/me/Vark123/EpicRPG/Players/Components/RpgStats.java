@@ -3,6 +3,7 @@ package me.Vark123.EpicRPG.Players.Components;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
@@ -21,6 +22,8 @@ import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.HealthSystem.RpgPlayerHealEvent;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Utils.ChatPrintable;
+import me.Vark123.EpicRPG.Utils.TableGenerator;
+import me.Vark123.EpicRPG.Utils.TableGenerator.Receiver;
 
 @Data
 public class RpgStats implements Serializable, ChatPrintable {
@@ -277,19 +280,27 @@ public class RpgStats implements Serializable, ChatPrintable {
 	@Override
 	public void print(CommandSender sender) {
 		int bonusKryt = rpg.getInfo().getShortProf().equalsIgnoreCase("mys") ? 10 : 0;
-		sender.sendMessage("§e§l========================= ");
-		sender.sendMessage("    §2Obrazenia: §a"+obrazenia+"§7/§a"+potionObrazenia+"§7/§a"+finalObrazenia
-				+"        §2Ochrona: §a"+ochrona+"§7/§a"+potionOchrona+"§7§a"+finalOchrona);
-		sender.sendMessage("    §2Sila: §a"+sila+"§7/§a"+potionSila+"§7/§a"+finalSila
-				+"        §2Wytrzymalosc: §a"+wytrzymalosc+"§7/§a"+potionWytrzymalosc+"§7§a"+finalWytrzymalosc);
-		sender.sendMessage("    §2Zrecznosc: §a"+zrecznosc+"§7/§a"+potionZrecznosc+"§7/§a"+finalZrecznosc
-				+"        §2Zdolnosci mysliwskie: §a"+zdolnosci+"§7/§a"+potionZdolnosci+"§7§a"+finalZdolnosci);
-		sender.sendMessage("    §2Inteligencja: §a"+inteligencja+"§7/§a"+potionInteligencja+"§7/§a"+finalInteligencja
-				+"        §2Mana: §a"+presentMana+" §7§l/ §7(§a"+mana+"§7/§a"+potionMana+"§7§a"+finalMana+"§7)");
-		sender.sendMessage("    §2Walka: §a"+walka+"§7/§a"+potionWalka+"§7/§a"+finalWalka
-				+"        §2Krytyk: §a"+String.format("%.1f",finalWalka/5.0+bonusKryt)+"%");
-		sender.sendMessage("    §2Zycie: §a"+health+"§7/§a"+potionHealth+"§7/§a"+finalHealth);
-		sender.sendMessage("    §2Krag: §a:"+krag);
+		
+		TableGenerator generator = new TableGenerator(TableGenerator.Alignment.LEFT, TableGenerator.Alignment.LEFT, TableGenerator.Alignment.LEFT);
+		generator.addRow("", "§2Obrazenia: §a"+obrazenia+"§7/§a"+potionObrazenia+"§7/§a"+finalObrazenia, 
+				"§2Ochrona: §a"+ochrona+"§7/§a"+potionOchrona+"§7§a"+finalOchrona);
+		generator.addRow("", "§2Sila: §a"+sila+"§7/§a"+potionSila+"§7/§a"+finalSila, 
+				"§2Wytrzymalosc: §a"+wytrzymalosc+"§7/§a"+potionWytrzymalosc+"§7§a"+finalWytrzymalosc);
+		generator.addRow("", "§2Zrecznosc: §a"+zrecznosc+"§7/§a"+potionZrecznosc+"§7/§a"+finalZrecznosc, 
+				"§2Zdolnosci mysliwskie: §a"+zdolnosci+"§7/§a"+potionZdolnosci+"§7§a"+finalZdolnosci);
+		generator.addRow("", "§2Inteligencja: §a"+inteligencja+"§7/§a"+potionInteligencja+"§7/§a"+finalInteligencja, 
+				"§2Mana: §a"+presentMana+" §7§l/ §7(§a"+mana+"§7/§a"+potionMana+"§7§a"+finalMana+"§7)");
+		generator.addRow("", "§2Walka: §a"+walka+"§7/§a"+potionWalka+"§7/§a"+finalWalka, 
+				"§2Krytyk: §a"+String.format("%.1f",finalWalka/5.0+bonusKryt)+"%");
+		generator.addRow("", "§2Zycie: §a"+health+"§7/§a"+potionHealth+"§7/§a"+finalHealth);
+		generator.addRow("", "§2Krag: §a:"+krag);
+		List<String> lines = generator.generate(Receiver.CLIENT, true, true);
+		
+		
+		sender.sendMessage("§6§l=========================");
+		for(String s : lines) {
+			sender.sendMessage(s);
+		}
 	}
 	
 }

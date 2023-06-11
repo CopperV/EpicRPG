@@ -3,6 +3,7 @@ package me.Vark123.EpicRPG.Players.Components;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -11,6 +12,8 @@ import lombok.Getter;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Utils.ChatPrintable;
+import me.Vark123.EpicRPG.Utils.TableGenerator;
+import me.Vark123.EpicRPG.Utils.TableGenerator.Receiver;
 
 @Getter
 public class RpgVault implements Serializable, ChatPrintable {
@@ -103,11 +106,15 @@ public class RpgVault implements Serializable, ChatPrintable {
 
 	@Override
 	public void print(CommandSender sender) {
+		TableGenerator generator = new TableGenerator(TableGenerator.Alignment.LEFT, TableGenerator.Alignment.LEFT, TableGenerator.Alignment.LEFT);
+		generator.addRow("", "§2Kasa: §e"+String.format("%.2f", getMoney())+" $", "§2Smocze monety: §4"+dragonCoins);
+		generator.addRow("", "§2Stygia: §3"+stygia, "§2Brylki rudy: §9"+brylkiRudy);
+		List<String> lines = generator.generate(Receiver.CLIENT, true, true);
+		
 		sender.sendMessage("§6§l========================= ");
-		sender.sendMessage("    §2Kasa: §e"+String.format("%.2f", getMoney())+" $"
-				+"        §2Smocze monety: §4"+dragonCoins);
-		sender.sendMessage("    §2Stygia: §3"+stygia
-				+"        §2Brylki rudy: §9"+brylkiRudy);
+		for(String s : lines) {
+			sender.sendMessage(s);
+		}
 	}
 	
 }
