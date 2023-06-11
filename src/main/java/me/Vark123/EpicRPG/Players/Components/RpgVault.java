@@ -26,6 +26,8 @@ public class RpgVault implements Serializable, ChatPrintable {
 	private int dragonCoins;
 	private int brylkiRudy;
 	
+	private int eventCurrency;
+	
 	public RpgVault(RpgPlayer rpg) {
 		this.rpg = rpg;
 	}
@@ -35,6 +37,7 @@ public class RpgVault implements Serializable, ChatPrintable {
 		stygia = set.getInt("player_stats.p_stygia");
 		dragonCoins = set.getInt("player_stats.p_coins");
 		brylkiRudy = set.getInt("player_stats.p_brylki");
+		this.eventCurrency = set.getInt("player_stats.p_event");
 		set.first();
 	}
 	
@@ -102,6 +105,22 @@ public class RpgVault implements Serializable, ChatPrintable {
 	
 	public void removeBrylkiRudy(int brylkiRudy) {
 		this.brylkiRudy -= brylkiRudy;
+	}
+	
+	public int getEventCurrency() {
+		return this.eventCurrency;
+	}
+	
+	public boolean hasEnoughEventCurrency(int eventCurrency) {
+		return eventCurrency <= this.eventCurrency;
+	}
+	
+	public void addEventCurrency(int eventCurrency) {
+		this.eventCurrency += eventCurrency;
+	}
+	
+	public void removeEventCurrency(int eventCurrency) {
+		this.eventCurrency -= eventCurrency;
 	}
 
 	@Override
