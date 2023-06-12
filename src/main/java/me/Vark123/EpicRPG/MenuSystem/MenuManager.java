@@ -10,7 +10,7 @@ import me.Vark123.EpicRPG.Jewelry.JewelryMenuManager;
 import me.Vark123.EpicRPG.Klejnoty.KlejnotyManager;
 import me.Vark123.EpicRPG.KosturSystem.KosturMenuManager;
 import me.Vark123.EpicRPG.MMExtension.RepairSystem.MMRepairManager;
-import me.Vark123.EpicRPG.RubySystem.RubyMenuManager;
+import me.Vark123.EpicRPG.RubySystem.RubyManager;
 import me.Vark123.EpicRPG.RuneSystem.Runes.KamiennyObserwator;
 import me.Vark123.EpicRPG.Stats.ResetStatsMenuManager;
 import me.Vark123.EpicRPG.SzponBeliara.SzponBeliaraManager;
@@ -54,10 +54,10 @@ public class MenuManager {
 				ResetStatsMenuManager.getInstance().open(p);
 				return true;
 			case 10:
-				RubyMenuManager.getInstance().openWarpedMenu(p);
+				RubyManager.getInstance().openWarpedMenu(p);
 				return true;
 			case 11:
-				RubyMenuManager.getInstance().openKyrianMenu(p);
+				RubyManager.getInstance().openKyrianMenu(p);
 				return true;
 			case 12:
 				KosturMenuManager.getInstance().openCreateMenu(p);

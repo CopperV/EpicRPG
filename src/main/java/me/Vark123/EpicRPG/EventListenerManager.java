@@ -36,6 +36,7 @@ import me.Vark123.EpicRPG.MMExtension.Misc.ProtectorDropKillEvent;
 import me.Vark123.EpicRPG.Players.BaseEvents.PlayerJoinEvent;
 import me.Vark123.EpicRPG.Players.BaseEvents.PlayerQuitEvent;
 import me.Vark123.EpicRPG.Potions.PotionDrinkEvent;
+import me.Vark123.EpicRPG.RubySystem.RubyUseEvent;
 import me.Vark123.EpicRPG.RuneSystem.RuneInteractEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.EksplodujacaStrzalaHitEffectEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.GradStrzalLaunchEvent;
@@ -62,6 +63,7 @@ public class EventListenerManager {
 
 		Bukkit.getPluginManager().registerEvents(new RuneInteractEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new PotionDrinkEvent(), inst);
+		Bukkit.getPluginManager().registerEvents(new RubyUseEvent(), inst);
 		
 		Bukkit.getPluginManager().registerEvents(new EksplodujacaStrzalaHitEffectEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new GradStrzalLaunchEvent(), inst);

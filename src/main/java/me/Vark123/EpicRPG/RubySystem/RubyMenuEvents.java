@@ -47,7 +47,7 @@ public class RubyMenuEvents {
 			Player p = (Player) e.getWhoClicked();
 			
 			int correct = 0;
-			final int[] freeSlots = RubyMenuManager.getInstance().getFreeSlots();
+			final int[] freeSlots = RubyManager.getInstance().getFreeSlots();
 			for(int i = 0; i < freeSlots.length; ++i) {
 				int checkSlot = freeSlots[i];
 				ItemStack it = inv.getItem(checkSlot);
@@ -109,7 +109,7 @@ public class RubyMenuEvents {
 			Player p = (Player) e.getWhoClicked();
 			
 			int correct = 0;
-			final int[] freeSlots = RubyMenuManager.getInstance().getFreeSlots();
+			final int[] freeSlots = RubyManager.getInstance().getFreeSlots();
 			for(int i = 0; i < freeSlots.length; ++i) {
 				int checkSlot = freeSlots[i];
 				ItemStack it = inv.getItem(checkSlot);
@@ -162,7 +162,7 @@ public class RubyMenuEvents {
 		Consumer<InventoryCloseEvent> event = e -> {
 			Inventory inv = e.getView().getTopInventory();
 			Player p = (Player) e.getPlayer();
-			for(int slot : RubyMenuManager.getInstance().getFreeSlots()) {
+			for(int slot : RubyManager.getInstance().getFreeSlots()) {
 				ItemStack it = inv.getItem(slot);
 				if(it == null 
 						|| it.getType().equals(Material.AIR))

@@ -1,6 +1,9 @@
 package me.Vark123.EpicRPG.RubySystem;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -20,9 +23,9 @@ import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Utils.Utils;
 
 @Getter
-public class RubyMenuManager {
+public class RubyManager {
 
-	private static final RubyMenuManager instance = new RubyMenuManager();
+	private static final RubyManager instance = new RubyManager();
 	
 	private final InventoryProvider warpedProvider;
 	private final InventoryProvider kyrianProvider;
@@ -47,8 +50,15 @@ public class RubyMenuManager {
 	private final ItemStack kyrian2;
 	@Getter(value = AccessLevel.NONE)
 	private final ItemStack kyrian3;
+
+	@Getter(value = AccessLevel.NONE)
+	public final long CLICK_COOLDOWN;
+	private final Map<Player, Date> cooldowns;
 	
-	private RubyMenuManager() {
+	private RubyManager() {
+		CLICK_COOLDOWN = 250;
+		cooldowns = new HashMap<>();
+		
 		freeSlots = new int[] {11,20,13,22,15,24};
 		
 		empty = new ItemStack(Material.BLACK_STAINED_GLASS_PANE, 1);{
@@ -127,7 +137,7 @@ public class RubyMenuManager {
 		};
 	}
 	
-	public static final RubyMenuManager getInstance() {
+	public static final RubyManager getInstance() {
 		return instance;
 	}
 	
