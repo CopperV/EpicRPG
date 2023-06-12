@@ -25,6 +25,10 @@ import me.Vark123.EpicRPG.FightSystem.Modifiers.ModList.WeaknessModifier;
 import me.Vark123.EpicRPG.FightSystem.Modifiers.ModList.WedrownyCienModifier;
 import me.Vark123.EpicRPG.FightSystem.Modifiers.ModList.ZewKrwiModifier;
 import me.Vark123.EpicRPG.HealthSystem.PlayerHealEvent;
+import me.Vark123.EpicRPG.HorseSystem.HorseDismountEvent;
+import me.Vark123.EpicRPG.HorseSystem.HorseInventoryEvent;
+import me.Vark123.EpicRPG.HorseSystem.HorseRemoveOnPlayerDeathEvent;
+import me.Vark123.EpicRPG.HorseSystem.HorseStickUseEvent;
 import me.Vark123.EpicRPG.MMExtension.CustomConditionLoadEvent;
 import me.Vark123.EpicRPG.MMExtension.CustomMechanicsLoadEvent;
 import me.Vark123.EpicRPG.MMExtension.CustomTargeterLoadEvent;
@@ -69,6 +73,11 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new CustomTargeterLoadEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new CustomConditionLoadEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new ProtectorDropKillEvent(), inst);
+
+		Bukkit.getPluginManager().registerEvents(new HorseDismountEvent(), inst);
+		Bukkit.getPluginManager().registerEvents(new HorseInventoryEvent(), inst);
+		Bukkit.getPluginManager().registerEvents(new HorseRemoveOnPlayerDeathEvent(), inst);
+		Bukkit.getPluginManager().registerEvents(new HorseStickUseEvent(), inst);
 		
 		//Damage Modifiers
 		DamageModifierManager.getInstance().registerModifier(new WedrownyCienModifier(), EventPriority.LOWEST);

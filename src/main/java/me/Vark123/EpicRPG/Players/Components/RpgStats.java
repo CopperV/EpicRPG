@@ -283,17 +283,17 @@ public class RpgStats implements Serializable, ChatPrintable {
 		
 		TableGenerator generator = new TableGenerator(TableGenerator.Alignment.LEFT, TableGenerator.Alignment.LEFT, TableGenerator.Alignment.LEFT);
 		generator.addRow("", "§2Obrazenia: §a"+obrazenia+"§7/§a"+potionObrazenia+"§7/§a"+finalObrazenia, 
-				"§2Ochrona: §a"+ochrona+"§7/§a"+potionOchrona+"§7§a"+finalOchrona);
+				"§2Ochrona: §a"+ochrona+"§7/§a"+potionOchrona+"§7/§a"+finalOchrona);
 		generator.addRow("", "§2Sila: §a"+sila+"§7/§a"+potionSila+"§7/§a"+finalSila, 
-				"§2Wytrzymalosc: §a"+wytrzymalosc+"§7/§a"+potionWytrzymalosc+"§7§a"+finalWytrzymalosc);
+				"§2Wytrzymalosc: §a"+wytrzymalosc+"§7/§a"+potionWytrzymalosc+"§7/§a"+finalWytrzymalosc);
 		generator.addRow("", "§2Zrecznosc: §a"+zrecznosc+"§7/§a"+potionZrecznosc+"§7/§a"+finalZrecznosc, 
-				"§2Zdolnosci mysliwskie: §a"+zdolnosci+"§7/§a"+potionZdolnosci+"§7§a"+finalZdolnosci);
+				"§2Zdolnosci mysliwskie: §a"+zdolnosci+"§7/§a"+potionZdolnosci+"§7/§a"+finalZdolnosci);
 		generator.addRow("", "§2Inteligencja: §a"+inteligencja+"§7/§a"+potionInteligencja+"§7/§a"+finalInteligencja, 
-				"§2Mana: §a"+presentMana+" §7§l/ §7(§a"+mana+"§7/§a"+potionMana+"§7§a"+finalMana+"§7)");
+				"§2Mana: §a"+presentMana+" §7/ §7(§a"+mana+"§7/§a"+potionMana+"§7/§a"+finalMana+"§7)");
 		generator.addRow("", "§2Walka: §a"+walka+"§7/§a"+potionWalka+"§7/§a"+finalWalka, 
 				"§2Krytyk: §a"+String.format("%.1f",finalWalka/5.0+bonusKryt)+"%");
 		generator.addRow("", "§2Zycie: §a"+health+"§7/§a"+potionHealth+"§7/§a"+finalHealth);
-		generator.addRow("", "§2Krag: §a:"+krag);
+		generator.addRow("", "§2Krag: §a"+krag);
 		List<String> lines = generator.generate(Receiver.CLIENT, true, true);
 		
 		

@@ -14,6 +14,7 @@ import me.Vark123.EpicRPG.Core.Commands.SoulbindItemCommand;
 import me.Vark123.EpicRPG.Core.Commands.StygiaBuyCommand;
 import me.Vark123.EpicRPG.Core.Commands.StygiaChangeCommand;
 import me.Vark123.EpicRPG.Core.Commands.UniquetemCommand;
+import me.Vark123.EpicRPG.HorseSystem.HorseSummonCommand;
 import me.Vark123.EpicRPG.Jewelry.JewelryCommand;
 import me.Vark123.EpicRPG.MenuSystem.MenuCommand;
 import me.Vark123.EpicRPG.Reputation.ReputationCommand;
@@ -41,6 +42,8 @@ public class CommandExecutorManager {
 		Bukkit.getPluginCommand("brbuy").setExecutor(new RudaBuyCommand());
 		Bukkit.getPluginCommand("ruda").setExecutor(new RudaChangeCommand());
 		Bukkit.getPluginCommand("event").setExecutor(new EventCurrencyChangeCommand());
+
+		Bukkit.getPluginCommand("kon").setExecutor(new HorseSummonCommand());
 	}
 	
 }

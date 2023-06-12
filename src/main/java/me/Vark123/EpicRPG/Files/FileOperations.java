@@ -232,4 +232,16 @@ public class FileOperations {
 		}
 	}
 	
+	public static File getPHorseFile(Player p) {
+		File f = new File(phorses, p.getName().toLowerCase() + "horse.yml");
+		if(!f.exists()) {
+			return null;
+		}
+		return f;
+	}
+	
+	public static File getPlayerHorsesFolder() {
+		return phorses;
+	}
+	
 }

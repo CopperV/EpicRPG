@@ -71,7 +71,7 @@ public class DBOperations {
 		String polecenie = "SELECT players.nick, player_stats.klasa, player_stats.ranga, player_stats.level, player_stats.exp, player_stats.nextLevel, player_stats.pn," + 
 				"player_stats.p_str, player_stats.p_wytrz, player_stats.p_zr, player_stats.p_zd, player_stats.p_int, player_stats.p_mana, player_stats.p_walka, player_stats.p_krag," + 
 				"player_stats.potion_str, player_stats.potion_wytrz, player_stats.potion_zr, player_stats.potion_zd, player_stats.potion_int, player_stats.potion_mana, player_stats.potion_walka," +
-				"player_stats.p_stygia, player_stats.p_coins, player_stats.p_brylki," + 
+				"player_stats.p_stygia, player_stats.p_coins, player_stats.p_brylki, player_stats.p_event," + 
 				"player_info.health, player_info.p_health, player_info.item_drop, player_info.tutorial, player_info.check_hp," + 
 				"player_rzemioslo.alchemia, player_rzemioslo.kowalstwo, player_rzemioslo.platnerstwo, player_rzemioslo.luczarstwo, player_rzemioslo.jubilerstwo," + 
 				"player_skills.manaReg, player_skills.unlimitArr, player_skills.foodless, player_skills.slugaBeliara, player_skills.magKrwi, player_skills.ciosKrytyczny, "+

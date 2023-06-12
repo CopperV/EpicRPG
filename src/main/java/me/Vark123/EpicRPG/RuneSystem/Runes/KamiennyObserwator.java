@@ -16,9 +16,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import de.tr7zw.nbtapi.NBTItem;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
-import io.github.rysefoxx.inventory.plugin.enums.Action;
 import io.github.rysefoxx.inventory.plugin.enums.DisabledEvents;
-import io.github.rysefoxx.inventory.plugin.enums.DisabledInventoryClick;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
@@ -112,8 +110,6 @@ public class KamiennyObserwator extends ARune {
 		RyseInventory.builder()
 			.title("§7§lKamienny obserwator")
 			.size(54)
-			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
-			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.listener(KamiennyObserwatorEvent.getClickEvent())
 			.disableUpdateTask()
