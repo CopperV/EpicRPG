@@ -27,6 +27,7 @@ import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.FightSystem.ManualDamage;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
@@ -182,6 +183,33 @@ public class RuneManager {
 			p.sendMessage("§7[§6EpicRPG§7] §cRuny "+ir.getName()+" §cbedziesz mogl uzyc za §7"+nextUse+" §csekund");
 			return false;
 		}
+		return true;
+	}
+	
+	public boolean regenTimePass(Player p, ItemStack rune) {
+		if(rune == null)
+			return true;
+		
+		if(hasGlobalCd(p))
+			return false;
+		
+		ItemStackRune ir = new ItemStackRune(rune);
+		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
+		
+		String prof = ChatColor.stripColor(rpg.getInfo().getProffesion());
+		if(!prof.equalsIgnoreCase(ir.getKlasa())) {
+			p.sendMessage("§7[§bEpicRPG§7] §c Tylko "+ir.getKlasa()+" §cmoze uzyc tej runy!");
+			return false;
+		}
+		if(rpg.getStats().getKrag() < ir.getKrag()) {
+			p.sendMessage(Main.getInstance().getPrefix()+" §cMusisz posiadac §7§o"+ir.getKrag()+" §ckrag magii, by uzyc "+ir.getName());
+			return false;
+		}
+		if(regenTimePass(p, ir)) {
+			p.sendMessage("§7[§6EpicRPG§7] §aRuna "+ir.getName()+" §ajest gotowa do uzycia");
+			return true;
+		}
+		
 		return true;
 	}
 	

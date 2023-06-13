@@ -120,7 +120,7 @@ public class RpgPlayerInfo implements Serializable, ChatPrintable{
 		TableGenerator generator = new TableGenerator(TableGenerator.Alignment.LEFT, TableGenerator.Alignment.LEFT, TableGenerator.Alignment.LEFT);
 		generator.addRow("", "§2Nick: §a"+rpg.getPlayer().getName(), "§2Klasa: §a"+proffesion);
 		generator.addRow("", "§2Poziom: §a"+level, "§2Punkty nauki: §a"+pn);
-		generator.addRow("", "§2Doswiadczenie: §a"+exp+"§7/§a"+nextLevel
+		generator.addRow("", "§2Doswiadczenie:", "§a"+exp+"§7/§a"+nextLevel
 				+" §7(§a"+String.format("%.2f", (((double)(exp - ExpSystem.getInstance().getNextLevelExp(level - 1)))
 						/ ((double)(nextLevel - ExpSystem.getInstance().getNextLevelExp(level - 1)))
 						* 100.0)) + "%§7)");

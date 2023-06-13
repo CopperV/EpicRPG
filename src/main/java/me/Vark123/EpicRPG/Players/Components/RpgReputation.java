@@ -3,6 +3,7 @@ package me.Vark123.EpicRPG.Players.Components;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,6 +16,8 @@ import me.Vark123.EpicRPG.Reputation.Reputation;
 import me.Vark123.EpicRPG.Reputation.ReputationContainer;
 import me.Vark123.EpicRPG.Reputation.ReputationLevels;
 import me.Vark123.EpicRPG.Utils.ChatPrintable;
+import me.Vark123.EpicRPG.Utils.TableGenerator;
+import me.Vark123.EpicRPG.Utils.TableGenerator.Receiver;
 
 @Getter
 public class RpgReputation implements Serializable, ChatPrintable {
@@ -72,11 +75,17 @@ public class RpgReputation implements Serializable, ChatPrintable {
 
 	@Override
 	public void print(CommandSender sender) {
-		sender.sendMessage("§6§l========================= ");
+		TableGenerator generator = new TableGenerator(TableGenerator.Alignment.LEFT, TableGenerator.Alignment.LEFT, TableGenerator.Alignment.LEFT);
 		reputacja.values().forEach(rep -> {
-			sender.sendMessage("    §2Reputacja "+rep.getDisplayFraction()+"§2: §a"+rep.getReputationLevel().getName()
-					+" §7(§a"+rep.getReputationAmount()+"§7/§a"+rep.getReputationLevel().getAmount()+"§7)");
+			generator.addRow("", "§2Reputacja "+rep.getDisplayFraction()+"§2:", 
+					"§a"+rep.getReputationLevel().getName()+" §7(§a"+rep.getReputationAmount()+"§7/§a"+rep.getReputationLevel().getAmount()+"§7)");
 		});
+
+		List<String> lines = generator.generate(Receiver.CLIENT, false, true);
+		sender.sendMessage("§6§l========================= ");
+		for(String s : lines) {
+			sender.sendMessage(s);
+		}
 	}
 	
 }

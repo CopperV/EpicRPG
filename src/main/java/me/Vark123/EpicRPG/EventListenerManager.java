@@ -29,6 +29,7 @@ import me.Vark123.EpicRPG.HorseSystem.HorseDismountEvent;
 import me.Vark123.EpicRPG.HorseSystem.HorseInventoryEvent;
 import me.Vark123.EpicRPG.HorseSystem.HorseRemoveOnPlayerDeathEvent;
 import me.Vark123.EpicRPG.HorseSystem.HorseStickUseEvent;
+import me.Vark123.EpicRPG.KosturSystem.KosturUseEvent;
 import me.Vark123.EpicRPG.MMExtension.CustomConditionLoadEvent;
 import me.Vark123.EpicRPG.MMExtension.CustomMechanicsLoadEvent;
 import me.Vark123.EpicRPG.MMExtension.CustomTargeterLoadEvent;
@@ -64,6 +65,7 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new RuneInteractEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new PotionDrinkEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new RubyUseEvent(), inst);
+		Bukkit.getPluginManager().registerEvents(new KosturUseEvent(), inst);
 		
 		Bukkit.getPluginManager().registerEvents(new EksplodujacaStrzalaHitEffectEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new GradStrzalLaunchEvent(), inst);
