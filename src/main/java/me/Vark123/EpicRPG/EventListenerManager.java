@@ -3,6 +3,13 @@ package me.Vark123.EpicRPG;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventPriority;
 
+import me.Vark123.EpicRPG.API.EpicRPGApi;
+import me.Vark123.EpicRPG.BlackrockSystem.Events.BlackrockAddAllEvent;
+import me.Vark123.EpicRPG.BlackrockSystem.Events.BlackrockAddEvent;
+import me.Vark123.EpicRPG.BlackrockSystem.Events.BlackrockEntryEvent;
+import me.Vark123.EpicRPG.BlackrockSystem.Events.BlackrockRemoveAllEvent;
+import me.Vark123.EpicRPG.BlackrockSystem.Events.BlackrockRemoveEvent;
+import me.Vark123.EpicRPG.BlackrockSystem.Events.BlackrockResetEvent;
 import me.Vark123.EpicRPG.Chat.ChatMsgSendEvent;
 import me.Vark123.EpicRPG.FightSystem.LavaDamageEvent;
 import me.Vark123.EpicRPG.FightSystem.RpgDamageEvent;
@@ -82,6 +89,13 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new HorseInventoryEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new HorseRemoveOnPlayerDeathEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new HorseStickUseEvent(), inst);
+
+		Bukkit.getPluginManager().registerEvents(new BlackrockAddAllEvent(), inst);
+		Bukkit.getPluginManager().registerEvents(new BlackrockAddEvent(), inst);
+		Bukkit.getPluginManager().registerEvents(new BlackrockEntryEvent(), inst);
+		Bukkit.getPluginManager().registerEvents(new BlackrockRemoveAllEvent(), inst);
+		Bukkit.getPluginManager().registerEvents(new BlackrockRemoveEvent(), inst);
+		Bukkit.getPluginManager().registerEvents(new BlackrockResetEvent(), inst);
 		
 		//Damage Modifiers
 		DamageModifierManager.getInstance().registerModifier(new WedrownyCienModifier(), EventPriority.LOWEST);
@@ -98,6 +112,11 @@ public class EventListenerManager {
 		DamageModifierManager.getInstance().registerModifier(new HPInfo(), EventPriority.MONITOR);
 		DamageModifierManager.getInstance().registerModifier(new NoDamageTicksModifier(), EventPriority.MONITOR);
 		DamageModifierManager.getInstance().registerModifier(new BeeStingModifier(), EventPriority.MONITOR);
+		
+		//Calendar Events
+		if(EpicRPGApi.getApi().getCalendarManager().isRegisteredEvent("reset_blackrock")) 
+			EpicRPGApi.getApi().getCalendarManager().removeEvent("reset_blackrock");
+		EpicRPGApi.getApi().getCalendarManager().addEvent("reset_blackrock", "every day", "00:05");
 	}
 	
 }

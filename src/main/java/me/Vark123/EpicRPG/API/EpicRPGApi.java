@@ -1,5 +1,7 @@
 package me.Vark123.EpicRPG.API;
 
+import org.bukkit.Bukkit;
+
 import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
 import lombok.Getter;
 import me.Vark123.EpicRPG.Main;
@@ -15,6 +17,8 @@ import me.Vark123.EpicRPG.MenuSystem.MenuManager;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Potions.PotionManager;
 import me.Vark123.EpicRPG.RuneSystem.RuneManager;
+import me.nikl.calendarevents.CalendarEvents;
+import me.nikl.calendarevents.CalendarEventsApi;
 
 @Getter
 public class EpicRPGApi {
@@ -35,6 +39,8 @@ public class EpicRPGApi {
 	private ExpSystem expSystem;
 	private MoneySystem moneySystem;
 	private StygiaSystem stygiaSystem;
+
+	private CalendarEventsApi calendarManager;
 	
 	private EpicRPGApi() {
 		this.chatManager = ChatManager.getInstance();
@@ -51,6 +57,8 @@ public class EpicRPGApi {
 		this.expSystem = ExpSystem.getInstance();
 		this.moneySystem = MoneySystem.getInstance();
 		this.stygiaSystem = StygiaSystem.getInstance();
+		
+		this.calendarManager = ((CalendarEvents) Bukkit.getPluginManager().getPlugin("CalendarEvents")).getApi();
 	}
 	
 	public static EpicRPGApi getApi() {
