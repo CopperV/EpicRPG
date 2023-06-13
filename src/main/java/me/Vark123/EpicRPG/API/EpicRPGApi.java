@@ -10,6 +10,7 @@ import me.Vark123.EpicRPG.Core.MoneySystem;
 import me.Vark123.EpicRPG.Core.StygiaSystem;
 import me.Vark123.EpicRPG.FightSystem.DamageManager;
 import me.Vark123.EpicRPG.FightSystem.Modifiers.DamageModifierManager;
+import me.Vark123.EpicRPG.HorseSystem.HorseManager;
 import me.Vark123.EpicRPG.MenuSystem.MenuManager;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Potions.PotionManager;
@@ -28,6 +29,7 @@ public class EpicRPGApi {
 	private RuneManager runeManager;
 	private InventoryManager inventoryManager;
 	private MenuManager menuManager;
+	private HorseManager horseManager;
 	
 	private CoinsSystem coinsSystem;
 	private ExpSystem expSystem;
@@ -43,6 +45,7 @@ public class EpicRPGApi {
 		this.runeManager = RuneManager.getInstance();
 		this.inventoryManager = Main.getInstance().getManager();
 		this.menuManager = MenuManager.getInstance();
+		this.horseManager = HorseManager.getInstance();
 		
 		this.coinsSystem = CoinsSystem.getInstance();
 		this.expSystem = ExpSystem.getInstance();

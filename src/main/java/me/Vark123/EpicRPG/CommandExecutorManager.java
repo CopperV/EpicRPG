@@ -2,6 +2,7 @@ package me.Vark123.EpicRPG;
 
 import org.bukkit.Bukkit;
 
+import me.Vark123.EpicRPG.AdvancedBuySystem.AdvancedBuyCommand;
 import me.Vark123.EpicRPG.Chat.ChatClearCommand;
 import me.Vark123.EpicRPG.Chat.ChatToggleCommand;
 import me.Vark123.EpicRPG.Core.Commands.DragonCoinsBuyCommand;
@@ -44,6 +45,7 @@ public class CommandExecutorManager {
 		Bukkit.getPluginCommand("event").setExecutor(new EventCurrencyChangeCommand());
 
 		Bukkit.getPluginCommand("kon").setExecutor(new HorseSummonCommand());
+		Bukkit.getPluginCommand("advancedbuy").setExecutor(new AdvancedBuyCommand());
 	}
 	
 }
