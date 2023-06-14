@@ -10,6 +10,7 @@ import me.Vark123.EpicRPG.Jewelry.JewelryMenuManager;
 import me.Vark123.EpicRPG.Klejnoty.KlejnotyManager;
 import me.Vark123.EpicRPG.KosturSystem.KosturMenuManager;
 import me.Vark123.EpicRPG.MMExtension.RepairSystem.MMRepairManager;
+import me.Vark123.EpicRPG.MerchantSystem.MerchantManager;
 import me.Vark123.EpicRPG.RubySystem.RubyManager;
 import me.Vark123.EpicRPG.RuneSystem.Runes.KamiennyObserwator;
 import me.Vark123.EpicRPG.Stats.ResetStatsMenuManager;
@@ -76,6 +77,10 @@ public class MenuManager {
 				return true;
 			case 17:
 				KamiennyObserwator.openRyseMenu(p);
+				return true;
+			case 18:
+				MerchantManager.getInstance().openSellMenu(p);
+				return true;
 		}
 		return false;
 	}

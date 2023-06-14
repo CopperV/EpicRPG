@@ -1,4 +1,4 @@
-package me.Vark123.EpicRPG.Core.Commands;
+package me.Vark123.EpicRPG.Core.Commands.SystemCmds;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;

@@ -1,4 +1,4 @@
-package me.Vark123.EpicRPG.Core.Commands;
+package me.Vark123.EpicRPG.Core.Commands.SystemCmds;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -15,17 +15,17 @@ import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgVault;
 
-public class StygiaBuyCommand implements CommandExecutor {
+public class RudaBuyCommand implements CommandExecutor{
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(!cmd.getName().equalsIgnoreCase("stygiabuy")) return false;
-		if(!sender.hasPermission("epicrpg.sgbuy")) {
+		if(!cmd.getName().equalsIgnoreCase("brbuy")) return false;
+		if(!sender.hasPermission("epicrpg.rudabuy")) {
 			sender.sendMessage(Main.getInstance().getPrefix()+" §cNie posiadasz uprawnien do tej komendy!");
 			return false;
 		}
 		if(args.length<4) {
-			sender.sendMessage(Main.getInstance().getPrefix()+" §aPoprawne uzycie komendy: §c§o/sgbuy <nick> <mmItem> <ilosc> <cena>");
+			sender.sendMessage(Main.getInstance().getPrefix()+" §aPoprawne uzycie komendy: §c§o/brbuy <nick> <mmItem> <ilosc> <cena>");
 			return false;
 		}
 		if(Bukkit.getPlayerExact(args[0])==null) {
@@ -47,18 +47,15 @@ public class StygiaBuyCommand implements CommandExecutor {
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		RpgVault vault = rpg.getVault();
 		int cena = Integer.parseInt(args[3]);
-		if(!vault.hasEnoughStygia(cena)) {
-			p.sendMessage(Main.getInstance().getPrefix()+" §aPosiadasz zbyt malo stygii na to: §3§o"+cena);
+		if(!vault.hasEnoughBrylkiRudy(cena)) {
+			p.sendMessage(Main.getInstance().getPrefix()+" §aPosiadasz zbyt malo brylek rudy na to: §3§o"+cena);
 			return false;
 		}
 		
-		vault.removeStygia(cena);
-		p.sendMessage(Main.getInstance().getPrefix() + " §aPobrano §3§o"+cena+" stygii");
-		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "sbgive "+args[0]+" "+args[1]+" "+args[2]);
-		
+		vault.removeBrylkiRudy(cena);
+		p.sendMessage(Main.getInstance().getPrefix() + " §aPobrano §9§o"+cena+" brylek rudy");
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "rpgmm give "+args[0]+" "+args[1]+" "+args[2]);
 		return true;
 	}
 
-	
-	
 }

@@ -1,4 +1,4 @@
-package me.Vark123.EpicRPG.Core.Commands;
+package me.Vark123.EpicRPG.Core.Commands.SystemCmds;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -13,17 +13,17 @@ import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgVault;
 
-public class DragonCoinsChangeCommand implements CommandExecutor {
+public class RudaChangeCommand implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(!cmd.getName().equalsIgnoreCase("dragoncoins")) return false;
-		if(!sender.hasPermission("epicrpg.coins")) {
+		if(!cmd.getName().equalsIgnoreCase("ruda")) return false;
+		if(!sender.hasPermission("epicrpg.brylki")) {
 			sender.sendMessage(Main.getInstance().getPrefix()+" §cNie posiadasz uprawnien do tej komendy!");
 			return false;
 		}
 		if(args.length<3) {
-			sender.sendMessage(Main.getInstance().getPrefix()+" §aPoprawne uzycie komendy: §c§o/coins add/remove <nick> <ilosc>");
+			sender.sendMessage(Main.getInstance().getPrefix()+" §aPoprawne uzycie komendy: §c§o/ruda add/remove <nick> <ilosc>");
 			return false;
 		}
 		if(Bukkit.getPlayerExact(args[1])==null) {
@@ -41,12 +41,12 @@ public class DragonCoinsChangeCommand implements CommandExecutor {
 		int cena = Integer.parseInt(args[2]);
 		switch(args[0].toLowerCase()) {
 		case "add":
-			vault.addDragonCoins(cena);
-			p.sendMessage(Main.getInstance().getPrefix()+" §aOtrzymales §c§o"+cena+" Smoczych Monet");
+			vault.addBrylkiRudy(cena);
+			p.sendMessage(Main.getInstance().getPrefix()+" §aOtrzymales §9§o"+cena+" Brylek Rudy");
 			break;
 		case "remove":
-			vault.removeDragonCoins(cena);
-			p.sendMessage(Main.getInstance().getPrefix()+" §aOdebrano Ci §c§o"+cena+" Smoczych Monet");
+			vault.removeBrylkiRudy(cena);
+			p.sendMessage(Main.getInstance().getPrefix()+" §aOdebrano Ci §9§o"+cena+" Brylek Rudy");
 			break;
 		}
 		return true;
