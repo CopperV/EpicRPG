@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import lombok.Getter;
+import lombok.Setter;
 import me.Vark123.EpicRPG.Core.ExpSystem;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Utils.ChatPrintable;
@@ -26,6 +27,7 @@ public class RpgPlayerInfo implements Serializable, ChatPrintable{
 	private int exp = 0;
 	private int nextLevel;
 	private int pn = 10;
+	@Setter
 	private String proffesion = "§aobywatel";
 	
 	private boolean drop = false;

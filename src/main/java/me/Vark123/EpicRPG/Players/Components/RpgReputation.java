@@ -81,7 +81,7 @@ public class RpgReputation implements Serializable, ChatPrintable {
 					"§a"+rep.getReputationLevel().getName()+" §7(§a"+rep.getReputationAmount()+"§7/§a"+rep.getReputationLevel().getAmount()+"§7)");
 		});
 
-		List<String> lines = generator.generate(Receiver.CLIENT, false, true);
+		List<String> lines = generator.generate(Receiver.CLIENT, false, false);
 		sender.sendMessage("§6§l========================= ");
 		for(String s : lines) {
 			sender.sendMessage(s);

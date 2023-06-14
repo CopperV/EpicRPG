@@ -6,7 +6,9 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -69,6 +71,23 @@ public class Utils {
 		} else {
 			p.getWorld().dropItem(p.getLocation(), it);
 		}
+	}
+	
+	public static void takeItems(Player p, int slot, int amount) {
+		ItemStack it = p.getInventory().getItem(slot);
+		if(it == null
+				|| it.getType().equals(Material.AIR))
+			return;
+		if(it.getAmount() < amount) {
+			p.getInventory().setItem(slot, new ItemStack(Material.AIR));
+		} else {
+			it.setAmount(it.getAmount() - amount);
+		}
+		p.updateInventory();
+	}
+	
+	public static void takeItems(Player p, EquipmentSlot slot, int amount) {
+		takeItems(p, slot.ordinal(), amount);
 	}
 	
 	public static List<Integer> intArrayToList(int[] arr){

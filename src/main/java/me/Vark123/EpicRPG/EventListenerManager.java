@@ -51,6 +51,10 @@ import me.Vark123.EpicRPG.RuneSystem.Events.GradStrzalLaunchEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.KamiennyObserwatorEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.LodowyBlokDisableMoveEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.WedrownyCienTargetEvent;
+import me.Vark123.EpicRPG.Scrolls.EpicBossScrollEvent;
+import me.Vark123.EpicRPG.Scrolls.KatedraScrollEvent;
+import me.Vark123.EpicRPG.Scrolls.KlasaResetScrollEvent;
+import me.Vark123.EpicRPG.Scrolls.StatResetScrollEvent;
 
 public class EventListenerManager {
 
@@ -96,6 +100,11 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new BlackrockRemoveAllEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new BlackrockRemoveEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new BlackrockResetEvent(), inst);
+
+		Bukkit.getPluginManager().registerEvents(new KatedraScrollEvent(), inst);
+		Bukkit.getPluginManager().registerEvents(new EpicBossScrollEvent(), inst);
+		Bukkit.getPluginManager().registerEvents(new StatResetScrollEvent(), inst);
+		Bukkit.getPluginManager().registerEvents(new KlasaResetScrollEvent(), inst);
 		
 		//Damage Modifiers
 		DamageModifierManager.getInstance().registerModifier(new WedrownyCienModifier(), EventPriority.LOWEST);

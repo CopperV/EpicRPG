@@ -17,6 +17,8 @@ import lombok.Getter;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.RpgScoreboard;
 import me.Vark123.EpicRPG.Core.ExpSystem;
+import me.Vark123.EpicRPG.Core.Events.PlayerKlasaResetEvent;
+import me.Vark123.EpicRPG.Core.Events.PlayerStatsResetEvent;
 import me.Vark123.EpicRPG.Players.Components.RpgJewelry;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
@@ -138,7 +140,12 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 		skills.endTasks();
 	}
 	
-	public void resetStats() {
+	public boolean resetStats() {
+		PlayerStatsResetEvent event = new PlayerStatsResetEvent(this);
+		Bukkit.getPluginManager().callEvent(event);
+		if(event.isCancelled())
+			return false;
+		
 		rzemiosla.reset();
 		skills.reset();
 		stats.reset();
@@ -146,11 +153,23 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 		info.setPN(info.getLevel() * 10);
 		
 		ChangeStats.change(this);
+		return true;
 	}
 	
-	//TODO
-	public void resetCharacter() {
-		resetStats();
+	public boolean resetCharacter() {
+		if(!resetStats())
+			return false;
+		PlayerKlasaResetEvent event = new PlayerKlasaResetEvent(this);
+		Bukkit.getPluginManager().callEvent(event);
+		if(event.isCancelled())
+			return false;
+		info.setProffesion("§aobywatel");
+		stats.setHealth(info.getLevel()*5 - 5 + 100);
+		
+		ChangeStats.change(this);
+		
+		player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(stats.getFinalHealth());
+		return true;
 	}
 	
 	public void updateBarLevel() {
