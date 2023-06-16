@@ -8,7 +8,7 @@ import org.bukkit.event.Listener;
 
 public class PlayerHealEvent implements Listener {
 
-	@EventHandler(priority=EventPriority.HIGHEST)
+	@EventHandler(priority=EventPriority.MONITOR)
 	public void onHeal(RpgPlayerHealEvent e) {
 		if(e.isCancelled()) 
 			return;

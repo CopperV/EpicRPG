@@ -30,7 +30,7 @@ public class ScrollManager {
 	
 	public boolean canPlayerClickScroll(Player p) {
 		if(!clickCooldowns.containsKey(p))
-			return false;
+			return true;
 		
 		long current = new Date().getTime();
 		long old = clickCooldowns.get(p).getTime();

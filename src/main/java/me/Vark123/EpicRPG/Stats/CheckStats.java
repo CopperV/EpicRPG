@@ -3,6 +3,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.apache.commons.lang.mutable.MutableBoolean;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -24,7 +25,8 @@ public class CheckStats {
 		if(Utils.isRune(item))
 			return false;
 		NBTItem nbtit = new NBTItem(item);
-		if(nbtit.hasTag("RPGType")) return false;
+		if(nbtit.hasTag("RPGType")) 
+			return false;
 		
 		RpgPlayerInfo info = rpg.getInfo();
 		RpgStats stats = rpg.getStats();
@@ -39,7 +41,6 @@ public class CheckStats {
 		}).takeWhile(s -> {
 			return check.booleanValue();
 		}).forEach(s -> {
-//			Bukkit.broadcastMessage(s+" §r"+s.replace("§", "&"));
 			if(s.contains("§4- §8Klasa: ")) {
 				s = s.replace("§4- §8Klasa: ", "");
 				String proffesion = ChatColor.stripColor(info.getProffesion());
@@ -66,7 +67,8 @@ public class CheckStats {
 //			int toCheck = Integer.parseInt(s.replace(": §c", ""));
 			int result;
 			s = s.split(":")[0];
-			s = Utils.convertToClassConvention(s);
+			s = s.split(" ")[0];
+//			s = Utils.convertToClassConvention(s);
 			Class<?> _class = stats.getClass();
 			String strMethod = "getFinal"+s;
 			Method method;

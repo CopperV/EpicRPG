@@ -260,6 +260,10 @@ public class RpgStats implements Serializable, ChatPrintable {
 			this.presentMana -= presentMana;
 		}
 	}
+	
+	public void resetMana() {
+		this.presentMana = this.finalMana;
+	}
 
 	public void addKrag(int krag) {
 		this.krag += krag;

@@ -113,7 +113,7 @@
 			<artifactId>MythicMobs</artifactId>
 			<scope>system</scope>
 			<version>1.0.0</version>
-			<systemPath>${env.USERPROFILE}\Desktop\plugins\MythicMobs-5.1.2.jar</systemPath>
+			<systemPath>${env.USERPROFILE}\Desktop\plugins\MythicMobs-5.2.6.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>npclib</groupId>

@@ -87,6 +87,10 @@ public class Utils {
 	}
 	
 	public static void takeItems(Player p, EquipmentSlot slot, int amount) {
+		if(slot.equals(EquipmentSlot.HAND)) {
+			takeItems(p, p.getInventory().getHeldItemSlot(), amount);
+			return;
+		}
 		takeItems(p, slot.ordinal(), amount);
 	}
 	

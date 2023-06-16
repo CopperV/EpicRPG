@@ -1,5 +1,7 @@
 package me.Vark123.EpicRPG.MMExtension.Conditions;
 
+import java.util.Collection;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -12,6 +14,7 @@ import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.conditions.ILocationCondition;
 import io.lumine.mythic.api.skills.conditions.ISkillMetaCondition;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
+import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.bukkit.utils.numbers.RangedInt;
 import io.lumine.mythic.core.skills.SkillCondition;
 
@@ -34,17 +37,16 @@ public class GeneralMobsInRadiusCondition extends SkillCondition implements ISki
 		AbstractLocation l = caster.getEntity().getLocation();
 		double radius = this.radius.get(meta);
 		double radiusSq = radius*radius;
-		int count = 0;
-		for (final AbstractEntity entity : SkillCondition.getPlugin().getVolatileCodeHandler().getWorldHandler().getEntitiesNearLocation(l, radiusSq)) {
+		Collection<AbstractEntity> collection = SkillCondition.getPlugin().getVolatileCodeHandler().getWorldHandler().getEntitiesNearLocation(l, radius);
+		int count = (int) collection.stream().filter(entity -> {
 			if(l.distanceSquared(entity.getLocation()) > radiusSq)
-				continue;
-			Entity e = entity.getBukkitEntity();
-			if(!(e instanceof LivingEntity))
-				continue;
-			if(e instanceof Player)
-				continue;
-			++count;
-		}
+				return false;
+			if(!MythicBukkit.inst().getMobManager().isActiveMob(entity))
+				return false;
+			if(entity.getBukkitEntity() instanceof Player)
+				return false;
+			return true;
+		}).count();
 		return this.amount.equals(count);
 	}
 
@@ -52,15 +54,17 @@ public class GeneralMobsInRadiusCondition extends SkillCondition implements ISki
 	@Override
 	public boolean check(AbstractLocation l) {
 		double radius = this.radius.get();
-		int count = 0;
-		for (final AbstractEntity entity : SkillCondition.getPlugin().getVolatileCodeHandler().getWorldHandler().getEntitiesNearLocation(l, radius)) {
-			Entity e = entity.getBukkitEntity();
-			if(!(e instanceof LivingEntity))
-				continue;
-			if(e instanceof Player)
-				continue;
-			++count;
-		}
+		double radiusSq = radius*radius;
+		Collection<AbstractEntity> collection = SkillCondition.getPlugin().getVolatileCodeHandler().getWorldHandler().getEntitiesNearLocation(l, radius);
+		int count = (int) collection.stream().filter(entity -> {
+			if(l.distanceSquared(entity.getLocation()) > radiusSq)
+				return false;
+			if(!MythicBukkit.inst().getMobManager().isActiveMob(entity))
+				return false;
+			if(entity.getBukkitEntity() instanceof Player)
+				return false;
+			return true;
+		}).count();
 		return this.amount.equals(count);
 	}
 

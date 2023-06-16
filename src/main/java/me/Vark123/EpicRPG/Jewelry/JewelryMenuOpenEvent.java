@@ -12,7 +12,6 @@ public class JewelryMenuOpenEvent implements Listener {
 	@EventHandler
 	public void onClick(InventoryClickEvent e) {
 		Player p = (Player) e.getWhoClicked();
-//		p.sendMessage(e.getClickedInventory().getType().name()+" "+e.getSlot());
 		if(e.getClickedInventory() == null)
 			return;
 		if(!e.getClickedInventory().getType().equals(InventoryType.CRAFTING))

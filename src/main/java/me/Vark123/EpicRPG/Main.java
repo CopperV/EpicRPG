@@ -4,6 +4,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+
 import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
 import lombok.Getter;
 import me.Vark123.EpicRPG.Files.FileOperations;
@@ -26,13 +29,12 @@ public class Main extends JavaPlugin {
 	
 	@Getter
 	private InventoryManager manager;
+	@Getter
+	private ProtocolManager protocolManager;
 	
 	@Override
 	public void onEnable() {
 		instance = this;
-		
-		EventListenerManager.registerEvents();
-		CommandExecutorManager.setExecutors();
 		
 		FileOperations.checkFiles();
 		DBOperations.init();
@@ -45,6 +47,10 @@ public class Main extends JavaPlugin {
 		
 		manager = new InventoryManager(instance);
 		manager.invoke();
+		protocolManager = ProtocolLibrary.getProtocolManager();
+		
+		EventListenerManager.registerEvents();
+		CommandExecutorManager.setExecutors();
 		// TODO Auto-generated method stub
 		super.onEnable();
 	}
