@@ -3,6 +3,7 @@ package me.Vark123.EpicRPG.Files;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
@@ -14,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 import me.Vark123.EpicRPG.EpicRPGMobManager;
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.BlackrockSystem.BlackrockManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgJewelry;
 import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
@@ -89,6 +91,17 @@ public class FileOperations {
 				});
 			}
 		});
+		
+		YamlConfiguration blackrockYml = YamlConfiguration.loadConfiguration(blackrock);
+		if(blackrockYml.contains("lista")) {
+			List<String> tmp = blackrockYml.getStringList("lista");
+			tmp.stream().map(s -> {
+				UUID uid = UUID.fromString(s);
+				return Bukkit.getPlayer(uid);
+			}).forEach(completed -> {
+				BlackrockManager.getInstance().completeDailyBlackrock(completed);
+			});
+		}
 	}
 	
 	@Deprecated
@@ -176,6 +189,29 @@ public class FileOperations {
 			Bukkit.getConsoleSender().sendMessage("Blad: "+e.getMessage());
 			Bukkit.getConsoleSender().sendMessage("Dane gracza: ");
 			Bukkit.getConsoleSender().sendMessage(rpg.toString());
+		}
+	}
+
+	public static void saveBlackrockCompleted() {
+		File f = blackrock;
+		if(!f.exists()) {
+			try {
+				f.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+				return;
+			}
+		}
+		YamlConfiguration fYml = YamlConfiguration.loadConfiguration(f);
+		List<String> toSave = BlackrockManager.getInstance().completedPlayers
+				.stream().map(p -> {
+					return p.getUniqueId().toString();
+				}).toList();
+		fYml.set("lista", toSave);
+		try {
+			fYml.save(f);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	

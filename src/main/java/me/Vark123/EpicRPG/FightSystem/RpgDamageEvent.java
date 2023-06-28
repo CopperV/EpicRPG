@@ -14,10 +14,9 @@ public class RpgDamageEvent implements Listener {
 	public void onDamage(EntityDamageByEntityEvent e) {
 		if(e.isCancelled())
 			return;
-		
 		DamageCause cause = e.getCause();
 		Entity damager = e.getDamager();
-		
+
 		switch(cause) {
 			case ENTITY_ATTACK:
 				e.setDamage(DamageManager.getInstance().getAttackCalculator().calc(damager, e.getEntity(), e.getDamage()));

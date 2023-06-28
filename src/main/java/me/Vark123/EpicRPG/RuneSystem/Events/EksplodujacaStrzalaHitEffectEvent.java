@@ -26,7 +26,9 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
+import me.Vark123.EpicRPG.FightSystem.DamageManager;
 import me.Vark123.EpicRPG.FightSystem.ManualDamage;
+import me.Vark123.EpicRPG.FightSystem.Calculators.DamageCalculator;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
@@ -64,13 +66,14 @@ public class EksplodujacaStrzalaHitEffectEvent implements Listener {
 		
 		boolean hitEntity = e.getHitEntity() != null;
 		ItemStack bow = (ItemStack) arrow.getMetadata("rpg_bow").get(0).value();
-		double dmg = arrow.getDamage();
+//		double dmg = arrow.getDamage();
 		
 		MutableDouble baseDmg;
+		DamageCalculator calculator = DamageManager.getInstance().getProjectileCalculator();
 		if(modifiers.hasEksplodujacaStrzala()) {
-			baseDmg = new MutableDouble(dmg*DEFAULT_EXPLOSION_DMG_MOD);
+			baseDmg = new MutableDouble(DEFAULT_EXPLOSION_DMG_MOD);
 		} else {
-			baseDmg = new MutableDouble(dmg*DEFAULT_EXPLOSION_DMG_MOD_H);
+			baseDmg = new MutableDouble(DEFAULT_EXPLOSION_DMG_MOD_H);
 		}
 		if(bow.getType().equals(Material.CROSSBOW)) {
 			double enchantMod = 0;
@@ -123,7 +126,8 @@ public class EksplodujacaStrzalaHitEffectEvent implements Listener {
 				State flag = set.queryValue(null, Flags.PVP);
 				if(flag != null && flag.equals(State.ALLOW)
 						&& !entity.getWorld().getName().toLowerCase().contains("dungeon"))
-					return false;
+					return true;
+				return false;
 			}
 			if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(entity).isDamageable())
 				return false;
@@ -131,21 +135,24 @@ public class EksplodujacaStrzalaHitEffectEvent implements Listener {
 		}).forEach(entity -> {
 			Location eLoc = entity.getLocation();
 			double dist = eLoc.distance(loc);
-			double eDmg = baseDmg.doubleValue() * (24.0 - dist) / 24.0;
 			
-			EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(p, entity, DamageCause.CONTACT, eDmg);
+			double calcDmg = calculator.calc(proj, entity, baseDmg.doubleValue());
+			calcDmg *= baseDmg.doubleValue();
+			double eDmg = calcDmg * (24.0 - dist) / 24.0;
+			
+			EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(p, entity, DamageCause.CUSTOM, eDmg);
 			Bukkit.getPluginManager().callEvent(event);
 			if(event.isCancelled()) {
 				return;
 			}
-			ManualDamage.doDamage(p, (LivingEntity) entity, event.getDamage(), event);
+			ManualDamage.doDamageNoCheck(p, (LivingEntity) entity, event.getDamage(), event);
 			
 			double strength = (18.0 - dist) / 18.0 * 1.25;
 			Vector dir = new Vector(eLoc.getX() - loc.getX(),
 					0,
 					eLoc.getZ() - loc.getZ())
 					.normalize()
-					.setY(1.5)
+					.setY(0.8)
 					.multiply(strength);
 			entity.setVelocity(dir);
 		});

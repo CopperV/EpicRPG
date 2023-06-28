@@ -7,8 +7,8 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class TeleportacjaKrotkodystansowa extends ARune {
 
@@ -34,8 +34,10 @@ public class TeleportacjaKrotkodystansowa extends ARune {
 		p.playSound(start, Sound.ITEM_CHORUS_FRUIT_TELEPORT, 10, .5f);
 	}
 
-	//TODO
 	private Location checkBlock(Location loc) {
+		if(!checkArea(loc))
+			return null;
+		
 		Material m = loc.getBlock().getType();
 		if(m.isSolid()) {
 			String s = m.name().toUpperCase();
@@ -57,6 +59,19 @@ public class TeleportacjaKrotkodystansowa extends ARune {
 			
 		}
 		return loc;
+	}
+	
+	private boolean checkArea(final Location loc) {
+
+		if(
+				loc.clone().add(-1, 1, 0).getBlock().getType().isSolid() ||
+				loc.clone().add(0, 1, 1).getBlock().getType().isSolid() ||
+				loc.clone().add(0, 1, -1).getBlock().getType().isSolid() ||
+				loc.clone().add(1, 1, 0).getBlock().getType().isSolid())
+		{
+			return false;
+		}
+		return true;
 	}
 	
 	private void spellEffect(Location loc) {

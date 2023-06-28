@@ -136,7 +136,7 @@ public class RuneUtils {
 			return new Pair<Boolean, Double>(false, dmg);
 		}
 		
-		EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(damager, victim, DamageCause.CONTACT, dmg);
+		EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(damager, victim, DamageCause.CUSTOM, dmg);
 		if(victim instanceof Player) {
 			RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
 			ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(victim.getLocation()));

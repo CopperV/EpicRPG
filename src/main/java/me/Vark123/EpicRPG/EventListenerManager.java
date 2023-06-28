@@ -14,6 +14,7 @@ import me.Vark123.EpicRPG.API.EpicRPGApi;
 import me.Vark123.EpicRPG.BlackrockSystem.Events.BlackrockAddAllEvent;
 import me.Vark123.EpicRPG.BlackrockSystem.Events.BlackrockAddEvent;
 import me.Vark123.EpicRPG.BlackrockSystem.Events.BlackrockEntryEvent;
+import me.Vark123.EpicRPG.BlackrockSystem.Events.BlackrockHealDebuffEvent;
 import me.Vark123.EpicRPG.BlackrockSystem.Events.BlackrockRemoveAllEvent;
 import me.Vark123.EpicRPG.BlackrockSystem.Events.BlackrockRemoveEvent;
 import me.Vark123.EpicRPG.BlackrockSystem.Events.BlackrockResetEvent;
@@ -32,6 +33,7 @@ import me.Vark123.EpicRPG.FightSystem.Modifiers.ModList.HPInfo;
 import me.Vark123.EpicRPG.FightSystem.Modifiers.ModList.LodowyBlokModifier;
 import me.Vark123.EpicRPG.FightSystem.Modifiers.ModList.ManekinDamage;
 import me.Vark123.EpicRPG.FightSystem.Modifiers.ModList.NoDamageTicksModifier;
+import me.Vark123.EpicRPG.FightSystem.Modifiers.ModList.ProjectileRuneEffectModifier;
 import me.Vark123.EpicRPG.FightSystem.Modifiers.ModList.RytualKrwiModifier;
 import me.Vark123.EpicRPG.FightSystem.Modifiers.ModList.ScaleDamageModifier;
 import me.Vark123.EpicRPG.FightSystem.Modifiers.ModList.ShulkerModifier;
@@ -63,10 +65,12 @@ import me.Vark123.EpicRPG.Potions.PotionDrinkEvent;
 import me.Vark123.EpicRPG.RubySystem.RubyPlaceProtEvent;
 import me.Vark123.EpicRPG.RubySystem.RubyUseEvent;
 import me.Vark123.EpicRPG.RuneSystem.RuneInteractEvent;
+import me.Vark123.EpicRPG.RuneSystem.RuneTimeCheckEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.EksplodujacaStrzalaHitEffectEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.GradStrzalLaunchEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.KamiennyObserwatorEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.LodowyBlokDisableMoveEvent;
+import me.Vark123.EpicRPG.RuneSystem.Events.ProwokacjaChangeTargetEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.WedrownyCienTargetEvent;
 import me.Vark123.EpicRPG.Scrolls.EpicBossScrollEvent;
 import me.Vark123.EpicRPG.Scrolls.KatedraScrollEvent;
@@ -96,6 +100,7 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new LavaDamageEvent(), inst);
 
 		Bukkit.getPluginManager().registerEvents(new RuneInteractEvent(), inst);
+		Bukkit.getPluginManager().registerEvents(new RuneTimeCheckEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new PotionDrinkEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new RubyUseEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new RubyPlaceProtEvent(), inst);
@@ -106,6 +111,7 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new KamiennyObserwatorEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new LodowyBlokDisableMoveEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new WedrownyCienTargetEvent(), inst);
+		Bukkit.getPluginManager().registerEvents(new ProwokacjaChangeTargetEvent(), inst);
 		
 		Bukkit.getPluginManager().registerEvents(new CustomMechanicsLoadEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new CustomTargeterLoadEvent(), inst);
@@ -123,6 +129,7 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new BlackrockRemoveAllEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new BlackrockRemoveEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new BlackrockResetEvent(), inst);
+		Bukkit.getPluginManager().registerEvents(new BlackrockHealDebuffEvent(), inst);
 
 		Bukkit.getPluginManager().registerEvents(new KatedraScrollEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new EpicBossScrollEvent(), inst);
@@ -143,6 +150,7 @@ public class EventListenerManager {
 		DamageModifierManager.getInstance().registerModifier(new ScaleDamageModifier(), EventPriority.HIGH);
 		DamageModifierManager.getInstance().registerModifier(new LodowyBlokModifier(), EventPriority.HIGHEST);
 		DamageModifierManager.getInstance().registerModifier(new TransfuzjaModifier(), EventPriority.HIGHEST);
+		DamageModifierManager.getInstance().registerModifier(new ProjectileRuneEffectModifier(), EventPriority.HIGHEST);
 		DamageModifierManager.getInstance().registerModifier(new EntityTauntModifier(), EventPriority.MONITOR);
 		DamageModifierManager.getInstance().registerModifier(new ManekinDamage(), EventPriority.MONITOR);
 		DamageModifierManager.getInstance().registerModifier(new ZewKrwiModifier(), EventPriority.MONITOR);

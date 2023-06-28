@@ -35,13 +35,12 @@ public class AuraRozproszenia extends ARune {
 	@Override
 	public void castSpell() {
 		List<Player> effected = new LinkedList<>();
-		effected.add(p);
 		
 		p.getWorld().getNearbyEntities(p.getLocation(), dr.getObszar(), dr.getObszar(), dr.getObszar()).stream().filter(e -> {
 			if(!(e instanceof Player))
 				return false;
 			if(e.equals(p))
-				return false;
+				return true;
 			RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
 			ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
 			State flag = set.queryValue(null, Flags.PVP);

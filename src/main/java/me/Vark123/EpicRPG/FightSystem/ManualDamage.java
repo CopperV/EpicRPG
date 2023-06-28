@@ -38,7 +38,23 @@ public class ManualDamage {
 		return damage(damager, victim, damage, e);
 	}
 	
-	private static boolean damage(LivingEntity damager, LivingEntity victim, double damage, EntityDamageEvent e) {
+	public static void doDamageNoCheck(org.bukkit.entity.Entity damager, LivingEntity victim, double damage, EntityDamageByEntityEvent e) {
+		damage(damager, victim, damage, e);
+	}
+	
+	public static void doDamageNoCheck(LivingEntity victim, double damage, EntityDamageEvent e) {
+		damage(victim /*TO PREVENT EXCEPTION*/,
+				victim, damage, e);
+	}
+	
+	private static boolean damage(org.bukkit.entity.Entity damager, LivingEntity victim, double damage, EntityDamageEvent e) {
+		if(victim.getHealth() < damage) {
+			victim.setLastDamageCause(e);
+			victim.setNoDamageTicks(0);
+			victim.setHealth(0);
+			return true;
+		}
+//		victim.setLastDamageCause(e);
 		DamageSource reason = getDamageSource(damager, victim, e.getCause());
 		EntityLiving target = ((CraftLivingEntity) victim).getHandle();
 		target.a(reason, (float) damage);
@@ -46,7 +62,7 @@ public class ManualDamage {
 	}
 	
 	@SuppressWarnings("incomplete-switch")
-	private static DamageSource getDamageSource(LivingEntity damager, LivingEntity victim, DamageCause cause) {
+	private static DamageSource getDamageSource(org.bukkit.entity.Entity damager, LivingEntity victim, DamageCause cause) {
 		DamageSource src = DamageSource.n;
 		final Entity source = ((CraftEntity) damager).getHandle();
 		

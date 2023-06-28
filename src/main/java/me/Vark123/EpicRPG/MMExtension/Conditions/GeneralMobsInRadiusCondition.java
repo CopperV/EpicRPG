@@ -2,8 +2,6 @@ package me.Vark123.EpicRPG.MMExtension.Conditions;
 
 import java.util.Collection;
 
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import io.lumine.mythic.api.adapters.AbstractEntity;

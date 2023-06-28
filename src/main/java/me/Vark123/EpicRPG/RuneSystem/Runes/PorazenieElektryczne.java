@@ -109,7 +109,7 @@ public class PorazenieElektryczne extends ARune {
 
 	private void spellEffect(Entity entity) {
 		new BukkitRunnable() {
-			Location loc1;
+			Location loc1 = entity.getLocation();
 			Location loc2;
 			double t = 1;
 			@Override

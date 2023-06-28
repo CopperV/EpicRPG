@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -45,7 +46,32 @@ public class RpgDeathEvent implements Listener {
 	public void onDeath(EntityDeathEvent e) {
 		LivingEntity victim = e.getEntity();
 		Player killer = e.getEntity().getKiller();
+
+		EntityDamageEvent ev1 = victim.getLastDamageCause();
+		if(ev1 instanceof EntityDamageByEntityEvent) {
+			EntityDamageByEntityEvent ev2 = (EntityDamageByEntityEvent) ev1;
+			if(ev2.getDamager() != null) {
+				Bukkit.broadcastMessage("Test2: "+ev2.getDamager().toString());
+			} else {
+				Bukkit.broadcastMessage("Test3");
+			}
+		} else {
+			Bukkit.broadcastMessage("Test1");
+		}
 		
+//		if(killer == null) {
+//			EntityDamageEvent ev1 = victim.getLastDamageCause();
+//			if(ev1 instanceof EntityDamageByEntityEvent) {
+//				EntityDamageByEntityEvent ev2 = (EntityDamageByEntityEvent) ev1;
+//				if(ev2.getDamager() != null) {
+//					Bukkit.broadcastMessage("Test2: "+ev2.getDamager().toString());
+//				} else {
+//					Bukkit.broadcastMessage("Test3");
+//				}
+//			} else {
+//				Bukkit.broadcastMessage("Test1");
+//			}
+//		}
 		if(killer == null)
 			return;
 		
@@ -157,18 +183,18 @@ public class RpgDeathEvent implements Listener {
 				double restoreHp = killer.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.0075;
 				@Override
 				public void run() {
-					if(timer >= 10) {
+					if(timer >= 20) {
 						this.cancel();
 						return;
 					}
 					++timer;
-					RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg, restoreHp);
+					RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg, restoreHp/2);
 					Bukkit.getPluginManager().callEvent(event);
 					if(!event.isCancelled()){
 						killer.getWorld().spawnParticle(Particle.HEART, killer.getLocation().add(0,1.25,0), 5, 0.5F, 0.5F, 0.5F, 0.1f);
 					}
 				}
-			}.runTaskTimer(Main.getInstance(), 0, 20);
+			}.runTaskTimer(Main.getInstance(), 0, 10);
 		}
 
 		if(victim instanceof Player) {

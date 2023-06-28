@@ -47,7 +47,7 @@ public class RpgModifiers implements Serializable {
 	private boolean zakazanyRytual_h;
 	private boolean zakazanyRytual_m;
 	private boolean zewKrwi;
-	private int zewKrwiMod = 0;
+	private double zewKrwiMod = 0;
 	private boolean rytualKrwi;
 	private boolean krewPrzodkow;
 	private boolean gniew;
@@ -248,7 +248,7 @@ public class RpgModifiers implements Serializable {
 		return zewKrwi;
 	}
 
-	public int getZewKrwiMod() {
+	public double getZewKrwiMod() {
 		return zewKrwiMod;
 	}
 
@@ -472,7 +472,7 @@ public class RpgModifiers implements Serializable {
 		this.zewKrwiMod = zewKrwiMod;
 	}
 
-	public void addZewKrwiMod(int zewKrwiMod) {
+	public void addZewKrwiMod(double zewKrwiMod) {
 		this.zewKrwiMod += zewKrwiMod;
 	}
 

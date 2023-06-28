@@ -13,6 +13,7 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
@@ -105,7 +106,7 @@ public class RuneManager {
 				spendHp(rpg, ir);
 			else
 				spendMana(rpg, ir);
-			createRuneCd(p, ir);
+			createRuneCd(rpg, ir);
 		} else {
 			p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 0.5f);
 			p.getWorld().spawnParticle(Particle.NAUTILUS, p.getLocation().add(0, 1, 0), 20, 0.75, 0.5, 0.75, 0.2);
@@ -132,7 +133,11 @@ public class RuneManager {
 		}.runTaskLater(Main.getInstance(), 15);
 	}
 	
-	public void createRuneCd(Player p, ItemStackRune ir) {
+	public void createRuneCd(RpgPlayer rpg, ItemStackRune ir) {
+		Player p = rpg.getPlayer();
+		if(rpg.getStats().getFinalMana() > 49) {
+			ir.modifyRegenTime(rpg.getStats());
+		}
 		Map<String, ItemStackRune> cds = playerRuneCd.getOrDefault(p, new ConcurrentHashMap<>());
 		cds.put(ir.getName(), ir);
 		playerRuneCd.put(p, cds);
@@ -176,7 +181,7 @@ public class RuneManager {
 		ItemStackRune check = playerCd.get(ir.getName());
 		Date present = new Date();
 		Date old = check.getDate();
-		long regenTime = ir.getRegenTime();
+		long regenTime = check.getRegenTime();
 		
 		if((old.getTime() + regenTime) > present.getTime()) {
 			int nextUse = (int) Math.ceil(((double)(old.getTime() + regenTime - present.getTime()))/1000.0);
@@ -284,7 +289,7 @@ public class RuneManager {
 		if(rpg.getModifiers().hasZrodloNatury()){
 			price *= 0.8;
 		}
-		EntityDamageEvent event = new EntityDamageEvent(p, DamageCause.MAGIC, price);
+		EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(p, p, DamageCause.MAGIC, price);
 		Bukkit.getPluginManager().callEvent(event);
 		
 		ManualDamage.doDamage(p, price, event);

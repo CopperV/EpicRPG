@@ -17,7 +17,6 @@ public class RytualKrwiModifier implements DamageModifier {
 
 	@Override
 	public double modifyDamage(Entity damager, Entity victim, double damage, DamageCause cause) {
-		
 		if(!(victim instanceof Player))
 			return damage;
 		

@@ -36,8 +36,6 @@ import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 import me.Vark123.EpicRPG.Players.Components.RpgSkills;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
-import me.Vark123.EpicRPG.RuneSystem.RuneTimeEffect;
-import me.Vark123.EpicRPG.RuneSystem.RuneUtils;
 import me.Vark123.EpicRPG.Stats.ChangeStats;
 import me.Vark123.EpicRPG.Stats.CheckStats;
 import net.md_5.bungee.api.ChatColor;
@@ -205,33 +203,6 @@ public class ProjectileDamageCalculator implements DamageCalculator {
 					dmgZmysly = dmg*0.15;
 				}
 				
-				if(modifiers.hasOgnistaStrzala()) {
-					dmgOgien = dmg*0.075;
-					
-					if(RuneDamage.directDamageEffect(p, (LivingEntity) victim, 
-							Optional.of(dmgOgien), RuneUtils.getCustomTimeEffect(dmg, RuneTimeEffect.FIRE))) {
-						Location loc2 = victim.getLocation().add(0, 1, 0);
-						loc2.getWorld().spawnParticle(Particle.FLAME, loc2, 15, 0.2, 0.2, 0.2, 0.05);
-					}
-				}
-				
-				if(modifiers.hasZatrutaStrzala()) {
-					dmgPoison = dmg*0.03;
-					
-					if(RuneDamage.directDamageEffect(p, (LivingEntity) victim, 
-							Optional.of(dmgPoison), RuneUtils.getCustomTimeEffect(dmg, RuneTimeEffect.POISON))) {
-						Location loc2 = victim.getLocation().add(0, 1, 0);
-						loc2.getWorld().spawnParticle(Particle.SLIME, loc2, 15, 0.2, 0.2, 0.2, 0.05);
-					}
-				}
-
-				if(modifiers.hasKrwawaStrzala()) {
-					double bleeding = dmg * 0.05;
-					
-					RuneDamage.directDamageEffect(p, (LivingEntity) victim, 
-							Optional.of(bleeding), RuneUtils.getCustomTimeEffect(dmg, RuneTimeEffect.BLOOD));
-				}
-				
 				if(modifiers.hasPrecyzyjnyStrzal()) {
 					dmgStrzal = dmg*0.5;
 				}
@@ -323,7 +294,7 @@ public class ProjectileDamageCalculator implements DamageCalculator {
 						if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 							return false;
 						return true;
-					}).parallelStream().forEach(e -> {
+					}).stream().forEach(e -> {
 						RuneDamage.directDamageEffect(p, (LivingEntity) e, Optional.of(holyDmg), Optional.empty());
 					});
 				}

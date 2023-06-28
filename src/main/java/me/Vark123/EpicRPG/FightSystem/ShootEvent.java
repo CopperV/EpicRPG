@@ -1,5 +1,6 @@
 package me.Vark123.EpicRPG.FightSystem;
 
+import org.bukkit.Material;
 import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.AbstractArrow.PickupStatus;
 import org.bukkit.entity.Entity;
@@ -7,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import me.Vark123.EpicRPG.Main;
@@ -47,7 +49,13 @@ public class ShootEvent implements Listener {
 			return;
 		
 		arrow.setPickupStatus(PickupStatus.CREATIVE_ONLY);
-		e.setConsumeItem(false);
+		if(e.getBow().getType().equals(Material.CROSSBOW)) {
+			ItemStack arr = e.getConsumable();
+			p.getInventory().addItem(arr);
+		} else {
+			e.setConsumeItem(false);
+			p.updateInventory();
+		}
 		
 	}
 

@@ -60,7 +60,7 @@ public class RuneDamage {
 		
 		MutableBoolean result = new MutableBoolean(true);
 		oDamage.ifPresent(dmg -> {
-			EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(p, e, DamageCause.CONTACT, dmg);
+			EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(p, e, DamageCause.CUSTOM, dmg);
 			Bukkit.getPluginManager().callEvent(event);
 			if(event.isCancelled()) {
 				result.setFalse();

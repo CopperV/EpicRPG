@@ -33,7 +33,7 @@ public class ZewKrwi extends ARune {
 		RpgModifiers modifiers = rpg.getModifiers();
 		modifiers.setZewKrwi(true);
 		modifiers.resetZewKrwiMod();
-		modifiers.addZewKrwiMod(1);
+		modifiers.addZewKrwiMod(1.5);
 		modifiers.setModifier1_lock(true);
 		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
 		

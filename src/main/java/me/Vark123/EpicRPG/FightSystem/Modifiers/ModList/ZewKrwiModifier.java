@@ -13,7 +13,6 @@ public class ZewKrwiModifier implements DamageModifier {
 
 	@Override
 	public double modifyDamage(Entity damager, Entity victim, double damage, DamageCause cause) {
-		
 		if(!(victim instanceof Player))
 			return damage;
 		
@@ -23,8 +22,9 @@ public class ZewKrwiModifier implements DamageModifier {
 		
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		RpgModifiers modifiers = rpg.getModifiers();
-		if(modifiers.hasZewKrwi())
-			modifiers.addZewKrwiMod(1);
+		if(modifiers.hasZewKrwi()){
+			modifiers.addZewKrwiMod(1.5);
+		}
 		
 		return damage;
 	}

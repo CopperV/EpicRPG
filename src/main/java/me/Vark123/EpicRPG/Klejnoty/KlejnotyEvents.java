@@ -79,6 +79,11 @@ public class KlejnotyEvents {
 				p.closeInventory();
 				return;
 			}
+			if(item.getAmount() > 1
+					|| klejnot.getAmount() > 1) {
+				p.closeInventory();
+				return;
+			}
 			
 			NBTItem itemNBT = new NBTItem(item);
 			NBTItem klejnotNBT = new NBTItem(klejnot);

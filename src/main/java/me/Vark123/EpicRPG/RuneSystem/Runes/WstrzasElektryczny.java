@@ -21,9 +21,9 @@ import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import me.Vark123.EpicRPG.Main;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
-import me.Vark123.EpicRPG.RuneSystem.ARune;
 import me.Vark123.EpicRPG.FightSystem.RuneDamage;
+import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class WstrzasElektryczny extends ARune {
 
@@ -58,9 +58,11 @@ public class WstrzasElektryczny extends ARune {
 				return false;
 			return true;
 		}).stream().takeWhile(e -> {
-			return tmp.size() < 5;
-		}).forEach(e -> {
+			if(tmp.size() > 5)
+				return false;
 			tmp.add(e);
+			return true;
+		}).forEach(e -> {
 			drawLine(p.getLocation().add(0, 1.25, 0), e.getLocation().add(0,1,0));
 		});
 		
@@ -86,7 +88,7 @@ public class WstrzasElektryczny extends ARune {
 					e.getWorld().getNearbyEntities(e.getLocation(), dr.getObszar(), dr.getObszar(), dr.getObszar(), en -> {
 						if(en.equals(p) || !(en instanceof LivingEntity))
 							return false;
-						if(en.getLocation().distance(p.getLocation()) > dr.getObszar())
+						if(en.getLocation().distance(e.getLocation()) > dr.getObszar())
 							return false;
 						if(entitiesList.contains(en) || main.contains(en))
 							return false;
@@ -102,9 +104,11 @@ public class WstrzasElektryczny extends ARune {
 							return false;
 						return true;
 					}).stream().takeWhile(en -> {
-						return tmp.size() < 5;
-					}).forEach(en -> {
+						if(tmp.size() > 5)
+							return false;
 						tmp.add(en);
+						return true;
+					}).forEach(en -> {
 						drawLine(en.getLocation().add(0, 1, 0), e.getLocation().add(0,1,0));
 					});
 					main.addAll(tmp);

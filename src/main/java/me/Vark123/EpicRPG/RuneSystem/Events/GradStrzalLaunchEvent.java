@@ -40,7 +40,7 @@ public class GradStrzalLaunchEvent implements Listener {
 		if(!(e.getEntity() instanceof Player))
 			return;
 		
-		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer((Player) e);
+		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer((Player) e.getEntity());
 		if(!rpg.getModifiers().hasGradStrzal())
 			return;
 		

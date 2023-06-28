@@ -5,8 +5,10 @@ import java.util.Date;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
+import lombok.Getter;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
 
+@Getter
 public class ItemStackRune {
 	
 	private String name;
@@ -78,65 +80,9 @@ public class ItemStackRune {
 			}
 		});
 	}
-	
-	public String getName() {
-		return name;
-	}
-
-	public int getDamage() {
-		return damage;
-	}
-
-	public Date getDate() {
-		return date;
-	}
-
-	public long getRegenTime() {
-		return regenTime;
-	}
-
-	public int getDurationTime() {
-		return durationTime;
-	}
-
-	public int getKrag() {
-		return krag;
-	}
-
-	public int getPrice() {
-		return price;
-	}
-
-	public boolean isHpInsteadMana() {
-		return hpInsteadMana;
-	}
-
-	public boolean isReqKlasa() {
-		return reqKlasa;
-	}
-
-	public String getKlasa() {
-		return klasa;
-	}
-
-	public int getObszar() {
-		return obszar;
-	}
-
-	public double getWplyw() {
-		return wplyw;
-	}
-
-	public int getPvp() {
-		return pvp;
-	}
-
-	public String getMagicType() {
-		return magicType;
-	}
 
 	public void modifyRegenTime(RpgStats stats) {
-		double percent = (stats.getFinalMana() / (70. * 100.));
+		double percent = (stats.getFinalMana() / (50. * 100.));
 		if(percent > 0.5)
 			percent = 0.5;
 		regenTime *= 1. - percent;
