@@ -81,21 +81,25 @@ public class Prowokacja extends ARune {
 				if(BukkitAdapter.adapt(e).isMonster())
 					canTargeting.setValue(true);
 			} else {
-				if(AI2 == null || AI2.isEmpty() || AI2.contains("players")) {
-					AI.stream().filter(s -> {
-						if(s.contains("meleeattack") 
-								|| s.contains("arrowattack") 
-								|| s.contains("spiderattack")
-								|| s.contains("rangedattack")
-								|| s.contains("bowattack")
-								|| s.contains("bowshoot")
-								|| s.contains("bowmaster")
-								|| s.contains("crossbowAttack")) {
-							return true;
-						}
-						return false;
-					}).findAny().ifPresent(s -> {
-						canTargeting.setValue(true);
+				if(AI2 != null) {
+					AI2.stream().filter(s -> {
+						return s.contains("players") || s.contains("attacker");
+					}).findAny().ifPresent(unused -> {
+						AI.stream().filter(s -> {
+							if(s.contains("meleeattack") 
+									|| s.contains("arrowattack") 
+									|| s.contains("spiderattack")
+									|| s.contains("rangedattack")
+									|| s.contains("bowattack")
+									|| s.contains("bowshoot")
+									|| s.contains("bowmaster")
+									|| s.contains("crossbowAttack")) {
+								return true;
+							}
+							return false;
+						}).findAny().ifPresent(s -> {
+							canTargeting.setValue(true);
+						});
 					});
 				}
 			}
