@@ -15,7 +15,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -46,18 +45,6 @@ public class RpgDeathEvent implements Listener {
 	public void onDeath(EntityDeathEvent e) {
 		LivingEntity victim = e.getEntity();
 		Player killer = e.getEntity().getKiller();
-
-		EntityDamageEvent ev1 = victim.getLastDamageCause();
-		if(ev1 instanceof EntityDamageByEntityEvent) {
-			EntityDamageByEntityEvent ev2 = (EntityDamageByEntityEvent) ev1;
-			if(ev2.getDamager() != null) {
-				Bukkit.broadcastMessage("Test2: "+ev2.getDamager().toString());
-			} else {
-				Bukkit.broadcastMessage("Test3");
-			}
-		} else {
-			Bukkit.broadcastMessage("Test1");
-		}
 		
 //		if(killer == null) {
 //			EntityDamageEvent ev1 = victim.getLastDamageCause();

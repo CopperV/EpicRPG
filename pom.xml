@@ -58,13 +58,6 @@
 			<systemPath>${env.USERPROFILE}\Desktop\plugins\EpicRPGSkillsAndQuests2.jar</systemPath>
 		</dependency>
 		<dependency>
-			<groupId>EpicRPGRespawn</groupId>
-			<artifactId>EpicRPGRespawn</artifactId>
-			<scope>system</scope>
-			<version>1.0.0</version>
-			<systemPath>${env.USERPROFILE}\Desktop\plugins\EpicRPGRespawn.jar</systemPath>
-		</dependency>
-		<dependency>
 			<groupId>Vault</groupId>
 			<artifactId>Vault</artifactId>
 			<scope>system</scope>
