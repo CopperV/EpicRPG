@@ -8,6 +8,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
+import me.Vark123.EpicRPG.Core.ExpSystem;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
@@ -107,7 +108,7 @@ public class RpgScoreboard {
 			obj.getScore(ChatColor.YELLOW+""+ChatColor.WHITE).setScore(14);
 			
 			String poziom = "  &bPoziom: &e";
-			if(playerInfo.getLevel() == 95)
+			if(playerInfo.getLevel() == ExpSystem.getInstance().MAX_LEVEL)
 				poziom += "MAX";
 			else
 				poziom += playerInfo.getLevel();
@@ -117,7 +118,7 @@ public class RpgScoreboard {
 			obj.getScore(ChatColor.YELLOW+""+ChatColor.GREEN).setScore(13);
 			
 			String exp = "  &bExp: &e";
-			if(playerInfo.getLevel() == 95)
+			if(playerInfo.getLevel() == ExpSystem.getInstance().MAX_LEVEL)
 				exp += "MAX";
 			else 
 				exp += (playerInfo.getExp()+"&a/&e"+playerInfo.getNextLevel());
@@ -226,12 +227,12 @@ public class RpgScoreboard {
 			obj.getScore(ChatColor.AQUA+""+ChatColor.BLACK).setScore(14);
 			
 			String poziom = "  &bPoziom: &e";
-			if(playerInfo.getLevel() == 95)
+			if(playerInfo.getLevel() == ExpSystem.getInstance().MAX_LEVEL)
 				poziom += "MAX";
 			else
 				poziom += playerInfo.getLevel();
 			String exp = "  &bExp: &e";
-			if(playerInfo.getLevel() == 95)
+			if(playerInfo.getLevel() == ExpSystem.getInstance().MAX_LEVEL)
 				exp += "MAX";
 			else 
 				exp += (playerInfo.getExp()+"&a/&e"+playerInfo.getNextLevel());

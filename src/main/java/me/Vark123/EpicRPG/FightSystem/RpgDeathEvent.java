@@ -10,13 +10,13 @@ import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -27,6 +27,7 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
+import io.lumine.mythic.bukkit.events.MythicMobDeathEvent;
 import me.Vark123.EpicRPG.EpicRPGMobManager;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Core.CoinsSystem;
@@ -40,28 +41,18 @@ import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.Players.Components.RpgSkills;
 
 public class RpgDeathEvent implements Listener {
-
+	
 	@EventHandler
-	public void onDeath(EntityDeathEvent e) {
-		LivingEntity victim = e.getEntity();
-		Player killer = e.getEntity().getKiller();
+	public void onDeath(MythicMobDeathEvent e) {
+		Entity victim = e.getEntity();
+		LivingEntity _killer = e.getKiller();
 		
-//		if(killer == null) {
-//			EntityDamageEvent ev1 = victim.getLastDamageCause();
-//			if(ev1 instanceof EntityDamageByEntityEvent) {
-//				EntityDamageByEntityEvent ev2 = (EntityDamageByEntityEvent) ev1;
-//				if(ev2.getDamager() != null) {
-//					Bukkit.broadcastMessage("Test2: "+ev2.getDamager().toString());
-//				} else {
-//					Bukkit.broadcastMessage("Test3");
-//				}
-//			} else {
-//				Bukkit.broadcastMessage("Test1");
-//			}
-//		}
-		if(killer == null)
+		if(_killer == null)
+			return;
+		if(!(_killer instanceof Player))
 			return;
 		
+		Player killer = (Player) _killer;
 		if(!PlayerManager.getInstance().playerExists(killer))
 			return;
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(killer);

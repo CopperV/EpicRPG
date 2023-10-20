@@ -134,7 +134,6 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 						+"  §2§l🛡 §2"+stats.getFinalOchrona()));
 	}
 	
-	//TODO
 	public void endTasks() {
 		score.cancel();
 		skills.endTasks();

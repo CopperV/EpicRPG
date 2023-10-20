@@ -5,18 +5,17 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
-import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
-import de.simonsator.partyandfriends.clan.api.Clan;
-import de.simonsator.partyandfriends.clan.api.ClansManager;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
+import me.clip.placeholderapi.PlaceholderAPI;
 
 public class ChatMsgSendEvent implements Listener {
 
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent e) {
+		if(e.isCancelled())
+			return;
 		String msg = e.getMessage();
 		if(msg.contains("${")) {
 			e.setCancelled(true);
@@ -37,13 +36,12 @@ public class ChatMsgSendEvent implements Listener {
 		
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		RpgPlayerInfo info = rpg.getInfo();
-		OnlinePAFPlayer pafPlayer = PAFPlayerManager.getInstance().getPlayer(p);
-		Clan klan = ClansManager.getInstance().getClan(pafPlayer);
 		String color = p.hasPermission("rpg.mod") ? ChatManager.getInstance().MOD_COLOR : ChatManager.getInstance().PLAYER_COLOR;
 		
 		StringBuilder sb = new StringBuilder("§8[§e§l" + info.getLevel() + "§8] [" + info.getShortProf() + "§8]");
-		if(klan != null)
-			sb.append(" [§9"+klan.getColoredClanTag()+"§8]");
+		String placeholder = PlaceholderAPI.setPlaceholders(p, "%epicclans_name%");
+		if(placeholder != null && !placeholder.isBlank())
+			sb.append(" §8["+placeholder+"§8]");
 		sb.append(" §r%s§7: "+color+"%s");
 		
 		e.setFormat(sb.toString());

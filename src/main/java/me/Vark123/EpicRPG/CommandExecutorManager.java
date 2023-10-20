@@ -4,6 +4,14 @@ import org.bukkit.Bukkit;
 
 import me.Vark123.EpicRPG.AdvancedBuySystem.AdvancedBuyCommand;
 import me.Vark123.EpicRPG.BlackrockSystem.BlackrockCommand;
+import me.Vark123.EpicRPG.BoosterSystem.Commands.BaseBoostCommand;
+import me.Vark123.EpicRPG.BoosterSystem.Commands.BoostCommandManager;
+import me.Vark123.EpicRPG.BoosterSystem.Commands.BoosterMenuCommand;
+import me.Vark123.EpicRPG.BoosterSystem.Commands.Impl.CoinsBoosterCommand;
+import me.Vark123.EpicRPG.BoosterSystem.Commands.Impl.ExpBoosterCommand;
+import me.Vark123.EpicRPG.BoosterSystem.Commands.Impl.MoneyBoosterCommand;
+import me.Vark123.EpicRPG.BoosterSystem.Commands.Impl.RudaBoosterCommand;
+import me.Vark123.EpicRPG.BoosterSystem.Commands.Impl.StygiaBoosterCommand;
 import me.Vark123.EpicRPG.Chat.ChatClearCommand;
 import me.Vark123.EpicRPG.Chat.ChatToggleCommand;
 import me.Vark123.EpicRPG.Core.Commands.DropCommand;
@@ -72,6 +80,14 @@ public class CommandExecutorManager {
 		Bukkit.getPluginCommand("reset").setExecutor(new ResetStatsCommand());
 
 		Bukkit.getPluginCommand("epicrpg").setExecutor(new EpicRPGCommand());
+		Bukkit.getPluginCommand("epicboost").setExecutor(new BaseBoostCommand());
+		Bukkit.getPluginCommand("modyfikatory").setExecutor(new BoosterMenuCommand());
+		
+		BoostCommandManager.get().registerSubcommand(new CoinsBoosterCommand());
+		BoostCommandManager.get().registerSubcommand(new ExpBoosterCommand());
+		BoostCommandManager.get().registerSubcommand(new MoneyBoosterCommand());
+		BoostCommandManager.get().registerSubcommand(new RudaBoosterCommand());
+		BoostCommandManager.get().registerSubcommand(new StygiaBoosterCommand());
 	}
 	
 }

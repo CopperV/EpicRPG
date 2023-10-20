@@ -8,16 +8,9 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 
-import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
-import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
-import de.simonsator.partyandfriends.clan.api.Clan;
-import de.simonsator.partyandfriends.clan.api.ClansManager;
-import me.Vark123.EpicClans.EpicClansApi;
-import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Core.Events.ExpModifyEvent;
 import me.Vark123.EpicRPG.Core.Events.PlayerLevelUpdateEvent;
-import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
@@ -27,7 +20,7 @@ public class ExpSystem {
 
 	private final static ExpSystem instance = new ExpSystem();
 	
-	public final int MAX_LEVEL = 95;
+	public final int MAX_LEVEL = 100;
 	public final int PN_PER_LEVEL = 10;
 	
 	private final FireworkEffect fe1;
@@ -70,58 +63,31 @@ public class ExpSystem {
 		return instance;
 	}
 	
-	public void addMobExp(RpgPlayer rpg, int xp) {
+	public void addExp(RpgPlayer rpg, int amount, String reason, boolean displayMessage) {
+		Bukkit.broadcastMessage("Before: "+amount);
+		ExpModifyEvent event = new ExpModifyEvent(rpg, amount, 1, reason);
+		if(event.isCancelled())
+			return;
 		
-		OnlinePAFPlayer partyPlayer = PAFPlayerManager.getInstance().getPlayer(rpg.getPlayer());
-		Clan klan = ClansManager.getInstance().getClan(partyPlayer);
-		
-		if(klan != null) {
-			final int clanExp = (int) (xp * EpicClansApi.getInst().getExpValue(klan));
-			if(clanExp > 0) {
-				new BukkitRunnable() {
-					@Override
-					public void run() {
-						klan.getAllOnlineClanPlayers().parallelStream().filter(p -> {
-							if(!p.getPlayer().equals(rpg.getPlayer()))
-								return false;
-							return PlayerManager.getInstance().playerExists(p.getPlayer());
-						}).forEach(paf -> {
-							RpgPlayer tmp = PlayerManager.getInstance().getRpgPlayer(paf.getPlayer());
-							RpgPlayerInfo info = tmp.getInfo();
-							
-							int copyClanExp = clanExp;
-							
-							//TODO
-							//ADDING STYGIA
-							
-							if(info.getLevel() >= MAX_LEVEL)
-								return;
-							if(tmp.getPlayer().hasPermission("rpg.vip")) {
-								copyClanExp *= 1.5;
-							}
-							
-							info.addXP(copyClanExp);
-							checkLvl(info);
-							tmp.getPlayer().sendMessage("§7[§b§o"+klan.getClanTag()+"§7] §a+"+ copyClanExp +" xp §7[§a"+info.getExp()+" xp§7/§a"+info.getNextLevel()+" xp§7]");
-						});
-					}
-				}.runTaskAsynchronously(Main.getInstance());
-			}
-		}
-		
+		int exp = (int) (event.getAmount()*event.getModifier());
+		if(exp == 0)
+			return;
+
 		RpgPlayerInfo info = rpg.getInfo();
-		if(info.getLevel() < MAX_LEVEL 
-				|| (info.getExp() - getNextLevelExp(MAX_LEVEL-1)) < (0.9 * (getNextLevelExp(MAX_LEVEL) - getNextLevelExp(MAX_LEVEL-1)))) {
-			if(rpg.getPlayer().hasPermission("rpg.vip")) {
-				xp *= 1.5;
-			}
-			info.addXP(xp);
-			checkLvl(info);
-			rpg.getPlayer().sendMessage("§a+"+ xp +" xp §7[§a"+info.getExp()+" xp§7/§a"+info.getNextLevel()+" xp§7]");
-		} else {
-			info.setXP((int) (0.9 * (getNextLevelExp(MAX_LEVEL) - getNextLevelExp(MAX_LEVEL-1))) + getNextLevelExp(MAX_LEVEL-1));
-		}
+		info.addXP(exp);
+		checkLvl(info);
 		
+		if(!displayMessage)
+			return;
+		rpg.getPlayer().sendMessage("§a+"+ exp +" xp §7[§a"+info.getExp()+" xp§7/§a"+info.getNextLevel()+" xp§7]");
+	}
+	
+	public void addQuestExp(RpgPlayer rpg, int xp) {
+		addExp(rpg, xp, "quest", true);
+	}
+	
+	public void addMobExp(RpgPlayer rpg, int xp) {
+		addExp(rpg, xp, "mob", true);
 	}
 	
 	private void checkLvl(RpgPlayerInfo info) {
@@ -372,6 +338,16 @@ public class ExpSystem {
 			return 153_500_000;
 		case 95:
 			return 170_000_000;
+		case 96:
+			return 188_000_000;
+		case 97:
+			return 208_000_000;
+		case 98:
+			return 230_000_000;
+		case 99:
+			return 255_000_000;
+		case 100:
+			return 280_000_000;
 		default:
 			return Integer.MAX_VALUE;
 		}

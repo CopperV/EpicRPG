@@ -386,6 +386,7 @@ public class RuneManager {
 					case "§3zryw":				return new Zryw(dr, p);
 					case "§3§lfala dezorientacyjna":return new FalaDezorientacyjna(dr, p);
 					case "§3§lfala dezorientacyjna i":return new FalaDezorientacyjna(dr, p);
+					case "§3§lfala dezorientacyjna ii":return new FalaDezorientacyjna(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_MALL:
@@ -411,6 +412,7 @@ public class RuneManager {
 					case "§aodwrocenie uwagi":	return new OdwrocenieUwagi(dr, p);
 					case "§a§leksplodujaca strzala":return new EksplodujacaStrzala(dr, p);
 					case "§a§leksplodujaca strzala i":return new EksplodujacaStrzala_H(dr, p);
+					case "§a§leksplodujaca strzala ii":return new EksplodujacaStrzala_M(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_STAL:
@@ -536,6 +538,7 @@ public class RuneManager {
 				switch(name) {
 					case "§f§lsila rownowagi":			return new SilaRownowagi(dr, p);
 					case "§f§lsila rownowagi i":		return new SilaRownowagi_H(dr, p);
+					case "§f§lsila rownowagi ii":		return new SilaRownowagi_M(dr, p);
 				}
 			default:
 				System.out.println(name);

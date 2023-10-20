@@ -22,11 +22,6 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
-import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
-import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
-import de.simonsator.partyandfriends.clan.api.Clan;
-import de.simonsator.partyandfriends.clan.api.ClansManager;
-import me.Vark123.EpicClans.EpicClansApi;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.FightSystem.DamageUtils;
 import me.Vark123.EpicRPG.FightSystem.RuneDamage;
@@ -105,6 +100,7 @@ public class ProjectileDamageCalculator implements DamageCalculator {
 				double dmgKrwawa = 0;
 				double dmgEksplodujaca = 0;
 				double dmgEksplodujaca_H = 0;
+				double dmgEksplodujaca_M = 0;
 				
 				if(victim instanceof Player) {
 					if(crit) {
@@ -164,14 +160,14 @@ public class ProjectileDamageCalculator implements DamageCalculator {
 				float force = projectile.getMetadata("rpg_force").get(0).asFloat();
 				dmg *= force;
 				
-				OnlinePAFPlayer paf = PAFPlayerManager.getInstance().getPlayer(p);
-				if(paf != null) {
-					Clan klan = ClansManager.getInstance().getClan(paf);
-					if(klan != null) {
-						double attack = EpicClansApi.getInst().getAttackValue(klan);
-						dmg += dmg*attack;
-					}
-				}
+//				OnlinePAFPlayer paf = PAFPlayerManager.getInstance().getPlayer(p);
+//				if(paf != null) {
+//					Clan klan = ClansManager.getInstance().getClan(paf);
+//					if(klan != null) {
+//						double attack = EpicClansApi.getInst().getAttackValue(klan);
+//						dmg += dmg*attack;
+//					}
+//				}
 				
 				if(crit) {
 					switch(modifiers.getPotionZrecznosc()) {
@@ -256,12 +252,20 @@ public class ProjectileDamageCalculator implements DamageCalculator {
 						dmgEksplodujaca_H = dmg * 0.34;
 					}
 				}
+				if(modifiers.hasEksplodujacaStrzala_m()) {
+					if(bow.getType().equals(Material.CROSSBOW)) {
+						int enchant = bow.getEnchantmentLevel(Enchantment.QUICK_CHARGE);
+						dmgEksplodujaca_H = dmg * (0.61 - 0.07*enchant);
+					} else {
+						dmgEksplodujaca_H = dmg * 0.4;
+					}
+				}
 				
 				dmg = dmg + dmgLod + dmgOgien + dmgPoison + dmgStrzal 
 						+ dmgZmysly + dmgPotZr + dmgPotZd + dmgZadzaKrwi 
 						+ dmgSwieta + dmgZyciodajnaZiemia 
 						+ dmgZyciodajnaZiemia_M + dmgKrwawa + dmgEksplodujaca
-						+ dmgEksplodujaca_H;
+						+ dmgEksplodujaca_H + dmgEksplodujaca_M;
 				
 				if(crit && skills.hasCiosKrytyczny()) {
 					dmg *= 1.15;

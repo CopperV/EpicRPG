@@ -1,8 +1,10 @@
 package me.Vark123.EpicRPG.Core;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import me.Vark123.EpicRPG.EpicRPGMobManager;
+import me.Vark123.EpicRPG.Core.Events.CoinsModifyEvent;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 import me.Vark123.EpicRPG.Players.Components.RpgVault;
@@ -17,21 +19,34 @@ public class CoinsSystem {
 		return instance;
 	}
 	
-	public void addMobCoins(RpgPlayer rpg, String mob) {
-		RpgPlayerInfo info = rpg.getInfo();
-		if(info.getLevel() < 50)
+	public void addCoins(RpgPlayer rpg, int amount, String reason, boolean displayMessage) {
+		CoinsModifyEvent event = new CoinsModifyEvent(rpg, amount, 1, reason);
+		Bukkit.getPluginManager().callEvent(event);
+		if(event.isCancelled())
 			return;
-		addCoins(rpg, EpicRPGMobManager.getInstance().getMobCoins(mob));
+		
+		int _amount = (int) (event.getAmount()*event.getModifier());
+		if(_amount == 0)
+			return;
+
+		RpgVault vault = rpg.getVault();
+		vault.addDragonCoins(_amount);
+		
+		if(!displayMessage)
+			return;
+		rpg.getPlayer().sendMessage("§c§o+"+ amount +" Smoczych Monet §7[§c§o"+vault.getDragonCoins()+" Smoczych Monet§7]");
+	}
+	
+	public void addMobCoins(RpgPlayer rpg, String mob) {
+		addCoins(rpg, EpicRPGMobManager.getInstance().getMobCoins(mob), "mob", true);
 	}
 	
 	public void addXpCoins(RpgPlayer rpg, double xp) {
-		RpgPlayerInfo info = rpg.getInfo();
-		if(info.getLevel() < 50)
-			return;
-		addCoins(rpg, (int) (xp/50));
+		addCoins(rpg, (int) (xp/50), "quest", true);
 	}
 	
-	private void addCoins(RpgPlayer rpg, int amount) {
+	@Deprecated
+	public void addCoins(RpgPlayer rpg, int amount) {
 		if(amount <= 0)
 			return;
 		RpgPlayerInfo info = rpg.getInfo();

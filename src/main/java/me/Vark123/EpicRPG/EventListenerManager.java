@@ -18,9 +18,13 @@ import me.Vark123.EpicRPG.BlackrockSystem.Events.BlackrockHealDebuffEvent;
 import me.Vark123.EpicRPG.BlackrockSystem.Events.BlackrockRemoveAllEvent;
 import me.Vark123.EpicRPG.BlackrockSystem.Events.BlackrockRemoveEvent;
 import me.Vark123.EpicRPG.BlackrockSystem.Events.BlackrockResetEvent;
+import me.Vark123.EpicRPG.BoosterSystem.Listeners.BoosterModifyListener;
 import me.Vark123.EpicRPG.Chat.ChatMsgSendEvent;
 import me.Vark123.EpicRPG.Core.Events.PlayerUseDisabledBlockEvent;
 import me.Vark123.EpicRPG.Core.Events.PlayerUseLeverEvent;
+import me.Vark123.EpicRPG.Core.Listeners.ExecutableItemUseListener;
+import me.Vark123.EpicRPG.Core.Listeners.LevelSystemControlListener;
+import me.Vark123.EpicRPG.Core.Listeners.VipBoostControlListener;
 import me.Vark123.EpicRPG.FightSystem.LavaDamageEvent;
 import me.Vark123.EpicRPG.FightSystem.RpgDamageEvent;
 import me.Vark123.EpicRPG.FightSystem.RpgDeathEvent;
@@ -141,6 +145,11 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new PlayerUseLeverEvent(), inst);
 		
 		Bukkit.getPluginManager().registerEvents(new HungerSkillEvent(), inst);
+
+		Bukkit.getPluginManager().registerEvents(new VipBoostControlListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new LevelSystemControlListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new ExecutableItemUseListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new BoosterModifyListener(), inst);
 		
 		//Damage Modifiers
 		DamageModifierManager.getInstance().registerModifier(new WedrownyCienModifier(), EventPriority.LOWEST);

@@ -2,6 +2,7 @@ package me.Vark123.EpicRPG.Files;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,6 +17,8 @@ import org.bukkit.inventory.ItemStack;
 import me.Vark123.EpicRPG.EpicRPGMobManager;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.BlackrockSystem.BlackrockManager;
+import me.Vark123.EpicRPG.BoosterSystem.Booster;
+import me.Vark123.EpicRPG.BoosterSystem.BoosterManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgJewelry;
 import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
@@ -33,6 +36,7 @@ public class FileOperations {
 	private static File jewelry = new File(Main.getInstance().getDataFolder(), "jewelry");
 	private static File exp = new File(Main.getInstance().getDataFolder(), "exp.yml");
 	private static File blackrock = new File(Main.getInstance().getDataFolder(), "blackrock.yml");
+	private static File boosters = new File(Main.getInstance().getDataFolder(), "boosters.yml");
 
 	public static void checkFiles() {
 		if(!Main.getInstance().getDataFolder().exists()) {
@@ -65,6 +69,12 @@ public class FileOperations {
 				e.printStackTrace();
 			}
 		}
+		if(!boosters.exists())
+			try {
+				boosters.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		
 		YamlConfiguration fYml = YamlConfiguration.loadConfiguration(exp);
 		fYml.getKeys(false).stream().parallel().forEach(s -> {
@@ -102,6 +112,17 @@ public class FileOperations {
 				BlackrockManager.getInstance().completeDailyBlackrock(completed);
 			});
 		}
+		
+		YamlConfiguration boosterYml = YamlConfiguration.loadConfiguration(boosters);
+		boosterYml.getKeys(false).stream().forEach(name -> {
+			ConfigurationSection boosterSection = boosterYml.getConfigurationSection(name);
+			String display = ChatColor.translateAlternateColorCodes('&', boosterSection.getString("display"));
+			boosterSection.getKeys(false).forEach(key -> {
+				double modifier = boosterSection.getDouble(key+".modifier");
+				long exp = boosterSection.getLong(key+".exp");
+				BoosterManager.get().initBooster(name, display, modifier, exp);
+			});
+		});
 	}
 	
 	@Deprecated
@@ -210,6 +231,31 @@ public class FileOperations {
 		fYml.set("lista", toSave);
 		try {
 			fYml.save(f);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void saveBoosters() {
+		YamlConfiguration fYml = YamlConfiguration.loadConfiguration(boosters);
+		fYml.getKeys(false).forEach(key -> fYml.set(key, null));
+		
+		BoosterManager.get().getBoosters().entrySet().forEach(entry -> {
+			Booster booster = entry.getKey();
+			String name = booster.getName();
+			String display = booster.getDisplay();
+			double modifier = booster.getModifier();
+			long exp = entry.getValue().getTime();
+			
+			String uid = UUID.randomUUID().toString();
+			
+			fYml.set(name+".display", display);
+			fYml.set(name+"."+uid+".modifier", modifier);
+			fYml.set(name+"."+uid+".exp", exp - new Date().getTime());
+		});
+		
+		try {
+			fYml.save(boosters);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

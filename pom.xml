@@ -37,6 +37,11 @@
 		    <name>Lumine Releases</name>
 		    <url>https://mvn.lumine.io/repository/maven-public/</url>
 		</repository>
+		<repository>
+			<id>codemc-repo</id>
+			<url>https://repo.codemc.org/repository/maven-public/</url>
+			<layout>default</layout>
+		</repository>
 	</repositories>
 	<dependencies>
 		<dependency>
@@ -49,13 +54,6 @@
 			<groupId>com.comphenix.protocol</groupId>
 			<artifactId>ProtocolLib</artifactId>
 			<version>4.8.0</version>
-		</dependency>
-		<dependency>
-			<groupId>EpicRPGSkillsAndQuests2</groupId>
-			<artifactId>EpicRPGSkillsAndQuests2</artifactId>
-			<scope>system</scope>
-			<version>1.0.0</version>
-			<systemPath>${env.USERPROFILE}\Desktop\plugins\EpicRPGSkillsAndQuests2.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>Vault</groupId>
@@ -86,25 +84,11 @@
 			<systemPath>${env.USERPROFILE}\Desktop\plugins\CalendarEvents.jar</systemPath>
 		</dependency>
 		<dependency>
-			<groupId>Clans</groupId>
-			<artifactId>Clans</artifactId>
+			<groupId>EffectLib</groupId>
+			<artifactId>EffectLib</artifactId>
 			<scope>system</scope>
 			<version>1.0.0</version>
-			<systemPath>${env.USERPROFILE}\Desktop\plugins\Clans-Spigot-0.9.9.28.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>EpicClans</groupId>
-			<artifactId>EpicClans</artifactId>
-			<scope>system</scope>
-			<version>1.0.0</version>
-			<systemPath>${env.USERPROFILE}\Desktop\plugins\EpicClans.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>item_nbt</groupId>
-			<artifactId>item_nbt</artifactId>
-			<scope>system</scope>
-			<version>1.0.0</version>
-			<systemPath>${env.USERPROFILE}\Desktop\plugins\item-nbt-api-plugin-2.11.1.jar</systemPath>
+			<systemPath>${env.USERPROFILE}\Desktop\plugins\EffectLib-9.0.jar</systemPath>
 		</dependency>
 		<dependency>
 		    <groupId>io.lumine</groupId>
@@ -113,32 +97,11 @@
 		    <scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>npclib</groupId>
-			<artifactId>npclib</artifactId>
-			<scope>system</scope>
-			<version>1.0.0</version>
-			<systemPath>${env.USERPROFILE}\Desktop\plugins\npclib-plugin-2.11.1-SNAPSHOT.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>PAFSpigot</groupId>
-			<artifactId>PAFSpigot</artifactId>
-			<scope>system</scope>
-			<version>1.0.0</version>
-			<systemPath>${env.USERPROFILE}\Desktop\plugins\PAFSpigot-N-1.0.66.jar</systemPath>
-		</dependency>
-		<dependency>
 			<groupId>PlaceholderAPI</groupId>
 			<artifactId>PlaceholderAPI</artifactId>
 			<scope>system</scope>
 			<version>1.0.0</version>
 			<systemPath>${env.USERPROFILE}\Desktop\plugins\PlaceholderAPI-2.10.10.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>EffectLib</groupId>
-			<artifactId>EffectLib</artifactId>
-			<scope>system</scope>
-			<version>1.0.0</version>
-			<systemPath>${env.USERPROFILE}\Desktop\plugins\EffectLib-9.0.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>io.github.rysefoxx.inventory</groupId>
@@ -150,6 +113,11 @@
 			<artifactId>lombok</artifactId>
 			<version>1.18.26</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+		  	<groupId>de.tr7zw</groupId>
+		  	<artifactId>item-nbt-api-plugin</artifactId>
+		  	<version>2.11.3</version>
 		</dependency>
 	</dependencies>
 </project>

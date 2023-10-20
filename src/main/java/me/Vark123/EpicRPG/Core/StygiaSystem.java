@@ -1,9 +1,9 @@
 package me.Vark123.EpicRPG.Core;
 
-import org.bukkit.entity.Player;
+import org.bukkit.Bukkit;
 
+import me.Vark123.EpicRPG.Core.Events.StygiaModifyEvent;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 import me.Vark123.EpicRPG.Players.Components.RpgVault;
 
 public class StygiaSystem {
@@ -18,33 +18,30 @@ public class StygiaSystem {
 		return instance;
 	}
 	
-	public void addMobStygia(RpgPlayer rpg, int xp) {
-		RpgPlayerInfo info = rpg.getInfo();
-		RpgVault vault = rpg.getVault();
-		if(info.getLevel() < 60)
+	public void addStygia(RpgPlayer rpg, int amount, String reason, boolean displayMessage) {
+		StygiaModifyEvent event = new StygiaModifyEvent(rpg, amount, 1, reason);
+		Bukkit.getPluginManager().callEvent(event);
+		if(event.isCancelled())
 			return;
-		Player p = rpg.getPlayer();
-		int stygia;
-		if(p.hasPermission("rpg.vip")) {
-			stygia = (int) (((double) xp) * 1.5 / 100);
-		} else {
-			stygia = xp/100;
-		}
 		
-		if(stygia == 0)
+		int _amount = (int) (event.getAmount()*event.getModifier());
+		if(_amount == 0)
 			return;
-		vault.addStygia(stygia);
+
+		RpgVault vault = rpg.getVault();
+		vault.addStygia(_amount);
+		
+		if(!displayMessage)
+			return;
+		rpg.getPlayer().sendMessage("§3§o+"+ _amount +" stygia §7[§3§o"+vault.getStygia()+" stygia§7]");
+	}
+	
+	public void addMobStygia(RpgPlayer rpg, int xp) {
+		addStygia(rpg, xp/100, "mob", false);
 	}
 	
 	public void addQuestStygia(RpgPlayer rpg, int xp) {
-		RpgPlayerInfo info = rpg.getInfo();
-		RpgVault vault = rpg.getVault();
-		if(info.getLevel() < 60)
-			return;
-		Player p = rpg.getPlayer();
-		int stygia = xp/400;
-		vault.addStygia(stygia);
-		p.sendMessage("§3§o+"+ stygia +" stygia §7[§3§o"+vault.getStygia()+" stygia§7]");
+		addStygia(rpg, xp/400, "mob", false);
 	}
 	
 }

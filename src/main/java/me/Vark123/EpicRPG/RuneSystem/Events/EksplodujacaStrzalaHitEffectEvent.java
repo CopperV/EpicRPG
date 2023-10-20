@@ -37,6 +37,7 @@ public class EksplodujacaStrzalaHitEffectEvent implements Listener {
 	
 	private static final double DEFAULT_EXPLOSION_DMG_MOD = 0.2;
 	private static final double DEFAULT_EXPLOSION_DMG_MOD_H = 0.26;
+	private static final double DEFAULT_EXPLOSION_DMG_MOD_M = 0.35;
 
 	@EventHandler
 	public void onHit(ProjectileHitEvent e) {
@@ -58,7 +59,8 @@ public class EksplodujacaStrzalaHitEffectEvent implements Listener {
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		RpgModifiers modifiers = rpg.getModifiers();
 		if(!modifiers.hasEksplodujacaStrzala()
-				&& !modifiers.hasEksplodujacaStrzala_h())
+				&& !modifiers.hasEksplodujacaStrzala_h()
+				&& !modifiers.hasEksplodujacaStrzala_m())
 			return;
 		
 		if(!arrow.hasMetadata("rpg_bow") || !arrow.hasMetadata("rpg_force"))
@@ -72,8 +74,10 @@ public class EksplodujacaStrzalaHitEffectEvent implements Listener {
 		DamageCalculator calculator = DamageManager.getInstance().getProjectileCalculator();
 		if(modifiers.hasEksplodujacaStrzala()) {
 			baseDmg = new MutableDouble(DEFAULT_EXPLOSION_DMG_MOD);
-		} else {
+		} else if(modifiers.hasEksplodujacaStrzala_h()) {
 			baseDmg = new MutableDouble(DEFAULT_EXPLOSION_DMG_MOD_H);
+		} else {
+			baseDmg = new MutableDouble(DEFAULT_EXPLOSION_DMG_MOD_M);
 		}
 		if(bow.getType().equals(Material.CROSSBOW)) {
 			double enchantMod = 0;

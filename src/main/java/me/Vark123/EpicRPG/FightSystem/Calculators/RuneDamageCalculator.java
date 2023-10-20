@@ -4,11 +4,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
-import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
-import de.simonsator.partyandfriends.clan.api.Clan;
-import de.simonsator.partyandfriends.clan.api.ClansManager;
-import me.Vark123.EpicClans.EpicClansApi;
 import me.Vark123.EpicRPG.FightSystem.DamageUtils;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
@@ -106,14 +101,14 @@ public class RuneDamageCalculator implements DamageCalculator {
 		dmg += dmgMana;
 		dmg = DamageUtils.randomizeDamage(dmg);
 		
-		OnlinePAFPlayer paf = PAFPlayerManager.getInstance().getPlayer(p);
-		if(paf != null) {
-			Clan klan = ClansManager.getInstance().getClan(paf);
-			if(klan != null) {
-				double attack = EpicClansApi.getInst().getAttackValue(klan);
-				dmg += dmg*attack;
-			}
-		}
+//		OnlinePAFPlayer paf = PAFPlayerManager.getInstance().getPlayer(p);
+//		if(paf != null) {
+//			Clan klan = ClansManager.getInstance().getClan(paf);
+//			if(klan != null) {
+//				double attack = EpicClansApi.getInst().getAttackValue(klan);
+//				dmg += dmg*attack;
+//			}
+//		}
 		
 		double dmgPotionInt = 0;
 		double dmgZadzaKrwi = 0;
@@ -128,6 +123,7 @@ public class RuneDamageCalculator implements DamageCalculator {
 		double dmgPelnia = 0;
 		double dmgSilaRownowagi = 0;
 		double dmgSilaRownowagi_H = 0;
+		double dmgSilaRownowagi_M = 0;
 		
 		switch(modifiers.getPotionInteligencja()) {
 			case 1:
@@ -182,10 +178,16 @@ public class RuneDamageCalculator implements DamageCalculator {
 			else
 				dmgSilaRownowagi_H = dmg * 0.25;
 		}
+		if(modifiers.hasSilaRownowagi_m()) {
+			if(dr.getMagicType().equalsIgnoreCase("rownowaga"))
+				dmgSilaRownowagi_M = dmg * 0.5;
+			else
+				dmgSilaRownowagi_M = dmg * 0.33;
+		}
 		dmg = dmg + dmgPotionInt + dmgZadzaKrwi + dmgInkantacja + dmgPoswiecenie
 				+ dmgZyciodajnaZiemia + dmgZakazanyRytual
 				+ dmgZakazanyRytual_H + dmgZyciodajnaZiemia_M + dmgZakazanyRytual_M 
-				+ dmgZewKrwi + dmgPelnia + dmgSilaRownowagi + dmgSilaRownowagi_H;
+				+ dmgZewKrwi + dmgPelnia + dmgSilaRownowagi + dmgSilaRownowagi_H + dmgSilaRownowagi_M;
 		
 		if(modifiers.hasProwokacja()) {
 			dmg /= 100;

@@ -59,6 +59,7 @@ public class Main extends JavaPlugin {
 	public void onDisable() {
 		DBOperations.close();
 		FileOperations.saveBlackrockCompleted();
+		FileOperations.saveBoosters();
 		EpicRPGMobManager.getInstance().clear();
 		
 		playerPlaceholders.unregister();

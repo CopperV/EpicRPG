@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import de.tr7zw.nbtapi.NBTItem;
 import io.github.rysefoxx.inventory.plugin.other.EventCreator;
 import lombok.Getter;
-import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Core.RudaSystem;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Utils.Utils;
@@ -78,8 +78,9 @@ public class FishSellEvents {
 			
 			int value = price.getValue();
 			RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
-			rpg.getVault().addBrylkiRudy(value);
-			p.sendMessage(Main.getInstance().getPrefix()+" §aOtrzymales §9§o"+value+" §abrylek rudy");
+			RudaSystem.getInstance().addRuda(rpg, value, "fish", true);
+//			rpg.getVault().addBrylkiRudy(value);
+//			p.sendMessage(Main.getInstance().getPrefix()+" §aOtrzymales §9§o"+value+" §abrylek rudy");
 			
 			toDrop.forEach(it -> {
 				Utils.dropItemStack(p, it);

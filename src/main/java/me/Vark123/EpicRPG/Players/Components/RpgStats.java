@@ -78,7 +78,6 @@ public class RpgStats implements Serializable, ChatPrintable {
 
 	@Setter(value = AccessLevel.NONE)
 	private int presentMana = 7;
-	@Setter(value = AccessLevel.NONE)
 	private int krag;
 
 	@Setter(value = AccessLevel.NONE)
@@ -195,6 +194,28 @@ public class RpgStats implements Serializable, ChatPrintable {
 				addPresentManaSmart(mana);
 			}
 		}.runTaskTimer(Main.getInstance(), 0, 20);
+	}
+	
+	public void addSila(int amount) {
+		this.sila += amount;
+	}
+	public void addZrecznosc(int amount) {
+		this.zrecznosc += amount;
+	}
+	public void addWytrzymalosc(int amount) {
+		this.wytrzymalosc += amount;
+	}
+	public void addZdolnosci(int amount) {
+		this.zdolnosci += amount;
+	}
+	public void addWalka(int amount) {
+		this.walka += amount;
+	}
+	public void addMana(int amount) {
+		this.mana += amount;
+	}
+	public void addInteligencja(int amount) {
+		this.inteligencja += amount;
 	}
 
 	public void addPotionOchrona(int potionOchrona) {

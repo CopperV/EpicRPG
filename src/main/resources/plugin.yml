@@ -2,8 +2,7 @@ name: EpicRPG
 version: 2.0.0-ALPHA
 main: me.Vark123.EpicRPG.Main
 author: Vark123
-depend: [CalendarEvents,MythicMobs,NBTAPI,Clans,PartyAndFriends,ProtocolLib]
-softdepend: [EpicClans]
+depend: [CalendarEvents,MythicMobs,NBTAPI,ProtocolLib]
 api-version: 1.18
 
 libraries:
@@ -61,3 +60,6 @@ commands:
     aliases: [ab,abs,advancedbuysystem]
   event:
     aliases: [evc, ev]
+  epicboost:
+  modyfikatory:
+    aliases: [modyfikator, mod, booster, boosters, boost, boosts]

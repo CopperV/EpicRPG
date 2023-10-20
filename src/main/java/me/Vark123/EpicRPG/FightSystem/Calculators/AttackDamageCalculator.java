@@ -15,12 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
-import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
-import de.simonsator.partyandfriends.clan.api.Clan;
-import de.simonsator.partyandfriends.clan.api.ClansManager;
 import de.tr7zw.nbtapi.NBTItem;
-import me.Vark123.EpicClans.EpicClansApi;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.FightSystem.DamageUtils;
 import me.Vark123.EpicRPG.HealthSystem.RpgPlayerHealEvent;
@@ -146,14 +141,14 @@ public class AttackDamageCalculator implements DamageCalculator {
 			
 			dmg = DamageUtils.randomizeDamage(dmg);
 
-			OnlinePAFPlayer paf = PAFPlayerManager.getInstance().getPlayer(p);
-			if(paf != null) {
-				Clan klan = ClansManager.getInstance().getClan(paf);
-				if(klan != null) {
-					double attack = EpicClansApi.getInst().getAttackValue(klan);
-					dmg += dmg * attack;
-				}
-			}
+//			OnlinePAFPlayer paf = PAFPlayerManager.getInstance().getPlayer(p);
+//			if(paf != null) {
+//				Clan klan = ClansManager.getInstance().getClan(paf);
+//				if(klan != null) {
+//					double attack = EpicClansApi.getInst().getAttackValue(klan);
+//					dmg += dmg * attack;
+//				}
+//			}
 			
 			if(crit) {
 				switch(modifiers.getPotionZrecznosc()) {

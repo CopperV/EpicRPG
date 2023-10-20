@@ -1,8 +1,6 @@
 package me.Vark123.EpicRPG.RuneSystem.Runes;
 
-import java.util.LinkedHashSet;
 import java.util.Random;
-import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -25,16 +23,13 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
-import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
-import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
-import de.simonsator.partyandfriends.api.party.PartyAPI;
-import de.simonsator.partyandfriends.api.party.PlayerParty;
-import de.simonsator.partyandfriends.clan.api.Clan;
-import de.simonsator.partyandfriends.clan.api.ClansManager;
 import me.Vark123.EpicRPG.Main;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
+//TODO
+//Ogarnac jakos klany
+//Oraz party
 public class PoteznaRunaDomisia extends ARune {
 	
 	public PoteznaRunaDomisia(ItemStackRune dr, Player p) {
@@ -180,79 +175,79 @@ public class PoteznaRunaDomisia extends ARune {
 			}.runTaskTimer(Main.getInstance(), 0, 5);
 		});
 		
-		OnlinePAFPlayer pafPlayer = PAFPlayerManager.getInstance().getPlayer(p);
-		PlayerParty party = PartyAPI.getParty(pafPlayer);
-		Clan klan = ClansManager.getInstance().getClan(pafPlayer);
-		Set<OnlinePAFPlayer> set = new LinkedHashSet<>();
+//		OnlinePAFPlayer pafPlayer = PAFPlayerManager.getInstance().getPlayer(p);
+//		PlayerParty party = PartyAPI.getParty(pafPlayer);
+//		Clan klan = ClansManager.getInstance().getClan(pafPlayer);
+//		Set<OnlinePAFPlayer> set = new LinkedHashSet<>();
 		
-		if(party != null) {
-			set.addAll(party.getAllPlayers());
-		}
-		if(klan != null) {
-			set.addAll(klan.getAllOnlineClanPlayers());
-		}
-		
-		set.stream().filter(paf -> {
-			if(paf.equals(pafPlayer))
-				return false;
-			return true;
-		}).forEach(paf -> {
-			Player tmp = paf.getPlayer();
-			tmp.playSound(tmp.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 5, 0.1f);
-			tmp.addPotionEffect(effect1);
-			tmp.addPotionEffect(effect2);
-			tmp.addPotionEffect(effect3);
-			tmp.addPotionEffect(effect4);
-			tmp.addPotionEffect(effect5);
-			tmp.addPotionEffect(effect7);
-			if(conf)
-				tmp.addPotionEffect(effect6);
-			
-			new BukkitRunnable() {
-				
-				double time = dr.getDurationTime();
-				double timer = dr.getDurationTime();
-				BossBar bar = Bukkit.createBossBar("§5§lPotezna Runa Domisia§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
-					bar.setVisible(true);
-					bar.addPlayer(tmp);
-					bar.setProgress(timer/time);
-				}
-				
-				@Override
-				public void run() {
-					if(timer <= 0) {
-						bar.removeAll();
-						bar.setVisible(false);
-						this.cancel();
-						return;
-					}
-					
-					bar.setTitle("§5§lPotezna Runa Domisia§f: "+(int)timer+" sekund");
-					bar.setProgress(timer/time);
-					
-					--timer;
-				}
-			}.runTaskTimer(Main.getInstance(), 0, 20);
-			
-			new BukkitRunnable() {
-				int timer = dr.getDurationTime()*4;
-				DustOptions dust = new DustOptions(Color.fromRGB(128, 0, 128), 1);
-				@Override
-				public void run() {
-					if(timer <= 0) {
-						tmp.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
-						tmp.playSound(tmp.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 5, 1f);
-						this.cancel();
-						return;
-					}
-					
-					Location loc = tmp.getLocation().add(0,1,0);
-					tmp.getWorld().spawnParticle(Particle.REDSTONE, loc, 3, 0.5f, 0.5f, 0.5f, 0.1f,dust);
-					
-					--timer;
-				}
-			}.runTaskTimer(Main.getInstance(), 0, 5);
-		});
+//		if(party != null) {
+//			set.addAll(party.getAllPlayers());
+//		}
+//		if(klan != null) {
+//			set.addAll(klan.getAllOnlineClanPlayers());
+//		}
+//		
+//		set.stream().filter(paf -> {
+//			if(paf.equals(pafPlayer))
+//				return false;
+//			return true;
+//		}).forEach(paf -> {
+//			Player tmp = paf.getPlayer();
+//			tmp.playSound(tmp.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 5, 0.1f);
+//			tmp.addPotionEffect(effect1);
+//			tmp.addPotionEffect(effect2);
+//			tmp.addPotionEffect(effect3);
+//			tmp.addPotionEffect(effect4);
+//			tmp.addPotionEffect(effect5);
+//			tmp.addPotionEffect(effect7);
+//			if(conf)
+//				tmp.addPotionEffect(effect6);
+//			
+//			new BukkitRunnable() {
+//				
+//				double time = dr.getDurationTime();
+//				double timer = dr.getDurationTime();
+//				BossBar bar = Bukkit.createBossBar("§5§lPotezna Runa Domisia§f: "+(int)timer+" sekund", BarColor.BLUE, BarStyle.SEGMENTED_12);{
+//					bar.setVisible(true);
+//					bar.addPlayer(tmp);
+//					bar.setProgress(timer/time);
+//				}
+//				
+//				@Override
+//				public void run() {
+//					if(timer <= 0) {
+//						bar.removeAll();
+//						bar.setVisible(false);
+//						this.cancel();
+//						return;
+//					}
+//					
+//					bar.setTitle("§5§lPotezna Runa Domisia§f: "+(int)timer+" sekund");
+//					bar.setProgress(timer/time);
+//					
+//					--timer;
+//				}
+//			}.runTaskTimer(Main.getInstance(), 0, 20);
+//			
+//			new BukkitRunnable() {
+//				int timer = dr.getDurationTime()*4;
+//				DustOptions dust = new DustOptions(Color.fromRGB(128, 0, 128), 1);
+//				@Override
+//				public void run() {
+//					if(timer <= 0) {
+//						tmp.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
+//						tmp.playSound(tmp.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 5, 1f);
+//						this.cancel();
+//						return;
+//					}
+//					
+//					Location loc = tmp.getLocation().add(0,1,0);
+//					tmp.getWorld().spawnParticle(Particle.REDSTONE, loc, 3, 0.5f, 0.5f, 0.5f, 0.1f,dust);
+//					
+//					--timer;
+//				}
+//			}.runTaskTimer(Main.getInstance(), 0, 5);
+//		});
 		
 	}
 
