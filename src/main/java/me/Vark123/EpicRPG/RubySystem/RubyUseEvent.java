@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.Sound;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
@@ -67,34 +68,45 @@ public class RubyUseEvent implements Listener {
 		List<String> lore = new LinkedList<>();
 		if(use) {
 			int present = Integer.parseInt(nbt.getString("PresentValue"));
+			int toUse = present;
 			if(present == 0)
 				return;
 			
 			if(hpRuby) {
-				RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg, present);
+				int toHeal = (int) (p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() - p.getHealth());
+				if(toHeal < present)
+					toUse = toHeal;
+				present -= toUse;
+				
+				RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg, toUse);
 				Bukkit.getPluginManager().callEvent(event);
 				
 				dust = new DustOptions(Color.RED, 1f);
 				volume = 0.8f;
 				sound = Sound.BLOCK_END_PORTAL_SPAWN;
-				lore.add("§cZycie: §7"+0+"/"+nbt.getString("MaxValue"));
+				lore.add("§cZycie: §7"+present+"/"+nbt.getString("MaxValue"));
 			} else {
+				int toRegen = rpg.getStats().getFinalMana() - rpg.getStats().getPresentMana();
+				if(toRegen < present)
+					toUse = toRegen;
+				present -= toUse;
+				
 				rpg.getStats().addPresentManaSmart(present);
 				
 				dust = new DustOptions(Color.BLUE, 1f);
 				volume = 1.3f;
 				sound = Sound.BLOCK_END_PORTAL_SPAWN;
-				lore.add("§9Mana: §7"+0+"/"+nbt.getString("MaxValue"));
+				lore.add("§9Mana: §7"+present+"/"+nbt.getString("MaxValue"));
 			}
 			
-			nbt.setString("PresentValue", 0+"");
+			nbt.setString("PresentValue", present+"");
 		} else {
 			int max = Integer.parseInt(nbt.getString("MaxValue"));
 			int present = Integer.parseInt(nbt.getString("PresentValue"));
 			if(present == max) 
 				return;
 			
-			int percent = max/20;
+			int percent = max/100;
 			int diff = max-present;
 			
 			int toAdd;
@@ -107,25 +119,50 @@ public class RubyUseEvent implements Listener {
 				if((p.getHealth() - 5) < toAdd)
 					return;
 				
-				EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(p, p, DamageCause.CONTACT, toAdd);
-				Bukkit.getPluginManager().callEvent(event);
+				RubyStorageEvent storeEvent = new RubyStorageEvent(p, toAdd, toAdd, true);
+				Bukkit.getPluginManager().callEvent(storeEvent);
+				if(storeEvent.isCancelled()) {
+					e.setCancelled(true);
+					return;
+				}
+				
+				if(storeEvent.getUse() > 0) {
+					EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(p, p, DamageCause.CONTACT, storeEvent.getUse());
+					Bukkit.getPluginManager().callEvent(event);
+				}
 
-				p.setHealth(p.getHealth()-toAdd);
+				p.setHealth(p.getHealth()-storeEvent.getUse());
 				p.playEffect(EntityEffect.HURT);
 
 				dust = new DustOptions(Color.RED, 1.5f);
 				volume = 1.3f;
 				sound = Sound.ENTITY_GENERIC_EXTINGUISH_FIRE;
+				
+				toAdd = (int) storeEvent.getStore();
+				if(max < present + toAdd)
+					toAdd = max - present;
 				lore.add("§cZycie: §7"+(present+toAdd)+"/"+max);
 			} else {
 				if((rpg.getStats().getPresentMana() + 5) < toAdd)
 					return;
 				
-				rpg.getStats().removePresentManaSmart(toAdd);
+				RubyStorageEvent storeEvent = new RubyStorageEvent(p, toAdd, toAdd, false);
+				Bukkit.getPluginManager().callEvent(storeEvent);
+				if(storeEvent.isCancelled()) {
+					e.setCancelled(true);
+					return;
+				}
+
+				if(storeEvent.getUse() > 0)
+					rpg.getStats().removePresentManaSmart((int) storeEvent.getUse());
 				
 				dust = new DustOptions(Color.BLUE, 1.5f);
 				volume = 0.8f;
 				sound = Sound.BLOCK_ENCHANTMENT_TABLE_USE;
+				
+				toAdd = (int) storeEvent.getStore();
+				if(max < present + toAdd)
+					toAdd = max - present;
 				lore.add("§9Mana: §7"+(present+toAdd)+"/"+max);
 			}
 			nbt.setString("PresentValue", (present+toAdd)+"");
@@ -133,6 +170,7 @@ public class RubyUseEvent implements Listener {
 
 		p.playSound(p.getLocation(), sound, 1f, volume);
 		p.spawnParticle(Particle.REDSTONE, p.getLocation().add(0, 1, 0), 30, 1f, 1f, 1f, 1f, dust);
+		
 		nbt.applyNBT(ruby);
 		ItemMeta im = ruby.getItemMeta();
 		im.setLore(lore);

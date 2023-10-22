@@ -28,7 +28,7 @@ public class RudaBoosterCommand extends ABoostCommand {
 		double modifier = Double.parseDouble(args[1]);
 		long time = Long.parseLong(args[2]) * 1000;
 		
-		BoosterManager.get().registerBooster(player, "ruda", "brylki rudy", modifier, time);
+		BoosterManager.get().registerBooster(player, "ruda", "§9§lbrylki rudy", modifier, time);
 		return true;
 	}
 

@@ -28,7 +28,7 @@ public class StygiaBoosterCommand extends ABoostCommand {
 		double modifier = Double.parseDouble(args[1]);
 		long time = Long.parseLong(args[2]) * 1000;
 		
-		BoosterManager.get().registerBooster(player, "stygia", "stygia", modifier, time);
+		BoosterManager.get().registerBooster(player, "stygia", "§3§lstygia", modifier, time);
 		return true;
 	}
 

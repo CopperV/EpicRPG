@@ -28,7 +28,7 @@ public class CoinsBoosterCommand extends ABoostCommand {
 		double modifier = Double.parseDouble(args[1]);
 		long time = Long.parseLong(args[2]) * 1000;
 		
-		BoosterManager.get().registerBooster(player, "coins", "smocze monety", modifier, time);
+		BoosterManager.get().registerBooster(player, "coins", "§4§lsmocze monety", modifier, time);
 		return true;
 	}
 

@@ -28,7 +28,7 @@ public class ExpBoosterCommand extends ABoostCommand {
 		double modifier = Double.parseDouble(args[1]);
 		long time = Long.parseLong(args[2]) * 1000;
 		
-		BoosterManager.get().registerBooster(player, "xp", "xp", modifier, time);
+		BoosterManager.get().registerBooster(player, "xp", "§e§lxp", modifier, time);
 		return true;
 	}
 
