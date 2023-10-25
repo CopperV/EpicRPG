@@ -51,6 +51,12 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>me.Vark123.ArcholosRPG</groupId>
+			<artifactId>EpicOptions</artifactId>
+			<scope>provided</scope>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
 			<groupId>com.comphenix.protocol</groupId>
 			<artifactId>ProtocolLib</artifactId>
 			<version>4.8.0</version>

@@ -27,6 +27,7 @@ import me.Vark123.EpicRPG.Players.Components.RpgRzemiosla;
 import me.Vark123.EpicRPG.Players.Components.RpgSkills;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import me.Vark123.EpicRPG.Players.Components.RpgVault;
+import me.Vark123.EpicRPG.Players.Components.Compass.EpicCompass;
 import me.Vark123.EpicRPG.Stats.ChangeStats;
 import me.Vark123.EpicRPG.Utils.ChatPrintable;
 import me.Vark123.EpicRPG.Utils.Utils;
@@ -53,6 +54,7 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 	private RpgReputation reputation;
 	
 	private Scoreboard board;
+	private EpicCompass compass;
 	
 	public RpgPlayer(Player p) {
 		this.player = p;
@@ -64,7 +66,9 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 		this.vault = new RpgVault(this);
 		this.jewelry = new RpgJewelry(this);
 		this.reputation = new RpgReputation(this);
-		board = Bukkit.getScoreboardManager().getNewScoreboard();
+		
+		this.board = Bukkit.getScoreboardManager().getNewScoreboard();
+		this.compass = new EpicCompass(this);
 		
 		createDisplay();
 	}
@@ -85,7 +89,9 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 			p.kickPlayer("Blad pobierania danych z bazy danych - zglos ten fakt administratorowi");
 			e.printStackTrace();
 		}
-		board = Bukkit.getScoreboardManager().getNewScoreboard();
+		
+		this.board = Bukkit.getScoreboardManager().getNewScoreboard();
+		this.compass = new EpicCompass(this);
 		
 		createDisplay();
 	}
@@ -100,7 +106,9 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 		this.vault = new RpgVault(this, fYml);
 		this.jewelry = new RpgJewelry(this);
 		this.reputation = new RpgReputation(this, fYml);
-		board = Bukkit.getScoreboardManager().getNewScoreboard();
+		
+		this.board = Bukkit.getScoreboardManager().getNewScoreboard();
+		this.compass = new EpicCompass(this);
 		
 		createDisplay();
 	}
@@ -137,6 +145,8 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 	public void endTasks() {
 		score.cancel();
 		skills.endTasks();
+		
+		compass.getCompass().removeAll();
 	}
 	
 	public boolean resetStats() {
