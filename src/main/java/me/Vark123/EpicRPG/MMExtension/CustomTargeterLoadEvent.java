@@ -10,6 +10,7 @@ import me.Vark123.EpicRPG.MMExtension.Targeters.AngleTargeter;
 import me.Vark123.EpicRPG.MMExtension.Targeters.CircleSegmentTargeter;
 import me.Vark123.EpicRPG.MMExtension.Targeters.ConditionalTarget;
 import me.Vark123.EpicRPG.MMExtension.Targeters.ForwardLevelTargeter;
+import me.Vark123.EpicRPG.MMExtension.Targeters.WorldLimitTargeter;
 
 public class CustomTargeterLoadEvent implements Listener {
 
@@ -32,6 +33,10 @@ public class CustomTargeterLoadEvent implements Listener {
 				break;
 			case "angletarget":
 				target = new AngleTargeter(MythicBukkit.inst().getSkillManager(), e.getConfig());
+				e.register(target);
+				break;
+			case "worldlimit":
+				target = new WorldLimitTargeter(MythicBukkit.inst().getSkillManager(), e.getConfig());
 				e.register(target);
 				break;
 		}

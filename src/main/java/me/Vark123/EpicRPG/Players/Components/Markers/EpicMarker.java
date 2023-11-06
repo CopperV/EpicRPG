@@ -40,6 +40,8 @@ public class EpicMarker implements Serializable {
 					this.marker = (MarkerSerializable) option.getValue();
 				});
 			});
+		if(marker.isCreated() && marker.isShowed())
+			createMarker();
 	}
 	
 	public void hideMarker() {
@@ -82,6 +84,35 @@ public class EpicMarker implements Serializable {
 		}.runTaskTimerAsynchronously(Main.getInstance(), 0, 4);
 	}
 	
+	public void createMarker() {
+		if(ognikTask != null && !ognikTask.isCancelled())
+			ognikTask.cancel();
+		
+		ognikTask = new BukkitRunnable() {
+			Player p = rpg.getPlayer();
+			@Override
+			public void run() {
+				if(!p.getWorld().getName().equalsIgnoreCase(marker.getWorld()))
+					return;
+				Location ognikLocation = p.getLocation().clone().add(0, 1.25, 0);
+				Location targetLocation = new Location(ognikLocation.getWorld(), marker.getX(), ognikLocation.getY(), marker.getZ());
+				boolean isClose = false;
+				if(ognikLocation.distance(targetLocation) > DISTANCE) {
+					Vector vec = new Vector(
+							targetLocation.getX() - ognikLocation.getX(),
+							0,
+							targetLocation.getZ() - ognikLocation.getZ())
+							.normalize()
+							.multiply(DISTANCE);
+					targetLocation = ognikLocation.clone().add(vec);
+				} else {
+					isClose = true;
+				}
+				spawnOgnik(targetLocation, isClose);
+			}
+		}.runTaskTimerAsynchronously(Main.getInstance(), 0, 2);
+	}
+	
 	private void spawnOgnik(Location loc, boolean isClose) {
 		Player p = rpg.getPlayer();
 		Location spawnLoc = loc.clone().add(0, ognik.getY(), 0);
@@ -99,9 +130,9 @@ public class EpicMarker implements Serializable {
 	
 	@Getter
 	private static class Ognik {
-		private static final int INTERVAL = 4;
+		private static final int INTERVAL = 2;
 		private static final double AMPLITUDE = 0.4;
-		private static final double MODIFIER = 0.075;
+		private static final double MODIFIER = 0.035;
 		
 		private double y = 0;
 		private BukkitTask task;

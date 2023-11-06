@@ -215,10 +215,10 @@ public class MarkerOptionMenuManager {
 						marker.setZ(z);
 						marker.setWorld(p.getWorld().getName());
 						marker.setCreated(true);
+						marker.setShowed(true);
 						
 						RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
-						rpg.getMarker().showMarker();
-						marker.setShowed(true);
+						rpg.getMarker().createMarker();
 						
 						return Arrays.asList(ResponseAction.close());
 					});
