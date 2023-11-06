@@ -78,7 +78,7 @@ public class FishSellEvents {
 			
 			int value = price.getValue();
 			RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
-			RudaSystem.getInstance().addRuda(rpg, value, "fish", true);
+			RudaSystem.getInstance().addRuda(rpg, value, "fish");
 //			rpg.getVault().addBrylkiRudy(value);
 //			p.sendMessage(Main.getInstance().getPrefix()+" §aOtrzymales §9§o"+value+" §abrylek rudy");
 			

@@ -1,7 +1,6 @@
 package me.Vark123.EpicRPG;
 
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -12,8 +11,8 @@ import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
 import lombok.Getter;
 import me.Vark123.EpicRPG.Files.FileOperations;
 import me.Vark123.EpicRPG.MySQL.DBOperations;
-import me.Vark123.EpicRPG.Options.TestClassSerializable;
 import me.Vark123.EpicRPG.Placeholders.PlayerPlaceholders;
+import me.Vark123.EpicRPG.Players.Components.Scoreboard.ScoreboardPlaceholders;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -26,6 +25,7 @@ public class Main extends JavaPlugin {
 	public static Permission perm;
 	
 	private static PlaceholderExpansion playerPlaceholders;
+	private static PlaceholderExpansion scoreboardPlaceholders;
 	
 	private final String prefix = "§7[§bEpicRPG§7]";
 	
@@ -33,10 +33,6 @@ public class Main extends JavaPlugin {
 	private InventoryManager manager;
 	@Getter
 	private ProtocolManager protocolManager;
-	
-	static {
-		ConfigurationSerialization.registerClass(TestClassSerializable.class);
-	}
 	
 	@Override
 	public void onEnable() {
@@ -50,6 +46,8 @@ public class Main extends JavaPlugin {
 		
 		playerPlaceholders = new PlayerPlaceholders();
 		playerPlaceholders.register();
+		scoreboardPlaceholders = new ScoreboardPlaceholders();
+		scoreboardPlaceholders.register();
 		
 		manager = new InventoryManager(instance);
 		manager.invoke();

@@ -1,6 +1,5 @@
 package me.Vark123.EpicRPG.Options.Items;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Material;
@@ -13,11 +12,12 @@ import lombok.Getter;
 import me.Vark123.EpicOptions.MenuSystem.IOptionItem;
 import me.Vark123.EpicOptions.PlayerSystem.OPlayer;
 import me.Vark123.EpicOptions.PlayerSystem.PlayerOption;
+import me.Vark123.EpicRPG.Options.Serializables.BooleanSerializable;
 
 @Getter
 @AllArgsConstructor
 @Builder
-public class BooleanItem implements IOptionItem<Boolean> {
+public class BooleanItem implements IOptionItem<BooleanSerializable> {
 
 	private String display;
 	private List<String> lore;
@@ -25,13 +25,13 @@ public class BooleanItem implements IOptionItem<Boolean> {
 	private int slot;
 	
 	@Override
-	public ItemStack getItem(OPlayer player, PlayerOption<Boolean> option) {
+	public ItemStack getItem(OPlayer player, PlayerOption<BooleanSerializable> option) {
 		ItemStack it = new ItemStack(material);
-		String isOn = option.getValue() ? "§a§lWLACZONY" : "§c§lWYLACZONY";
+		String isOn = option.getValue().isValue() ? "§a§lWLACZONY" : "§c§lWYLACZONY";
 
 		ItemMeta im = it.getItemMeta();
 		im.setDisplayName(display+": "+isOn);
-		im.setLore(Arrays.asList(" ","§7Kompas w postaci BOSS-BARU,","§7ktory zawsze dokladnie wskaze Ci kierunek","§7Twojej podrozy"));
+		im.setLore(lore);
 		it.setItemMeta(im);
 		
 		return it;

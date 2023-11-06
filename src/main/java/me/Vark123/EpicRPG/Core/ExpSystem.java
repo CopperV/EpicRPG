@@ -9,8 +9,10 @@ import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 
+import me.Vark123.EpicOptions.OptionsAPI;
 import me.Vark123.EpicRPG.Core.Events.ExpModifyEvent;
 import me.Vark123.EpicRPG.Core.Events.PlayerLevelUpdateEvent;
+import me.Vark123.EpicRPG.Options.Serializables.ResourcesInfoSerializable;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
@@ -63,11 +65,12 @@ public class ExpSystem {
 		return instance;
 	}
 	
-	public void addExp(RpgPlayer rpg, int amount, String reason, boolean displayMessage) {
+	public void addExp(RpgPlayer rpg, int amount, String reason) {
 		Bukkit.broadcastMessage("Before: "+amount);
 		ExpModifyEvent event = new ExpModifyEvent(rpg, amount, 1, reason);
 		if(event.isCancelled())
 			return;
+		Bukkit.broadcastMessage("After: "+amount);
 		
 		int exp = (int) (event.getAmount()*event.getModifier());
 		if(exp == 0)
@@ -77,17 +80,24 @@ public class ExpSystem {
 		info.addXP(exp);
 		checkLvl(info);
 		
-		if(!displayMessage)
-			return;
-		rpg.getPlayer().sendMessage("§a+"+ exp +" xp §7[§a"+info.getExp()+" xp§7/§a"+info.getNextLevel()+" xp§7]");
+		OptionsAPI.get().getPlayerManager().getPlayerOptions(rpg.getPlayer())
+			.ifPresent(op -> {
+				op.getPlayerOptionByID("epicrpg_resources")
+					.ifPresent(pOption -> {
+						ResourcesInfoSerializable option = (ResourcesInfoSerializable) pOption.getValue();
+						if(!option.isExpInfo())
+							return;
+						rpg.getPlayer().sendMessage("§a+"+ exp +" xp §7[§a"+info.getExp()+" xp§7/§a"+info.getNextLevel()+" xp§7]");
+					});
+			});
 	}
 	
 	public void addQuestExp(RpgPlayer rpg, int xp) {
-		addExp(rpg, xp, "quest", true);
+		addExp(rpg, xp, "quest");
 	}
 	
 	public void addMobExp(RpgPlayer rpg, int xp) {
-		addExp(rpg, xp, "mob", true);
+		addExp(rpg, xp, "mob");
 	}
 	
 	private void checkLvl(RpgPlayerInfo info) {

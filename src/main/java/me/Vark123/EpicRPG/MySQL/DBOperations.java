@@ -34,7 +34,12 @@ public class DBOperations {
 		prop.setProperty("password", fc.getString("DB.passwd"));
 		prop.setProperty("autoReconnect", "true");
 		try {
-			c = DriverManager.getConnection("jdbc:mysql://"+fc.getString("DB.ip")+"/"+fc.getString("DB.database")+"?useSSL=false&autoReconnect=true&failOverReadOnly=false&maxReconnects=10",prop);
+			c = DriverManager.getConnection("jdbc:mysql://"+fc.getString("DB.ip")+"/"+fc.getString("DB.database")
+				+"?useSSL=false&"
+				+ "autoReconnect=true&"
+				+ "failOverReadOnly=false&"
+				+ "maxReconnects=10&"
+				+ "enabledTLSProtocols=TLSv1.2",prop);
 		} catch (SQLException e) {
 			System.out.println("§c§lBlad laczenia z baza danych: "+e.getMessage());
 			return;

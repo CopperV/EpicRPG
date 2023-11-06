@@ -28,6 +28,8 @@ import me.Vark123.EpicRPG.Players.Components.RpgSkills;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import me.Vark123.EpicRPG.Players.Components.RpgVault;
 import me.Vark123.EpicRPG.Players.Components.Compass.EpicCompass;
+import me.Vark123.EpicRPG.Players.Components.Markers.EpicMarker;
+import me.Vark123.EpicRPG.Players.Components.Scoreboard.EpicScoreboard;
 import me.Vark123.EpicRPG.Stats.ChangeStats;
 import me.Vark123.EpicRPG.Utils.ChatPrintable;
 import me.Vark123.EpicRPG.Utils.Utils;
@@ -55,6 +57,8 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 	
 	private Scoreboard board;
 	private EpicCompass compass;
+	private EpicScoreboard scoreboard;
+	private EpicMarker marker;
 	
 	public RpgPlayer(Player p) {
 		this.player = p;
@@ -69,6 +73,8 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 		
 		this.board = Bukkit.getScoreboardManager().getNewScoreboard();
 		this.compass = new EpicCompass(this);
+		this.scoreboard = new EpicScoreboard(this);
+		this.marker = new EpicMarker(this);
 		
 		createDisplay();
 	}
@@ -92,6 +98,8 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 		
 		this.board = Bukkit.getScoreboardManager().getNewScoreboard();
 		this.compass = new EpicCompass(this);
+		this.scoreboard = new EpicScoreboard(this);
+		this.marker = new EpicMarker(this);
 		
 		createDisplay();
 	}
@@ -109,6 +117,8 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 		
 		this.board = Bukkit.getScoreboardManager().getNewScoreboard();
 		this.compass = new EpicCompass(this);
+		this.scoreboard = new EpicScoreboard(this);
+		this.marker = new EpicMarker(this);
 		
 		createDisplay();
 	}

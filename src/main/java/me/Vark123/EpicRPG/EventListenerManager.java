@@ -58,8 +58,10 @@ import me.Vark123.EpicRPG.MMExtension.CustomConditionLoadEvent;
 import me.Vark123.EpicRPG.MMExtension.CustomMechanicsLoadEvent;
 import me.Vark123.EpicRPG.MMExtension.CustomTargeterLoadEvent;
 import me.Vark123.EpicRPG.MMExtension.Misc.ProtectorDropKillEvent;
-import me.Vark123.EpicRPG.Options.Compass.Listeners.CompassOptionRegistryListener;
-import me.Vark123.EpicRPG.Options.Compass.Listeners.TestOptionRegistryListener;
+import me.Vark123.EpicRPG.Options.Listeners.CompassOptionRegistryListener;
+import me.Vark123.EpicRPG.Options.Listeners.MarkerRegistryListener;
+import me.Vark123.EpicRPG.Options.Listeners.ResourceInfoRegistryListener;
+import me.Vark123.EpicRPG.Options.Listeners.ScoreboardOptionRegistryListener;
 import me.Vark123.EpicRPG.Players.BaseEvents.PlayerArrowWeaponUseEvent;
 import me.Vark123.EpicRPG.Players.BaseEvents.PlayerChangeEqEvent;
 import me.Vark123.EpicRPG.Players.BaseEvents.PlayerDropEvent;
@@ -155,8 +157,11 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new BoosterModifyListener(), inst);
 
 		Bukkit.getPluginManager().registerEvents(new CompassOptionRegistryListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new ScoreboardOptionRegistryListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new ResourceInfoRegistryListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new MarkerRegistryListener(), inst);
+		
 		Bukkit.getPluginManager().registerEvents(new PlayerCompassUpdateEvent(), inst);
-		Bukkit.getPluginManager().registerEvents(new TestOptionRegistryListener(), inst);
 		
 		//Damage Modifiers
 		DamageModifierManager.getInstance().registerModifier(new WedrownyCienModifier(), EventPriority.LOWEST);

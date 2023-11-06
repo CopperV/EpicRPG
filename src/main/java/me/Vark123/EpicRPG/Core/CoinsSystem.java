@@ -3,8 +3,10 @@ package me.Vark123.EpicRPG.Core;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import me.Vark123.EpicOptions.OptionsAPI;
 import me.Vark123.EpicRPG.EpicRPGMobManager;
 import me.Vark123.EpicRPG.Core.Events.CoinsModifyEvent;
+import me.Vark123.EpicRPG.Options.Serializables.ResourcesInfoSerializable;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 import me.Vark123.EpicRPG.Players.Components.RpgVault;
@@ -19,7 +21,7 @@ public class CoinsSystem {
 		return instance;
 	}
 	
-	public void addCoins(RpgPlayer rpg, int amount, String reason, boolean displayMessage) {
+	public void addCoins(RpgPlayer rpg, int amount, String reason) {
 		CoinsModifyEvent event = new CoinsModifyEvent(rpg, amount, 1, reason);
 		Bukkit.getPluginManager().callEvent(event);
 		if(event.isCancelled())
@@ -31,18 +33,26 @@ public class CoinsSystem {
 
 		RpgVault vault = rpg.getVault();
 		vault.addDragonCoins(_amount);
+
 		
-		if(!displayMessage)
-			return;
-		rpg.getPlayer().sendMessage("§c§o+"+ amount +" Smoczych Monet §7[§c§o"+vault.getDragonCoins()+" Smoczych Monet§7]");
+		OptionsAPI.get().getPlayerManager().getPlayerOptions(rpg.getPlayer())
+			.ifPresent(op -> {
+				op.getPlayerOptionByID("epicrpg_resources")
+					.ifPresent(pOption -> {
+						ResourcesInfoSerializable option = (ResourcesInfoSerializable) pOption.getValue();
+						if(!option.isCoinsInfo())
+							return;
+						rpg.getPlayer().sendMessage("§c§o+"+ amount +" Smoczych Monet §7[§c§o"+vault.getDragonCoins()+" Smoczych Monet§7]");
+					});
+			});
 	}
 	
 	public void addMobCoins(RpgPlayer rpg, String mob) {
-		addCoins(rpg, EpicRPGMobManager.getInstance().getMobCoins(mob), "mob", true);
+		addCoins(rpg, EpicRPGMobManager.getInstance().getMobCoins(mob), "mob");
 	}
 	
 	public void addXpCoins(RpgPlayer rpg, double xp) {
-		addCoins(rpg, (int) (xp/50), "quest", true);
+		addCoins(rpg, (int) (xp/50), "quest");
 	}
 	
 	@Deprecated

@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import lombok.Getter;
 import me.Vark123.EpicOptions.OptionsAPI;
+import me.Vark123.EpicRPG.Options.Serializables.BooleanSerializable;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 
 @Getter
@@ -28,7 +29,7 @@ public class EpicCompass implements Serializable {
 		OptionsAPI.get().getPlayerManager().getPlayerOptions(p)
 			.ifPresent(op -> {
 				op.getPlayerOptionByID("epicrpg_compass").ifPresent(option -> {
-					enabled = (boolean) option.getValue();
+					enabled = ((BooleanSerializable)option.getValue()).isValue();
 				});
 			});
 		
