@@ -45,7 +45,6 @@ public class ChatMsgSendEvent implements Listener {
 		sb.append(" §r%s§7: "+color+"%s");
 		
 		e.setFormat(sb.toString());
-		
 	}
 	
 }

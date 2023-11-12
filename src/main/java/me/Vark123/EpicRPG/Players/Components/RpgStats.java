@@ -305,6 +305,8 @@ public class RpgStats implements Serializable, ChatPrintable {
 	@Override
 	public void print(CommandSender sender) {
 		int bonusKryt = rpg.getInfo().getShortProf().equalsIgnoreCase("mys") ? 10 : 0;
+		if(rpg.getSkills().hasCiosKrytyczny())
+			bonusKryt += 5;
 		
 		TableGenerator generator = new TableGenerator(TableGenerator.Alignment.LEFT, TableGenerator.Alignment.LEFT, TableGenerator.Alignment.LEFT);
 		generator.addRow("", "§2Obrazenia: §a"+obrazenia+"§7/§a"+potionObrazenia+"§7/§a"+finalObrazenia, 

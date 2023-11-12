@@ -67,7 +67,7 @@ public class EpicRPGMobManager {
 	}
 	
 	public Pair<Integer, Integer> getMobExp(String mob){
-		return mobExp.getOrDefault(mob, new Pair<>(0, 0));
+		return mobExp.getOrDefault(mob, new Pair<>(0, 1));
 	}
 	
 	public int getRandomMobExp(String mob) {

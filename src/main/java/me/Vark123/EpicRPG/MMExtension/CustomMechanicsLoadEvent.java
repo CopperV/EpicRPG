@@ -21,27 +21,27 @@ public class CustomMechanicsLoadEvent implements Listener {
 		SkillMechanic mechanic;
 		switch(mech) {
 			case "echo":
-				mechanic = new EchoMechanic(MythicBukkit.inst().getSkillManager(), e.getConfig().getLine(), e.getConfig());
+				mechanic = new EchoMechanic(MythicBukkit.inst().getSkillManager(), e.getContainer().getFile(), e.getConfig().getLine(), e.getConfig());
 				e.register(mechanic);
 				break;
 			case "settarget":
-				mechanic = new SetTargetMechanic(MythicBukkit.inst().getSkillManager(), e.getConfig().getLine(), e.getConfig());
+				mechanic = new SetTargetMechanic(MythicBukkit.inst().getSkillManager(), e.getContainer().getFile(), e.getConfig().getLine(), e.getConfig());
 				e.register(mechanic);
 				break;
 			case "aurapull":
-				mechanic = new AuraPullMechanic(MythicBukkit.inst().getSkillManager(), e.getConfig().getLine(), e.getConfig());
+				mechanic = new AuraPullMechanic(MythicBukkit.inst().getSkillManager(), e.getContainer().getFile(), e.getConfig().getLine(), e.getConfig());
 				e.register(mechanic);
 				break;
 			case "malevolence":
-				mechanic = new MalevolenceMechanic(MythicBukkit.inst().getSkillManager(), e.getConfig().getLine(), e.getConfig());
+				mechanic = new MalevolenceMechanic(MythicBukkit.inst().getSkillManager(), e.getContainer().getFile(), e.getConfig().getLine(), e.getConfig());
 				e.register(mechanic);
 				break;
 			case "removetarget":
-				mechanic = new RemoveTargetMechanic(MythicBukkit.inst().getSkillManager(), e.getConfig().getLine(), e.getConfig());
+				mechanic = new RemoveTargetMechanic(MythicBukkit.inst().getSkillManager(), e.getContainer().getFile(), e.getConfig().getLine(), e.getConfig());
 				e.register(mechanic);
 				break;
 			case "setflag":
-				mechanic = new ChangeRegionFlagMechanic(MythicBukkit.inst().getSkillManager(), e.getConfig().getLine(), e.getConfig());
+				mechanic = new ChangeRegionFlagMechanic(MythicBukkit.inst().getSkillManager(), e.getContainer().getFile(), e.getConfig().getLine(), e.getConfig());
 				e.register(mechanic);
 				break;
 		}

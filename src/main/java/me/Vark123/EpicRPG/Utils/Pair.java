@@ -1,5 +1,10 @@
 package me.Vark123.EpicRPG.Utils;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class Pair<K,V> {
 
 	private K key;
@@ -9,13 +14,4 @@ public class Pair<K,V> {
 		this.key = key;
 		this.value = value;
 	}
-
-	public K getKey() {
-		return key;
-	}
-
-	public V getValue() {
-		return value;
-	}
-	
 }

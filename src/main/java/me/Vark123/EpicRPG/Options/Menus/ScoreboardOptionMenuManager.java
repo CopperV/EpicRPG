@@ -159,7 +159,7 @@ public final class ScoreboardOptionMenuManager {
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		
 		RyseInventory.builder()
-			.title("§7§lUSTAWIENIA - §e§lSCOREBOARD")
+//			.title("§7§lUSTAWIENIA - §e§lSCOREBOARD")
 			.disableUpdateTask()
 			.rows(3)
 			.provider(new InventoryProvider() {

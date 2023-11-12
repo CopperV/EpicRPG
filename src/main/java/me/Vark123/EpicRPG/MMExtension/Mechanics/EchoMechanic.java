@@ -1,5 +1,6 @@
 package me.Vark123.EpicRPG.MMExtension.Mechanics;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -41,8 +42,8 @@ public class EchoMechanic extends SkillMechanic implements ITargetedEntitySkill,
 	
 	private PlaceholderDouble yOffset;
 	
-	public EchoMechanic(SkillExecutor exec, String skill, MythicLineConfig mlc) {
-		super(exec, skill, mlc);
+	public EchoMechanic(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
+		super(manager, file, line, mlc);
 		
 		this.amount = mlc.getPlaceholderInteger(new String[] {"amount", "a"}, 1, new String[0]);
 		this.duration = mlc.getPlaceholderInteger(new String[] {"duration", "d"}, 5, new String[0]);

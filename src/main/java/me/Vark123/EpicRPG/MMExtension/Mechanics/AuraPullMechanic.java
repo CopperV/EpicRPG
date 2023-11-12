@@ -1,5 +1,7 @@
 package me.Vark123.EpicRPG.MMExtension.Mechanics;
 
+import java.io.File;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
@@ -22,8 +24,8 @@ public class AuraPullMechanic extends SkillMechanic implements ITargetedEntitySk
 	private boolean toOrigin;
 	private PlaceholderDouble velocity;
 
-	public AuraPullMechanic(SkillExecutor manager, String line, MythicLineConfig mlc) {
-		super(manager, line, mlc);
+	public AuraPullMechanic(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
+		super(manager, file, line, mlc);
 		this.velocity = mlc.getPlaceholderDouble(new String[] {"velocity", "v"}, 1.0D, new String[0]);
 		this.toOrigin = mlc.getBoolean(new String[] {"toorigin", "to"}, false);
 		this.auraName = mlc.getString(new String[] {"auraname", "aura", "a"}, "nullAura", new String[0]);

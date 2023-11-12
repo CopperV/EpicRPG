@@ -6,7 +6,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
 
 import me.Vark123.EpicRPG.Utils.Utils;
 import net.md_5.bungee.api.ChatColor;
@@ -19,7 +18,6 @@ public class JewelryMenuInteractEvent implements Listener {
 		if(!e.getInventory().getType().equals(InventoryType.CHEST)) return;
 		String title = ChatColor.stripColor(e.getView().getTitle().toLowerCase());
 		if(!title.equalsIgnoreCase("bizuteria")) return;
-		Inventory inv = e.getClickedInventory();
 		if(e.getClickedInventory() == null || !e.getClickedInventory().getType().equals(InventoryType.CHEST)) return;
 		
 		List<Integer> tmpList = Utils.intArrayToList(JewelryMenuManager.getInstance().getFreeSlots());

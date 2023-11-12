@@ -17,9 +17,9 @@ import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.FightSystem.RuneDamage;
 import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
-import me.Vark123.EpicRPG.FightSystem.RuneDamage;
 import net.minecraft.world.phys.AxisAlignedBB;
 
 public class UsciskUmarlych extends ARune {

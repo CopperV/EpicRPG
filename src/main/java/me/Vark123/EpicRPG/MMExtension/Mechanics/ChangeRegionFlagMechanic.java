@@ -1,5 +1,7 @@
 package me.Vark123.EpicRPG.MMExtension.Mechanics;
 
+import java.io.File;
+
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.StateFlag;
@@ -22,8 +24,8 @@ public class ChangeRegionFlagMechanic extends SkillMechanic implements ITargeted
 	private String flag;
 	private String value;
 	
-	public ChangeRegionFlagMechanic(SkillExecutor manager, String line, MythicLineConfig mlc) {
-		super(manager, line, mlc);
+	public ChangeRegionFlagMechanic(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
+		super(manager, file, line, mlc);
 		this.region = mlc.getString(new String[] {"region"}, "__global__");
 		this.flag = mlc.getString(new String[] {"flag"}, "pvp");
 		this.value = mlc.getString(new String[] {"state"}, null);
