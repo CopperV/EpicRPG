@@ -40,15 +40,22 @@ public class GemManager {
 	private final InventoryProvider annihilusProvider;
 	private final int[] annihilusFreeSlots;
 	private final List<String> annihilusGemKatedra;
+
+	private final InventoryProvider annihilusUpgradeProvider;
+	private final int[] annihilusUpgradeFreeSlots;
+	private final List<String> annihilusUpgradeGemKatedra;
+	private final ItemStack witcherTrophies;
+	private final ItemStack oldAnnihilus;
+	private final ItemStack newGem;
 	
 	@Getter(value = AccessLevel.NONE)
 	private final ItemStack empty;
-	@Getter(value = AccessLevel.NONE)
 	private final ItemStack create;
 	
 	private GemManager() {
 		powerfulFreeSlots = new int[] {10,11,19,20,15};
 		annihilusFreeSlots = new int[] {10,11,19,20,15,16};
+		annihilusUpgradeFreeSlots = new int[] {10,11,12,13,14,15,16,29,33};
 		
 		empty = new ItemStack(Material.BLACK_STAINED_GLASS_PANE, 1);{
 			ItemMeta im = empty.getItemMeta();
@@ -60,9 +67,23 @@ public class GemManager {
 			im.setDisplayName("§6§lStworz");
 			create.setItemMeta(im);
 		}
+		witcherTrophies = new ItemStack(Material.LEATHER, 1);{
+			ItemMeta im = witcherTrophies.getItemMeta();
+			im.setDisplayName("§2§lTROFEA WIEDZMINSKIE");
+			witcherTrophies.setItemMeta(im);
+		}
+		ItemExecutor manag = MythicBukkit.inst().getItemManager();
+		oldAnnihilus = manag.getItemStack("Gem_Annihilus");
+		newGem = manag.getItemStack("Gem_KnockBack1");{
+			ItemMeta im = newGem.getItemMeta();
+			im.setDisplayName("§7DOWOLNY GEM");
+			newGem.setItemMeta(im);
+		}
 		
 		powerfulGemKatedra = Arrays.asList("arena4","arena9","arena11","arena7");
 		annihilusGemKatedra = Arrays.asList("arena8","arena19","arena17","arena20");
+		annihilusUpgradeGemKatedra = Arrays.asList("arena2_2","arena2_6","arena2_3","arena2_8",
+				"arena2_1","arena2_7","arena2_13");
 		
 		powerfulProvider = new InventoryProvider() {
 			@Override
@@ -92,6 +113,23 @@ public class GemManager {
 					}
 					contents.set(i, empty);
 				}
+			}
+		};
+		annihilusUpgradeProvider = new InventoryProvider() {
+			@Override
+			public void init(Player player, InventoryContents contents) {
+				List<Integer> tmpList = Utils.intArrayToList(annihilusUpgradeFreeSlots);
+				for(int i = 0; i < 45; ++i) {
+					if(tmpList.contains(i))
+						continue;
+					if(i == 29)
+						continue;
+					contents.set(i, empty);
+				}
+				contents.set(4, witcherTrophies);
+				contents.set(20, oldAnnihilus);
+				contents.set(24, newGem);
+				contents.set(40, create);
 			}
 		};
 	}
@@ -132,9 +170,31 @@ public class GemManager {
 			.open(p);
 	}
 	
+	public void openAnnihilusGemUpgrade(Player p) {
+		RyseInventory.builder()
+			.title("§6§lUlepszenie Annihilusa")
+			.size(45)
+			.ignoredSlots(annihilusUpgradeFreeSlots)
+			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
+			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
+			.listener(GemEvents.getEvents().getAnnihilusUpgradeClickEvent())
+			.listener(GemEvents.getEvents().getAnnihilusUpgradeCloseEvent())
+			.disableUpdateTask()
+			.provider(annihilusUpgradeProvider)
+			.build(Main.getInstance())
+			.open(p);
+	}
+	
 	public ItemStack getAnnihilus(ItemStack it1, ItemStack it2) {
+		NBTItem nbtit1 = new NBTItem(it1);
+		NBTItem nbtit2 = new NBTItem(it2);
+		
 		ItemExecutor manag = MythicBukkit.inst().getItemManager();
 		ItemStack it = manag.getItemStack("Gem_Annihilus");
+		if(nbtit1.hasTag("MYTHIC_TYPE")
+				&& nbtit1.getString("MYTHIC_TYPE").equals("Gem_Annihilus"))
+			it = manag.getItemStack("Gem_Annihilus_I");
 		
 		Map<String, Integer> staty = new ConcurrentHashMap<>();
 		double hp = 0;
@@ -147,7 +207,7 @@ public class GemManager {
 		if(it2.hasItemMeta() && it2.getItemMeta().hasLore())
 			lore.addAll(it2.getItemMeta().getLore());
 		
-		lore.parallelStream().filter(s -> {
+		lore.stream().filter(s -> {
 			return s.contains(": ");
 		}).forEach(s -> {
 			String[] tmpArr = s.split(": §7");
@@ -156,7 +216,6 @@ public class GemManager {
 			staty.put(tmpArr[0], present+value);
 		});
 		
-		NBTItem nbtit1 = new NBTItem(it1);
 		NBTCompoundList listTmp = nbtit1.getCompoundList("AttributeModifiers");
 		for(int i = 0; i < listTmp.size(); ++i) {
 			NBTListCompound lc = listTmp.get(i);
@@ -173,7 +232,6 @@ public class GemManager {
 			}
 		}
 		
-		NBTItem nbtit2 = new NBTItem(it2);
 		listTmp = nbtit2.getCompoundList("AttributeModifiers");
 		for(int i = 0; i < listTmp.size(); ++i) {
 			NBTListCompound lc = listTmp.get(i);
@@ -244,7 +302,10 @@ public class GemManager {
 			speedTag.setString("Slot", "offhand");
 		}
 
-		nbtit.setInteger("annihilus", 1);
+		int level = 0;
+		if(nbtit.hasTag("annihilus"))
+			level = nbtit.getInteger("annihilus");
+		nbtit.setInteger("annihilus", level + 1);
 		nbtit.applyNBT(it);
 		
 		return it;

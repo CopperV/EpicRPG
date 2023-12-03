@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.bukkit.event.EventPriority;
 
+@Deprecated
 public class DamageModifierManager {
 
 	private static DamageModifierManager instance = new DamageModifierManager();

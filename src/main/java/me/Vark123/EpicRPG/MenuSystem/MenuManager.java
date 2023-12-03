@@ -81,6 +81,12 @@ public class MenuManager {
 			case 18:
 				MerchantManager.getInstance().openSellMenu(p);
 				return true;
+			case 19:
+				GemManager.getInstance().openAnnihilusGemUpgrade(p);
+				return true;
+			case 20:
+				BackpackManager.getInstance().openBackpackUpgradeMenu(p);
+				return true;
 		}
 		return false;
 	}

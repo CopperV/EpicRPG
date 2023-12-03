@@ -57,6 +57,11 @@ public class EntityDamageListener implements Listener {
 				damageType = EpicDamageType.PROJECTILE;
 				break;
 			case ENTITY_ATTACK:
+				//TO TEST - LUKI
+				if(dmg > 100){
+					damageType = EpicDamageType.PROJECTILE;
+					break;
+				}
 				damageInfo = DamageManager.getInstance()
 					.getMeleeCalculator()
 					.calc(damager, victim, dmg);
@@ -96,7 +101,6 @@ public class EntityDamageListener implements Listener {
 		
 		//DEFENSE STATEMENT
 		if(victim instanceof Player) {
-			Bukkit.broadcastMessage("Defense calc");
 			Pair<Double, Boolean> defenseInfo = DamageManager.getInstance()
 					.getDefenseCalculator().calc(damager, victim, dmg);
 			

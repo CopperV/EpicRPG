@@ -27,6 +27,7 @@ import me.Vark123.EpicRPG.Core.Listeners.VipBoostControlListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.CustomProjectileDamageListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.EntityDamageListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.EntityDeathListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.FallDamageListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.LavaDamageListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.MagicDamageListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.MeleeDragonAttackListener;
@@ -118,6 +119,7 @@ import me.Vark123.EpicRPG.RuneSystem.Events.LodowyBlokDisableMoveEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.ProwokacjaChangeTargetEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.WedrownyCienTargetEvent;
 import me.Vark123.EpicRPG.Scrolls.EpicBossScrollEvent;
+import me.Vark123.EpicRPG.Scrolls.Katedra2ScrollEvent;
 import me.Vark123.EpicRPG.Scrolls.KatedraScrollEvent;
 import me.Vark123.EpicRPG.Scrolls.KlasaResetScrollEvent;
 import me.Vark123.EpicRPG.Scrolls.StatResetScrollEvent;
@@ -148,6 +150,7 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new MagicDamageListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new CustomProjectileDamageListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new LavaDamageListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new FallDamageListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new VoidDamageListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new ProjectileLaunchListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new EntityDeathListener(), inst);
@@ -241,6 +244,7 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new BlackrockHealDebuffEvent(), inst);
 
 		Bukkit.getPluginManager().registerEvents(new KatedraScrollEvent(), inst);
+		Bukkit.getPluginManager().registerEvents(new Katedra2ScrollEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new EpicBossScrollEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new StatResetScrollEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new KlasaResetScrollEvent(), inst);

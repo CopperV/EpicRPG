@@ -44,7 +44,7 @@ public class ConditionalDebuffEffectModifierListener implements Listener {
 		Material m2 = victim.getLocation().getBlock().getType();
 		if((m.equals(Material.WATER) || m.equals(Material.LAVA)
 				|| m2.equals(Material.WATER) || m2.equals(Material.LAVA))
-				&& EpicRPGMobManager.getInstance().isWaterMob(victim.getName())) {
+				&& !EpicRPGMobManager.getInstance().isWaterMob(victim.getName())) {
 			p.sendMessage(Main.getInstance().getPrefix()+" §cWoda stawia straszny opor w walce...");
 			p.sendMessage(Main.getInstance().getPrefix()+" §cNie moge tak walczyc!");
 			e.setDmg(e.getDmg() / 20.);

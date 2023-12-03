@@ -66,11 +66,10 @@ public class ExpSystem {
 	}
 	
 	public void addExp(RpgPlayer rpg, int amount, String reason) {
-		Bukkit.broadcastMessage("Before: "+amount);
 		ExpModifyEvent event = new ExpModifyEvent(rpg, amount, 1, reason);
+		Bukkit.getPluginManager().callEvent(event);
 		if(event.isCancelled())
 			return;
-		Bukkit.broadcastMessage("After: "+amount);
 		
 		int exp = (int) (event.getAmount()*event.getModifier());
 		if(exp == 0)

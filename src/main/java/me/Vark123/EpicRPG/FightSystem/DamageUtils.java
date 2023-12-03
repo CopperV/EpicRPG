@@ -31,7 +31,7 @@ public final class DamageUtils {
 	}
 	
 	public static double randomizeDamage(double dmg, RpgStats stats) {
-		double zrMod = stats.getFinalZrecznosc() / 50.;
+		double zrMod = stats.getFinalZrecznosc() / 35.;
 		double min = 95 - zrMod;
 		double max = 105 + zrMod;
 		return randomizeDamage(dmg, min, max);

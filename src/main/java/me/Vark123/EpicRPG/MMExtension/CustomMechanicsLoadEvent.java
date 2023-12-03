@@ -10,6 +10,7 @@ import me.Vark123.EpicRPG.MMExtension.Mechanics.AuraPullMechanic;
 import me.Vark123.EpicRPG.MMExtension.Mechanics.ChangeRegionFlagMechanic;
 import me.Vark123.EpicRPG.MMExtension.Mechanics.EchoMechanic;
 import me.Vark123.EpicRPG.MMExtension.Mechanics.MalevolenceMechanic;
+import me.Vark123.EpicRPG.MMExtension.Mechanics.PlaceholderProjectileMechanic;
 import me.Vark123.EpicRPG.MMExtension.Mechanics.RemoveTargetMechanic;
 import me.Vark123.EpicRPG.MMExtension.Mechanics.SetTargetMechanic;
 
@@ -42,6 +43,10 @@ public class CustomMechanicsLoadEvent implements Listener {
 				break;
 			case "setflag":
 				mechanic = new ChangeRegionFlagMechanic(MythicBukkit.inst().getSkillManager(), e.getContainer().getFile(), e.getConfig().getLine(), e.getConfig());
+				e.register(mechanic);
+				break;
+			case "pprojectile":
+				mechanic = new PlaceholderProjectileMechanic(MythicBukkit.inst().getSkillManager(), e.getContainer().getFile(), e.getConfig().getLine(), e.getConfig());
 				e.register(mechanic);
 				break;
 		}

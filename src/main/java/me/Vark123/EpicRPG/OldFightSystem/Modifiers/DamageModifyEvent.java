@@ -9,6 +9,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
+@Deprecated
 public class DamageModifyEvent implements Listener {
 
 	@EventHandler(priority=EventPriority.MONITOR)
