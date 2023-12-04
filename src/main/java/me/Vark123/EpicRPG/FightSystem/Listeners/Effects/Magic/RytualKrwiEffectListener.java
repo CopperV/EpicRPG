@@ -8,7 +8,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
 import io.lumine.mythic.bukkit.MythicBukkit;
-import me.Vark123.EpicRPG.FightSystem.EpicDamageType;
 import me.Vark123.EpicRPG.FightSystem.Events.EpicEffectEvent;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
@@ -21,9 +20,6 @@ public class RytualKrwiEffectListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onMod(EpicEffectEvent e) {
 		if(e.isCancelled())
-			return;
-		
-		if(!e.getDamageType().equals(EpicDamageType.MAGIC))
 			return;
 		
 		Entity victim = e.getVictim();

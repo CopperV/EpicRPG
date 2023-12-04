@@ -55,6 +55,14 @@ public class ProjectileEffectsListener implements Listener {
 			loc.getWorld().spawnParticle(Particle.SNOWBALL, loc, 15, 0.2, 0.2, 0.2, 0.05);
 			loc2.getWorld().spawnParticle(Particle.SNOWBALL, loc2, 15, 0.2, 0.2, 0.2, 0.05);
 		}
+		if(modifiers.hasZakletaStrzala()) {
+			PotionEffect pe = new PotionEffect(PotionEffectType.SLOW, 20*20, 2);
+			((LivingEntity)victim).addPotionEffect(pe);
+			Location loc = damager.getLocation().add(0, 1, 0);
+			Location loc2 = victim.getLocation().add(0, 1, 0);
+			loc.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, loc, 15, 0.2, 0.2, 0.2, 0.05);
+			loc2.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, loc2, 15, 0.2, 0.2, 0.2, 0.05);
+		}
 		if(modifiers.hasSwietaStrzala()) {
 			Location loc = damager.getLocation().add(0, 1, 0);
 			Location loc2 = victim.getLocation().add(0, 1, 0);
@@ -64,7 +72,7 @@ public class ProjectileEffectsListener implements Listener {
 		if(modifiers.hasOgnistaStrzala()) {
 			double dmg = e.getDmg() * 0.075;
 			if(RuneDamage.directDamageEffect(p, (LivingEntity) victim, 
-					Optional.of(dmg), RuneUtils.getCustomTimeEffect(dmg, RuneTimeEffect.FIRE))) {
+					Optional.of(dmg), RuneUtils.getCustomTimeEffect(dmg, RuneTimeEffect.FIRE, e.getDamageType()))) {
 				Location loc2 = victim.getLocation().add(0, 1, 0);
 				loc2.getWorld().spawnParticle(Particle.FLAME, loc2, 15, 0.2, 0.2, 0.2, 0.05);
 			}
@@ -72,7 +80,7 @@ public class ProjectileEffectsListener implements Listener {
 		if(modifiers.hasZatrutaStrzala()) {
 			double dmg = e.getDmg()*0.03;
 			if(RuneDamage.directDamageEffect(p, (LivingEntity) victim, 
-					Optional.of(dmg), RuneUtils.getCustomTimeEffect(dmg, RuneTimeEffect.POISON))) {
+					Optional.of(dmg), RuneUtils.getCustomTimeEffect(dmg, RuneTimeEffect.POISON, e.getDamageType()))) {
 				Location loc2 = victim.getLocation().add(0, 1, 0);
 				loc2.getWorld().spawnParticle(Particle.SLIME, loc2, 15, 0.2, 0.2, 0.2, 0.05);
 			}
@@ -80,7 +88,7 @@ public class ProjectileEffectsListener implements Listener {
 		if(modifiers.hasKrwawaStrzala()) {
 			double dmg = e.getDmg() * 0.04;
 			RuneDamage.directDamageEffect(p, (LivingEntity) victim, 
-					Optional.of(dmg), RuneUtils.getCustomTimeEffect(dmg, RuneTimeEffect.BLOOD));
+					Optional.of(dmg), RuneUtils.getCustomTimeEffect(dmg, RuneTimeEffect.BLOOD, e.getDamageType()));
 		}
 		
 	}

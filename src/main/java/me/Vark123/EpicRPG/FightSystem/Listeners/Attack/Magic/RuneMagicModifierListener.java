@@ -77,6 +77,12 @@ public class RuneMagicModifierListener implements Listener {
 			else
 				modifier += 0.33;
 		}
+		if(modifiers.hasLaskaBeliara() 
+				&& ir.getMagicType().equalsIgnoreCase("mrok"))
+			modifier += 0.4;
+		if(modifiers.hasWybraniecBeliara() 
+				&& ir.getMagicType().equalsIgnoreCase("mrok"))
+			modifier += 0.6;
 		
 		e.increaseModifier(modifier);
 	}

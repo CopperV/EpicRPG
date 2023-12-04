@@ -69,6 +69,11 @@ public class RpgModifiers implements Serializable {
 	private boolean silaRownowagi_h;
 	private boolean eksplodujacaStrzala_m;
 	private boolean silaRownowagi_m;
+	private boolean klatwaKrwi;
+	private boolean laskaBeliara;
+	private boolean trujacaAura;
+	private boolean zakletaStrzala;
+	private boolean wybraniecBeliara;
 	
 	private int potionSila;
 	private int potionZrecznosc;
@@ -588,5 +593,45 @@ public class RpgModifiers implements Serializable {
 
 	public void setSilaRownowagi_m(boolean silaRownowagi_m) {
 		this.silaRownowagi_m = silaRownowagi_m;
+	}
+
+	public boolean hasKlatwaKrwi() {
+		return klatwaKrwi;
+	}
+
+	public void setKlatwaKrwi(boolean klatwaKrwi) {
+		this.klatwaKrwi = klatwaKrwi;
+	}
+
+	public boolean hasLaskaBeliara() {
+		return laskaBeliara;
+	}
+
+	public void setLaskaBeliara(boolean laskaBeliara) {
+		this.laskaBeliara = laskaBeliara;
+	}
+
+	public boolean hasTrujacaAura() {
+		return trujacaAura;
+	}
+
+	public void setTrujacaAura(boolean trujacaAura) {
+		this.trujacaAura = trujacaAura;
+	}
+
+	public boolean hasZakletaStrzala() {
+		return zakletaStrzala;
+	}
+
+	public void setZakletaStrzala(boolean zakletaStrzala) {
+		this.zakletaStrzala = zakletaStrzala;
+	}
+
+	public boolean hasWybraniecBeliara() {
+		return wybraniecBeliara;
+	}
+
+	public void setWybraniecBeliara(boolean wybraniecBeliara) {
+		this.wybraniecBeliara = wybraniecBeliara;
 	}
 }

@@ -33,15 +33,15 @@ public final class RuneDamage {
 					|| tmp.getGameMode().equals(GameMode.CREATIVE)) 
 				return false;
 		}
-		
+
 		MutableBoolean result = new MutableBoolean(true);
 		oDamage.ifPresent(dmg -> {
-			EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(p, e, DamageCause.CUSTOM, dmg);
-			Bukkit.getPluginManager().callEvent(event);
-			if(event.isCancelled()) {
-				result.setFalse();
-				return;
-			}
+			EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(p, e, DamageCause.MAGIC, dmg);
+//			Bukkit.getPluginManager().callEvent(event);
+//			if(event.isCancelled()) {
+//				result.setFalse();
+//				return;
+//			}
 
 			result.setValue(ManualDamage
 					.doDamageWithCheck(p, e, event.getDamage(), event));
@@ -52,7 +52,6 @@ public final class RuneDamage {
 				effect.playEffect(p, e, null);
 			});
 		}
-		
 		return result.booleanValue();
 	}
 	

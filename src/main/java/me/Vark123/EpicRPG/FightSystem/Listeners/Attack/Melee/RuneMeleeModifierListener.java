@@ -1,13 +1,16 @@
 package me.Vark123.EpicRPG.FightSystem.Listeners.Attack.Melee;
 
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+import de.tr7zw.nbtapi.NBTItem;
 import me.Vark123.EpicRPG.FightSystem.EpicDamageType;
 import me.Vark123.EpicRPG.FightSystem.Events.EpicAttackEvent;
 import me.Vark123.EpicRPG.Players.PlayerManager;
@@ -59,6 +62,13 @@ public class RuneMeleeModifierListener implements Listener {
 				p.getWorld().spawnParticle(Particle.SWEEP_ATTACK, p.getLocation().add(0,1,0), 7, .5f, .5f, .5f, .05f);
 				modifier += 1.25;
 			}
+		}
+		
+		ItemStack item = p.getInventory().getItemInMainHand();
+		if(item != null && !item.getType().equals(Material.AIR)) {
+			NBTItem nbti = new NBTItem(item);
+			if(nbti.hasTag("SzponBeliara") && modifiers.hasWybraniecBeliara())
+				modifier += 0.3;
 		}
 		
 		e.increaseModifier(modifier);

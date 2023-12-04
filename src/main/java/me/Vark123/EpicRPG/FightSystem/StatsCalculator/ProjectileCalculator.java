@@ -94,12 +94,12 @@ public class ProjectileCalculator implements IDamageCalculator {
 		
 		if(crit) {
 			dmg = Math.ceil(1.3 * dmg);
-			wspDmgZd = 1.35;
+			wspDmgZd = 1.2;
 			wspDmgZr = 0.45;
 			wspDmgStr = 0.38;
 			wspDmgInt = 0.05;
 		}else {
-			wspDmgZd = 1.1;
+			wspDmgZd = 0.9;
 			wspDmgZr = 0.3;
 			wspDmgStr = 0.25;
 			wspDmgInt = 0.02;

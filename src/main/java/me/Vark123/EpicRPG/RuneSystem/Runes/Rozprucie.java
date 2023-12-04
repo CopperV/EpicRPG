@@ -3,8 +3,8 @@ package me.Vark123.EpicRPG.RuneSystem.Runes;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
-import org.bukkit.Sound;
 import org.bukkit.Particle.DustOptions;
+import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -15,9 +15,9 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.FightSystem.RuneDamage;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class Rozprucie extends ARune {
 

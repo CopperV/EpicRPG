@@ -43,6 +43,7 @@ import me.Vark123.EpicRPG.FightSystem.Listeners.Attack.Melee.ProfMeleeModifierLi
 import me.Vark123.EpicRPG.FightSystem.Listeners.Attack.Melee.RuneMeleeModifierListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Attack.Melee.SlugaBeliaraModifierListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Attack.Misc.CiosKrytycznyModifierListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Attack.Misc.KlatwaKrwiModifierListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Attack.Misc.ProwokacjaModifierListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Attack.Misc.ZadzaKrwiModifierListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Attack.Misc.ZyciodajnaZiemiaModifierListener;
@@ -80,6 +81,8 @@ import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Melee.WampiryzmEffectMod
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Misc.ConditionalDebuffEffectModifierListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Misc.CriticalEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Misc.DodgeEffectModifierListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Misc.KlatwaKrwiEffectModifierListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Misc.TrujacaAuraEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Projectile.NoDamageTicksEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Projectile.ProjectileEffectsListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Projectile.SwietaStrzalaAreaEffectListener;
@@ -182,6 +185,7 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new ProwokacjaModifierListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new RuneDefenseModifierListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new ProfDefenseModifierListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new KlatwaKrwiModifierListener(), inst);
 
 		Bukkit.getPluginManager().registerEvents(new BeeStingEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new DollInfoEffectListener(), inst);
@@ -210,6 +214,8 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new NoDamageTicksEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new ProjectileEffectsListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new SwietaStrzalaAreaEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new KlatwaKrwiEffectModifierListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new TrujacaAuraEffectListener(), inst);
 
 		Bukkit.getPluginManager().registerEvents(new RuneInteractEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new RuneTimeCheckEvent(), inst);

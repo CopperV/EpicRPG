@@ -86,13 +86,13 @@ public class MeleeCalculator implements IDamageCalculator {
 		
 		if(crit) {
 			dmg = Math.ceil(1.3 * stats.getFinalObrazenia());
-			wspDmgStr = 0.75;
-			wspDmgZr = 1.3;
+			wspDmgStr = 0.65;
+			wspDmgZr = 0.9;
 			wspDmgZd = 0.05;
 			wspDmgInt = 0.05;
 		} else {
 			dmg = Math.ceil(stats.getFinalObrazenia());
-			wspDmgStr = 0.75;
+			wspDmgStr = 0.65;
 			wspDmgZr = 0.45;
 			wspDmgZd = 0.01;
 			wspDmgInt = 0.01;

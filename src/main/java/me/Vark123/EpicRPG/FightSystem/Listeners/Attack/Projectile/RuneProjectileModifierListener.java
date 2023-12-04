@@ -49,6 +49,8 @@ public class RuneProjectileModifierListener implements Listener {
 			modifier += 0.2;
 		if(modifiers.hasKrwawaStrzala())
 			modifier += 0.3;
+		if(modifiers.hasZakletaStrzala())
+			modifier += 0.2;
 		if(modifiers.hasEksplodujacaStrzala()) {
 			if(bow.getType().equals(Material.CROSSBOW)) {
 				int enchant = bow.getEnchantmentLevel(Enchantment.QUICK_CHARGE);

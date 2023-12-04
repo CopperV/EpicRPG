@@ -19,8 +19,8 @@ import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import me.Vark123.EpicRPG.Main;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class OdwrocenieUwagi extends ARune {
 	

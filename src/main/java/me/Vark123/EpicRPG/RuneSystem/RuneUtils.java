@@ -46,7 +46,8 @@ public class RuneUtils {
 	
 	public static Optional<RuneEffect> getCustomTimeEffect(
 			final double damage, 
-			final RuneTimeEffect type) {
+			final RuneTimeEffect type,
+			final EpicDamageType damageType) {
 		switch(type) {
 			case BLOOD:
 				return Optional.of(new RuneEffect() {
@@ -64,7 +65,7 @@ public class RuneUtils {
 								}
 								--timer;
 								
-								Pair<Boolean, Double> result = doPrivateDamage(damager, victim, damage, EpicDamageType.PROJECTILE);
+								Pair<Boolean, Double> result = doPrivateDamage(damager, victim, damage, damageType);
 								if(!result.getKey()) {
 									this.cancel();
 									return;
@@ -90,7 +91,7 @@ public class RuneUtils {
 								}
 								--timer;
 								
-								Pair<Boolean, Double> result = doPrivateDamage(damager, victim, damage, EpicDamageType.PROJECTILE);
+								Pair<Boolean, Double> result = doPrivateDamage(damager, victim, damage, damageType);
 								if(!result.getKey()) {
 									this.cancel();
 									return;
@@ -116,7 +117,7 @@ public class RuneUtils {
 								}
 								--timer;
 								
-								Pair<Boolean, Double> result = doPrivateDamage(damager, victim, damage, EpicDamageType.PROJECTILE);
+								Pair<Boolean, Double> result = doPrivateDamage(damager, victim, damage, damageType);
 								if(!result.getKey()) {
 									this.cancel();
 									return;

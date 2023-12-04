@@ -3,9 +3,9 @@ package me.Vark123.EpicRPG.Klejnoty;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.Event.Result;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class GrindstoneUseEvent implements Listener {
