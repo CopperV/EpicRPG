@@ -1,52 +1,28 @@
 package me.Vark123.EpicRPG.FightSystem;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-import me.Vark123.EpicRPG.FightSystem.Modifiers.DamageModifier;
-import me.Vark123.EpicRPG.FightSystem.Modifiers.DamageModifierManager;
-import me.Vark123.EpicRPG.HealthSystem.RpgPlayerHealEvent;
+import me.Vark123.EpicRPG.FightSystem.Events.EpicAttackEvent;
+import me.Vark123.EpicRPG.FightSystem.Events.EpicDefenseEvent;
+import me.Vark123.EpicRPG.FightSystem.Events.EpicEffectEvent;
+import me.Vark123.EpicRPG.FightSystem.Events.MagicEntityDamageByEntityEvent;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.RuneEffect;
-import me.Vark123.EpicRPG.RuneSystem.RuneUtils;
+import me.Vark123.EpicRPG.Utils.Pair;
 
-public class RuneDamage {
-	
-	@Deprecated
-	public static boolean damageSwietaStrzala(Player p, LivingEntity e, double dmg) {
-		return true;
-	}
+public final class RuneDamage {
 
-	@Deprecated
-	public static boolean damageKrwawaStrzala(Player p, LivingEntity e, double damage) {
-		return true;
-	}
-
-	@Deprecated
-	public static boolean damageOgnistaStrzala(Player p, LivingEntity e, double damage) {
-		return true;		
-	}
-
-	@Deprecated
-	public static boolean damageZatrutaStrzala(Player p, LivingEntity e, double damage) {
-		return true;
-	}
+	private RuneDamage() { }
 	
 	public static boolean directDamageEffect(Player p, LivingEntity e, Optional<Double> oDamage, Optional<RuneEffect> oEffect) {
 		if(e == null || e.isDead())
@@ -57,15 +33,15 @@ public class RuneDamage {
 					|| tmp.getGameMode().equals(GameMode.CREATIVE)) 
 				return false;
 		}
-		
+
 		MutableBoolean result = new MutableBoolean(true);
 		oDamage.ifPresent(dmg -> {
-			EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(p, e, DamageCause.CUSTOM, dmg);
-			Bukkit.getPluginManager().callEvent(event);
-			if(event.isCancelled()) {
-				result.setFalse();
-				return;
-			}
+			EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(p, e, DamageCause.MAGIC, dmg);
+//			Bukkit.getPluginManager().callEvent(event);
+//			if(event.isCancelled()) {
+//				result.setFalse();
+//				return;
+//			}
 
 			result.setValue(ManualDamage
 					.doDamageWithCheck(p, e, event.getDamage(), event));
@@ -76,7 +52,6 @@ public class RuneDamage {
 				effect.playEffect(p, e, null);
 			});
 		}
-		
 		return result.booleanValue();
 	}
 	
@@ -103,28 +78,10 @@ public class RuneDamage {
 				return false;
 		}
 		
-		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
-		dmg = DamageManager.getInstance().getRuneCalculator().calc(p, e, dmg, dr);
-		
-		EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(p, e, DamageCause.CUSTOM, dmg);
+		MagicEntityDamageByEntityEvent event = new MagicEntityDamageByEntityEvent(p, e, dmg, dr);
 		Bukkit.getPluginManager().callEvent(event);
 		if(event.isCancelled())
 			return false;
-
-		RpgModifiers modifiers = rpg.getModifiers();
-		if(modifiers.hasRytualWzniesienia()) {
-			double restoreHp = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.03;
-			RpgPlayerHealEvent event2 = new RpgPlayerHealEvent(rpg, restoreHp);
-			Bukkit.getPluginManager().callEvent(event2);
-			p.getWorld().spawnParticle(Particle.DAMAGE_INDICATOR, p.getLocation().add(0,1,0), 12, 0.4F, 0.4F, 0.4F, 0.05f);
-			p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_HURT_SWEET_BERRY_BUSH, 1, .7f);
-		}
-
-		if(e.getHealth() - event.getDamage() < 1.0D 
-				&& modifiers.hasKrewPrzodkow() 
-				&& dr.getMagicType().equalsIgnoreCase("krew")) {
-			RuneUtils.krewPrzodkowEffect(rpg);
-		}
 
 		ManualDamage.doDamage(p, e, event.getDamage(), event);
 
@@ -155,42 +112,61 @@ public class RuneDamage {
 				return false;
 		}
 		
-		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
-		dmg = DamageManager.getInstance().getRuneCalculator().calc(p, e, dmg, dr);
+		MagicEntityDamageByEntityEvent event = new MagicEntityDamageByEntityEvent(p, e, dmg, dr);
+
+		EpicDamageType damageType = EpicDamageType.MAGIC;
+		Pair<Double, Boolean> damageInfo = DamageManager.getInstance()
+				.getMagicCalculator()
+				.calc(p, e, dmg, dr);
 		
-		EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(p, e, DamageCause.CUSTOM, dmg);
-		if(e instanceof Player)
-			dmg = DamageManager.getInstance().getDefenseCalculator().calc(p, e, dmg);
+		EpicAttackEvent attackEvent = new EpicAttackEvent(p, e, damageType, 
+				damageInfo.getKey(), 1, damageInfo);
+		Bukkit.getPluginManager().callEvent(attackEvent);
 		
-		Map<EventPriority, List<DamageModifier>> mods = DamageModifierManager.getInstance().getModifiers();
-		for(EventPriority priority : mods.keySet()) {
-			for(DamageModifier modifier : mods.get(priority)) {
-				dmg = modifier.modifyDamage(p, e, dmg, DamageCause.CUSTOM);
-				if(dmg < 0){
-					return false;
-				}
-			}
-		}
-		
-		if(!ManualDamage.doDamageWithCheck(p, e, event.getDamage(), event))
+		if(attackEvent.isCancelled())
+			return false;
+		if(attackEvent.getDmg() <= 0) 
 			return false;
 		
-		RpgModifiers modifiers = rpg.getModifiers();
-		if(modifiers.hasRytualWzniesienia()) {
-			double restoreHp = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.03;
-			RpgPlayerHealEvent event2 = new RpgPlayerHealEvent(rpg, restoreHp);
-			Bukkit.getPluginManager().callEvent(event2);
-			p.getWorld().spawnParticle(Particle.DAMAGE_INDICATOR, p.getLocation().add(0,1,0), 12, 0.4F, 0.4F, 0.4F, 0.05f);
-			p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_HURT_SWEET_BERRY_BUSH, 1, .7f);
+		dmg = attackEvent.getDmg() * attackEvent.getModifier();
+		if(dmg <= 0)
+			return false;
+		
+		if(e instanceof Player) {
+			Pair<Double, Boolean> defenseInfo = DamageManager.getInstance()
+					.getDefenseCalculator().calc(p, e, dmg);
+			
+			EpicDefenseEvent defenseEvent = new EpicDefenseEvent(p, e, damageType,
+					defenseInfo.getKey(), 1, defenseInfo);
+			Bukkit.getPluginManager().callEvent(defenseEvent);
+			
+			if(defenseEvent.isCancelled()) 
+				return false;
+			
+			dmg = defenseEvent.getDmg() * defenseEvent.getModifier();
+			RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer((Player) e);
+			int level = rpg.getInfo().getLevel();
+			if(dmg < ((level / 10.) + 2))
+				dmg = (level / 10.) + 2;
 		}
 		
-		if(e.getHealth() - event.getDamage() < 1.0D 
-				&& modifiers.hasKrewPrzodkow() 
-				&& dr.getMagicType().equalsIgnoreCase("krew")) {
-			RuneUtils.krewPrzodkowEffect(rpg);
-		}
+		EpicEffectEvent effectEvent = new EpicEffectEvent(p, e, damageType,
+				dmg, 1, damageInfo);
+		Bukkit.getPluginManager().callEvent(effectEvent);
+		
+		if(effectEvent.isCancelled())
+			return false;
+		
+		if(effectEvent.getDmg() <= 0)
+			return false;
+		
+		dmg = effectEvent.getFinalDamage();
+		if(dmg <= 0) 
+			return false;
+		
+		if(!ManualDamage.doDamageWithCheck(p, e, effectEvent.getFinalDamage(), event))
+			return false;
 
-		
 		return true;
 	}
 	

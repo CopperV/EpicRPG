@@ -164,7 +164,7 @@ public class RpgSkills implements Serializable, ChatPrintable {
 		this.manaRegTask = Bukkit.getScheduler().runTaskTimer(Main.getInstance(), ()->{
 			
 			if(stats.getPresentMana() != stats.getFinalMana()) {
-				int tmp = (int)(stats.getFinalMana() * 0.0125);
+				int tmp = (int)(stats.getFinalMana() * 0.015);
 				if(tmp == 0) tmp = 1;
 				stats.addPresentManaSmart(tmp);
 				RpgScoreboard.updateScore(rpg.getPlayer());

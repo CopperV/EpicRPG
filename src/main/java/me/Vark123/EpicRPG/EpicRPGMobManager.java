@@ -40,7 +40,15 @@ public class EpicRPGMobManager {
 			ChatColor.translateAlternateColorCodes('&', "&2&lBagienny truten"),
 			ChatColor.translateAlternateColorCodes('&', "&e&oWaz blotny"),
 			ChatColor.translateAlternateColorCodes('&', "&3&lPelzacz swiatynny"),
-			ChatColor.translateAlternateColorCodes('&', "&9&lSwiatynna Krolowa Pelzaczy"));
+			ChatColor.translateAlternateColorCodes('&', "&9&lSwiatynna Krolowa Pelzaczy"),
+			ChatColor.translateAlternateColorCodes('&', "&9&lKejran - BOSS"),
+			ChatColor.translateAlternateColorCodes('&', "&c&oKrwiozercza Pijawka"),
+			ChatColor.translateAlternateColorCodes('&', "&a&oDrifter"),
+			ChatColor.translateAlternateColorCodes('&', "&2Szambler"),
+			ChatColor.translateAlternateColorCodes('&', "&e&lPurchlak"),
+			ChatColor.translateAlternateColorCodes('&', "&e&oCordyceps"),
+			ChatColor.translateAlternateColorCodes('&', "&2&lElement Zero - BOSS"),
+			ChatColor.translateAlternateColorCodes('&', "&8Szczur kanalowy"));
 	
 	private EpicRPGMobManager() {
 		rand = new Random();
@@ -67,7 +75,7 @@ public class EpicRPGMobManager {
 	}
 	
 	public Pair<Integer, Integer> getMobExp(String mob){
-		return mobExp.getOrDefault(mob, new Pair<>(0, 0));
+		return mobExp.getOrDefault(mob, new Pair<>(0, 1));
 	}
 	
 	public int getRandomMobExp(String mob) {

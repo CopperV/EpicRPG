@@ -8,6 +8,7 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -20,10 +21,11 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
+import io.lumine.mythic.bukkit.MythicBukkit;
 import me.Vark123.EpicRPG.Main;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
-import me.Vark123.EpicRPG.RuneSystem.ARune;
 import me.Vark123.EpicRPG.FightSystem.RuneDamage;
+import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import net.minecraft.world.phys.AxisAlignedBB;
 
 public class BurzaOgnista extends ARune {
@@ -67,6 +69,9 @@ public class BurzaOgnista extends ARune {
 							return true;
 						return false;
 					}
+					if(!MythicBukkit.inst().getMobManager().isMythicMob(e)
+							&& e.getType().equals(EntityType.ARMOR_STAND))
+						return false;
 					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 						return false;
 					return true;
@@ -80,7 +85,7 @@ public class BurzaOgnista extends ARune {
 					le = (LivingEntity) e;
 					RuneDamage.damageNormal(p, le, dr, (p, le, dr)->{
 						new BukkitRunnable() {
-							int timer = 10;
+							int timer = 4;
 							double dmg = dr.getDamage()/50.0;
 							@Override
 							public void run() {
@@ -161,6 +166,9 @@ public class BurzaOgnista extends ARune {
 								return true;
 							return false;
 						}
+						if(!MythicBukkit.inst().getMobManager().isMythicMob(e)
+								&& e.getType().equals(EntityType.ARMOR_STAND))
+							return false;
 						if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 							return false;
 						return true;

@@ -10,6 +10,9 @@ import me.Vark123.EpicRPG.MMExtension.Mechanics.AuraPullMechanic;
 import me.Vark123.EpicRPG.MMExtension.Mechanics.ChangeRegionFlagMechanic;
 import me.Vark123.EpicRPG.MMExtension.Mechanics.EchoMechanic;
 import me.Vark123.EpicRPG.MMExtension.Mechanics.MalevolenceMechanic;
+import me.Vark123.EpicRPG.MMExtension.Mechanics.ManaDrainMechanic;
+import me.Vark123.EpicRPG.MMExtension.Mechanics.ManaDrainPercentMechanic;
+import me.Vark123.EpicRPG.MMExtension.Mechanics.PlaceholderProjectileMechanic;
 import me.Vark123.EpicRPG.MMExtension.Mechanics.RemoveTargetMechanic;
 import me.Vark123.EpicRPG.MMExtension.Mechanics.SetTargetMechanic;
 
@@ -21,27 +24,39 @@ public class CustomMechanicsLoadEvent implements Listener {
 		SkillMechanic mechanic;
 		switch(mech) {
 			case "echo":
-				mechanic = new EchoMechanic(MythicBukkit.inst().getSkillManager(), e.getConfig().getLine(), e.getConfig());
+				mechanic = new EchoMechanic(MythicBukkit.inst().getSkillManager(), e.getContainer().getFile(), e.getConfig().getLine(), e.getConfig());
 				e.register(mechanic);
 				break;
 			case "settarget":
-				mechanic = new SetTargetMechanic(MythicBukkit.inst().getSkillManager(), e.getConfig().getLine(), e.getConfig());
+				mechanic = new SetTargetMechanic(MythicBukkit.inst().getSkillManager(), e.getContainer().getFile(), e.getConfig().getLine(), e.getConfig());
 				e.register(mechanic);
 				break;
 			case "aurapull":
-				mechanic = new AuraPullMechanic(MythicBukkit.inst().getSkillManager(), e.getConfig().getLine(), e.getConfig());
+				mechanic = new AuraPullMechanic(MythicBukkit.inst().getSkillManager(), e.getContainer().getFile(), e.getConfig().getLine(), e.getConfig());
 				e.register(mechanic);
 				break;
 			case "malevolence":
-				mechanic = new MalevolenceMechanic(MythicBukkit.inst().getSkillManager(), e.getConfig().getLine(), e.getConfig());
+				mechanic = new MalevolenceMechanic(MythicBukkit.inst().getSkillManager(), e.getContainer().getFile(), e.getConfig().getLine(), e.getConfig());
 				e.register(mechanic);
 				break;
 			case "removetarget":
-				mechanic = new RemoveTargetMechanic(MythicBukkit.inst().getSkillManager(), e.getConfig().getLine(), e.getConfig());
+				mechanic = new RemoveTargetMechanic(MythicBukkit.inst().getSkillManager(), e.getContainer().getFile(), e.getConfig().getLine(), e.getConfig());
 				e.register(mechanic);
 				break;
 			case "setflag":
-				mechanic = new ChangeRegionFlagMechanic(MythicBukkit.inst().getSkillManager(), e.getConfig().getLine(), e.getConfig());
+				mechanic = new ChangeRegionFlagMechanic(MythicBukkit.inst().getSkillManager(), e.getContainer().getFile(), e.getConfig().getLine(), e.getConfig());
+				e.register(mechanic);
+				break;
+			case "pprojectile":
+				mechanic = new PlaceholderProjectileMechanic(MythicBukkit.inst().getSkillManager(), e.getContainer().getFile(), e.getConfig().getLine(), e.getConfig());
+				e.register(mechanic);
+				break;
+			case "manadrain":
+				mechanic = new ManaDrainMechanic(MythicBukkit.inst().getSkillManager(), e.getContainer().getFile(), e.getConfig().getLine(), e.getConfig());
+				e.register(mechanic);
+				break;
+			case "manadrainpercent":
+				mechanic = new ManaDrainPercentMechanic(MythicBukkit.inst().getSkillManager(), e.getContainer().getFile(), e.getConfig().getLine(), e.getConfig());
 				e.register(mechanic);
 				break;
 		}

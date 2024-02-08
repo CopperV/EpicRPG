@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -19,10 +20,11 @@ import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import io.lumine.mythic.api.adapters.AbstractEntity;
+import io.lumine.mythic.bukkit.MythicBukkit;
 import me.Vark123.EpicRPG.Main;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
-import me.Vark123.EpicRPG.RuneSystem.ARune;
 import me.Vark123.EpicRPG.FightSystem.RuneDamage;
+import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import net.minecraft.world.phys.AxisAlignedBB;
 
 public class RojOwadow extends ARune {
@@ -66,6 +68,9 @@ public class RojOwadow extends ARune {
 							return true;
 						return false;
 					}
+					if(!MythicBukkit.inst().getMobManager().isMythicMob(e)
+							&& e.getType().equals(EntityType.ARMOR_STAND))
+						return false;
 					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 						return false;
 					return true;

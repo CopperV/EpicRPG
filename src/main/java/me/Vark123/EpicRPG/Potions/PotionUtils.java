@@ -97,6 +97,9 @@ public class PotionUtils {
 			case "Mikstura_Mysliwego":
 			case "Mikstura_Maga":
 			case "Mikstura_Szalu":
+			case "Mikstura_Druida":
+			case "Mikstura_Szermieza":
+			case "Mikstura_Tarczownika":
 				return RpgPotionType.STALE;
 		}
 		return RpgPotionType.NONE;
@@ -134,14 +137,14 @@ public class PotionUtils {
 					MutableInt time = new MutableInt();
 					potion.getItemMeta().getLore().stream().filter(s -> {
 						return s.contains("Przywrocona mana") || s.contains("Czas trwania");
-					}).findAny().ifPresent(s -> {
+					}).forEach(s -> {
 						if(s.contains("Przywrocona mana")) {
 							mana.setValue(Integer.parseInt(ChatColor.stripColor(
 									s.replace("§4- §3Przywrocona mana na sekunde: §7", ""))));
 							return;
 						}
 						time.setValue(Integer.parseInt(ChatColor.stripColor(
-								s.replace("§4- §3Czas trwania: §7", ""))));
+								s.replace("§4- §3Czas trwania: §7", "").replace(" sekund", ""))));
 					});
 					rpg.getStats().createRegenManaTask(time.intValue(), mana.intValue());
 				};
@@ -152,14 +155,14 @@ public class PotionUtils {
 					MutableInt time = new MutableInt();
 					potion.getItemMeta().getLore().stream().filter(s -> {
 						return s.contains("Przywrocone zycie") || s.contains("Czas trwania");
-					}).findAny().ifPresent(s -> {
+					}).forEach(s -> {
 						if(s.contains("Przywrocone zycie")) {
 							hp.setValue(Integer.parseInt(ChatColor.stripColor(
 									s.replace("§4- §3Przywrocone zycie na sekunde: §7", ""))));
 							return;
 						}
 						time.setValue(Integer.parseInt(ChatColor.stripColor(
-								s.replace("§4- §3Czas trwania: §7", ""))));
+								s.replace("§4- §3Czas trwania: §7", "").replace(" sekund", ""))));
 					});
 					rpg.getStats().createRegenHpTask(time.intValue(), hp.intValue());
 				};
@@ -170,7 +173,7 @@ public class PotionUtils {
 					MutableInt hp = new MutableInt();
 					potion.getItemMeta().getLore().stream().filter(s -> {
 						return s.contains("Przywrocona mana") || s.contains("Przywrocone zycie");
-					}).findAny().ifPresent(s -> {
+					}).forEach(s -> {
 						if(s.contains("Przywrocona mana")) {
 							mana.setValue(Integer.parseInt(ChatColor.stripColor(s.replace("§4- §3Przywrocona mana: §7", ""))));
 							return;
@@ -191,17 +194,18 @@ public class PotionUtils {
 						return s.contains("Przywrocona mana")
 								|| s.contains("Przywrocone zycie")
 								|| s.contains("Czas trwania");
-					}).findAny().ifPresent(s -> {
+					}).forEach(s -> {
 						if(s.contains("Przywrocona mana")) {
 							mana.setValue(Integer.parseInt(ChatColor.stripColor(
-									s.replace("§4- §3Przywrocona mana na sekunde: §7", ""))));							return;
+									s.replace("§4- §3Przywrocona mana na sekunde: §7", ""))));
+							return;
 						} else if(s.contains("Przywrocone zycie")) {
 							hp.setValue(Integer.parseInt(ChatColor.stripColor(
 									s.replace("§4- §3Przywrocone zycie na sekunde: §7", ""))));
 							return;
 						}
 						time.setValue(Integer.parseInt(ChatColor.stripColor(
-								s.replace("§4- §3Czas trwania: §7", ""))));
+								s.replace("§4- §3Czas trwania: §7", "").replace(" sekund", ""))));
 					});
 					rpg.getStats().createRegenHpTask(time.intValue(), hp.intValue());
 					rpg.getStats().createRegenManaTask(time.intValue(), mana.intValue());
@@ -250,44 +254,44 @@ public class PotionUtils {
 			case STALE:
 				effect = rpg -> {
 					RpgStats stats = rpg.getStats();
-					switch(potion.getItemMeta().getDisplayName().split(" ")[1]) {
-						case "Duszy":
+					switch(potion.getItemMeta().getDisplayName().split(" ")[1].toLowerCase()) {
+						case "duszy":
 							stats.addPotionMana(2);
 							stats.addPresentManaSmart(2);
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
 									+" §2Otrzymales 2 punkty many. Obecnie posiadasz §a"+(stats.getMana()+stats.getPotionMana())+" §2punktow many.");
 							break;
-						case "Sily":
+						case "sily":
 							stats.addPotionSila(1);
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
 									+" §2Otrzymales 1 punkty sily.");
 							break;
-						case "Zrecznosci":
+						case "zrecznosci":
 							stats.addPotionZrecznosc(1);
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
 									+" §2Otrzymales 1 punkty zrecznosci.");
 							break;
-						case "Umyslu":
+						case "umyslu":
 							stats.addPotionInteligencja(1);
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
 									+" §2Otrzymales 1 punkty inteligencji.");
 							break;
-						case "Mysliwska":
+						case "mysliwska":
 							stats.addPotionZdolnosci(1);
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
 									+" §2Otrzymales 1 punkty zdolnosci mysliwskich.");
 							break;
-						case "Wytrzymalosci":
+						case "wytrzymalosci":
 							stats.addPotionWytrzymalosc(1);
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
 									+" §2Otrzymales 1 punkty wytrzymalosci.");
 							break;
-						case "Walki":
+						case "walki":
 							stats.addPotionWalka(1);
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
 									+" §2Otrzymales 1 punkty walki.");
 							break;
-						case "Wojownika":
+						case "wojownika":
 							stats.addPotionSila(1);
 							stats.addPotionWytrzymalosc(1);
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
@@ -295,7 +299,7 @@ public class PotionUtils {
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
 									+" §2Otrzymales 1 punkty walki.");
 							break;
-						case "Mysliwego":
+						case "mysliwego":
 							stats.addPotionZrecznosc(1);
 							stats.addPotionZdolnosci(1);
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
@@ -303,7 +307,7 @@ public class PotionUtils {
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
 									+" §2Otrzymales 1 punkty zdolnosci mysliwskich.");
 							break;
-						case "Maga":
+						case "maga":
 							stats.addPotionMana(2);
 							stats.addPresentManaSmart(2);
 							stats.addPotionInteligencja(1);
@@ -312,10 +316,25 @@ public class PotionUtils {
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
 									+" §2Otrzymales 2 punkty many. Obecnie posiadasz §a"+(stats.getMana()+stats.getPotionMana())+" §2punktow many.");
 							break;
-						case "Szalu":
+						case "szalu":
 							stats.addPotionWalka(2);
 							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
 									+" §2Otrzymales 2 punkty walki.");
+							break;
+						case "druida":
+							stats.addPotionHealth(2);
+							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
+									+" §2Otrzymales 2 punkty zycia.");
+							break;
+						case "szermieza":
+							stats.addPotionObrazenia(1);
+							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
+									+" §2Otrzymales 1 punkt obrazen.");
+							break;
+						case "tarczownika":
+							stats.addPotionOchrona(1);
+							rpg.getPlayer().sendMessage(Main.getInstance().getPrefix()
+									+" §2Otrzymales 1 punkt ochrony.");
 							break;
 					}
 				};

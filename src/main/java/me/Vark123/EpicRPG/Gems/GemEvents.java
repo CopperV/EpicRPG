@@ -28,6 +28,9 @@ public class GemEvents {
 
 	private final EventCreator<InventoryClickEvent> annihilusClickEvent;
 	private final EventCreator<InventoryCloseEvent> annihilusCloseEvent;
+
+	private final EventCreator<InventoryClickEvent> annihilusUpgradeClickEvent;
+	private final EventCreator<InventoryCloseEvent> annihilusUpgradeCloseEvent;
 	
 	private GemEvents() {
 		powerfulClickEvent = powerfulClickEventCreator();
@@ -35,6 +38,9 @@ public class GemEvents {
 
 		annihilusClickEvent = annihilusClickEventCreator();
 		annihilusCloseEvent = annihilusCloseEventCreator();
+
+		annihilusUpgradeClickEvent = annihilusUpgradeClickEventCreator();
+		annihilusUpgradeCloseEvent = annihilusUpgradeCloseEventCreator();
 	}
 	
 	public static GemEvents getEvents() {
@@ -44,9 +50,6 @@ public class GemEvents {
 	private EventCreator<InventoryClickEvent> powerfulClickEventCreator(){
 		
 		Consumer<InventoryClickEvent> event = e -> {
-			if(e.isCancelled())
-				return;
-			
 			Inventory inv = e.getClickedInventory();
 			if(inv == null || !inv.getType().equals(InventoryType.CHEST)) 
 				return;
@@ -153,9 +156,6 @@ public class GemEvents {
 	private EventCreator<InventoryClickEvent> annihilusClickEventCreator(){
 		
 		Consumer<InventoryClickEvent> event = e -> {
-			if(e.isCancelled())
-				return;
-			
 			Inventory inv = e.getClickedInventory();
 			if(inv == null || !inv.getType().equals(InventoryType.CHEST)) 
 				return;
@@ -235,6 +235,98 @@ public class GemEvents {
 			Inventory inv = e.getView().getTopInventory();
 			Player p = (Player) e.getPlayer();
 			for(int slot : GemManager.getInstance().getAnnihilusFreeSlots()) {
+				ItemStack it = inv.getItem(slot);
+				if(it == null 
+						|| it.getType().equals(Material.AIR))
+					continue;
+				Utils.dropItemStack(p, it);
+			}
+		};
+		
+		EventCreator<InventoryCloseEvent> creator = new EventCreator<>(InventoryCloseEvent.class, event);
+		return creator;
+	}
+	private EventCreator<InventoryClickEvent> annihilusUpgradeClickEventCreator(){
+		
+		Consumer<InventoryClickEvent> event = e -> {
+			Inventory inv = e.getView().getTopInventory();
+			if(e.getClickedInventory() == null || !e.getClickedInventory().equals(inv))
+				return;
+			
+			int slot = e.getSlot();
+			ItemStack it = inv.getItem(slot);
+			if(it == null || it.getType().equals(Material.AIR))
+				return;
+			
+			if(!it.equals(GemManager.getInstance().getCreate()))
+				return;
+
+			final int[] slots = GemManager.getInstance().getAnnihilusUpgradeFreeSlots();
+			
+			Player p = (Player) e.getWhoClicked();
+			ItemStack annihilus = inv.getItem(slots[7]);
+			ItemStack gem = inv.getItem(slots[8]);
+			if(annihilus == null || annihilus.getType().equals(Material.AIR)
+					|| gem == null || gem.getType().equals(Material.AIR)) {
+				p.closeInventory();
+				return;
+			}
+			
+			NBTItem nbtAnnihilus = new NBTItem(annihilus);
+			NBTItem nbtGem = new NBTItem(gem);
+			if(!nbtAnnihilus.hasTag("RPGType")
+					|| !nbtAnnihilus.getString("RPGType").equalsIgnoreCase("gem")
+					|| !(nbtAnnihilus.hasTag("annihilus") && nbtAnnihilus.getInteger("annihilus") == 1)
+					|| !nbtGem.hasTag("RPGType")
+					|| !nbtGem.getString("RPGType").equalsIgnoreCase("gem")
+					|| (nbtGem.hasTag("annihilus") && nbtGem.getInteger("annihilus") == 1)) {
+				p.closeInventory();
+				return;
+			}
+			
+			List<String> katedraNBT = new ArrayList<>();
+			for(int i = 0; i < slots.length - 2; ++i) {
+				int checkSlot = slots[i];
+				ItemStack trophy = inv.getItem(checkSlot);
+				if(trophy == null
+						|| trophy.getType().equals(Material.AIR)) {
+					p.closeInventory();
+					return;
+				}
+				
+				NBTItem nbtTrophy = new NBTItem(trophy);
+				if(!nbtTrophy.hasTag("soulbind")
+						|| !nbtTrophy.getString("soulbind").equalsIgnoreCase(e.getWhoClicked().getName())) {
+					p.closeInventory();
+					return;
+				}
+				if(!nbtTrophy.hasTag("Katedra")
+						|| !GemManager.getInstance().getAnnihilusUpgradeGemKatedra()
+							.contains(nbtTrophy.getString("Katedra"))
+						|| katedraNBT.contains(nbtTrophy.getString("Katedra"))) {
+					p.closeInventory();
+					return;
+				}
+				
+				katedraNBT.add(nbtTrophy.getString("Katedra"));
+			}
+			
+			inv.clear();
+			p.closeInventory();
+			ItemStack annihilusItem = GemManager.getInstance().getAnnihilus(annihilus, gem);
+			Utils.dropItemStack(p, annihilusItem);
+		};
+		
+		EventCreator<InventoryClickEvent> creator = new EventCreator<>(InventoryClickEvent.class, event);
+		return creator;
+	}
+	
+	private EventCreator<InventoryCloseEvent> annihilusUpgradeCloseEventCreator(){
+		
+		Consumer<InventoryCloseEvent> event = e -> {
+			Inventory inv = e.getView().getTopInventory();
+			Player p = (Player) e.getPlayer();
+			for(int slot : GemManager.getInstance().getAnnihilusUpgradeFreeSlots()) {
 				ItemStack it = inv.getItem(slot);
 				if(it == null 
 						|| it.getType().equals(Material.AIR))

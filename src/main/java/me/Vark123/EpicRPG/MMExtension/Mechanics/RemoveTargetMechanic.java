@@ -1,5 +1,7 @@
 package me.Vark123.EpicRPG.MMExtension.Mechanics;
 
+import java.io.File;
+
 import org.bukkit.entity.Entity;
 
 import io.lumine.mythic.api.adapters.AbstractEntity;
@@ -14,8 +16,8 @@ import io.lumine.mythic.core.skills.SkillMechanic;
 
 public class RemoveTargetMechanic extends SkillMechanic implements ITargetedEntitySkill {
 
-	public RemoveTargetMechanic(SkillExecutor exec, String skill, MythicLineConfig mlc) {
-		super(exec, skill, mlc);
+	public RemoveTargetMechanic(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
+		super(manager, file, line, mlc);
 	}
 
 	@Override

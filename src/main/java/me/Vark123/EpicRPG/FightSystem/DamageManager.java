@@ -1,45 +1,31 @@
 package me.Vark123.EpicRPG.FightSystem;
 
-import me.Vark123.EpicRPG.FightSystem.Calculators.AttackDamageCalculator;
-import me.Vark123.EpicRPG.FightSystem.Calculators.DamageCalculator;
-import me.Vark123.EpicRPG.FightSystem.Calculators.DefenseDamageCalculator;
-import me.Vark123.EpicRPG.FightSystem.Calculators.ProjectileDamageCalculator;
-import me.Vark123.EpicRPG.FightSystem.Calculators.RuneDamageCalculator;
+import lombok.Getter;
+import me.Vark123.EpicRPG.FightSystem.StatsCalculator.DefenseCalculator;
+import me.Vark123.EpicRPG.FightSystem.StatsCalculator.IDamageCalculator;
+import me.Vark123.EpicRPG.FightSystem.StatsCalculator.MagicCalculator;
+import me.Vark123.EpicRPG.FightSystem.StatsCalculator.MeleeCalculator;
+import me.Vark123.EpicRPG.FightSystem.StatsCalculator.ProjectileCalculator;
 
-public class DamageManager {
+@Getter
+public final class DamageManager {
 	
 	private static final DamageManager instance = new DamageManager();
 	
-	private DamageCalculator attackCalculator;
-	private DamageCalculator projectileCalculator;
-	private DamageCalculator defenseCalculator;
-	private RuneDamageCalculator runeCalculator;
+	private final IDamageCalculator meleeCalculator;
+	private final IDamageCalculator projectileCalculator;
+	private final IDamageCalculator magicCalculator;
+	private final IDamageCalculator defenseCalculator;
 	
 	private DamageManager() {
-		this.attackCalculator = new AttackDamageCalculator();
-		this.projectileCalculator = new ProjectileDamageCalculator();
-		this.defenseCalculator = new DefenseDamageCalculator();
-		this.runeCalculator = new RuneDamageCalculator();
+		this.meleeCalculator = new MeleeCalculator();
+		this.projectileCalculator = new ProjectileCalculator();
+		this.defenseCalculator = new DefenseCalculator();
+		this.magicCalculator = new MagicCalculator();
 	}
 
 	public static DamageManager getInstance() {
 		return instance;
-	}
-
-	public DamageCalculator getAttackCalculator() {
-		return attackCalculator;
-	}
-
-	public DamageCalculator getProjectileCalculator() {
-		return projectileCalculator;
-	}
-
-	public DamageCalculator getDefenseCalculator() {
-		return defenseCalculator;
-	}
-
-	public RuneDamageCalculator getRuneCalculator() {
-		return runeCalculator;
 	}
 
 }

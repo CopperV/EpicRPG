@@ -22,9 +22,12 @@ import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.FightSystem.DamageManager;
-import me.Vark123.EpicRPG.FightSystem.DamageUtils;
+import me.Vark123.EpicRPG.FightSystem.EpicDamageType;
 import me.Vark123.EpicRPG.FightSystem.ManualDamage;
+import me.Vark123.EpicRPG.FightSystem.Events.EpicDefenseEvent;
+import me.Vark123.EpicRPG.FightSystem.Events.EpicEffectEvent;
 import me.Vark123.EpicRPG.HealthSystem.RpgPlayerHealEvent;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Utils.Pair;
 
@@ -43,7 +46,8 @@ public class RuneUtils {
 	
 	public static Optional<RuneEffect> getCustomTimeEffect(
 			final double damage, 
-			final RuneTimeEffect type) {
+			final RuneTimeEffect type,
+			final EpicDamageType damageType) {
 		switch(type) {
 			case BLOOD:
 				return Optional.of(new RuneEffect() {
@@ -61,7 +65,7 @@ public class RuneUtils {
 								}
 								--timer;
 								
-								Pair<Boolean, Double> result = doPrivateDamage(damager, victim, damage);
+								Pair<Boolean, Double> result = doPrivateDamage(damager, victim, damage, damageType);
 								if(!result.getKey()) {
 									this.cancel();
 									return;
@@ -87,7 +91,7 @@ public class RuneUtils {
 								}
 								--timer;
 								
-								Pair<Boolean, Double> result = doPrivateDamage(damager, victim, damage);
+								Pair<Boolean, Double> result = doPrivateDamage(damager, victim, damage, damageType);
 								if(!result.getKey()) {
 									this.cancel();
 									return;
@@ -113,7 +117,7 @@ public class RuneUtils {
 								}
 								--timer;
 								
-								Pair<Boolean, Double> result = doPrivateDamage(damager, victim, damage);
+								Pair<Boolean, Double> result = doPrivateDamage(damager, victim, damage, damageType);
 								if(!result.getKey()) {
 									this.cancel();
 									return;
@@ -130,27 +134,54 @@ public class RuneUtils {
 		
 	}
 	
-	private static Pair<Boolean, Double> doPrivateDamage(LivingEntity damager, LivingEntity victim, double dmg){
+	private static Pair<Boolean, Double> doPrivateDamage(LivingEntity damager, LivingEntity victim, double dmg, EpicDamageType damageType){
 		if(!io.lumine.mythic.bukkit.BukkitAdapter
 				.adapt(victim).isDamageable()){
 			return new Pair<Boolean, Double>(false, dmg);
 		}
 		
+		Pair<Double, Boolean> damageInfo = new Pair<>(dmg, false);
 		EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(damager, victim, DamageCause.CUSTOM, dmg);
 		if(victim instanceof Player) {
+			//TODO
+			//REWORK PVP SYSTEM ON MAP
 			RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
 			ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(victim.getLocation()));
 			State flag = set.queryValue(null, Flags.PVP);
 			if(flag != null && flag.equals(State.DENY)) {
 				return new Pair<Boolean, Double>(false, dmg);
 			}
-			dmg = DamageManager.getInstance().getDefenseCalculator().calc(damager, victim, dmg);
+			
+			Pair<Double, Boolean> defenseInfo = DamageManager.getInstance()
+					.getDefenseCalculator().calc(damager, victim, dmg);
+			
+			EpicDefenseEvent defenseEvent = new EpicDefenseEvent(damager, victim, damageType,
+					defenseInfo.getKey(), 1, defenseInfo);
+			Bukkit.getPluginManager().callEvent(defenseEvent);
+			
+			if(defenseEvent.isCancelled()) 
+				return new Pair<Boolean, Double>(false, dmg);
+			
+			dmg = defenseEvent.getDmg() * defenseEvent.getModifier();
+			RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer((Player) victim);
+			int level = rpg.getInfo().getLevel();
+			if(dmg < ((level / 10.) + 2))
+				dmg = (level / 10.) + 2;
 		}
 		
-		Pair<Boolean, Double> modEffect = DamageUtils.runThroughModifiers(damager, victim, dmg, event);
-		if(!modEffect.getKey()) {
+		EpicEffectEvent effectEvent = new EpicEffectEvent(damager, victim, damageType,
+				dmg, 1, damageInfo);
+		Bukkit.getPluginManager().callEvent(effectEvent);
+		
+		if(effectEvent.isCancelled())
 			return new Pair<Boolean, Double>(false, dmg);
-		}
+		
+		if(effectEvent.getDmg() <= 0)
+			return new Pair<Boolean, Double>(false, dmg);
+		
+		dmg = effectEvent.getFinalDamage();
+		if(dmg <= 0) 
+			return new Pair<Boolean, Double>(false, dmg);
 		
 		if(!ManualDamage.doDamageWithCheck(damager, victim, dmg, event)){
 			return new Pair<Boolean, Double>(false, dmg);

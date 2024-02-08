@@ -21,6 +21,8 @@ public class ReputationCost extends AdvancedBuyCost {
 	@Override
 	public boolean check(Player p) {
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
+		if(rpg == null)
+			return false;
 		RpgReputation rep = rpg.getReputation();
 		if(!rep.getReputacja().containsKey(fraction.toLowerCase()))
 			return false;

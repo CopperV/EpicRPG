@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -19,8 +20,8 @@ import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import me.Vark123.EpicRPG.Main;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class OdwrocenieUwagi extends ARune {
 	
@@ -50,6 +51,9 @@ public class OdwrocenieUwagi extends ARune {
 			if(e instanceof Player)
 				return false;
 			if(e.getLocation().distance(loc) > dr.getObszar())
+				return false;
+			if(!MythicBukkit.inst().getMobManager().isMythicMob(e)
+					&& e.getType().equals(EntityType.ARMOR_STAND))
 				return false;
 			if(!BukkitAdapter.adapt(e).isDamageable())
 				return false;

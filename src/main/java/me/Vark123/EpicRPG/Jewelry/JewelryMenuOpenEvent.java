@@ -18,7 +18,7 @@ public class JewelryMenuOpenEvent implements Listener {
 			return;
 		if(e.getSlot() != 3)
 			return;
-		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "rpgmenu "+p.getName()+" 15");
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "rpgmenu "+p.getName()+" 21");
 	}
 	
 }

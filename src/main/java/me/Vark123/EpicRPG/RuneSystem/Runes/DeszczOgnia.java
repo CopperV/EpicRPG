@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -20,6 +21,7 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
+import io.lumine.mythic.bukkit.MythicBukkit;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.FightSystem.RuneDamage;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
@@ -58,7 +60,7 @@ public class DeszczOgnia extends ARune{
 				target = new Location(loc.getWorld(), x, loc.getY(), z);
 				spellEffect(target.clone());
 				
-				Collection<Entity> tmpList = loc.getWorld().getNearbyEntities(loc,dr.getObszar(), dr.getObszar(), dr.getObszar());
+				Collection<Entity> tmpList = loc.getWorld().getNearbyEntities(loc,dr.getObszar(), 8, dr.getObszar());
 				
 				tmpList.stream().filter(e -> {
 					if(entitiesList.contains(e))
@@ -75,6 +77,9 @@ public class DeszczOgnia extends ARune{
 							return true;
 						return false;
 					}
+					if(!MythicBukkit.inst().getMobManager().isMythicMob(e)
+							&& e.getType().equals(EntityType.ARMOR_STAND))
+						return false;
 					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 						return false;
 					return true;
@@ -82,7 +87,7 @@ public class DeszczOgnia extends ARune{
 					le = (LivingEntity) e;
 					RuneDamage.damageNormal(p, le, dr, (p, le, dr) -> {
 						new BukkitRunnable() {
-							int timer = 20;
+							int timer = 9;
 							double dmg = dr.getDamage()/50.0;
 							@Override
 							public void run() {

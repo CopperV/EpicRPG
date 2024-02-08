@@ -38,9 +38,6 @@ public class MerchantEvents {
 	
 	private EventCreator<InventoryClickEvent> clickEventCreator() {
 		Consumer<InventoryClickEvent> event = e -> {
-			if(e.isCancelled())
-				return;
-			
 			int slot = e.getSlot();
 			Inventory inv = e.getClickedInventory();
 			if(slot == 49) {

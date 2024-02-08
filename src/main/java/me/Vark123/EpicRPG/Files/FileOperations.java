@@ -2,20 +2,27 @@ package me.Vark123.EpicRPG.Files;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import lombok.Getter;
 import me.Vark123.EpicRPG.EpicRPGMobManager;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.BlackrockSystem.BlackrockManager;
+import me.Vark123.EpicRPG.BoosterSystem.Booster;
+import me.Vark123.EpicRPG.BoosterSystem.BoosterManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgJewelry;
 import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
@@ -31,16 +38,19 @@ public class FileOperations {
 	private static File users = new File(Main.getInstance().getDataFolder(), "users");
 	private static File phorses = new File(Main.getInstance().getDataFolder(), "phorses");
 	private static File jewelry = new File(Main.getInstance().getDataFolder(), "jewelry");
+	private static File oldJewelry = new File(Main.getInstance().getDataFolder(), "old_jewelry");
+	private static File backItems = new File(Main.getInstance().getDataFolder(), "backs");
 	private static File exp = new File(Main.getInstance().getDataFolder(), "exp.yml");
 	private static File blackrock = new File(Main.getInstance().getDataFolder(), "blackrock.yml");
+	private static File boosters = new File(Main.getInstance().getDataFolder(), "boosters.yml");
+	@Getter
+	private static File config = new File(Main.getInstance().getDataFolder(), "config.yml");
 
 	public static void checkFiles() {
 		if(!Main.getInstance().getDataFolder().exists()) {
 			Main.getInstance().getDataFolder().mkdir();
 		}
-		if(!new File(Main.getInstance().getDataFolder(), "config.yml").exists()) {
-			Main.getInstance().saveDefaultConfig();
-		}
+		Main.getInstance().saveResource("config.yml", false);
 		Main.getInstance().getConfig().options().copyDefaults(true);
 		Main.getInstance().saveConfig();
 		if(!exp.exists())
@@ -58,6 +68,8 @@ public class FileOperations {
 		if(!jewelry.exists()) {
 			jewelry.mkdir();
 		}
+		if(!backItems.exists())
+			backItems.mkdir();
 		if(!blackrock.exists()) {
 			try {
 				blackrock.createNewFile();
@@ -65,6 +77,15 @@ public class FileOperations {
 				e.printStackTrace();
 			}
 		}
+		if(!boosters.exists())
+			try {
+				boosters.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		
+		if(oldJewelry.exists())
+			convert();
 		
 		YamlConfiguration fYml = YamlConfiguration.loadConfiguration(exp);
 		fYml.getKeys(false).stream().parallel().forEach(s -> {
@@ -102,6 +123,17 @@ public class FileOperations {
 				BlackrockManager.getInstance().completeDailyBlackrock(completed);
 			});
 		}
+		
+		YamlConfiguration boosterYml = YamlConfiguration.loadConfiguration(boosters);
+		boosterYml.getKeys(false).stream().forEach(name -> {
+			ConfigurationSection boosterSection = boosterYml.getConfigurationSection(name);
+			String display = ChatColor.translateAlternateColorCodes('&', boosterSection.getString("display"));
+			boosterSection.getKeys(false).forEach(key -> {
+				double modifier = boosterSection.getDouble(key+".modifier");
+				long exp = boosterSection.getLong(key+".exp");
+				BoosterManager.get().initBooster(name, display, modifier, exp);
+			});
+		});
 	}
 	
 	@Deprecated
@@ -147,7 +179,7 @@ public class FileOperations {
 		fYml.set("sila", stats.getSila());
 		fYml.set("zrecznosc", stats.getZrecznosc());
 		fYml.set("wytrzymalosc", stats.getWytrzymalosc());
-		fYml.set("zdolnosci", stats.getZdolnosci());
+		fYml.set("zdolnosci", stats.getZdolnosciMysliwskie());
 		fYml.set("walka", stats.getWalka());
 		fYml.set("health", stats.getHealth());
 		fYml.set("mana", stats.getMana());
@@ -157,7 +189,7 @@ public class FileOperations {
 		fYml.set("potion_sila", stats.getPotionSila());
 		fYml.set("potion_wytrzymalosc", stats.getPotionWytrzymalosc());
 		fYml.set("potion_zrecznosc", stats.getPotionZrecznosc());
-		fYml.set("potion_zdolnosci", stats.getPotionZdolnosci());
+		fYml.set("potion_zdolnosci", stats.getPotionZdolnosciMysliwskie());
 		fYml.set("potion_mana", stats.getPotionMana());
 		fYml.set("potion_inteligencja", stats.getPotionInteligencja());
 		fYml.set("potion_walka", stats.getPotionWalka());
@@ -215,12 +247,37 @@ public class FileOperations {
 		}
 	}
 	
+	public static void saveBoosters() {
+		YamlConfiguration fYml = YamlConfiguration.loadConfiguration(boosters);
+		fYml.getKeys(false).forEach(key -> fYml.set(key, null));
+		
+		BoosterManager.get().getBoosters().entrySet().forEach(entry -> {
+			Booster booster = entry.getKey();
+			String name = booster.getName();
+			String display = booster.getDisplay();
+			double modifier = booster.getModifier();
+			long exp = entry.getValue().getTime();
+			
+			String uid = UUID.randomUUID().toString();
+			
+			fYml.set(name+".display", display);
+			fYml.set(name+"."+uid+".modifier", modifier);
+			fYml.set(name+"."+uid+".exp", exp - new Date().getTime());
+		});
+		
+		try {
+			fYml.save(boosters);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private static File getPlayerJewelryFile(Player p) {
-		return new File(jewelry, p.getName().toLowerCase() + ".yml");
+		return new File(jewelry, p.getUniqueId().toString().toLowerCase() + ".yml");
 	}
 	
 	public static boolean hasPlayerJewelryFile(Player p) {
-		return (new File(jewelry, p.getName().toLowerCase() + ".yml").exists());
+		return (new File(jewelry, p.getUniqueId().toString().toLowerCase() + ".yml").exists());
 	}
 	
 	public static void createPlayerJewelryFile(Player p) {
@@ -257,9 +314,54 @@ public class FileOperations {
 			return;
 		YamlConfiguration fYml = YamlConfiguration.loadConfiguration(f);
 		
+		fYml.set("last-nick", rpg.getPlayer().getName());
 		rpg.getJewelry().getAkcesoria().forEach((i, jewerlyItem) -> {
 			fYml.set("slots."+i, jewerlyItem.getItem());
 		});
+		
+		try {
+			fYml.save(f);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static File getPlayerBackItemFile(Player p) {
+		return new File(backItems, p.getUniqueId().toString().toLowerCase() + ".yml");
+	}
+	
+	public static boolean hasPlayerBackItemFile(Player p) {
+		return new File(backItems, p.getUniqueId().toString().toLowerCase() + ".yml").exists();
+	}
+	
+	public static void createPlayerBackItemFile(Player p) {
+		File f = getPlayerBackItemFile(p);
+		if(f.exists())
+			return;
+		try {
+			f.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static ItemStack loadPlayerBackItem(Player p) {
+		File f = getPlayerBackItemFile(p);
+		if(f == null)
+			return null;
+		YamlConfiguration fYml = YamlConfiguration.loadConfiguration(f);
+		ItemStack it = fYml.getItemStack("item");
+		return it;
+	}
+	
+	public static void savePlayerBackItem(RpgPlayer rpg) {
+		File f = getPlayerBackItemFile(rpg.getPlayer());
+		if(f == null)
+			return;
+		YamlConfiguration fYml = YamlConfiguration.loadConfiguration(f);
+
+		fYml.set("last-nick", rpg.getPlayer().getName());
+		fYml.set("item", rpg.getBackItem());
 		
 		try {
 			fYml.save(f);
@@ -278,6 +380,53 @@ public class FileOperations {
 	
 	public static File getPlayerHorsesFolder() {
 		return phorses;
+	}
+	
+	private static void convert() {
+		Arrays.asList(oldJewelry.listFiles()).stream()
+			.filter(file -> file.isFile())
+			.filter(file -> file.getName().endsWith(".yml"))
+			.forEach(file -> {
+				YamlConfiguration fYml = YamlConfiguration.loadConfiguration(file);
+				String nick = file.getName().replace(".yml", "");
+				System.out.println(nick);
+				OfflinePlayer op = Bukkit.getOfflinePlayer(nick);
+				if(op == null)
+					return;
+				UUID uid = op.getUniqueId();
+				if(uid == null)
+					return;
+				Object slots = fYml.get("slots");
+
+				File file2 = new File(jewelry, uid+".yml");
+				if(file2.exists()) {
+					File toCompare1 = new File(oldJewelry, nick.toLowerCase()+".yml");
+					YamlConfiguration fYml2 = YamlConfiguration.loadConfiguration(file2);
+					String nick2 = fYml2.getString("last-nick");
+					File toCompare2 = new File(oldJewelry, nick2.toLowerCase()+".yml");
+					if(toCompare2.exists()
+							&& FileUtils.isFileNewer(toCompare1, toCompare2))
+						return;
+					if(!toCompare2.exists())
+						return;
+				} else {
+					try {
+						file2.createNewFile();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				
+				YamlConfiguration fYml2 = YamlConfiguration.loadConfiguration(file2);
+				fYml2.set("last-nick", nick);
+				fYml2.set("slots", slots);
+				try {
+					fYml2.save(file2);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			});
+		oldJewelry.renameTo(new File(Main.getInstance().getDataFolder(), "archive"));
 	}
 	
 }

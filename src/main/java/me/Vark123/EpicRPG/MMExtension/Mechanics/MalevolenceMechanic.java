@@ -1,5 +1,7 @@
 package me.Vark123.EpicRPG.MMExtension.Mechanics;
 
+import java.io.File;
+
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.adapters.AbstractLocation;
 import io.lumine.mythic.api.adapters.SkillAdapter;
@@ -17,8 +19,8 @@ public class MalevolenceMechanic extends SkillMechanic implements ITargetedEntit
 	protected PlaceholderFloat velocityY;
 	protected PlaceholderFloat radius;
 	
-	public MalevolenceMechanic(SkillExecutor exec, String skill, MythicLineConfig mlc) {
-		super(exec, skill, mlc);
+	public MalevolenceMechanic(SkillExecutor manager, File file, String line, MythicLineConfig mlc) {
+		super(manager, file, line, mlc);
 		
 		this.velocity = mlc.getPlaceholderFloat(new String[] { "velocity", "v" }, 1.0F, new String[0]);
 	    this.velocityY = mlc.getPlaceholderFloat(new String[] { "velocityy", "yvelocity", "vy", "yv" }, 1.0F, new String[0]);

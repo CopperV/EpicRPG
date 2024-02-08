@@ -5,13 +5,15 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Config;
+import me.Vark123.EpicRPG.Config.DBConnection;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 import me.Vark123.EpicRPG.Players.Components.RpgReputation;
@@ -28,13 +30,18 @@ public class DBOperations {
 	public static void init() {
 		if(isInit)
 			return;
-		FileConfiguration fc = Main.getInstance().getConfig();
+		DBConnection connectionData = Config.get().getConnectionData();
 		Properties prop = new Properties();
-		prop.setProperty("user", fc.getString("DB.user"));
-		prop.setProperty("password", fc.getString("DB.passwd"));
+		prop.setProperty("user", connectionData.getUser());
+		prop.setProperty("password", connectionData.getPassword());
 		prop.setProperty("autoReconnect", "true");
 		try {
-			c = DriverManager.getConnection("jdbc:mysql://"+fc.getString("DB.ip")+"/"+fc.getString("DB.database")+"?useSSL=false&autoReconnect=true&failOverReadOnly=false&maxReconnects=10",prop);
+			c = DriverManager.getConnection("jdbc:mysql://"+connectionData.getHost()+"/"+connectionData.getDatabase()
+				+"?useSSL=false&"
+				+ "autoReconnect=true&"
+				+ "failOverReadOnly=false&"
+				+ "maxReconnects=10&"
+				+ "enabledTLSProtocols=TLSv1.2",prop);
 		} catch (SQLException e) {
 			System.out.println("§c§lBlad laczenia z baza danych: "+e.getMessage());
 			return;
@@ -83,7 +90,7 @@ public class DBOperations {
 				"INNER JOIN player_rzemioslo ON players.id = player_rzemioslo.player_id " + 
 				"INNER JOIN player_skills ON players.id = player_skills.player_id " + 
 				"LEFT JOIN player_reputation ON players.id = player_reputation.player_id " + 
-				"WHERE players.nick LIKE \""+player.getName()+"\"";
+				"WHERE players.UUID LIKE \""+player.getUniqueId().toString()+"\"";
 		try {
 			Statement stmt = c.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			if(!stmt.executeQuery(polecenie).next()) return null;
@@ -98,24 +105,139 @@ public class DBOperations {
 	
 	public static void savePlayer(RpgPlayer rpg) {
 		UUID id = rpg.getPlayer().getUniqueId();
-		String polecenie;
-		polecenie = "SELECT players.UUID from players WHERE players.UUID = \""+id.toString()+"\";";
-		ResultSet set;
+		savePlayer(rpg, id);
+//		String polecenie;
+//		polecenie = "SELECT players.UUID from players WHERE players.UUID = \""+id.toString()+"\";";
+//		ResultSet set;
+//		try {
+//			set = c.createStatement().executeQuery(polecenie);
+//			if(set.next()==true) {
+//				updatePlayer(rpg, id);
+//			}
+//			else {
+//				insertPlayer(rpg, id);
+//			}
+//		} catch (SQLException e) {
+//			System.out.println("Blad sprawdzenia gracza "+rpg.getPlayer().getName());
+//			e.printStackTrace();
+//			return;
+//		}
+	}
+	
+	private static void savePlayer(RpgPlayer rpg, UUID uid) {
+		Player p = rpg.getPlayer();
+		
+		String call1 = "CALL SavePlayer(\""+uid.toString()+"\",\""+p.getName()+"\");";
 		try {
-			set = c.createStatement().executeQuery(polecenie);
-			if(set.next()==true) {
-				updatePlayer(rpg, id);
-			}
-			else {
-				insertPlayer(rpg, id);
-			}
+			c.createStatement().executeUpdate(call1);
 		} catch (SQLException e) {
-			System.out.println("Blad sprawdzenia gracza "+rpg.getPlayer().getName());
+			System.out.println("Blad zapisu gracza "+p.getName()+" w bazie danych");
 			e.printStackTrace();
 			return;
 		}
+		
+		String select = "SELECT id FROM players WHERE players.UUID=\""+uid.toString()+"\";";
+		int id = -1;
+		try {
+			ResultSet set = c.createStatement().executeQuery(select);
+			while(set.next()) {
+				id = set.getInt("id");
+			}
+		} catch (SQLException e) {
+			System.out.println("Blad odczytu gracza "+p.getName()+" z bazy danych");
+			e.printStackTrace();
+			return;
+		}
+		
+		if(id < 0) {
+			System.out.println("Blad odczytu gracza "+p.getName()+" z bazy danych");
+			return;
+		}
+		
+		RpgStats stats = rpg.getStats();
+		RpgPlayerInfo playerInfo = rpg.getInfo();
+		RpgRzemiosla rzemiosla = rpg.getRzemiosla();
+		RpgSkills skills = rpg.getSkills();
+		RpgVault vault = rpg.getVault();
+		RpgReputation rep = rpg.getReputation();
+		
+		List<String> calls = new LinkedList<>();
+		calls.add("CALL SavePlayerInfo("
+				+id+","
+				+stats.getHealth()+","
+				+stats.getPotionHealth()+","
+				+playerInfo.isDrop()+","
+				+playerInfo.isTutorial()+");");
+		calls.add("CALL SavePlayerReputation("
+				+id+","
+				+rep.getReputacja().get("archolos").getReputationLevel().getId()+","+rep.getReputacja().get("archolos").getReputationAmount()+","
+				+rep.getReputacja().get("klan").getReputationLevel().getId()+","+rep.getReputacja().get("klan").getReputationAmount()+","
+				+rep.getReputacja().get("witcher").getReputationLevel().getId()+","+rep.getReputacja().get("witcher").getReputationAmount()+");");
+		calls.add("CALL SavePlayerRzemioslo("
+				+id+","
+				+rzemiosla.hasAlchemia()+","
+				+rzemiosla.hasKowalstwo()+","
+				+rzemiosla.hasPlatnerstwo()+","
+				+rzemiosla.hasLuczarstwo()+","
+				+rzemiosla.hasJubilerstwo()+");");
+		calls.add("CALL SavePlayerSkills("
+				+id+","
+				+skills.hasManaReg()+","
+				+skills.hasUnlimitedArrows()+","
+				+skills.hasHungerless()+","
+				+skills.hasSlugaBeliara()+","
+				+skills.hasMagKrwi()+","
+				+skills.hasCiosKrytyczny()+","
+				+skills.hasMagnetyzm()+","
+				+skills.hasSilaZywiolow()+","+
+				skills.hasPolnocnyBarbarzynca()+","+
+				skills.hasRozprucie()+");");
+		calls.add("CALL SavePlayerStats("
+				+id+","
+				+"\"§2Gracz\","
+				+"\""+playerInfo.getProffesion()+"\","
+				+playerInfo.getLevel()+","
+				+playerInfo.getExp()+","
+				+playerInfo.getNextLevel()+","
+				+playerInfo.getPn()+","
+				+stats.getSila()+","
+				+stats.getWytrzymalosc()+","
+				+stats.getZrecznosc()+","
+				+stats.getZdolnosciMysliwskie()+","
+				+stats.getInteligencja()+","
+				+stats.getMana()+","
+				+stats.getWalka()+","
+				+stats.getPotionSila()+","
+				+stats.getPotionWytrzymalosc()+","
+				+stats.getPotionZrecznosc()+","
+				+stats.getPotionZdolnosciMysliwskie()+","
+				+stats.getPotionInteligencja()+","
+				+stats.getPotionMana()+","
+				+stats.getPotionWalka()+","
+				+stats.getKrag()+","
+				+vault.getStygia()+","
+				+vault.getDragonCoins()+","
+				+vault.getBrylkiRudy()+","
+				+vault.getEventCurrency()+");");
+		try {
+			try {
+				c.setAutoCommit(false);
+				for(String query : calls)
+					c.createStatement().execute(query);
+				c.commit();
+			} catch(SQLException e) {
+				e.printStackTrace();
+				c.rollback();
+			} finally {
+				c.setAutoCommit(true);
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
+	@SuppressWarnings("unused")
+	@Deprecated
 	private static void updatePlayer(RpgPlayer rpg, UUID id) {
 		RpgStats stats = rpg.getStats();
 		RpgPlayerInfo playerInfo = rpg.getInfo();
@@ -211,7 +333,7 @@ public class DBOperations {
 				+ "p_str="+stats.getSila()+","
 				+ "p_wytrz="+stats.getWytrzymalosc()+","
 				+ "p_zr="+stats.getZrecznosc()+","
-				+ "p_zd="+stats.getZdolnosci()+","
+				+ "p_zd="+stats.getZdolnosciMysliwskie()+","
 				+ "p_mana="+stats.getMana()+","
 				+ "p_int="+stats.getInteligencja()+","
 				+ "p_walka="+stats.getWalka()+","
@@ -219,7 +341,7 @@ public class DBOperations {
 				+ "potion_str="+stats.getPotionSila()+","
 				+ "potion_wytrz="+stats.getPotionWytrzymalosc()+","
 				+ "potion_zr="+stats.getPotionZrecznosc()+","
-				+ "potion_zd="+stats.getPotionZdolnosci()+","
+				+ "potion_zd="+stats.getPotionZdolnosciMysliwskie()+","
 				+ "potion_mana="+stats.getPotionMana()+","
 				+ "potion_int="+stats.getPotionInteligencja()+","
 				+ "potion_walka="+stats.getPotionWalka()+","
@@ -257,6 +379,8 @@ public class DBOperations {
 		
 	}
 	
+	@SuppressWarnings("unused")
+	@Deprecated
 	private static void insertPlayer(RpgPlayer rpg, UUID id) {
 		RpgStats stats = rpg.getStats();
 		RpgReputation reputation = rpg.getReputation();
@@ -330,8 +454,8 @@ public class DBOperations {
 				+ "potion_str,potion_wytrz,potion_zr,potion_zd,potion_mana,potion_int,potion_walka,"
 				+ "p_stygia,p_coins,p_brylki) VALUES "
 				+"("+db_id+",\"§2Gracz\",\""+playerInfo.getProffesion()+"\","+playerInfo.getLevel()+","+playerInfo.getExp()+","+playerInfo.getNextLevel()+","+playerInfo.getPn()+","
-				+stats.getSila()+","+stats.getWytrzymalosc()+","+stats.getZrecznosc()+","+stats.getZdolnosci()+","+stats.getMana()+","+stats.getInteligencja()+","+stats.getWalka()+","+stats.getKrag()+","
-				+stats.getPotionSila()+","+stats.getPotionWytrzymalosc()+","+stats.getPotionZrecznosc()+","+stats.getPotionZdolnosci()+","+stats.getPotionMana()+","+stats.getPotionInteligencja()+","+stats.getPotionWalka()+","
+				+stats.getSila()+","+stats.getWytrzymalosc()+","+stats.getZrecznosc()+","+stats.getZdolnosciMysliwskie()+","+stats.getMana()+","+stats.getInteligencja()+","+stats.getWalka()+","+stats.getKrag()+","
+				+stats.getPotionSila()+","+stats.getPotionWytrzymalosc()+","+stats.getPotionZrecznosc()+","+stats.getPotionZdolnosciMysliwskie()+","+stats.getPotionMana()+","+stats.getPotionInteligencja()+","+stats.getPotionWalka()+","
 				+vault.getStygia()+","+vault.getDragonCoins()+","+vault.getBrylkiRudy()+");";
 		try {
 			c.createStatement().executeUpdate(polecenie);

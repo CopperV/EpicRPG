@@ -26,6 +26,7 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
+import io.lumine.mythic.bukkit.MythicBukkit;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.FightSystem.ManualDamage;
 import me.Vark123.EpicRPG.Players.PlayerManager;
@@ -224,7 +225,22 @@ public class RuneManager {
 		int price = ir.getPrice();
 		if(rpg.getModifiers().hasZrodloNatury())
 			price *= 0.8;
-
+		if(p.getWorld().getName().toLowerCase().contains("dungeon12")
+				&& p.getNearbyEntities(30, 10, 30)
+					.stream()
+					.filter(entity -> {
+						if(!entity.getName().equals("§2§l§oLoatheb"))
+							return false;
+						String phase = MythicBukkit.inst().getMobManager().getMythicMobInstance(entity).getStance();
+						if(!phase.equals("phase2") && !phase.equals("phase3"))
+							return false;
+						return true;
+					})
+					.findAny()
+					.isPresent()) {
+			price *= 1.5;
+		}
+		
 		if(stats.getPresentMana() >= price)
 			return true;
 		
@@ -250,11 +266,29 @@ public class RuneManager {
 
 	public boolean hasEnoughHp(RpgPlayer rpg, ItemStackRune ir) {
 		Player p = rpg.getPlayer();
+		if(!rpg.getSkills().hasMagKrwi()) {
+			p.sendMessage("§7[§6EpicRPG§7] §cMusisz byc magiem krwi, by moc uzyc tej runy!");
+			return false;
+		}
 		double presentHealth = p.getHealth();
 		int price = ir.getPrice();
 		if(rpg.getModifiers().hasZrodloNatury())
 			price *= 0.8;
-		
+		if(p.getWorld().getName().toLowerCase().contains("dungeon12")
+				&& p.getNearbyEntities(30, 10, 30)
+					.stream()
+					.filter(entity -> {
+						if(!entity.getName().equals("§2§l§oLoatheb"))
+							return false;
+						String phase = MythicBukkit.inst().getMobManager().getMythicMobInstance(entity).getStance();
+						if(!phase.equals("phase2") && !phase.equals("phase3"))
+							return false;
+						return true;
+					})
+					.findAny()
+					.isPresent()) {
+			price *= 1.5;
+		}
 
 		if(price >= (presentHealth + 1)) {
 			p.sendMessage("§7[§6EpicRPG§7] §cNie masz wystarczajaco zycia by uzyc tej runy!");
@@ -269,6 +303,23 @@ public class RuneManager {
 			price *= 0.8;
 		}
 		
+		Player p = rpg.getPlayer();
+		if(p.getWorld().getName().toLowerCase().contains("dungeon12")
+				&& p.getNearbyEntities(30, 10, 30)
+					.stream()
+					.filter(entity -> {
+						if(!entity.getName().equals("§2§l§oLoatheb"))
+							return false;
+						String phase = MythicBukkit.inst().getMobManager().getMythicMobInstance(entity).getStance();
+						if(!phase.equals("phase2") && !phase.equals("phase3"))
+							return false;
+						return true;
+					})
+					.findAny()
+					.isPresent()) {
+			price *= 1.5;
+		}
+		
 		RpgStats stats = rpg.getStats();
 		if(stats.getPresentMana() >= price) {
 			stats.removePresentManaSmart(price);
@@ -276,7 +327,6 @@ public class RuneManager {
 		}
 		
 		double hpPrice = price * 0.5;
-		Player p = rpg.getPlayer();
 		EntityDamageEvent event = new EntityDamageEvent(p, DamageCause.MAGIC, hpPrice);
 		Bukkit.getPluginManager().callEvent(event);
 		
@@ -289,6 +339,22 @@ public class RuneManager {
 		if(rpg.getModifiers().hasZrodloNatury()){
 			price *= 0.8;
 		}
+		if(p.getWorld().getName().toLowerCase().contains("dungeon12")
+				&& p.getNearbyEntities(30, 10, 30)
+					.stream()
+					.filter(entity -> {
+						if(!entity.getName().equals("§2§l§oLoatheb"))
+							return false;
+						String phase = MythicBukkit.inst().getMobManager().getMythicMobInstance(entity).getStance();
+						if(!phase.equals("phase2") && !phase.equals("phase3"))
+							return false;
+						return true;
+					})
+					.findAny()
+					.isPresent()) {
+			price *= 1.5;
+		}
+		
 		EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(p, p, DamageCause.MAGIC, price);
 		Bukkit.getPluginManager().callEvent(event);
 		
@@ -331,6 +397,9 @@ public class RuneManager {
 					case "§c§lmasowa pirokineza":return new MasowaPirokineza(dr, p);
 					case "§c§lmasowa pirokineza i":return new MasowaPirokineza(dr, p);
 					case "§c§lmasowa pirokineza ii":return new MasowaPirokineza(dr, p);
+					case "§c§oognisty wybuch":	return new OgnistyWybuch(dr, p);
+					case "§c§orozerwanie":		return new Rozerwanie(dr, p);
+					case "§4§owulkaniczny gejzer":return new WulkanicznyGejzer(dr, p);
 					default:					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_BLOCKS:
@@ -386,6 +455,9 @@ public class RuneManager {
 					case "§3zryw":				return new Zryw(dr, p);
 					case "§3§lfala dezorientacyjna":return new FalaDezorientacyjna(dr, p);
 					case "§3§lfala dezorientacyjna i":return new FalaDezorientacyjna(dr, p);
+					case "§3§lfala dezorientacyjna ii":return new FalaDezorientacyjna(dr, p);
+					case "§3swiety mrok":		return new SwietyMrok(dr, p);
+					case "§3wybraniec beliara":	return new WybraniecBeliara(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_MALL:
@@ -411,6 +483,9 @@ public class RuneManager {
 					case "§aodwrocenie uwagi":	return new OdwrocenieUwagi(dr, p);
 					case "§a§leksplodujaca strzala":return new EksplodujacaStrzala(dr, p);
 					case "§a§leksplodujaca strzala i":return new EksplodujacaStrzala_H(dr, p);
+					case "§a§leksplodujaca strzala ii":return new EksplodujacaStrzala_M(dr, p);
+					case "§atrujaca aura":		return new TrujacaAura(dr, p);
+					case "§azakleta strzala":	return new ZakletaStrzala(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_STAL:
@@ -425,6 +500,7 @@ public class RuneManager {
 					case "§9totem obronny":		return new TotemObronny(dr, p);
 					case "§7§lteleportacja krotkodystansowa":	return new TeleportacjaKrotkodystansowa(dr, p);
 					case "§e§lfala uderzeniowa":return new FalaUderzeniowa(dr, p);
+					case "§2§lwtopienie":		return new Wtopienie(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_STRAD:
@@ -462,6 +538,12 @@ public class RuneManager {
 					case "§8§luscisk umarlych":	return new UsciskUmarlych(dr, p);
 					case "§8§luscisk umarlych i":	return new UsciskUmarlych(dr, p);
 					case "§8§luscisk umarlych ii":	return new UsciskUmarlych(dr, p);
+					case "§8§llaska beliara":	return new LaskaBeliara(dr, p);
+					case "§8strzala mroku":		return new StrzalaMroku(dr, p);
+					case "§8§owlocznia ciemnosci":return new WloczniaCiemnosci(dr, p);
+					case "§8§ozmrok":			return new Zmrok(dr, p);
+					case "§8zaglada":			return new Zaglada(dr, p);
+					case "§8§lczarny sen":		return new CzarnySen(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_13:
@@ -493,28 +575,33 @@ public class RuneManager {
 					case "§ezlodziej energii":	return new ZlodziejEnergii(dr, p);
 					case "§5§lpotezna runa domisia":return new PoteznaRunaDomisia(dr, p);
 					case "§5§lpotezna runa domisia i":return new PoteznaRunaDomisia(dr, p);
-					case "§5§lpotezna runa domisia ii":return new PoteznaRunaDomisia(dr, p);
+					case "§5§lpotezna runa domisia ii":return new PoteznaRunaDomisia_M(dr, p);
 					case "§c§lzyciodajna ziemia":return new ZyciodajnaZiemia(dr, p);
 					case "§c§lzyciodajna ziemia i":return new ZyciodajnaZiemia_M(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_WARD:
 				switch(name) {
-					case "§c§lkrwawy deszcz":	return new KrwawyDeszcz(dr, p);
-					case "§c§lkrwawa fala":		return new KrwawaFala(dr, p);
-					case "§c§lkrwawa fala i":	return new KrwawaFala(dr, p);
-					case "§c§lkrwawa fala ii":	return new KrwawaFala(dr, p);
+					case "§c§lkrwawy deszcz":		return new KrwawyDeszcz(dr, p);
+					case "§c§lkrwawa fala":			return new KrwawaFala(dr, p);
+					case "§c§lkrwawa fala i":		return new KrwawaFala(dr, p);
+					case "§c§lkrwawa fala ii":		return new KrwawaFala(dr, p);
 					case "§d§l§oszept przedwiecznych":	return new SzeptPrzedwiecznych(dr, p);
-					case "§c§l§oszpon beliara":	return new SzponBeliaraInt(dr, p);
-					case "§c§lszpon beliara":	return new SzponBeliaraMana(dr, p);
-					case "§5§lszal beliara":	return new SzalBeliara(dr, p);
-					case "§5§lzakazany rytual":	return new ZakazanyRytual(dr, p);
-					case "§5§lzakazany rytual i":return new ZakazanyRytual_H(dr, p);
-					case "§5§lzakazany rytual ii":return new ZakazanyRytual_M(dr, p);
+					case "§c§l§oszpon beliara":		return new SzponBeliaraInt(dr, p);
+					case "§c§l§oszpon beliara i":	return new SzponBeliaraInt(dr, p);
+					case "§c§lszpon beliara":		return new SzponBeliaraMana(dr, p);
+					case "§c§lszpon beliara i":		return new SzponBeliaraMana(dr, p);
+					case "§5§lszal beliara":		return new SzalBeliara(dr, p);
+					case "§5§lzakazany rytual":		return new ZakazanyRytual(dr, p);
+					case "§5§lzakazany rytual i":	return new ZakazanyRytual_H(dr, p);
+					case "§5§lzakazany rytual ii":	return new ZakazanyRytual_M(dr, p);
 					case "§x§8§a§0§3§0§3§okrwawy pocisk":return new KrwawyPocisk(dr, p);
 					case "§x§8§a§0§3§0§3spirala krwi":return new SpiralaKrwi(dr, p);
 					case "§x§a§a§5§3§0§3zatruta krew":return new ZatrutaKrew(dr, p);
 					case "§x§9§a§0§3§0§3§lrozprucie":return new Rozprucie(dr, p);
+					case "§x§8§a§0§3§0§3furia":		return new Furia(dr, p);
+					case "§5§lkoszmar beliara":		return new KoszmarBeliara(dr, p);
+					default: 						return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_WAIT:
 				switch(name) {
@@ -522,6 +609,7 @@ public class RuneManager {
 					case "§7czystka":					return new Czystka(dr, p);
 					case "§x§0§0§f§f§f§fwlocznia elysian":	return new WloczniaElysian(dr, p);
 					case "§7§lkamienny obserwator":		return new KamiennyObserwator(dr, p);
+					default: 							return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_PIGSTEP:
 				switch(name) {
@@ -530,12 +618,17 @@ public class RuneManager {
 					case "§x§9§a§4§3§0§3§oplugawa krew":	return new PlugawaKrew(dr, p);
 					case "§x§9§a§0§3§4§3krew przodkow":		return new KrewPrzodkow(dr, p);
 					case "§x§8§a§0§3§0§3§ogniew":			return new Gniew(dr, p);
+					case "§x§c§d§0§0§0§0§ldrenaz":			return new Drenaz(dr, p);
+					case "§x§8§a§0§3§0§3§lklatwa krwi":		return new KlatwaKrwi(dr, p);
 					case "§x§e§e§0§5§0§5§ltransfuzja":		return new Transfuzja(dr, p);
+					default: 							return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_OTHERSIDE:
 				switch(name) {
 					case "§f§lsila rownowagi":			return new SilaRownowagi(dr, p);
 					case "§f§lsila rownowagi i":		return new SilaRownowagi_H(dr, p);
+					case "§f§lsila rownowagi ii":		return new SilaRownowagi_M(dr, p);
+					default: 							return new OgnistaStrzala(dr, p);
 				}
 			default:
 				System.out.println(name);

@@ -77,8 +77,7 @@ public class JewelryMenuManager {
 	public void openMenu(Player viewer, Player owner) {
 		if(!PlayerManager.getInstance().playerExists(owner))
 			return;
-		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(owner
-				);
+		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(owner);
 		RyseInventory.builder()
 			.title("§6§lBizuteria")
 			.size(18)

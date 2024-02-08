@@ -21,6 +21,7 @@ import lombok.Setter;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.HealthSystem.RpgPlayerHealEvent;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
+import me.Vark123.EpicRPG.Potions.RpgPlayerManaRegenEvent;
 import me.Vark123.EpicRPG.Utils.ChatPrintable;
 import me.Vark123.EpicRPG.Utils.TableGenerator;
 import me.Vark123.EpicRPG.Utils.TableGenerator.Receiver;
@@ -38,7 +39,7 @@ public class RpgStats implements Serializable, ChatPrintable {
 	private int sila = 3;
 	private int zrecznosc = 3;
 	private int wytrzymalosc = 3;
-	private int zdolnosci = 3;
+	private int zdolnosciMysliwskie = 3;
 	private int walka = 3;
 	private int mana = 7;
 	private int inteligencja = 3;
@@ -55,7 +56,7 @@ public class RpgStats implements Serializable, ChatPrintable {
 	@Setter(value = AccessLevel.NONE)
 	private int potionWytrzymalosc;
 	@Setter(value = AccessLevel.NONE)
-	private int potionZdolnosci;
+	private int potionZdolnosciMysliwskie;
 	@Setter(value = AccessLevel.NONE)
 	private int potionWalka;
 	@Setter(value = AccessLevel.NONE)
@@ -70,7 +71,7 @@ public class RpgStats implements Serializable, ChatPrintable {
 	private int finalSila;
 	private int finalZrecznosc;
 	private int finalWytrzymalosc;
-	private int finalZdolnosci;
+	private int finalZdolnosciMysliwskie;
 	private int finalWalka;
 	private int finalMana;
 	private int finalInteligencja;
@@ -78,7 +79,6 @@ public class RpgStats implements Serializable, ChatPrintable {
 
 	@Setter(value = AccessLevel.NONE)
 	private int presentMana = 7;
-	@Setter(value = AccessLevel.NONE)
 	private int krag;
 
 	@Setter(value = AccessLevel.NONE)
@@ -99,7 +99,7 @@ public class RpgStats implements Serializable, ChatPrintable {
 		this.sila = set.getInt("player_stats.p_str");
 		this.zrecznosc = set.getInt("player_stats.p_zr");
 		this.wytrzymalosc = set.getInt("player_stats.p_wytrz");
-		this.zdolnosci = set.getInt("player_stats.p_zd");
+		this.zdolnosciMysliwskie = set.getInt("player_stats.p_zd");
 		this.walka = set.getInt("player_stats.p_walka");
 		this.mana = set.getInt("player_stats.p_mana");
 		this.inteligencja = set.getInt("player_stats.p_int");
@@ -108,7 +108,7 @@ public class RpgStats implements Serializable, ChatPrintable {
 		this.potionSila = set.getInt("player_stats.potion_str");
 		this.potionWytrzymalosc = set.getInt("player_stats.potion_wytrz");
 		this.potionZrecznosc = set.getInt("player_stats.potion_zr");
-		this.potionZdolnosci = set.getInt("player_stats.potion_zd");
+		this.potionZdolnosciMysliwskie = set.getInt("player_stats.potion_zd");
 		this.potionMana = set.getInt("player_stats.potion_mana");
 		this.potionInteligencja = set.getInt("player_stats.potion_int");
 		this.potionWalka = set.getInt("player_stats.potion_walka");
@@ -133,7 +133,7 @@ public class RpgStats implements Serializable, ChatPrintable {
 		this.sila = fYml.getInt("sila");
 		this.zrecznosc = fYml.getInt("zrecznosc");
 		this.wytrzymalosc = fYml.getInt("wytrzymalosc");
-		this.zdolnosci = fYml.getInt("zdolnosci");
+		this.zdolnosciMysliwskie = fYml.getInt("zdolnosci");
 		this.walka = fYml.getInt("walka");
 		this.mana = fYml.getInt("mana");
 		this.inteligencja = fYml.getInt("inteligencja");
@@ -142,7 +142,7 @@ public class RpgStats implements Serializable, ChatPrintable {
 		this.potionSila = fYml.getInt("potion_sila");
 		this.potionWytrzymalosc = fYml.getInt("potion_wytrzymalosc");
 		this.potionZrecznosc = fYml.getInt("potion_zrecznosc");
-		this.potionZdolnosci = fYml.getInt("potion_zdolnosci");
+		this.potionZdolnosciMysliwskie = fYml.getInt("potion_zdolnosci");
 		this.potionMana = fYml.getInt("potion_mana");
 		this.potionInteligencja = fYml.getInt("potion_inteligencja");
 		this.potionWalka = fYml.getInt("potion_mana");
@@ -196,6 +196,28 @@ public class RpgStats implements Serializable, ChatPrintable {
 			}
 		}.runTaskTimer(Main.getInstance(), 0, 20);
 	}
+	
+	public void addSila(int amount) {
+		this.sila += amount;
+	}
+	public void addZrecznosc(int amount) {
+		this.zrecznosc += amount;
+	}
+	public void addWytrzymalosc(int amount) {
+		this.wytrzymalosc += amount;
+	}
+	public void addZdolnosci(int amount) {
+		this.zdolnosciMysliwskie += amount;
+	}
+	public void addWalka(int amount) {
+		this.walka += amount;
+	}
+	public void addMana(int amount) {
+		this.mana += amount;
+	}
+	public void addInteligencja(int amount) {
+		this.inteligencja += amount;
+	}
 
 	public void addPotionOchrona(int potionOchrona) {
 		this.potionOchrona += potionOchrona;
@@ -218,7 +240,7 @@ public class RpgStats implements Serializable, ChatPrintable {
 	}
 
 	public void addPotionZdolnosci(int potionZdolnosci) {
-		this.potionZdolnosci += potionZdolnosci;
+		this.potionZdolnosciMysliwskie += potionZdolnosci;
 	}
 
 	public void addPotionWalka(int potionWalka) {
@@ -246,6 +268,12 @@ public class RpgStats implements Serializable, ChatPrintable {
 	}
 	
 	public void addPresentManaSmart(int presentMana) {
+		RpgPlayerManaRegenEvent event = new RpgPlayerManaRegenEvent(rpg, presentMana);
+		Bukkit.getPluginManager().callEvent(event);
+		if(event.isCancelled())
+			return;
+		
+		presentMana = event.getRegen();
 		if(presentMana + this.presentMana > this.finalMana) {
 			this.presentMana = this.finalMana;
 		}else {
@@ -273,7 +301,7 @@ public class RpgStats implements Serializable, ChatPrintable {
 		this.sila = 3;
 		this.zrecznosc = 3;
 		this.wytrzymalosc = 3;
-		this.zdolnosci = 3;
+		this.zdolnosciMysliwskie = 3;
 		this.walka = 0;
 		this.mana = 7;
 		this.presentMana = 7;
@@ -283,7 +311,14 @@ public class RpgStats implements Serializable, ChatPrintable {
 	
 	@Override
 	public void print(CommandSender sender) {
-		int bonusKryt = rpg.getInfo().getShortProf().equalsIgnoreCase("mys") ? 10 : 0;
+		int kryt = finalWalka;
+		int bonusKryt = rpg.getInfo().getShortProf().equalsIgnoreCase("mys") ? 50 : 0;
+		if(rpg.getSkills().hasCiosKrytyczny())
+			bonusKryt += 25;
+		kryt += bonusKryt;
+		
+		double percent1 = (double) kryt / 500. * 100.;
+		double percent2 = (double) kryt / 2500. * 100.;
 		
 		TableGenerator generator = new TableGenerator(TableGenerator.Alignment.LEFT, TableGenerator.Alignment.LEFT, TableGenerator.Alignment.LEFT);
 		generator.addRow("", "§2Obrazenia: §a"+obrazenia+"§7/§a"+potionObrazenia+"§7/§a"+finalObrazenia, 
@@ -291,12 +326,13 @@ public class RpgStats implements Serializable, ChatPrintable {
 		generator.addRow("", "§2Sila: §a"+sila+"§7/§a"+potionSila+"§7/§a"+finalSila, 
 				"§2Wytrzymalosc: §a"+wytrzymalosc+"§7/§a"+potionWytrzymalosc+"§7/§a"+finalWytrzymalosc);
 		generator.addRow("", "§2Zrecznosc: §a"+zrecznosc+"§7/§a"+potionZrecznosc+"§7/§a"+finalZrecznosc, 
-				"§2Zdolnosci mysliwskie: §a"+zdolnosci+"§7/§a"+potionZdolnosci+"§7/§a"+finalZdolnosci);
+				"§2Zdolnosci mysliwskie: §a"+zdolnosciMysliwskie+"§7/§a"+potionZdolnosciMysliwskie+"§7/§a"+finalZdolnosciMysliwskie);
 		generator.addRow("", "§2Inteligencja: §a"+inteligencja+"§7/§a"+potionInteligencja+"§7/§a"+finalInteligencja, 
 				"§2Mana: §a"+presentMana+" §7/ §7(§a"+mana+"§7/§a"+potionMana+"§7/§a"+finalMana+"§7)");
 		generator.addRow("", "§2Walka: §a"+walka+"§7/§a"+potionWalka+"§7/§a"+finalWalka, 
-				"§2Krytyk: §a"+String.format("%.1f",finalWalka/5.0+bonusKryt)+"%");
-		generator.addRow("", "§2Zycie: §a"+health+"§7/§a"+potionHealth+"§7/§a"+finalHealth);
+				"§2Zycie: §a"+health+"§7/§a"+potionHealth+"§7/§a"+finalHealth);
+		generator.addRow("", "§2Krytyk §7[§2PVE§7]: §a"+String.format("%.1f",percent1)+"%",
+				"§2Krytyk §7[§2PVP§7]: §a"+String.format("%.1f",percent2)+"%");
 		generator.addRow("", "§2Krag: §a"+krag);
 		List<String> lines = generator.generate(Receiver.CLIENT, true, true);
 		

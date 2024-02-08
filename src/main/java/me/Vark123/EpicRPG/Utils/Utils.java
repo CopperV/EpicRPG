@@ -86,6 +86,19 @@ public class Utils {
 		p.updateInventory();
 	}
 	
+	public static void takeItems(Player p, Inventory inv, int slot, int amount) {
+		ItemStack it = inv.getItem(slot);
+		if(it == null
+				|| it.getType().equals(Material.AIR))
+			return;
+		if(it.getAmount() < amount) {
+			inv.setItem(slot, new ItemStack(Material.AIR));
+		} else {
+			it.setAmount(it.getAmount() - amount);
+		}
+		p.updateInventory();
+	}
+	
 	public static void takeItems(Player p, EquipmentSlot slot, int amount) {
 		if(slot.equals(EquipmentSlot.HAND)) {
 			takeItems(p, p.getInventory().getHeldItemSlot(), amount);

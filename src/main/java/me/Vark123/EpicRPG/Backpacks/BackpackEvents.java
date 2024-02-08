@@ -16,6 +16,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.github.rysefoxx.inventory.plugin.other.EventCreator;
 import lombok.Getter;
 import me.Vark123.EpicRPG.Utils.Utils;
@@ -28,11 +29,15 @@ public class BackpackEvents {
 	private final EventCreator<InventoryClickEvent> clickEvent;
 	private final EventCreator<InventoryCloseEvent> closeEvent;
 	private final EventCreator<InventoryCloseEvent> repairCloseEvent;
+	private final EventCreator<InventoryClickEvent> clickUpgradeEvent;
+	private final EventCreator<InventoryCloseEvent> closeUpgradeEvent;
 	
 	private BackpackEvents() {
 		clickEvent = clickEventCreator();
 		closeEvent = closeEventCreator();
 		repairCloseEvent = repairCloseEventCreator();
+		clickUpgradeEvent = clickUpgradeEventCreator();
+		closeUpgradeEvent = closeUpgradeEventCreator();
 	}
 	
 	public static BackpackEvents getEvents() {
@@ -42,9 +47,6 @@ public class BackpackEvents {
 	private EventCreator<InventoryClickEvent> clickEventCreator(){
 		
 		Consumer<InventoryClickEvent> event = e -> {
-			if(e.isCancelled())
-				return;
-
 			Inventory inv = e.getClickedInventory();
 			if(inv == null || !inv.getType().equals(InventoryType.CHEST)) 
 				return;
@@ -173,7 +175,6 @@ public class BackpackEvents {
 			if(BackpackUtils.isBuggedBackpack(backpack)) {
 				NBTItem nbt = new NBTItem(backpack);
 				int slotsAmount = nbt.getInteger("SlotsAmount");
-				Bukkit.broadcastMessage(slotsAmount+"");
 				int type = 1;
 				switch(slotsAmount) {
 					case 9:
@@ -187,6 +188,9 @@ public class BackpackEvents {
 						break;
 					case 54:
 						type = 4;
+						break;
+					case 36:
+						type = 5;
 						break;
 				}
 				for(int i = 0; i < slotsAmount; ++i) {
@@ -206,6 +210,96 @@ public class BackpackEvents {
 			toDrop.parallelStream().forEach(it -> {
 				Utils.dropItemStack(p, it);
 			});
+		};
+		
+		EventCreator<InventoryCloseEvent> creator = new EventCreator<>(InventoryCloseEvent.class, event);
+		return creator;
+	}
+	
+	private EventCreator<InventoryClickEvent> clickUpgradeEventCreator(){
+		
+		Consumer<InventoryClickEvent> event = e -> {
+			int[] slots = BackpackManager.getInstance().getUpgradeFreeSlots();
+			int slot = e.getSlot();
+			Inventory inv = e.getClickedInventory();
+			ItemStack it = inv.getItem(slot);
+			if(it == null || it.getType().equals(Material.AIR))
+				return;
+
+			if(!it.equals(BackpackManager.getInstance().getCreate()))
+				return;
+
+			Player p = (Player) e.getWhoClicked();
+			List<String> katedraNBT = new LinkedList<>();
+			for(int i = 0; i < slots.length - 1; ++i) {
+				int freeSlot = slots[i];
+				ItemStack katedraIt = inv.getItem(freeSlot);
+				if(katedraIt == null
+						|| katedraIt.getType().equals(Material.AIR)) {
+					p.closeInventory();
+					return;
+				}
+				
+				NBTItem nbtIt = new NBTItem(katedraIt);
+				if(!nbtIt.hasTag("soulbind")
+						|| !nbtIt.getString("soulbind").equalsIgnoreCase(p.getName())) {
+					p.closeInventory();
+					return;
+				}
+				if(!nbtIt.hasTag("Katedra")
+						|| !BackpackManager.getInstance().getGiantBackpack()
+							.contains(nbtIt.getString("Katedra"))
+						|| katedraNBT.contains(nbtIt.getString("Katedra"))) {
+					p.closeInventory();
+					return;
+				}
+
+				katedraNBT.add(nbtIt.getString("Katedra"));
+			}
+
+			ItemStack oldBackpack = inv.getItem(slots[7]);
+			NBTItem nbt = new NBTItem(oldBackpack);
+			ReadWriteNBT compund = nbt.getCompound("PublicBukkitValues");
+			if(!compund.hasTag("fancybags:backpackid") || compund.getInteger("fancybags:backpackid") != 3){
+				p.closeInventory();
+				return;
+			}
+
+			List<ItemStack> toDropList = new LinkedList<>();
+			for(int i = 0; i < 3*9; ++i) {
+				ItemStack toDrop = BackpackUtils.itemstackFromBase64(compund.getString("fancybags:"+i));
+				if(toDrop == null 
+						|| toDrop.getType().equals(Material.AIR)) {
+					continue;
+				}
+				toDropList.add(toDrop);
+			}
+			toDropList.parallelStream().forEach(toDrop -> {
+				Utils.dropItemStack(p, toDrop);
+			});
+			
+			
+			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "fb give "+p.getName()+" 5");
+			inv.clear();
+			e.getWhoClicked().closeInventory();
+		};
+		
+		EventCreator<InventoryClickEvent> creator = new EventCreator<>(InventoryClickEvent.class, event);
+		return creator;
+	}
+	
+	private EventCreator<InventoryCloseEvent> closeUpgradeEventCreator(){
+		
+		Consumer<InventoryCloseEvent> event = e -> {
+			Inventory inv = e.getView().getTopInventory();
+			Player p = (Player) e.getPlayer();
+			for(int slot : BackpackManager.getInstance().getUpgradeFreeSlots()) {
+				ItemStack it = inv.getItem(slot);
+				if(it == null 
+						|| it.getType().equals(Material.AIR))
+					continue;
+				Utils.dropItemStack(p, it);
+			}
 		};
 		
 		EventCreator<InventoryCloseEvent> creator = new EventCreator<>(InventoryCloseEvent.class, event);

@@ -36,9 +36,6 @@ public class RubyMenuEvents {
 	
 	private EventCreator<InventoryClickEvent> warpedClickEventCreator(){
 		Consumer<InventoryClickEvent> event = e -> {
-			if(e.isCancelled())
-				return;
-			
 			int slot = e.getSlot();
 			if(slot != 31)
 				return;
@@ -98,9 +95,6 @@ public class RubyMenuEvents {
 	
 	private EventCreator<InventoryClickEvent> kyrianClickEventCreator(){
 		Consumer<InventoryClickEvent> event = e -> {
-			if(e.isCancelled())
-				return;
-			
 			int slot = e.getSlot();
 			if(slot != 31)
 				return;

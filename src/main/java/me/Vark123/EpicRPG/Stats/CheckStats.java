@@ -3,6 +3,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.apache.commons.lang.mutable.MutableBoolean;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -36,6 +37,8 @@ public class CheckStats {
 				return true;
 			if(!s.contains(": §c"))
 				return false;
+			if(s.contains("§c§o"))
+				return false;
 			return true;
 		}).takeWhile(s -> {
 			return check.booleanValue();
@@ -61,7 +64,12 @@ public class CheckStats {
 				return;
 			}
 			s = s.replace("§4- §8", "");
-			int toCheck = Integer.parseInt(ChatColor.stripColor(s.split(": ")[1]));
+			
+			String tmp = ChatColor.stripColor(s.split(": ")[1]);
+			if(!StringUtils.isNumeric(tmp))
+				return;
+			
+			int toCheck = Integer.parseInt(tmp);
 //			int toCheck = Integer.parseInt(s.replace(": ", ChatColor.stripColor(s)));
 //			int toCheck = Integer.parseInt(s.replace(": §c", ""));
 			int result;

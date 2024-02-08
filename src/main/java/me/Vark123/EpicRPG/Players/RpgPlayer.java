@@ -9,16 +9,19 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Scoreboard;
 
 import lombok.Getter;
+import lombok.Setter;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.RpgScoreboard;
 import me.Vark123.EpicRPG.Core.ExpSystem;
 import me.Vark123.EpicRPG.Core.Events.PlayerKlasaResetEvent;
 import me.Vark123.EpicRPG.Core.Events.PlayerStatsResetEvent;
+import me.Vark123.EpicRPG.Files.FileOperations;
 import me.Vark123.EpicRPG.Players.Components.RpgJewelry;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
@@ -27,6 +30,9 @@ import me.Vark123.EpicRPG.Players.Components.RpgRzemiosla;
 import me.Vark123.EpicRPG.Players.Components.RpgSkills;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import me.Vark123.EpicRPG.Players.Components.RpgVault;
+import me.Vark123.EpicRPG.Players.Components.Compass.EpicCompass;
+import me.Vark123.EpicRPG.Players.Components.Markers.EpicMarker;
+import me.Vark123.EpicRPG.Players.Components.Scoreboard.EpicScoreboard;
 import me.Vark123.EpicRPG.Stats.ChangeStats;
 import me.Vark123.EpicRPG.Utils.ChatPrintable;
 import me.Vark123.EpicRPG.Utils.Utils;
@@ -52,7 +58,13 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 	private RpgJewelry jewelry;
 	private RpgReputation reputation;
 	
+	@Setter
+	private ItemStack backItem;
+	
 	private Scoreboard board;
+	private EpicCompass compass;
+	private EpicScoreboard scoreboard;
+	private EpicMarker marker;
 	
 	public RpgPlayer(Player p) {
 		this.player = p;
@@ -64,9 +76,15 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 		this.vault = new RpgVault(this);
 		this.jewelry = new RpgJewelry(this);
 		this.reputation = new RpgReputation(this);
-		board = Bukkit.getScoreboardManager().getNewScoreboard();
+		this.backItem = FileOperations.loadPlayerBackItem(p);
+		
+		this.compass = new EpicCompass(this);
+		this.scoreboard = new EpicScoreboard(this);
+		this.marker = new EpicMarker(this);
 		
 		createDisplay();
+		updateBarExp();
+		updateBarLevel();
 	}
 	
 	public RpgPlayer(Player p, ResultSet set) {
@@ -81,13 +99,19 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 			this.vault = new RpgVault(this, set);
 			this.jewelry = new RpgJewelry(this);
 			this.reputation = new RpgReputation(this, set);
+			this.backItem = FileOperations.loadPlayerBackItem(p);
 		} catch (SQLException e) {
 			p.kickPlayer("Blad pobierania danych z bazy danych - zglos ten fakt administratorowi");
 			e.printStackTrace();
 		}
-		board = Bukkit.getScoreboardManager().getNewScoreboard();
+		
+		this.compass = new EpicCompass(this);
+		this.scoreboard = new EpicScoreboard(this);
+		this.marker = new EpicMarker(this);
 		
 		createDisplay();
+		updateBarExp();
+		updateBarLevel();
 	}
 	
 	public RpgPlayer(Player p, YamlConfiguration fYml) {
@@ -100,14 +124,21 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 		this.vault = new RpgVault(this, fYml);
 		this.jewelry = new RpgJewelry(this);
 		this.reputation = new RpgReputation(this, fYml);
-		board = Bukkit.getScoreboardManager().getNewScoreboard();
+		this.backItem = FileOperations.loadPlayerBackItem(p);
+		
+		this.compass = new EpicCompass(this);
+		this.scoreboard = new EpicScoreboard(this);
+		this.marker = new EpicMarker(this);
 		
 		createDisplay();
+		updateBarExp();
+		updateBarLevel();
 	}
 	
 	public void createScoreboard() {
 		if(score != null && !score.isCancelled())
 			return;
+		this.board = Bukkit.getScoreboardManager().getNewScoreboard();
 		RpgScoreboard.createScore(player);
 		this.score = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.getInstance(), ()->{
 			RpgScoreboard.updateScore(player);
@@ -134,10 +165,11 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 						+"  §2§l🛡 §2"+stats.getFinalOchrona()));
 	}
 	
-	//TODO
 	public void endTasks() {
 		score.cancel();
 		skills.endTasks();
+		
+		compass.getCompass().removeAll();
 	}
 	
 	public boolean resetStats() {
@@ -179,6 +211,8 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 	public void updateBarExp() {
 		float prevLvlExp = ExpSystem.getInstance().getNextLevelExp(info.getLevel() - 1);
 		float presLvlExp = info.getNextLevel();
+		if(prevLvlExp > presLvlExp)
+			prevLvlExp = 0;
 		float exp = info.getExp();
 		exp = (float) Utils.normalizeValue(prevLvlExp, presLvlExp, exp);
 		exp = (float) Utils.scaleValue(prevLvlExp, presLvlExp, 0, 1, exp);

@@ -37,12 +37,10 @@ public class EndTutorialCommand implements CommandExecutor{
 				info.setTutorial(false);
 				rpg.getPlayer().teleport(Bukkit.getWorld("F_RPG").getSpawnLocation());
 				rpg.getPlayer().getInventory().clear();
-				me.Vark123.EpicRPGRespawn.Main.getPlayers().put(rpg.getPlayer().getUniqueId().toString(), 
-						me.Vark123.EpicRPGRespawn.Main.getRegiony().get("spawn1").getLoc());
 				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mm i give "+args[0]+" ItemStart1");
 				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mm i give "+args[0]+" ItemStart2");
 			}
-		}.runTaskLater(Main.getInstance(), 20*3);
+		}.runTask(Main.getInstance());
 		return true;
 	}
 

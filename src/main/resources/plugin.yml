@@ -2,12 +2,11 @@ name: EpicRPG
 version: 2.0.0-ALPHA
 main: me.Vark123.EpicRPG.Main
 author: Vark123
-depend: [CalendarEvents,MythicMobs,NBTAPI,Clans,PartyAndFriends,ProtocolLib]
-softdepend: [EpicClans]
+depend: [CalendarEvents,MythicMobs,NBTAPI,ProtocolLib,EpicOptions]
 api-version: 1.18
 
 libraries:
-  - io.github.rysefoxx.inventory:RyseInventory-Plugin:1.6.3
+  - io.github.rysefoxx.inventory:RyseInventory-Plugin:1.6.5
 
 commands:
   staty:
@@ -61,3 +60,10 @@ commands:
     aliases: [ab,abs,advancedbuysystem]
   event:
     aliases: [evc, ev]
+  epicboost:
+  modyfikatory:
+    aliases: [modyfikator, mod, booster, boosters, boost, boosts]
+  epicexp:
+    aliases: [exp, eexp]
+  ekwipunek:
+    aliases: [eq]

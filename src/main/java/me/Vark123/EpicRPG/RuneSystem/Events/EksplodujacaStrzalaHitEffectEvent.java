@@ -13,8 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -26,9 +24,8 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
-import me.Vark123.EpicRPG.FightSystem.DamageManager;
 import me.Vark123.EpicRPG.FightSystem.ManualDamage;
-import me.Vark123.EpicRPG.FightSystem.Calculators.DamageCalculator;
+import me.Vark123.EpicRPG.FightSystem.Events.CustomProjectileEntityDamageEvent;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
@@ -37,6 +34,7 @@ public class EksplodujacaStrzalaHitEffectEvent implements Listener {
 	
 	private static final double DEFAULT_EXPLOSION_DMG_MOD = 0.2;
 	private static final double DEFAULT_EXPLOSION_DMG_MOD_H = 0.26;
+	private static final double DEFAULT_EXPLOSION_DMG_MOD_M = 0.35;
 
 	@EventHandler
 	public void onHit(ProjectileHitEvent e) {
@@ -58,7 +56,8 @@ public class EksplodujacaStrzalaHitEffectEvent implements Listener {
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		RpgModifiers modifiers = rpg.getModifiers();
 		if(!modifiers.hasEksplodujacaStrzala()
-				&& !modifiers.hasEksplodujacaStrzala_h())
+				&& !modifiers.hasEksplodujacaStrzala_h()
+				&& !modifiers.hasEksplodujacaStrzala_m())
 			return;
 		
 		if(!arrow.hasMetadata("rpg_bow") || !arrow.hasMetadata("rpg_force"))
@@ -69,11 +68,12 @@ public class EksplodujacaStrzalaHitEffectEvent implements Listener {
 //		double dmg = arrow.getDamage();
 		
 		MutableDouble baseDmg;
-		DamageCalculator calculator = DamageManager.getInstance().getProjectileCalculator();
 		if(modifiers.hasEksplodujacaStrzala()) {
 			baseDmg = new MutableDouble(DEFAULT_EXPLOSION_DMG_MOD);
-		} else {
+		} else if(modifiers.hasEksplodujacaStrzala_h()) {
 			baseDmg = new MutableDouble(DEFAULT_EXPLOSION_DMG_MOD_H);
+		} else {
+			baseDmg = new MutableDouble(DEFAULT_EXPLOSION_DMG_MOD_M);
 		}
 		if(bow.getType().equals(Material.CROSSBOW)) {
 			double enchantMod = 0;
@@ -114,7 +114,8 @@ public class EksplodujacaStrzalaHitEffectEvent implements Listener {
 			loc.getWorld().spawnParticle(Particle.CRIT, loc.clone().add(v), 0, 
 					v.getX()*(-2),v.getY(),v.getZ()*(-2));
 		}
-		
+
+		final double dmg = arrow.getDamage() * proj.getMetadata("rpg_force").get(0).asFloat();
 		loc.getWorld().getNearbyEntities(loc, 6, 6, 6, entity -> {
 			if(entity.equals(p) || !(entity instanceof LivingEntity))
 				return false;
@@ -135,12 +136,9 @@ public class EksplodujacaStrzalaHitEffectEvent implements Listener {
 		}).forEach(entity -> {
 			Location eLoc = entity.getLocation();
 			double dist = eLoc.distance(loc);
+			double eDmg = dmg * baseDmg.doubleValue() * (24.0 - dist) / 24.0;
 			
-			double calcDmg = calculator.calc(proj, entity, baseDmg.doubleValue());
-			calcDmg *= baseDmg.doubleValue();
-			double eDmg = calcDmg * (24.0 - dist) / 24.0;
-			
-			EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(p, entity, DamageCause.CUSTOM, eDmg);
+			CustomProjectileEntityDamageEvent event = new CustomProjectileEntityDamageEvent(proj, entity, eDmg);
 			Bukkit.getPluginManager().callEvent(event);
 			if(event.isCancelled()) {
 				return;

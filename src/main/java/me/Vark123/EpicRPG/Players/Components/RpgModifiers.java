@@ -67,6 +67,14 @@ public class RpgModifiers implements Serializable {
 	private boolean silaRownowagi;
 	private boolean eksplodujacaStrzala_h;
 	private boolean silaRownowagi_h;
+	private boolean eksplodujacaStrzala_m;
+	private boolean silaRownowagi_m;
+	private boolean klatwaKrwi;
+	private boolean laskaBeliara;
+	private boolean trujacaAura;
+	private boolean zakletaStrzala;
+	private boolean wybraniecBeliara;
+	private boolean wtopienie;
 	
 	private int potionSila;
 	private int potionZrecznosc;
@@ -570,5 +578,69 @@ public class RpgModifiers implements Serializable {
 
 	public void setSilaRownowagi_h(boolean silaRownowagi_h) {
 		this.silaRownowagi_h = silaRownowagi_h;
+	}
+
+	public boolean hasEksplodujacaStrzala_m() {
+		return eksplodujacaStrzala_m;
+	}
+
+	public void setEksplodujacaStrzala_m(boolean eksplodujacaStrzala_m) {
+		this.eksplodujacaStrzala_m = eksplodujacaStrzala_m;
+	}
+
+	public boolean hasSilaRownowagi_m() {
+		return silaRownowagi_m;
+	}
+
+	public void setSilaRownowagi_m(boolean silaRownowagi_m) {
+		this.silaRownowagi_m = silaRownowagi_m;
+	}
+
+	public boolean hasKlatwaKrwi() {
+		return klatwaKrwi;
+	}
+
+	public void setKlatwaKrwi(boolean klatwaKrwi) {
+		this.klatwaKrwi = klatwaKrwi;
+	}
+
+	public boolean hasLaskaBeliara() {
+		return laskaBeliara;
+	}
+
+	public void setLaskaBeliara(boolean laskaBeliara) {
+		this.laskaBeliara = laskaBeliara;
+	}
+
+	public boolean hasTrujacaAura() {
+		return trujacaAura;
+	}
+
+	public void setTrujacaAura(boolean trujacaAura) {
+		this.trujacaAura = trujacaAura;
+	}
+
+	public boolean hasZakletaStrzala() {
+		return zakletaStrzala;
+	}
+
+	public void setZakletaStrzala(boolean zakletaStrzala) {
+		this.zakletaStrzala = zakletaStrzala;
+	}
+
+	public boolean hasWybraniecBeliara() {
+		return wybraniecBeliara;
+	}
+
+	public void setWybraniecBeliara(boolean wybraniecBeliara) {
+		this.wybraniecBeliara = wybraniecBeliara;
+	}
+
+	public boolean hasWtopienie() {
+		return wtopienie;
+	}
+
+	public void setWtopienie(boolean wtopienie) {
+		this.wtopienie = wtopienie;
 	}
 }

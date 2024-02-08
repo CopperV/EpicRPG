@@ -8,16 +8,11 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 
-import de.simonsator.partyandfriends.api.pafplayers.OnlinePAFPlayer;
-import de.simonsator.partyandfriends.api.pafplayers.PAFPlayerManager;
-import de.simonsator.partyandfriends.clan.api.Clan;
-import de.simonsator.partyandfriends.clan.api.ClansManager;
-import me.Vark123.EpicClans.EpicClansApi;
-import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicOptions.OptionsAPI;
+import me.Vark123.EpicRPG.Core.Events.ExpModifyEvent;
 import me.Vark123.EpicRPG.Core.Events.PlayerLevelUpdateEvent;
-import me.Vark123.EpicRPG.Players.PlayerManager;
+import me.Vark123.EpicRPG.Options.Serializables.ResourcesInfoSerializable;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
@@ -27,7 +22,7 @@ public class ExpSystem {
 
 	private final static ExpSystem instance = new ExpSystem();
 	
-	public final int MAX_LEVEL = 95;
+	public final int MAX_LEVEL = 100;
 	public final int PN_PER_LEVEL = 10;
 	
 	private final FireworkEffect fe1;
@@ -70,67 +65,51 @@ public class ExpSystem {
 		return instance;
 	}
 	
-	public void addMobExp(RpgPlayer rpg, int xp) {
+	public void addExp(RpgPlayer rpg, int amount, String reason) {
+		ExpModifyEvent event = new ExpModifyEvent(rpg, amount, 1, reason);
+		Bukkit.getPluginManager().callEvent(event);
+		if(event.isCancelled())
+			return;
 		
-		OnlinePAFPlayer partyPlayer = PAFPlayerManager.getInstance().getPlayer(rpg.getPlayer());
-		Clan klan = ClansManager.getInstance().getClan(partyPlayer);
-		
-		if(klan != null) {
-			final int clanExp = (int) (xp * EpicClansApi.getInst().getExpValue(klan));
-			if(clanExp > 0) {
-				new BukkitRunnable() {
-					@Override
-					public void run() {
-						klan.getAllOnlineClanPlayers().parallelStream().filter(p -> {
-							if(!p.getPlayer().equals(rpg.getPlayer()))
-								return false;
-							return PlayerManager.getInstance().playerExists(p.getPlayer());
-						}).forEach(paf -> {
-							RpgPlayer tmp = PlayerManager.getInstance().getRpgPlayer(paf.getPlayer());
-							RpgPlayerInfo info = tmp.getInfo();
-							
-							int copyClanExp = clanExp;
-							
-							//TODO
-							//ADDING STYGIA
-							
-							if(info.getLevel() >= MAX_LEVEL)
-								return;
-							if(tmp.getPlayer().hasPermission("rpg.vip")) {
-								copyClanExp *= 1.5;
-							}
-							
-							info.addXP(copyClanExp);
-							checkLvl(info);
-							tmp.getPlayer().sendMessage("§7[§b§o"+klan.getClanTag()+"§7] §a+"+ copyClanExp +" xp §7[§a"+info.getExp()+" xp§7/§a"+info.getNextLevel()+" xp§7]");
-						});
-					}
-				}.runTaskAsynchronously(Main.getInstance());
-			}
-		}
-		
+		int exp = (int) (event.getAmount()*event.getModifier());
+		if(exp == 0)
+			return;
+
 		RpgPlayerInfo info = rpg.getInfo();
-		if(info.getLevel() < MAX_LEVEL 
-				|| (info.getExp() - getNextLevelExp(MAX_LEVEL-1)) < (0.9 * (getNextLevelExp(MAX_LEVEL) - getNextLevelExp(MAX_LEVEL-1)))) {
-			if(rpg.getPlayer().hasPermission("rpg.vip")) {
-				xp *= 1.5;
-			}
-			info.addXP(xp);
-			checkLvl(info);
-			rpg.getPlayer().sendMessage("§a+"+ xp +" xp §7[§a"+info.getExp()+" xp§7/§a"+info.getNextLevel()+" xp§7]");
-		} else {
-			info.setXP((int) (0.9 * (getNextLevelExp(MAX_LEVEL) - getNextLevelExp(MAX_LEVEL-1))) + getNextLevelExp(MAX_LEVEL-1));
-		}
+		info.addXP(exp);
+		checkLvl(info);
 		
+		OptionsAPI.get().getPlayerManager().getPlayerOptions(rpg.getPlayer())
+			.ifPresent(op -> {
+				op.getPlayerOptionByID("epicrpg_resources")
+					.ifPresent(pOption -> {
+						ResourcesInfoSerializable option = (ResourcesInfoSerializable) pOption.getValue();
+						if(!option.isExpInfo())
+							return;
+						rpg.getPlayer().sendMessage("§a+"+ exp +" xp §7[§a"+info.getExp()+" xp§7/§a"+info.getNextLevel()+" xp§7]");
+					});
+			});
+	}
+	
+	public void addRawExp(RpgPlayer rpg, int amount) {
+		RpgPlayerInfo info = rpg.getInfo();
+		info.addXP(amount);
+		checkLvl(info);
+	}
+	
+	public void addQuestExp(RpgPlayer rpg, int xp) {
+		addExp(rpg, xp, "quest");
+	}
+	
+	public void addMobExp(RpgPlayer rpg, int xp) {
+		addExp(rpg, xp, "mob");
 	}
 	
 	private void checkLvl(RpgPlayerInfo info) {
 		if(info.getLevel() >= MAX_LEVEL)
 			return;
-		if(info.getExp() >= info.getNextLevel()) {
+		if(info.getExp() >= info.getNextLevel())
 			updateLvl(info);
-			info.getRpg().updateBarLevel();
-		}
 		info.getRpg().updateBarExp();
 	}
 	
@@ -150,6 +129,8 @@ public class ExpSystem {
 		
 		info.addLevel(1);
 		info.setNextLevel(getNextLevelExp(info.getLevel()));
+
+		info.getRpg().updateBarLevel();
 		
 		p.sendTitle("§6§lGRATULACJE!", "§aAwansowales na §6"+(info.getLevel())+" §apoziom", 5, 10, 15);
 		Bukkit.broadcastMessage("§6§lGracz " + p.getName() + " awansowal na " + (info.getLevel()) + " poziom!!!");
@@ -372,6 +353,16 @@ public class ExpSystem {
 			return 153_500_000;
 		case 95:
 			return 170_000_000;
+		case 96:
+			return 188_000_000;
+		case 97:
+			return 208_000_000;
+		case 98:
+			return 230_000_000;
+		case 99:
+			return 255_000_000;
+		case 100:
+			return 280_000_000;
 		default:
 			return Integer.MAX_VALUE;
 		}
