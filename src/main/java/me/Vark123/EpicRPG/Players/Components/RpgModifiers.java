@@ -74,6 +74,7 @@ public class RpgModifiers implements Serializable {
 	private boolean trujacaAura;
 	private boolean zakletaStrzala;
 	private boolean wybraniecBeliara;
+	private boolean wtopienie;
 	
 	private int potionSila;
 	private int potionZrecznosc;
@@ -633,5 +634,13 @@ public class RpgModifiers implements Serializable {
 
 	public void setWybraniecBeliara(boolean wybraniecBeliara) {
 		this.wybraniecBeliara = wybraniecBeliara;
+	}
+
+	public boolean hasWtopienie() {
+		return wtopienie;
+	}
+
+	public void setWtopienie(boolean wtopienie) {
+		this.wtopienie = wtopienie;
 	}
 }

@@ -26,6 +26,7 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
+import io.lumine.mythic.bukkit.MythicBukkit;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.FightSystem.ManualDamage;
 import me.Vark123.EpicRPG.Players.PlayerManager;
@@ -224,7 +225,22 @@ public class RuneManager {
 		int price = ir.getPrice();
 		if(rpg.getModifiers().hasZrodloNatury())
 			price *= 0.8;
-
+		if(p.getWorld().getName().toLowerCase().contains("dungeon12")
+				&& p.getNearbyEntities(30, 10, 30)
+					.stream()
+					.filter(entity -> {
+						if(!entity.getName().equals("§2§l§oLoatheb"))
+							return false;
+						String phase = MythicBukkit.inst().getMobManager().getMythicMobInstance(entity).getStance();
+						if(!phase.equals("phase2") && !phase.equals("phase3"))
+							return false;
+						return true;
+					})
+					.findAny()
+					.isPresent()) {
+			price *= 1.5;
+		}
+		
 		if(stats.getPresentMana() >= price)
 			return true;
 		
@@ -258,7 +274,21 @@ public class RuneManager {
 		int price = ir.getPrice();
 		if(rpg.getModifiers().hasZrodloNatury())
 			price *= 0.8;
-		
+		if(p.getWorld().getName().toLowerCase().contains("dungeon12")
+				&& p.getNearbyEntities(30, 10, 30)
+					.stream()
+					.filter(entity -> {
+						if(!entity.getName().equals("§2§l§oLoatheb"))
+							return false;
+						String phase = MythicBukkit.inst().getMobManager().getMythicMobInstance(entity).getStance();
+						if(!phase.equals("phase2") && !phase.equals("phase3"))
+							return false;
+						return true;
+					})
+					.findAny()
+					.isPresent()) {
+			price *= 1.5;
+		}
 
 		if(price >= (presentHealth + 1)) {
 			p.sendMessage("§7[§6EpicRPG§7] §cNie masz wystarczajaco zycia by uzyc tej runy!");
@@ -273,6 +303,23 @@ public class RuneManager {
 			price *= 0.8;
 		}
 		
+		Player p = rpg.getPlayer();
+		if(p.getWorld().getName().toLowerCase().contains("dungeon12")
+				&& p.getNearbyEntities(30, 10, 30)
+					.stream()
+					.filter(entity -> {
+						if(!entity.getName().equals("§2§l§oLoatheb"))
+							return false;
+						String phase = MythicBukkit.inst().getMobManager().getMythicMobInstance(entity).getStance();
+						if(!phase.equals("phase2") && !phase.equals("phase3"))
+							return false;
+						return true;
+					})
+					.findAny()
+					.isPresent()) {
+			price *= 1.5;
+		}
+		
 		RpgStats stats = rpg.getStats();
 		if(stats.getPresentMana() >= price) {
 			stats.removePresentManaSmart(price);
@@ -280,7 +327,6 @@ public class RuneManager {
 		}
 		
 		double hpPrice = price * 0.5;
-		Player p = rpg.getPlayer();
 		EntityDamageEvent event = new EntityDamageEvent(p, DamageCause.MAGIC, hpPrice);
 		Bukkit.getPluginManager().callEvent(event);
 		
@@ -293,6 +339,22 @@ public class RuneManager {
 		if(rpg.getModifiers().hasZrodloNatury()){
 			price *= 0.8;
 		}
+		if(p.getWorld().getName().toLowerCase().contains("dungeon12")
+				&& p.getNearbyEntities(30, 10, 30)
+					.stream()
+					.filter(entity -> {
+						if(!entity.getName().equals("§2§l§oLoatheb"))
+							return false;
+						String phase = MythicBukkit.inst().getMobManager().getMythicMobInstance(entity).getStance();
+						if(!phase.equals("phase2") && !phase.equals("phase3"))
+							return false;
+						return true;
+					})
+					.findAny()
+					.isPresent()) {
+			price *= 1.5;
+		}
+		
 		EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(p, p, DamageCause.MAGIC, price);
 		Bukkit.getPluginManager().callEvent(event);
 		
@@ -438,6 +500,7 @@ public class RuneManager {
 					case "§9totem obronny":		return new TotemObronny(dr, p);
 					case "§7§lteleportacja krotkodystansowa":	return new TeleportacjaKrotkodystansowa(dr, p);
 					case "§e§lfala uderzeniowa":return new FalaUderzeniowa(dr, p);
+					case "§2§lwtopienie":		return new Wtopienie(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_STRAD:
@@ -480,6 +543,7 @@ public class RuneManager {
 					case "§8§owlocznia ciemnosci":return new WloczniaCiemnosci(dr, p);
 					case "§8§ozmrok":			return new Zmrok(dr, p);
 					case "§8zaglada":			return new Zaglada(dr, p);
+					case "§8§lczarny sen":		return new CzarnySen(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_13:
@@ -511,7 +575,7 @@ public class RuneManager {
 					case "§ezlodziej energii":	return new ZlodziejEnergii(dr, p);
 					case "§5§lpotezna runa domisia":return new PoteznaRunaDomisia(dr, p);
 					case "§5§lpotezna runa domisia i":return new PoteznaRunaDomisia(dr, p);
-					case "§5§lpotezna runa domisia ii":return new PoteznaRunaDomisia(dr, p);
+					case "§5§lpotezna runa domisia ii":return new PoteznaRunaDomisia_M(dr, p);
 					case "§c§lzyciodajna ziemia":return new ZyciodajnaZiemia(dr, p);
 					case "§c§lzyciodajna ziemia i":return new ZyciodajnaZiemia_M(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
@@ -524,7 +588,9 @@ public class RuneManager {
 					case "§c§lkrwawa fala ii":		return new KrwawaFala(dr, p);
 					case "§d§l§oszept przedwiecznych":	return new SzeptPrzedwiecznych(dr, p);
 					case "§c§l§oszpon beliara":		return new SzponBeliaraInt(dr, p);
+					case "§c§l§oszpon beliara i":	return new SzponBeliaraInt(dr, p);
 					case "§c§lszpon beliara":		return new SzponBeliaraMana(dr, p);
+					case "§c§lszpon beliara i":		return new SzponBeliaraMana(dr, p);
 					case "§5§lszal beliara":		return new SzalBeliara(dr, p);
 					case "§5§lzakazany rytual":		return new ZakazanyRytual(dr, p);
 					case "§5§lzakazany rytual i":	return new ZakazanyRytual_H(dr, p);
@@ -534,6 +600,7 @@ public class RuneManager {
 					case "§x§a§a§5§3§0§3zatruta krew":return new ZatrutaKrew(dr, p);
 					case "§x§9§a§0§3§0§3§lrozprucie":return new Rozprucie(dr, p);
 					case "§x§8§a§0§3§0§3furia":		return new Furia(dr, p);
+					case "§5§lkoszmar beliara":		return new KoszmarBeliara(dr, p);
 					default: 						return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_WAIT:

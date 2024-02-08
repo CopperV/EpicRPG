@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.Sound;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -15,6 +16,7 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
+import io.lumine.mythic.bukkit.MythicBukkit;
 import me.Vark123.EpicRPG.FightSystem.RuneDamage;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
 import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
@@ -44,6 +46,9 @@ public class Rozprucie extends ARune {
 					return true;
 				return false;
 			}
+			if(!MythicBukkit.inst().getMobManager().isMythicMob(e)
+					&& e.getType().equals(EntityType.ARMOR_STAND))
+				return false;
 			if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 				return false;
 			return true;

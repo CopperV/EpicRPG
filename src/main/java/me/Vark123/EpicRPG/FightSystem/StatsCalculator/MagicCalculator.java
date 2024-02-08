@@ -26,7 +26,7 @@ public class MagicCalculator implements IDamageCalculator {
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		RpgStats stats = rpg.getStats();
 		RpgPlayerInfo info = rpg.getInfo();
-		ChangeStats.change(rpg, null);
+		ChangeStats.change(rpg, null, true);
 		
 		if(args == null 
 				|| args.length <= 0
@@ -44,55 +44,54 @@ public class MagicCalculator implements IDamageCalculator {
 			dmg += wplywDmg;
 		}
 		
-		boolean crit = DamageUtils.checkCrit(rpg);
+		boolean crit = DamageUtils.checkCrit(rpg, victim);
 		pair.setValue(crit);
 		if(victim instanceof Player) {
 			String type = ir.getMagicType().toLowerCase();
 			switch(type) {
 				case "ogien":
-					dmg = wplyw*1.8*dmg;
+					dmg = wplyw*7.2*dmg;
 					break;
 				case "woda":
-					dmg = wplyw*0.9*dmg;
+					dmg = wplyw*2.8*dmg;
 					break;
 				case "natura":
-					dmg = wplyw*0.8*dmg;
+					dmg = wplyw*3.6*dmg;
 					break;
 				case "tajemna":
-					dmg = wplyw*0.7*dmg;
+					dmg = wplyw*3.65*dmg;
 					break;
 				case "mrok":
-					dmg = (wplyw+0.1)*dmg;
+					dmg = (wplyw*0.4+0.2)*dmg;
 					break;
 				case "swiatlo":
-					dmg = wplyw*1.65*dmg;
+					dmg = wplyw*7.2*dmg;
 					break;
 				case "rownowaga":
-					dmg = wplyw*1.75*dmg;
+					dmg = wplyw*0.72*dmg;
 					break;
 				case "chaos":
-					dmg = wplyw*0.5*dmg;
+					dmg = wplyw*1.8*dmg;
 					break;
 				case "krew":
 					dmg = wplyw*2*dmg;
 					break;
 				default:
-					dmg = wplyw*0.5*dmg;
+					dmg = wplyw*dmg*0.4;
 					break;
 			}
-			dmgLevel = (dmg*0.01*info.getLevel());
-			dmg *= crit ? 1.1 : 0.8;
+			dmgLevel = (dmg*0.002*info.getLevel());
 		} else {
 			if(crit) {
-				dmg *= 1.75;
-				wplyw *= 1.25;
+				dmg *= 1.5;
+				wplyw *= 1.2;
 			}
 				
 			addDmg = wplyw * stats.getFinalInteligencja() * dmg / 100.0;
 			dmg += addDmg;
 				
 			dmgLevel = dmg * 0.005 * info.getLevel();
-			dmgMana = dmg * 0.0003 * stats.getFinalMana();
+			dmgMana = dmg * 0.0001 * stats.getFinalMana();
 		}
 		
 		dmgKrag = dmg * 0.05 * stats.getKrag();

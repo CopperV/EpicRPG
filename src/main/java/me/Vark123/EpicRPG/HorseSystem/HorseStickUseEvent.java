@@ -14,16 +14,17 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import de.tr7zw.nbtapi.NBTItem;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Files.FileOperations;
 import me.Vark123.EpicRPG.HorseSystem.Horses.BaseHorse;
+import me.Vark123.EpicRPG.HorseSystem.Horses.DeathRider;
 import me.Vark123.EpicRPG.HorseSystem.Horses.DiamondHorse;
 import me.Vark123.EpicRPG.HorseSystem.Horses.ESkeletonHorse;
 import me.Vark123.EpicRPG.HorseSystem.Horses.EZombieHorse;
 import me.Vark123.EpicRPG.HorseSystem.Horses.GoldenHorse;
+import me.Vark123.EpicRPG.HorseSystem.Horses.GoldenSteed;
 import me.Vark123.EpicRPG.HorseSystem.Horses.HauntedHorse;
 import me.Vark123.EpicRPG.HorseSystem.Horses.IronHorse;
 import me.Vark123.EpicRPG.HorseSystem.Horses.KidHorse;
@@ -43,13 +44,6 @@ public class HorseStickUseEvent implements Listener {
 			return;
 		
 		if(!it.getType().equals(Material.CARROT_ON_A_STICK))
-			return;
-		
-		ItemMeta im = it.getItemMeta();
-		if(!im.hasDisplayName()
-				|| !(im.getDisplayName().contains("Kon") 
-						|| im.getDisplayName().contains("Wierzchowiec") 
-						|| im.getDisplayName().contains("Zrebie")))
 			return;
 
 		NBTItem nbt = new NBTItem(it);
@@ -121,6 +115,18 @@ public class HorseStickUseEvent implements Listener {
 				horse = new KidHorse();
 				if(!horses.contains("9")) {
 					horses.add("9");
+				}
+				break;
+			case "Kon10":
+				horse = new DeathRider();
+				if(!horses.contains("10")) {
+					horses.add("10");
+				}
+				break;
+			case "Kon11":
+				horse = new GoldenSteed();
+				if(!horses.contains("11")) {
+					horses.add("11");
 				}
 				break;
 			default:

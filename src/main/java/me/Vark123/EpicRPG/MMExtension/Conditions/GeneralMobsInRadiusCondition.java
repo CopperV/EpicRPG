@@ -14,6 +14,7 @@ import io.lumine.mythic.api.skills.conditions.ISkillMetaCondition;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.bukkit.utils.numbers.RangedInt;
+import io.lumine.mythic.core.mobs.MobExecutor;
 import io.lumine.mythic.core.skills.SkillCondition;
 
 public class GeneralMobsInRadiusCondition extends SkillCondition implements ISkillMetaCondition, ILocationCondition {
@@ -35,11 +36,14 @@ public class GeneralMobsInRadiusCondition extends SkillCondition implements ISki
 		AbstractLocation l = caster.getEntity().getLocation();
 		double radius = this.radius.get(meta);
 		double radiusSq = radius*radius;
+		MobExecutor manager = MythicBukkit.inst().getMobManager();
 		Collection<AbstractEntity> collection = SkillCondition.getPlugin().getVolatileCodeHandler().getWorldHandler().getEntitiesNearLocation(l, radius);
 		int count = (int) collection.stream().filter(entity -> {
 			if(l.distanceSquared(entity.getLocation()) > radiusSq)
 				return false;
-			if(!MythicBukkit.inst().getMobManager().isActiveMob(entity))
+			if(!manager.isMythicMob(entity))
+				return false;
+			if(!manager.isActiveMob(entity))
 				return false;
 			if(entity.getBukkitEntity() instanceof Player)
 				return false;
@@ -53,11 +57,14 @@ public class GeneralMobsInRadiusCondition extends SkillCondition implements ISki
 	public boolean check(AbstractLocation l) {
 		double radius = this.radius.get();
 		double radiusSq = radius*radius;
+		MobExecutor manager = MythicBukkit.inst().getMobManager();
 		Collection<AbstractEntity> collection = SkillCondition.getPlugin().getVolatileCodeHandler().getWorldHandler().getEntitiesNearLocation(l, radius);
 		int count = (int) collection.stream().filter(entity -> {
 			if(l.distanceSquared(entity.getLocation()) > radiusSq)
 				return false;
-			if(!MythicBukkit.inst().getMobManager().isActiveMob(entity))
+			if(!manager.isMythicMob(entity))
+				return false;
+			if(!manager.isActiveMob(entity))
 				return false;
 			if(entity.getBukkitEntity() instanceof Player)
 				return false;

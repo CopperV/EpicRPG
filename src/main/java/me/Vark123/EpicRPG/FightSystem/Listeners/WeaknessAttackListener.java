@@ -32,7 +32,7 @@ public class WeaknessAttackListener implements Listener {
 		
 		Location pEyeLoc = p.getEyeLocation();
 		RayTraceResult result = p.getWorld()
-				.rayTraceEntities(pEyeLoc, pEyeLoc.getDirection(), 3.5, 1, entity -> {
+				.rayTraceEntities(pEyeLoc, pEyeLoc.getDirection(), 4, 1.5, entity -> {
 					if (!MythicBukkit.inst().getAPIHelper().isMythicMob(entity))
 						return false;
 					if (entity.isDead())

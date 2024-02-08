@@ -21,9 +21,6 @@ public class KamiennyObserwatorEvent implements Listener {
 	
 	public static EventCreator<InventoryClickEvent> getClickEvent(){
 		Consumer<InventoryClickEvent> event = e -> {
-			if(e.isCancelled())
-				return;
-			
 			ItemStack clock = e.getCurrentItem();
 			if(clock == null || !clock.getType().equals(Material.CLOCK))
 				return;

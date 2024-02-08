@@ -131,6 +131,18 @@ public class ResourceInfoOptionMenuManager {
 							p.closeInventory();
 						}));
 					}
+					{
+						ItemStack it = info.isClanExpInfo() ? onTemplate.clone() : offTemplate.clone();
+						ItemMeta im = it.getItemMeta();
+						String display = "§e§oDoswiadczenie klanowe"+im.getDisplayName();
+						im.setDisplayName(display);
+						it.setItemMeta(im);
+						
+						contents.set(14, IntelligentItem.of(it, e -> {
+							info.setClanExpInfo(!info.isClanExpInfo());
+							p.closeInventory();
+						}));
+					}
 				}
 			})
 			.build(Main.getInstance())

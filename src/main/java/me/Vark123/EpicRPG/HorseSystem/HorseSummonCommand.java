@@ -3,6 +3,7 @@ package me.Vark123.EpicRPG.HorseSystem;
 import java.io.File;
 import java.util.Date;
 
+import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -10,9 +11,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import me.Vark123.EpicOptions.PlayerSystem.PlayerManager;
+import me.Vark123.EpicOptions.PlayerSystem.PlayerOption;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Files.FileOperations;
+import me.Vark123.EpicRPG.Options.Serializables.StringSerializable;
 
 public class HorseSummonCommand implements CommandExecutor {
 
@@ -75,8 +80,31 @@ public class HorseSummonCommand implements CommandExecutor {
 			switch(args[0].toLowerCase()) {
 				case "summon":
 				case "przyzwij":
-					//TODO
-					//Impl Player Options
+				case "sum":
+				case "s":
+					MutableBoolean returnValue = new MutableBoolean(true);
+					PlayerManager.get().getPlayerOptions(p).ifPresent(op -> {
+						@SuppressWarnings("unchecked")
+						PlayerOption<StringSerializable> option = (PlayerOption<StringSerializable>) op
+								.getPlayerOptionByID("epicrpg_horse").orElseThrow();
+						AEpicHorse horse = HorseManager.getInstance().getHorse(option.getValue().getValue());
+						
+						if(horse == null) {
+							p.sendMessage(Main.getInstance().getPrefix() + " §cNie posiadasz ustawionego zadnego wierzchowca!");
+							returnValue.setFalse();
+							return;
+						}
+						
+						horse.summonMount(p);
+						HorseManager.getInstance().getHorseCd().put(p, new Date());
+						new BukkitRunnable() {
+							
+							@Override
+							public void run() {
+								p.sendMessage(Main.getInstance().getPrefix() + " §a§lMozesz znow przywolac wierzchowca!");
+							}
+						}.runTaskLater(Main.getInstance(), 20*HorseManager.getInstance().HORSE_SUMMON_CD);
+					});
 					return true;
 			}
 		}

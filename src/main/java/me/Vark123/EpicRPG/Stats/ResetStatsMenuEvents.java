@@ -29,9 +29,6 @@ public class ResetStatsMenuEvents {
 	
 	private EventCreator<InventoryClickEvent> clickEventCreator() {
 		Consumer<InventoryClickEvent> event = e -> {
-			if(e.isCancelled())
-				return;
-			
 			if(!e.getClickedInventory().getType().equals(InventoryType.CHEST))
 				return;
 			

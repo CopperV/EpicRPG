@@ -33,9 +33,6 @@ public class HorseMenuEvents {
 	
 	private EventCreator<InventoryClickEvent> clickEventCreator(){
 		Consumer<InventoryClickEvent> event = e -> {
-			if(e.isCancelled())
-				return;
-			
 			ItemStack it = e.getCurrentItem();
 			if(it == null || it.getType().equals(Material.AIR))
 				return;

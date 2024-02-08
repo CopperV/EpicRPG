@@ -5,6 +5,7 @@ import org.bukkit.event.Listener;
 
 import io.lumine.mythic.bukkit.events.MythicConditionLoadEvent;
 import io.lumine.mythic.core.skills.SkillCondition;
+import me.Vark123.EpicRPG.MMExtension.Conditions.CasterFieldOfViewCondition;
 import me.Vark123.EpicRPG.MMExtension.Conditions.GeneralMobsInRadiusCondition;
 import me.Vark123.EpicRPG.MMExtension.Conditions.HealthCheckpointCondition;
 import me.Vark123.EpicRPG.MMExtension.Conditions.SzansaCondition;
@@ -26,6 +27,10 @@ public class CustomConditionLoadEvent implements Listener {
 				break;
 			case "hpcheck":
 				condition = new HealthCheckpointCondition(e.getConfig().getLine(), e.getConfig());
+				e.register(condition);
+				break;
+			case "casterfieldofview":
+				condition = new CasterFieldOfViewCondition(e.getConfig().getLine(), e.getConfig());
 				e.register(condition);
 				break;
 		}

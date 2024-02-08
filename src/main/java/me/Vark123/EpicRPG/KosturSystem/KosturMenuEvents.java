@@ -47,9 +47,6 @@ public class KosturMenuEvents {
 	
 	private EventCreator<InventoryClickEvent> kosturClickEventCreator() {
 		Consumer<InventoryClickEvent> event = e -> {
-			if(e.isCancelled())
-				return;
-			
 			int slot = e.getSlot();
 			if(slot != 22)
 				return;
@@ -96,9 +93,6 @@ public class KosturMenuEvents {
 	
 	private EventCreator<InventoryClickEvent> kosturModifyClickEventCreator() {
 		Consumer<InventoryClickEvent> event = e -> {
-			if(e.isCancelled())
-				return;
-			
 			int slot = e.getSlot();
 			if(slot != 22)
 				return;
@@ -164,9 +158,6 @@ public class KosturMenuEvents {
 	
 	private EventCreator<InventoryClickEvent> kosturCreateClickEventCreator() {
 		Consumer<InventoryClickEvent> event = e -> {
-			if(e.isCancelled())
-				return;
-			
 			int slot = e.getSlot();
 			if(slot != 31)
 				return;

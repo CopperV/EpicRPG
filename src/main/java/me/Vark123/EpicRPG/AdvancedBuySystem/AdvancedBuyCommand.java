@@ -1,7 +1,7 @@
 package me.Vark123.EpicRPG.AdvancedBuySystem;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -14,12 +14,6 @@ import com.sk89q.worldguard.internal.flywaydb.core.internal.util.StringUtils;
 
 import io.lumine.mythic.bukkit.MythicBukkit;
 import me.Vark123.EpicRPG.Main;
-import me.Vark123.EpicRPG.AdvancedBuySystem.PriceImpl.CoinsCost;
-import me.Vark123.EpicRPG.AdvancedBuySystem.PriceImpl.MoneyCost;
-import me.Vark123.EpicRPG.AdvancedBuySystem.PriceImpl.ReputationCost;
-import me.Vark123.EpicRPG.AdvancedBuySystem.PriceImpl.RudaCost;
-import me.Vark123.EpicRPG.AdvancedBuySystem.PriceImpl.StygiaCost;
-import me.Vark123.EpicRPG.AdvancedBuySystem.PriceImpl.UndefinedCost;
 
 public class AdvancedBuyCommand implements CommandExecutor {
 
@@ -56,22 +50,40 @@ public class AdvancedBuyCommand implements CommandExecutor {
 			return false;
 		}
 		
-		List<AdvancedBuyCost> list = new LinkedList<>();
+//		List<AdvancedBuyCost> list = new LinkedList<>();
+//		for(int i = 3; i < args.length; ++i) {
+//			list.add(getCost(args[i]));
+//		}
+		
+		Map<String, String> conditions = new LinkedHashMap<>();
 		for(int i = 3; i < args.length; ++i) {
-			list.add(getCost(args[i]));
+			String[] arr = args[i].split(":", 2);
+			if(arr.length < 2)
+				continue;
+			conditions.put(arr[0], arr[1]);
 		}
 		
-		for(AdvancedBuyCost cost : list) {
-			if(cost.check(p))
-				continue;
+		AdvancedBuyEvent event = new AdvancedBuyEvent(p, conditions);
+		Bukkit.getPluginManager().callEvent(event);
+		if(event.isCancelled()) {
 			sender.sendMessage(Main.getInstance().getPrefix()+" §cNie mozna tego zakupic!");
 			p.sendMessage(Main.getInstance().getPrefix()+" §cNie mozesz tego zakupic!");
 			return false;
 		}
 		
-		for(AdvancedBuyCost cost : list) {
-			cost.spend(p);
-		}
+		event.getActions().forEach(action -> action.action(p));
+		
+//		for(AdvancedBuyCost cost : list) {
+//			if(cost.check(p))
+//				continue;
+//			sender.sendMessage(Main.getInstance().getPrefix()+" §cNie mozna tego zakupic!");
+//			p.sendMessage(Main.getInstance().getPrefix()+" §cNie mozesz tego zakupic!");
+//			return false;
+//		}
+//		
+//		for(AdvancedBuyCost cost : list) {
+//			cost.spend(p);
+//		}
 		
 		it.setAmount(amount);
 		int slot = p.getInventory().firstEmpty();
@@ -90,29 +102,29 @@ public class AdvancedBuyCommand implements CommandExecutor {
 		sender.sendMessage(Main.getInstance().getPrefix()+" §cPoprawne uzycie komendy: §c§o/abs <nick> <MMItem> <ilosc> [wymagania/koszta]");
 	}
 
-	private AdvancedBuyCost getCost(String line) {
-		String[] tab = line.split(":");
-		String costType = tab[0].toLowerCase();
-		switch(costType) {
-			case "money":
-				double money = Double.parseDouble(tab[1]);
-				return new MoneyCost(money);
-			case "coins":
-				int coins = Integer.parseInt(tab[1]);
-				return new CoinsCost(coins);
-			case "ruda":
-				int ruda = Integer.parseInt(tab[1]);
-				return new RudaCost(ruda);
-			case "stygia":
-				int stygia = Integer.parseInt(tab[1]);
-				return new StygiaCost(stygia);
-			case "reputation":
-				String fraction = tab[1].toLowerCase();
-				int level = Integer.parseInt(tab[2]);
-				return new ReputationCost(fraction, level);
-			default:
-				return new UndefinedCost();
-		}
-	}
+//	private AdvancedBuyCost getCost(String line) {
+//		String[] tab = line.split(":");
+//		String costType = tab[0].toLowerCase();
+//		switch(costType) {
+//			case "money":
+//				double money = Double.parseDouble(tab[1]);
+//				return new MoneyCost(money);
+//			case "coins":
+//				int coins = Integer.parseInt(tab[1]);
+//				return new CoinsCost(coins);
+//			case "ruda":
+//				int ruda = Integer.parseInt(tab[1]);
+//				return new RudaCost(ruda);
+//			case "stygia":
+//				int stygia = Integer.parseInt(tab[1]);
+//				return new StygiaCost(stygia);
+//			case "reputation":
+//				String fraction = tab[1].toLowerCase();
+//				int level = Integer.parseInt(tab[2]);
+//				return new ReputationCost(fraction, level);
+//			default:
+//				return new UndefinedCost();
+//		}
+//	}
 	
 }

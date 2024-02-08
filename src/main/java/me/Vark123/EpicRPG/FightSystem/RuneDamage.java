@@ -77,7 +77,7 @@ public final class RuneDamage {
 					|| tmp.getGameMode().equals(GameMode.CREATIVE)) 
 				return false;
 		}
-				
+		
 		MagicEntityDamageByEntityEvent event = new MagicEntityDamageByEntityEvent(p, e, dmg, dr);
 		Bukkit.getPluginManager().callEvent(event);
 		if(event.isCancelled())
@@ -164,7 +164,7 @@ public final class RuneDamage {
 		if(dmg <= 0) 
 			return false;
 		
-		if(!ManualDamage.doDamageWithCheck(p, e, event.getDamage(), event))
+		if(!ManualDamage.doDamageWithCheck(p, e, effectEvent.getFinalDamage(), event))
 			return false;
 
 		return true;

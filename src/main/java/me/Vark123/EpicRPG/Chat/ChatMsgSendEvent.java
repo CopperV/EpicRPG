@@ -35,6 +35,8 @@ public class ChatMsgSendEvent implements Listener {
 		}
 		
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
+		if(rpg == null)
+			return;
 		RpgPlayerInfo info = rpg.getInfo();
 		String color = p.hasPermission("rpg.mod") ? ChatManager.getInstance().MOD_COLOR : ChatManager.getInstance().PLAYER_COLOR;
 		

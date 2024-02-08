@@ -34,9 +34,6 @@ public class SzponBeliaraEvents {
 	
 	private EventCreator<InventoryClickEvent> awakeningClickEventCreator() {
 		Consumer<InventoryClickEvent> event = e -> {
-			if(e.isCancelled())
-				return;
-			
 			int[] freeSlots = SzponBeliaraManager.getInstance().getAwakeningFreeSlots();
 			int slot = e.getSlot();
 			if(slot != 22)

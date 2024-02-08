@@ -54,7 +54,7 @@ public class DamageUtils {
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		RpgStats stats = rpg.getStats();
 		double los = rand.nextDouble(100);
-		double szansa = (stats.getFinalZdolnosci()+stats.getFinalZrecznosc())/65;
+		double szansa = (stats.getFinalZdolnosciMysliwskie()+stats.getFinalZrecznosc())/65;
 		if(szansa > 25)
 			szansa = 25;
 		if(los >= szansa)

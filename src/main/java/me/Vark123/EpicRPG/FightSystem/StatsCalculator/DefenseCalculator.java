@@ -11,7 +11,6 @@ import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import me.Vark123.EpicRPG.RuneSystem.Runes.SilaJednosci;
 import me.Vark123.EpicRPG.Utils.Pair;
-import net.md_5.bungee.api.ChatColor;
 
 public class DefenseCalculator implements IDamageCalculator {
 
@@ -41,8 +40,6 @@ public class DefenseCalculator implements IDamageCalculator {
 		
 		if(damager instanceof Player 
 				&& PlayerManager.getInstance().playerExists((Player) damager)) {
-			double value = ChatColor.stripColor(info.getShortProf().toLowerCase()).equalsIgnoreCase("woj") ? 0.2 : 0.1;
-			dmg -= value * stats.getFinalOchrona();
 			pair.setKey(dmg);
 			return pair;
 		}

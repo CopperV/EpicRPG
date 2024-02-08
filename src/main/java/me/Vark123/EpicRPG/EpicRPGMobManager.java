@@ -42,7 +42,13 @@ public class EpicRPGMobManager {
 			ChatColor.translateAlternateColorCodes('&', "&3&lPelzacz swiatynny"),
 			ChatColor.translateAlternateColorCodes('&', "&9&lSwiatynna Krolowa Pelzaczy"),
 			ChatColor.translateAlternateColorCodes('&', "&9&lKejran - BOSS"),
-			ChatColor.translateAlternateColorCodes('&', "&c&oKrwiozercza Pijawka"));
+			ChatColor.translateAlternateColorCodes('&', "&c&oKrwiozercza Pijawka"),
+			ChatColor.translateAlternateColorCodes('&', "&a&oDrifter"),
+			ChatColor.translateAlternateColorCodes('&', "&2Szambler"),
+			ChatColor.translateAlternateColorCodes('&', "&e&lPurchlak"),
+			ChatColor.translateAlternateColorCodes('&', "&e&oCordyceps"),
+			ChatColor.translateAlternateColorCodes('&', "&2&lElement Zero - BOSS"),
+			ChatColor.translateAlternateColorCodes('&', "&8Szczur kanalowy"));
 	
 	private EpicRPGMobManager() {
 		rand = new Random();

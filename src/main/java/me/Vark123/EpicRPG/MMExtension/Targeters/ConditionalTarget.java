@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.bukkit.Bukkit;
-
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.adapters.AbstractLocation;
 import io.lumine.mythic.api.adapters.AbstractPlayer;
@@ -93,7 +91,6 @@ public class ConditionalTarget extends IEntitySelector {
 		if(selector.equals("RANDOM")) {
 			return toReturn;
 		}else {
-			Bukkit.broadcastMessage(aEntity.getName());
 			toReturn.add(aEntity);
 			return toReturn;
 		}

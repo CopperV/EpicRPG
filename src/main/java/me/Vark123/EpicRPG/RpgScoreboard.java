@@ -87,9 +87,10 @@ public class RpgScoreboard {
 		
 		Scoreboard board = rpg.getBoard();
 
-		board.getEntries().stream().forEach(s -> {
-			board.resetScores(s);
-		});
+		if(board.getEntries() != null)
+			board.getEntries().stream().forEach(s -> {
+				board.resetScores(s);
+			});
 		setScore(rpg, board);
 	}
 

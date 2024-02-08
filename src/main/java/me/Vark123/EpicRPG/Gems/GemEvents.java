@@ -50,9 +50,6 @@ public class GemEvents {
 	private EventCreator<InventoryClickEvent> powerfulClickEventCreator(){
 		
 		Consumer<InventoryClickEvent> event = e -> {
-			if(e.isCancelled())
-				return;
-			
 			Inventory inv = e.getClickedInventory();
 			if(inv == null || !inv.getType().equals(InventoryType.CHEST)) 
 				return;
@@ -159,9 +156,6 @@ public class GemEvents {
 	private EventCreator<InventoryClickEvent> annihilusClickEventCreator(){
 		
 		Consumer<InventoryClickEvent> event = e -> {
-			if(e.isCancelled())
-				return;
-			
 			Inventory inv = e.getClickedInventory();
 			if(inv == null || !inv.getType().equals(InventoryType.CHEST)) 
 				return;
@@ -255,9 +249,6 @@ public class GemEvents {
 	private EventCreator<InventoryClickEvent> annihilusUpgradeClickEventCreator(){
 		
 		Consumer<InventoryClickEvent> event = e -> {
-			if(e.isCancelled())
-				return;
-			
 			Inventory inv = e.getView().getTopInventory();
 			if(e.getClickedInventory() == null || !e.getClickedInventory().equals(inv))
 				return;

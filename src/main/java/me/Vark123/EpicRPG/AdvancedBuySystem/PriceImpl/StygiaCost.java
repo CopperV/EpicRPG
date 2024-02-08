@@ -18,12 +18,16 @@ public class StygiaCost extends AdvancedBuyCost {
 	@Override
 	public boolean check(Player p) {
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
+		if(rpg == null)
+			return false;
 		return !(rpg.getVault().getStygia() < amount);
 	}
 
 	@Override
 	public void spend(Player p) {
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
+		if(rpg == null)
+			return;
 		rpg.getVault().removeStygia(amount);
 	}
 

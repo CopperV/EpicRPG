@@ -14,10 +14,10 @@ import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 
 public class ScaleDamageModifierEffectListener implements Listener {
 	
-	private static final double MAG_SCALE = 0.9;
-	private static final double WOJ_SCALE = 0.85;
-	private static final double MYS_SCALE = 0.7;
-	private static final double OBY_SCALE = 1.2;
+	private static final double MAG_SCALE = 0.48;
+	private static final double WOJ_SCALE = 0.59;
+	private static final double MYS_SCALE = 0.51;
+	private static final double OBY_SCALE = 0.75;
 	
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onMod(EpicEffectEvent e) {

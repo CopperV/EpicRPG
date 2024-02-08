@@ -1,8 +1,11 @@
 package me.Vark123.EpicRPG.Core.Listeners;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -15,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.Vark123.EpicRPG.Main;
 import me.clip.placeholderapi.PlaceholderAPI;
 
@@ -38,15 +42,29 @@ public class ExecutableItemUseListener implements Listener {
 			return;
 
 		NBTItem nbtit = new NBTItem(item);
-		if(!nbtit.hasTag("epic_command"))
+		if(!nbtit.hasTag("epic_command") && !nbtit.hasTag("epic_commands"))
 			return;
 		
 		if(cooldowns.contains(p.getUniqueId()))
 			return;
-
-		String command = nbtit.getString("epic_command");
-		command = PlaceholderAPI.setPlaceholders(p, command);
-		Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), command);
+		
+		List<String> commands = new LinkedList<>();
+		if(nbtit.hasTag("epic_command")) {
+			String command = nbtit.getString("epic_command");
+			command = PlaceholderAPI.setPlaceholders(p, command);
+			commands.add(command);
+		}
+		if(nbtit.hasTag("epic_commands")) {
+			if(cooldowns.contains(p.getUniqueId()))
+				return;
+			ReadWriteNBT cmdsNBT = nbtit.getCompound("epic_commands");
+			commands.addAll(cmdsNBT.getKeys().stream()
+				.map(key -> cmdsNBT.getString(key))
+				.map(cmd -> PlaceholderAPI.setPlaceholders(p, cmd))
+				.collect(Collectors.toList()));
+		}
+		
+		commands.forEach(command -> Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), command));
 		if(item.getAmount() != 1)
 			item.setAmount(item.getAmount()-1);
 		else

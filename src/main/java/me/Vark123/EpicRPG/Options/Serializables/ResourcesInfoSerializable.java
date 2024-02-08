@@ -17,6 +17,7 @@ public class ResourcesInfoSerializable implements ISerializable {
 	private boolean stygiaInfo = true;
 	private boolean coinsInfo = true;
 	private boolean rudaInfo = true;
+	private boolean clanExpInfo = true;
 	
 	@Override
 	public void serialize(ConfigurationSection section) {
@@ -25,6 +26,7 @@ public class ResourcesInfoSerializable implements ISerializable {
 		section.set("stygia", stygiaInfo);
 		section.set("coins", coinsInfo);
 		section.set("ruda", rudaInfo);
+		section.set("clan-exp", clanExpInfo);
 	}
 	
 	@Override
@@ -34,6 +36,7 @@ public class ResourcesInfoSerializable implements ISerializable {
 		stygiaInfo = section.getBoolean("stygia");
 		coinsInfo = section.getBoolean("coins");
 		rudaInfo = section.getBoolean("ruda");
+		clanExpInfo = section.getBoolean("clan-exp");
 	}
 	
 	@Override
@@ -44,6 +47,7 @@ public class ResourcesInfoSerializable implements ISerializable {
 				.stygiaInfo(stygiaInfo)
 				.coinsInfo(coinsInfo)
 				.rudaInfo(rudaInfo)
+				.clanExpInfo(clanExpInfo)
 				.build();
 	}
 

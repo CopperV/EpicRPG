@@ -52,7 +52,7 @@ public class MeleeCalculator implements IDamageCalculator {
 		RpgPlayerInfo info = rpg.getInfo();
 		RpgModifiers modifiers = rpg.getModifiers();
 		
-		boolean crit = DamageUtils.checkCrit(rpg);
+		boolean crit = DamageUtils.checkCrit(rpg, victim);
 		if(modifiers.hasPenetracja())
 			crit = true;
 		pair.setValue(crit);
@@ -63,9 +63,8 @@ public class MeleeCalculator implements IDamageCalculator {
 		}
 		
 		if(victim instanceof Player) {
-			double value = crit ? .15 : .1;
-			dmg = stats.getFinalObrazenia() * value;
-			dmg = DamageUtils.randomizeDamage(dmg);
+			dmg = stats.getFinalObrazenia();
+			dmg = DamageUtils.randomizeDamage(dmg) * 0.6;
 			pair.setKey(dmg);
 			return pair;
 		}
@@ -85,28 +84,28 @@ public class MeleeCalculator implements IDamageCalculator {
 		double wspDmgMana = 0;
 		
 		if(crit) {
-			dmg = Math.ceil(1.3 * stats.getFinalObrazenia());
+			dmg = Math.ceil(1.3 * stats.getFinalObrazenia() + 1);
 			wspDmgStr = 0.65;
-			wspDmgZr = 0.9;
+			wspDmgZr = 0.85;
 			wspDmgZd = 0.05;
 			wspDmgInt = 0.05;
 		} else {
-			dmg = Math.ceil(stats.getFinalObrazenia());
+			dmg = Math.ceil(stats.getFinalObrazenia() + 1);
 			wspDmgStr = 0.65;
-			wspDmgZr = 0.45;
+			wspDmgZr = 0.5;
 			wspDmgZd = 0.01;
 			wspDmgInt = 0.01;
 		}
 		
 		if(info.getLevel() < 70) {
-			dmgZd = wspDmgZd * stats.getFinalZdolnosci() * dmg / (100*0.05*info.getLevel());
+			dmgZd = wspDmgZd * stats.getFinalZdolnosciMysliwskie() * dmg / (100*0.05*info.getLevel());
 			dmgZr = wspDmgZr * stats.getFinalZrecznosc() * dmg / (100*0.05*info.getLevel());
 			dmgStr = wspDmgStr * stats.getFinalSila() * dmg / (100*0.05*info.getLevel());
 			dmgInt = wspDmgInt * stats.getFinalInteligencja() * dmg / (100*0.05*info.getLevel());
 			dmgWytrz = wspDmgWytrz * stats.getFinalWytrzymalosc() * dmg / (100*0.05*info.getLevel());
 			dmgMana = wspDmgMana * stats.getFinalMana() * dmg / (100*0.05*info.getLevel());
 		} else {
-			dmgZd = wspDmgZd * stats.getFinalZdolnosci() * dmg / (100*0.05*70);
+			dmgZd = wspDmgZd * stats.getFinalZdolnosciMysliwskie() * dmg / (100*0.05*70);
 			dmgZr = wspDmgZr * stats.getFinalZrecznosc() * dmg / (100*0.05*70);
 			dmgStr = wspDmgStr * stats.getFinalSila() * dmg / (100*0.05*70);
 			dmgInt = wspDmgInt * stats.getFinalInteligencja() * dmg / (100*0.05*70);

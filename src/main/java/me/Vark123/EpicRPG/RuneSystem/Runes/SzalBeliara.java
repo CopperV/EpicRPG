@@ -10,6 +10,7 @@ import org.bukkit.Particle.DustOptions;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -22,6 +23,7 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
+import io.lumine.mythic.bukkit.MythicBukkit;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.FightSystem.RuneDamage;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
@@ -63,7 +65,7 @@ public class SzalBeliara extends ARune {
 				p.getWorld().spawnParticle(Particle.REDSTONE, loc2, 4, 0.1f, 0.1f, 0.1f, 0.02f, dust1);
 				p.getWorld().spawnParticle(Particle.REDSTONE, loc2, 4, 0f, 0f, 0f, 0.25f, dust2);
 				
-				loc.getWorld().getNearbyEntities(loc, 3, 3, 3, e -> {
+				loc2.getWorld().getNearbyEntities(loc2, 3, 3, 3, e -> {
 					AxisAlignedBB aabb = ((CraftEntity)e).getHandle().cw();
 					AxisAlignedBB aabb2 = new AxisAlignedBB(loc2.getX()-0.6, loc2.getY()-0.6, loc2.getZ()-0.6, loc2.getX()+0.6, loc2.getY()+0.6, loc2.getZ()+0.6);
 					if(!aabb.c(aabb2))
@@ -81,6 +83,9 @@ public class SzalBeliara extends ARune {
 							return true;
 						return false;
 					}
+					if(!MythicBukkit.inst().getMobManager().isMythicMob(e)
+							&& e.getType().equals(EntityType.ARMOR_STAND))
+						return false;
 					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 						return false;
 					return true;

@@ -314,7 +314,9 @@ public final class ScoreboardOptionMenuManager {
 				public void anvil(Player player, Builder anvil) {
 					ItemStack it = new ItemStack(Material.PAPER);
 					ItemMeta im = it.getItemMeta();
-					im.setDisplayName("TWOJ WLASNY TEKST");
+//					im.setDisplayName("TWOJ WLASNY TEKST");
+					String odlText = option.getValue().getLines().get(lineNum).replace('§', '&');
+					im.setDisplayName(odlText);
 					it.setItemMeta(im);
 					
 					anvil.itemLeft(it);

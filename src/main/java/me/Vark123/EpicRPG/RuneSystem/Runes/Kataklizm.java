@@ -12,6 +12,7 @@ import org.bukkit.Particle.DustOptions;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -24,6 +25,7 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
+import io.lumine.mythic.bukkit.MythicBukkit;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.FightSystem.RuneDamage;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
@@ -168,6 +170,9 @@ public class Kataklizm extends ARune {
 								return true;
 							return false;
 						}
+						if(!MythicBukkit.inst().getMobManager().isMythicMob(e)
+								&& e.getType().equals(EntityType.ARMOR_STAND))
+							return false;
 						if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 							return false;
 						return true;
@@ -253,6 +258,9 @@ public class Kataklizm extends ARune {
 							return true;
 						return false;
 					}
+					if(!MythicBukkit.inst().getMobManager().isMythicMob(e)
+							&& e.getType().equals(EntityType.ARMOR_STAND))
+						return false;
 					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 						return false;
 					return true;
@@ -287,6 +295,9 @@ public class Kataklizm extends ARune {
 							return true;
 						return false;
 					}
+					if(!MythicBukkit.inst().getMobManager().isMythicMob(e)
+							&& e.getType().equals(EntityType.ARMOR_STAND))
+						return false;
 					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 						return false;
 					return true;
@@ -294,7 +305,7 @@ public class Kataklizm extends ARune {
 					Location loc2 = e.getLocation();
 					Vector p1 = new Vector(loc.getX(), loc.getY(), loc.getZ());
 					Vector p2 = new Vector(loc2.getX(), loc2.getY(), loc2.getZ());
-					Vector vec = p1.clone().subtract(p2).normalize().multiply(2/loc2.distance(loc));
+					Vector vec = p1.clone().subtract(p2).setY(-1).normalize().multiply(2/loc2.distance(loc));
 					e.setVelocity(vec);
 				});
 			}
@@ -340,6 +351,9 @@ public class Kataklizm extends ARune {
 							return true;
 						return false;
 					}
+					if(!MythicBukkit.inst().getMobManager().isMythicMob(e)
+							&& e.getType().equals(EntityType.ARMOR_STAND))
+						return false;
 					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 						return false;
 					return true;
@@ -457,6 +471,9 @@ public class Kataklizm extends ARune {
 								return true;
 							return false;
 						}
+						if(!MythicBukkit.inst().getMobManager().isMythicMob(e)
+								&& e.getType().equals(EntityType.ARMOR_STAND))
+							return false;
 						if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 							return false;
 						return true;
@@ -521,14 +538,14 @@ public class Kataklizm extends ARune {
 				double z2 = radius * Math.cos(theta + jump);
 				Location loc1 = base.clone().add(x1,0,z1);
 				Location loc2 = base.clone().add(x2,0,z2);
-				loc1.getWorld().playSound(loc1, Sound.ENTITY_ENDER_DRAGON_FLAP, 1.2f, 0.8f);
-				loc2.getWorld().playSound(loc2, Sound.ENTITY_ENDER_DRAGON_FLAP, 1.2f, 0.8f);
+				loc1.getWorld().playSound(loc1, Sound.ENTITY_ENDER_DRAGON_FLAP, 0.4f, 0.8f);
+				loc2.getWorld().playSound(loc2, Sound.ENTITY_ENDER_DRAGON_FLAP, 0.4f, 0.8f);
 				effect5Tornado(loc1,alfa);
 				effect5Tornado(loc2,alfa);
 				
 				loc1.getWorld().getNearbyEntities(loc1, 3, 3, 3).stream().filter(e -> {
 					AxisAlignedBB aabb = ((CraftEntity)e).getHandle().cw();
-					AxisAlignedBB aabb2 = new AxisAlignedBB(loc1.getX()-1, loc1.getY()-5, loc1.getZ()-1, loc1.getX()+1, loc1.getY()+5, loc1.getZ()+1);
+					AxisAlignedBB aabb2 = new AxisAlignedBB(loc1.getX()-2, loc1.getY()-5, loc1.getZ()-2, loc1.getX()+2, loc1.getY()+5, loc1.getZ()+2);
 					if(!aabb.c(aabb2))
 						return false;
 					if(e.equals(p) || !(e instanceof LivingEntity))
@@ -544,6 +561,9 @@ public class Kataklizm extends ARune {
 							return true;
 						return false;
 					}
+					if(!MythicBukkit.inst().getMobManager().isMythicMob(e)
+							&& e.getType().equals(EntityType.ARMOR_STAND))
+						return false;
 					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 						return false;
 					return true;
@@ -567,7 +587,7 @@ public class Kataklizm extends ARune {
 				
 				loc2.getWorld().getNearbyEntities(loc2, 3, 3, 3).stream().filter(e -> {
 					AxisAlignedBB aabb = ((CraftEntity)e).getHandle().cw();
-					AxisAlignedBB aabb2 = new AxisAlignedBB(loc2.getX()-1, loc2.getY()-5, loc2.getZ()-1, loc2.getX()+1, loc2.getY()+5, loc2.getZ()+1);
+					AxisAlignedBB aabb2 = new AxisAlignedBB(loc2.getX()-2, loc2.getY()-5, loc2.getZ()-2, loc2.getX()+2, loc2.getY()+5, loc2.getZ()+2);
 					if(!aabb.c(aabb2))
 						return false;
 					if(e.equals(p) || !(e instanceof LivingEntity))
@@ -583,6 +603,9 @@ public class Kataklizm extends ARune {
 							return true;
 						return false;
 					}
+					if(!MythicBukkit.inst().getMobManager().isMythicMob(e)
+							&& e.getType().equals(EntityType.ARMOR_STAND))
+						return false;
 					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 						return false;
 					return true;
@@ -692,6 +715,9 @@ public class Kataklizm extends ARune {
 							return true;
 						return false;
 					}
+					if(!MythicBukkit.inst().getMobManager().isMythicMob(e)
+							&& e.getType().equals(EntityType.ARMOR_STAND))
+						return false;
 					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 						return false;
 					return true;

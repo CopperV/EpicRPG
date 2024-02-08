@@ -27,7 +27,7 @@ public class MeleeDragonAttackListener implements Listener {
 		Player p = e.getPlayer();
 		Location pEyeLoc = p.getEyeLocation();
 		RayTraceResult result = p.getWorld()
-				.rayTraceEntities(pEyeLoc, pEyeLoc.getDirection(), 6, 1, entity -> {
+				.rayTraceEntities(pEyeLoc, pEyeLoc.getDirection(), 6.5, 3, entity -> {
 					if (!MythicBukkit.inst().getAPIHelper().isMythicMob(entity))
 						return false;
 					if (entity.isDead())

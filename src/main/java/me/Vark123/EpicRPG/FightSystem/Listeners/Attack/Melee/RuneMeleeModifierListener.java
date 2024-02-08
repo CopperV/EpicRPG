@@ -1,5 +1,6 @@
 package me.Vark123.EpicRPG.FightSystem.Listeners.Attack.Melee;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -47,17 +48,18 @@ public class RuneMeleeModifierListener implements Listener {
 			modifier += 0.75;
 		if(modifiers.hasMord())
 			modifier += 0.9;
-		//TODO
-		//PRZEMYŚLEC CZY NIE DAĆ W EFEKTY
+		
 		if(modifiers.hasCiosWPlecy()) {
 			Entity victim = e.getVictim();
-			Vector pDir = damager.getLocation().getDirection();
-			Vector eDir = victim.getLocation().getDirection();
-			double xv = pDir.getX() * eDir.getZ() - pDir.getZ() * eDir.getX();
-			double zv = pDir.getX() * eDir.getX() + pDir.getZ() * eDir.getZ();
-			double angle = Math.atan2(xv, zv);
-			double angleInDegrees = (angle * 180) / Math.PI;
-			if(Math.abs(angleInDegrees) < 45) {
+			Location loc1 = victim.getLocation();
+			Location loc2 = damager.getLocation();
+			Vector vec1 = loc1.clone().subtract(loc2).toVector().normalize();
+			Vector vec2 = loc1.getDirection();
+			
+			vec1.setY(0).normalize();
+			vec2.setY(0).normalize();
+			double calcAngle = Math.toDegrees(vec1.angle(vec2)) - 180;
+			if(Math.abs(calcAngle) > 135) {
 				p.playSound(p.getLocation(), Sound.BLOCK_GRINDSTONE_USE, 2, 2);
 				p.getWorld().spawnParticle(Particle.SWEEP_ATTACK, p.getLocation().add(0,1,0), 7, .5f, .5f, .5f, .05f);
 				modifier += 1.25;

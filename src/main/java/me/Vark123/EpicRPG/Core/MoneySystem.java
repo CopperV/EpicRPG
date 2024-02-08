@@ -39,7 +39,7 @@ public class MoneySystem {
 						ResourcesInfoSerializable option = (ResourcesInfoSerializable) pOption.getValue();
 						if(!option.isMoneyInfo())
 							return;
-						rpg.getPlayer().sendMessage("§e§o+"+ String.format("%.2f", _amount) +"$ §7[§e§o"+String.format("%.2f", _amount)+"$§7]");
+						rpg.getPlayer().sendMessage("§e§o+"+ String.format("%.2f", _amount) +"$ §7[§e§o"+String.format("%.2f", vault.getMoney())+"$§7]");
 					});
 			});
 	}

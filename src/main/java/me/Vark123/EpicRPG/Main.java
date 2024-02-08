@@ -3,6 +3,8 @@ package me.Vark123.EpicRPG;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -12,6 +14,7 @@ import lombok.Getter;
 import me.Vark123.EpicRPG.Files.FileOperations;
 import me.Vark123.EpicRPG.MySQL.DBOperations;
 import me.Vark123.EpicRPG.Placeholders.PlayerPlaceholders;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.Components.Scoreboard.ScoreboardPlaceholders;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import net.milkbowl.vault.economy.Economy;
@@ -34,11 +37,15 @@ public class Main extends JavaPlugin {
 	@Getter
 	private ProtocolManager protocolManager;
 	
+	@Getter
+	private BukkitTask saveTask;
+	
 	@Override
 	public void onEnable() {
 		instance = this;
 		
 		FileOperations.checkFiles();
+		Config.get().init();
 		DBOperations.init();
 		
 		checkEco();
@@ -55,19 +62,27 @@ public class Main extends JavaPlugin {
 		
 		EventListenerManager.registerEvents();
 		CommandExecutorManager.setExecutors();
-		// TODO Auto-generated method stub
+		
+		createSaveTask();
+		
 		super.onEnable();
 	}
 	
 	@Override
 	public void onDisable() {
+		if(saveTask != null && !saveTask.isCancelled())
+			saveTask.cancel();
+		
+		Bukkit.getOnlinePlayers().stream()
+			.map(PlayerManager.getInstance()::getRpgPlayer)
+			.forEach(DBOperations::savePlayer);
+		
 		DBOperations.close();
 		FileOperations.saveBlackrockCompleted();
 		FileOperations.saveBoosters();
 		EpicRPGMobManager.getInstance().clear();
 		
 		playerPlaceholders.unregister();
-		// TODO Auto-generated method stub
 		super.onDisable();
 	}
 	
@@ -97,6 +112,20 @@ public class Main extends JavaPlugin {
 			return false;
 		}
 		return true;
+	}
+	
+	private void createSaveTask() {
+		this.saveTask = new BukkitRunnable() {
+			@Override
+			public void run() {
+				if(isCancelled())
+					return;
+				
+				Bukkit.getOnlinePlayers().stream()
+					.map(PlayerManager.getInstance()::getRpgPlayer)
+					.forEach(DBOperations::savePlayer);
+			}
+		}.runTaskTimerAsynchronously(this, 0, Config.get().getSaveInterval());
 	}
 
 	public static Main getInstance() {

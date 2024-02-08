@@ -129,7 +129,7 @@ public class ScoreboardPlaceholders extends PlaceholderExpansion {
 			case "zr":
 				return ChatColor.translateAlternateColorCodes('&', "  &bZrecznosc: &e"+rpg.getStats().getFinalZrecznosc());
 			case "zd":
-				return ChatColor.translateAlternateColorCodes('&', "  &bZdolnosci mysliwskie: &e"+rpg.getStats().getFinalZdolnosci());
+				return ChatColor.translateAlternateColorCodes('&', "  &bZdolnosci mysliwskie: &e"+rpg.getStats().getFinalZdolnosciMysliwskie());
 			case "walka":
 				return ChatColor.translateAlternateColorCodes('&', "  &bWalka: &e"+rpg.getStats().getFinalWalka());
 			case "krag":

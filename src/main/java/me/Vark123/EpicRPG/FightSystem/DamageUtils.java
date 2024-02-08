@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang.mutable.MutableDouble;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -37,12 +38,25 @@ public final class DamageUtils {
 		return randomizeDamage(dmg, min, max);
 	}
 	
+	@Deprecated
 	public static boolean checkCrit(RpgPlayer rpg) {
 		CritCalculateEvent event = new CritCalculateEvent(rpg, 0);
 		Bukkit.getPluginManager().callEvent(event);
 		
 		int chance = event.getChance();
 		int los = rand.nextInt(500);
+		
+		return los < chance;
+	}
+	
+	public static boolean checkCrit(RpgPlayer rpg, Entity victim) {
+		CritCalculateEvent event = new CritCalculateEvent(rpg, 0);
+		Bukkit.getPluginManager().callEvent(event);
+		
+		int max = victim instanceof Player ? 2500 : 500;
+		
+		int chance = event.getChance();
+		int los = rand.nextInt(max);
 		
 		return los < chance;
 	}
@@ -53,9 +67,13 @@ public final class DamageUtils {
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		RpgStats stats = rpg.getStats();
 		double los = rand.nextDouble(100);
-		double chance = (stats.getFinalZdolnosci()+stats.getFinalZrecznosc())/65.;
-		if(chance > 25)
-			chance = 25;
+		double chance = (stats.getFinalZdolnosciMysliwskie()+stats.getFinalZrecznosc())/65.;
+		
+		if(rpg.getModifiers().hasWtopienie())
+			chance += 0.08;
+		
+		if(chance > 30)
+			chance = 30;
 		if(los >= chance)
 			return false;
 		return true;

@@ -8,6 +8,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import me.Vark123.EpicRPG.FightSystem.DamageManager;
 import me.Vark123.EpicRPG.FightSystem.EpicDamageType;
@@ -22,10 +23,11 @@ import me.Vark123.EpicRPG.Utils.Pair;
 
 public class EntityDamageListener implements Listener {
 
-	@EventHandler
-	public void onTestDamage(EntityDamageEvent e) {
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onDamage(EntityDamageEvent e) {
 		if(e.isCancelled())
 			return;
+		
 		if(e instanceof EntityDamageByEntityEvent)
 			return;
 		
@@ -33,7 +35,52 @@ public class EntityDamageListener implements Listener {
 		if(!(victim instanceof Player))
 			return;
 		
-		Bukkit.broadcastMessage("Test EntityDamageEvent "+victim.getName()+" "+e.getCause().name());
+		DamageCause cause = e.getCause();
+		if(cause.equals(DamageCause.FALL)
+				|| cause.equals(DamageCause.LAVA)
+				|| cause.equals(DamageCause.VOID))
+			return;
+		
+		double dmg = e.getDamage();
+		Pair<Double, Boolean> damageInfo = DamageManager.getInstance()
+				.getDefenseCalculator().calc(null, victim, dmg);
+		
+		EpicDefenseEvent defenseEvent = new EpicDefenseEvent(null, victim, EpicDamageType.CUSTOM,
+				damageInfo.getKey(), 1, damageInfo);
+		Bukkit.getPluginManager().callEvent(defenseEvent);
+		
+		if(defenseEvent.isCancelled()) {
+			e.setCancelled(true);
+			return;
+		}
+		
+		dmg = defenseEvent.getDmg() * defenseEvent.getModifier();
+		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer((Player) victim);
+		int level = rpg.getInfo().getLevel();
+		if(dmg < ((level / 10.) + 2))
+			dmg = (level / 10.) + 2;
+		
+		EpicEffectEvent effectEvent = new EpicEffectEvent(null, victim, EpicDamageType.CUSTOM,
+				dmg, 1, damageInfo);
+		Bukkit.getPluginManager().callEvent(effectEvent);
+		
+		if(effectEvent.isCancelled()) {
+			e.setCancelled(true);
+			return;
+		}
+		
+		if(effectEvent.getDmg() <= 0) {
+			e.setCancelled(true);
+			return;
+		}
+		
+		dmg = effectEvent.getFinalDamage();
+		if(dmg <= 0) {
+			e.setCancelled(true);
+			return;
+		}
+		
+		e.setDamage(dmg);
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)

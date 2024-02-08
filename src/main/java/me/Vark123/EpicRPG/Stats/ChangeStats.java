@@ -23,20 +23,29 @@ public class ChangeStats {
 	private static final String STR_SET_METHOD = "setFinal";
 
 	public static void change(RpgPlayer rpg) {
-		change(rpg, rpg.getPlayer().getInventory().getItemInMainHand());
+		change(rpg, false);
 	}
 
+	public static void change(RpgPlayer rpg, boolean useBackItem) {
+		change(rpg, rpg.getPlayer().getInventory().getItemInMainHand(), useBackItem);
+	}
+	
 	public static void change(RpgPlayer rpg, ItemStack weapon) {
+		change(rpg, weapon, false);
+	}
+	
+	public static void change(RpgPlayer rpg, ItemStack weapon, boolean useBackItem) {
 		Player p = rpg.getPlayer();
 		
 		RpgJewelry jewelry = rpg.getJewelry();
 		RpgStats stats = rpg.getStats();
+		ItemStack backItem = rpg.getBackItem();
 		rpg.updateHp();
 		stats.setFinalInteligencja(stats.getInteligencja()+stats.getPotionInteligencja());
 		stats.setFinalSila(stats.getSila()+stats.getPotionSila());
 		stats.setFinalWytrzymalosc(stats.getWytrzymalosc()+stats.getPotionWytrzymalosc());
 		stats.setFinalZrecznosc(stats.getZrecznosc()+stats.getPotionZrecznosc());
-		stats.setFinalZdolnosci(stats.getZdolnosci()+stats.getPotionZdolnosci());
+		stats.setFinalZdolnosciMysliwskie(stats.getZdolnosciMysliwskie()+stats.getPotionZdolnosciMysliwskie());
 		stats.setFinalMana(stats.getMana()+stats.getPotionMana());
 		stats.setFinalWalka(stats.getWalka()+stats.getPotionWalka());
 		stats.setFinalOchrona(stats.getOchrona() + stats.getPotionOchrona());
@@ -56,6 +65,9 @@ public class ChangeStats {
 		if((p.getEquipment().getBoots() != null) && (p.getEquipment().getBoots().getItemMeta().hasLore()))
 			itemy.put(36, p.getEquipment().getBoots());
 		
+		if(useBackItem && backItem != null && backItem.getItemMeta().hasLore())
+			itemy.put(-1, backItem);
+		
 		jewelry.getAkcesoria().forEach((i, jewItem) -> {
 			ItemStack tmp = jewItem.getItem();
 			if(tmp == null || tmp.getType().equals(Material.AIR) || !tmp.hasItemMeta() || !tmp.getItemMeta().hasLore())
@@ -72,25 +84,35 @@ public class ChangeStats {
 				changeStatsItem(stats, off);
 		}
 		
-		//TODO
-		//Trzeba sprawdzic czy sie nie buguje
-		for(int i = 0; i < itemy.size(); ++i) {
+		int lastSize = Integer.MAX_VALUE;
+		int presentSize = itemy.size();
+		while(true) {
+			if(presentSize >= lastSize)
+				break;
 			if(weaponCheck && CheckStats.check(rpg, weapon)) {
 				changeStatsItem(stats, weapon);
 				weaponCheck = false;
 			}
 			itemy.forEach((slot, item) -> {
 				if(CheckStats.check(rpg, item)) {
-					changeStatsItem(stats, item);
+					if(slot == -1) 
+						changeStatsBackItem(stats, item);
+					else
+						changeStatsItem(stats, item);
 					itemy.remove(slot);
 				}
 			});
+			
+			lastSize = presentSize;
+			presentSize = itemy.size();
 		}
 		
 		itemy.forEach((slot, item) -> {
 			p.sendMessage("§cNie mozesz zalozyc "+item.getItemMeta().getDisplayName()+" §cna siebie!");
 			if(akcesoria.containsKey(slot+1000) && akcesoria.get(slot+1000).equals(item)) {
 				dropAkcesoria(jewelry, item, slot);
+			} else if(slot == -1) {
+				dropBackItem(rpg);
 			} else {
 				dropItem(p, item, slot);
 			}
@@ -100,6 +122,22 @@ public class ChangeStats {
 			changeStatsItem(stats, weapon);
 			weaponCheck = false;
 		}
+	}
+	
+	private static void dropBackItem(RpgPlayer rpg) {
+		ItemStack it = rpg.getBackItem();
+		if(it == null)
+			return;
+		rpg.setBackItem(null);
+		Player p = rpg.getPlayer();
+		PlayerInventory inv = p.getInventory();
+		int freeSlot = inv.firstEmpty();
+		if(freeSlot >= 0 && freeSlot < 36) {
+			inv.setItem(freeSlot, it);
+		}else {
+			p.getWorld().dropItem(p.getLocation(), it);
+		}
+		p.updateInventory();
 	}
 	
 	private static void dropAkcesoria(RpgJewelry jewelry, ItemStack item, int slot) {
@@ -135,6 +173,54 @@ public class ChangeStats {
 				!item.hasItemMeta() ||
 				!item.getItemMeta().hasLore())
 			return;
+
+		item.getItemMeta().getLore().parallelStream().filter(s -> {
+			if(!s.contains(": §7"))
+				return false;
+			if(!s.contains("§4- §8"))
+				return false;
+			if(s.contains("Klasa") || s.contains("Krag"))
+				return false;
+			return true;
+		}).forEach(s -> {
+			s = s.replace("+", "");
+			int toAdd = Integer.parseInt(ChatColor.stripColor(s.split(": ")[1]));
+			s = s.replace("§4- §8", "");
+			s = s.split(":")[0];
+			s = Utils.convertToClassConvention(s);
+			
+			Class<?> _class = stats.getClass();
+			Method getMethod;
+			Method setMethod;
+			
+			try {
+				getMethod = _class.getMethod(STR_GET_METHOD+s);
+				setMethod = _class.getMethod(STR_SET_METHOD+s, int.class);
+			} catch (NoSuchMethodException e) {
+				return;
+			} catch (SecurityException e) {
+				return;
+			}
+			
+			try {
+				setMethod.invoke(stats, 
+						((int)getMethod.invoke(stats)) + toAdd);
+			} catch (IllegalAccessException e) {
+				return;
+			} catch (IllegalArgumentException e) {
+				return;
+			} catch (InvocationTargetException e) {
+				return;
+			}
+		});
+	}
+	
+	private static void changeStatsBackItem(RpgStats stats, ItemStack item) {
+		if(item == null ||
+				item.getType().equals(Material.AIR) ||
+				!item.hasItemMeta() ||
+				!item.getItemMeta().hasLore())
+			return;
 		
 		item.getItemMeta().getLore().parallelStream().filter(s -> {
 			if(!s.contains(": §7"))
@@ -142,6 +228,9 @@ public class ChangeStats {
 			if(!s.contains("§4- §8"))
 				return false;
 			if(s.contains("Klasa") || s.contains("Krag"))
+				return false;
+			if(s.contains("Sila") || s.contains("Wytrzymalosc") 
+					|| s.contains("Zrecznosc") || s.contains("Zdolnosci"))
 				return false;
 			return true;
 		}).forEach(s -> {

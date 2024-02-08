@@ -31,6 +31,7 @@ import me.Vark123.EpicRPG.Core.Commands.SystemCmds.DragonCoinsBuyCommand;
 import me.Vark123.EpicRPG.Core.Commands.SystemCmds.DragonCoinsChangeCommand;
 import me.Vark123.EpicRPG.Core.Commands.SystemCmds.DragonCoinsCmdRunCommand;
 import me.Vark123.EpicRPG.Core.Commands.SystemCmds.EventCurrencyChangeCommand;
+import me.Vark123.EpicRPG.Core.Commands.SystemCmds.ExpChangeCommand;
 import me.Vark123.EpicRPG.Core.Commands.SystemCmds.RudaBuyCommand;
 import me.Vark123.EpicRPG.Core.Commands.SystemCmds.RudaChangeCommand;
 import me.Vark123.EpicRPG.Core.Commands.SystemCmds.StygiaBuyCommand;
@@ -38,6 +39,7 @@ import me.Vark123.EpicRPG.Core.Commands.SystemCmds.StygiaChangeCommand;
 import me.Vark123.EpicRPG.HorseSystem.HorseSummonCommand;
 import me.Vark123.EpicRPG.Jewelry.JewelryCommand;
 import me.Vark123.EpicRPG.MenuSystem.MenuCommand;
+import me.Vark123.EpicRPG.Players.AdditionalMenuCommand;
 import me.Vark123.EpicRPG.Reputation.ReputationCommand;
 import me.Vark123.EpicRPG.Reputation.ReputationModCommand;
 import me.Vark123.EpicRPG.Stats.StatsCommand;
@@ -46,6 +48,7 @@ public class CommandExecutorManager {
 
 	public static void setExecutors() {
 		Bukkit.getPluginCommand("bizuteria").setExecutor(new JewelryCommand());
+		Bukkit.getPluginCommand("ekwipunek").setExecutor(new AdditionalMenuCommand());
 		Bukkit.getPluginCommand("reputation").setExecutor(new ReputationCommand());
 		Bukkit.getPluginCommand("reputationmod").setExecutor(new ReputationModCommand());
 		Bukkit.getPluginCommand("staty").setExecutor(new StatsCommand());
@@ -66,6 +69,7 @@ public class CommandExecutorManager {
 		Bukkit.getPluginCommand("brbuy").setExecutor(new RudaBuyCommand());
 		Bukkit.getPluginCommand("ruda").setExecutor(new RudaChangeCommand());
 		Bukkit.getPluginCommand("event").setExecutor(new EventCurrencyChangeCommand());
+		Bukkit.getPluginCommand("epicexp").setExecutor(new ExpChangeCommand());
 
 		Bukkit.getPluginCommand("kon").setExecutor(new HorseSummonCommand());
 		Bukkit.getPluginCommand("rotacja").setExecutor(new RotacjaCommand());

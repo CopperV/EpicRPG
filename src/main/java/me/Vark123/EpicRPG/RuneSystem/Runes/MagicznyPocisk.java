@@ -6,6 +6,7 @@ import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -19,6 +20,7 @@ import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import de.slikey.effectlib.util.MathUtils;
+import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.utils.VectorUtils;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.FightSystem.RuneDamage;
@@ -75,6 +77,9 @@ public class MagicznyPocisk extends ARune {
 							return true;
 						return false;
 					}
+					if(!MythicBukkit.inst().getMobManager().isMythicMob(e)
+							&& e.getType().equals(EntityType.ARMOR_STAND))
+						return false;
 					if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 						return false;
 					return true;

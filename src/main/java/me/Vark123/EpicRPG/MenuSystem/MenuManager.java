@@ -11,6 +11,7 @@ import me.Vark123.EpicRPG.Klejnoty.KlejnotyManager;
 import me.Vark123.EpicRPG.KosturSystem.KosturMenuManager;
 import me.Vark123.EpicRPG.MMExtension.RepairSystem.MMRepairManager;
 import me.Vark123.EpicRPG.MerchantSystem.MerchantManager;
+import me.Vark123.EpicRPG.Players.AdditionalMenuManager;
 import me.Vark123.EpicRPG.RubySystem.RubyManager;
 import me.Vark123.EpicRPG.RuneSystem.Runes.KamiennyObserwator;
 import me.Vark123.EpicRPG.Stats.ResetStatsMenuManager;
@@ -86,6 +87,12 @@ public class MenuManager {
 				return true;
 			case 20:
 				BackpackManager.getInstance().openBackpackUpgradeMenu(p);
+				return true;
+			case 21:
+				AdditionalMenuManager.get().openBaseMenu(p);
+				return true;
+			case 22:
+				SzponBeliaraManager.getInstance().openSzponUpgradeMenu(p);
 				return true;
 		}
 		return false;

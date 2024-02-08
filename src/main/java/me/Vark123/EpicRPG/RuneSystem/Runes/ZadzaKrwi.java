@@ -2,7 +2,9 @@ package me.Vark123.EpicRPG.RuneSystem.Runes;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -13,7 +15,6 @@ import org.bukkit.Sound;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -24,16 +25,11 @@ import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
 import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Events.AllyRangedRuneUseEvent;
 
-//TODO
-//Ogarnąć jakoś klany
-//Oraz party
 public class ZadzaKrwi extends ARune {
 
 	private static List<Player> effected = new ArrayList<>();
-	
-//	private List<OnlinePAFPlayer> list1 = new LinkedList<>();
-//	private List<OnlinePAFPlayer> list2 = new LinkedList<>();
 
 	public ZadzaKrwi(ItemStackRune dr, Player p) {
 		super(dr, p);
@@ -111,27 +107,25 @@ public class ZadzaKrwi extends ARune {
 			}.runTaskLater(Main.getInstance(), 60*10*20);
 		}
 		
-//		OnlinePAFPlayer pafPlayer = PAFPlayerManager.getInstance().getPlayer(p);
-//		PlayerParty party = PartyAPI.getParty(pafPlayer);
-//		Clan klan = ClansManager.getInstance().getClan(pafPlayer);
-//		
-//		if(party != null) list1 = party.getAllPlayers();
-//		if(klan != null) list2 = klan.getAllOnlineClanPlayers();
+		Collection<Player> affected = new HashSet<>();
+		affected.addAll(p.getNearbyEntities(dr.getObszar(), dr.getObszar(), dr.getObszar()).stream()
+				.filter(e -> {
+					if(!(e instanceof Player))
+						return false;
+					if(e.getLocation().distanceSquared(p.getLocation()) > dr.getObszar() * dr.getObszar())
+						return false;
+					Player tmp = (Player) e;
+					if(tmp.equals(p))
+						return false;
+					if(effected.contains(tmp))
+						return false;
+					return true;
+				}).map(e -> (Player) e)
+				.collect(Collectors.toSet()));
+		AllyRangedRuneUseEvent event = new AllyRangedRuneUseEvent(p, this, affected);
+		Bukkit.getPluginManager().callEvent(event);
 		
-		Collection<Entity> entities = p.getWorld().getNearbyEntities(p.getLocation(), dr.getObszar(), dr.getObszar(), dr.getObszar());
-		
-		entities.stream().filter(e -> {
-			if(!(e instanceof Player))
-				return false;
-			Player tmp = (Player) e;
-			if(effected.contains(tmp))
-				return false;
-//			OnlinePAFPlayer tmpPAF = PAFPlayerManager.getInstance().getPlayer(tmp);
-//			if(!(list1.contains(tmpPAF) || list2.contains(tmpPAF)))
-//				return false;
-			return true;
-		}).forEach(e -> {
-			Player tmp = (Player) e;
+		event.getAffectedPlayers().forEach(tmp -> {
 			RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(tmp);
 			tmp.playSound(tmp.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 5, 0.1f);
 			effected.add(tmp);

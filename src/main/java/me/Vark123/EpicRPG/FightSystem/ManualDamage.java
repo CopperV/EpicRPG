@@ -1,7 +1,7 @@
 package me.Vark123.EpicRPG.FightSystem;
 
+import org.bukkit.EntityEffect;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_18_R2.event.CraftEventFactory;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Projectile;
@@ -54,14 +54,24 @@ public class ManualDamage {
 			victim.setHealth(0);
 			return true;
 		}
+		
+		victim.setLastDamageCause(e);
+		victim.playEffect(EntityEffect.HURT);
+		victim.setHealth(victim.getHealth() - damage);
+		
 //		victim.setLastDamageCause(e);
-		DamageSource reason = getDamageSource(damager, victim, e.getCause());
-		EntityLiving target = ((CraftLivingEntity) victim).getHandle();
-		target.a(reason, (float) damage);
+//		victim.setNoDamageTicks(0);
+//		BukkitAdapter.adapt(victim).setNoDamageTicks(0);
+//		Bukkit.broadcastMessage("§aTest1 "+victim.getName()+"§r§f "+((int) victim.getHealth())+" "+((int) damage));
+//		DamageSource reason = getDamageSource(damager, victim, e.getCause());
+//		EntityLiving target = ((CraftLivingEntity) victim).getHandle();
+//		target.a(reason, (float) damage);
+//		victim.setNoDamageTicks(0);
+//		Bukkit.broadcastMessage("§bTest2 "+victim.getName()+"§r§f "+((int) victim.getHealth()));
 		return true;
 	}
 	
-	@SuppressWarnings("incomplete-switch")
+	@SuppressWarnings({ "incomplete-switch", "unused" })
 	private static DamageSource getDamageSource(org.bukkit.entity.Entity damager, LivingEntity victim, DamageCause cause) {
 		DamageSource src = DamageSource.n;
 		final Entity source = ((CraftEntity) damager).getHandle();

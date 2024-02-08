@@ -39,9 +39,6 @@ public class MMRepairEvents {
 	
 	private EventCreator<InventoryClickEvent> clickEventCreator(){
 		Consumer<InventoryClickEvent> event = e -> {
-			if(e.isCancelled())
-				return;
-			
 			int slot = e.getSlot();
 			if(slot != 49)
 				return;

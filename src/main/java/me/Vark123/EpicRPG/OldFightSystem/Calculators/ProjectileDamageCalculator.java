@@ -139,14 +139,14 @@ public class ProjectileDamageCalculator implements DamageCalculator {
 					}
 				
 					if(info.getLevel() < 70) {
-						dmgZd = wspDmgZd * stats.getFinalZdolnosci() * dmg / (100*0.04*info.getLevel());
+						dmgZd = wspDmgZd * stats.getFinalZdolnosciMysliwskie() * dmg / (100*0.04*info.getLevel());
 						dmgZr = wspDmgZr * stats.getFinalZrecznosc() * dmg / (100*0.04*info.getLevel());
 						dmgStr = wspDmgStr * stats.getFinalSila() * dmg / (100*0.04*info.getLevel());
 						dmgInt = wspDmgInt * stats.getFinalInteligencja() * dmg / (100*0.04*info.getLevel());
 						dmgWytrz = wspDmgWytrz * stats.getFinalWytrzymalosc() * dmg / (100*0.04*info.getLevel());
 						dmgMana = wspDmgMana * stats.getFinalMana() * dmg / (100*0.04*info.getLevel());
 					} else {
-						dmgZd = wspDmgZd * stats.getFinalZdolnosci() * dmg / (100*0.04*70);
+						dmgZd = wspDmgZd * stats.getFinalZdolnosciMysliwskie() * dmg / (100*0.04*70);
 						dmgZr = wspDmgZr * stats.getFinalZrecznosc() * dmg / (100*0.04*70);
 						dmgStr = wspDmgStr * stats.getFinalSila() * dmg / (100*0.04*70);
 						dmgInt = wspDmgInt * stats.getFinalInteligencja() * dmg / (100*0.04*70);

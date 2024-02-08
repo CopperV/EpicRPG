@@ -8,11 +8,13 @@ import org.bukkit.Particle.DustOptions;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import io.lumine.mythic.bukkit.MythicBukkit;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.FightSystem.RuneDamage;
 import me.Vark123.EpicRPG.HealthSystem.RpgPlayerHealEvent;
@@ -42,6 +44,9 @@ public class Drenaz extends ARune {
 			if(e instanceof Player)
 				return false;
 			if(e.getLocation().distance(p.getLocation()) > dr.getObszar())
+				return false;
+			if(!MythicBukkit.inst().getMobManager().isMythicMob(e)
+					&& e.getType().equals(EntityType.ARMOR_STAND))
 				return false;
 			if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 				return false;

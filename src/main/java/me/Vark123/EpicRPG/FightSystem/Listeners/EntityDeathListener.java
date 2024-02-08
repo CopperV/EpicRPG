@@ -41,7 +41,6 @@ import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.Players.Components.RpgSkills;
 
-//TODO
 public class EntityDeathListener implements Listener {
 	
 	@EventHandler

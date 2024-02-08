@@ -6,7 +6,7 @@ depend: [CalendarEvents,MythicMobs,NBTAPI,ProtocolLib,EpicOptions]
 api-version: 1.18
 
 libraries:
-  - io.github.rysefoxx.inventory:RyseInventory-Plugin:1.6.3
+  - io.github.rysefoxx.inventory:RyseInventory-Plugin:1.6.5
 
 commands:
   staty:
@@ -63,3 +63,7 @@ commands:
   epicboost:
   modyfikatory:
     aliases: [modyfikator, mod, booster, boosters, boost, boosts]
+  epicexp:
+    aliases: [exp, eexp]
+  ekwipunek:
+    aliases: [eq]

@@ -7,6 +7,7 @@ import org.bukkit.Particle.DustOptions;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -23,6 +24,7 @@ import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.adapters.AbstractPlayer;
 import io.lumine.mythic.api.adapters.AbstractVector;
 import io.lumine.mythic.bukkit.BukkitAdapter;
+import io.lumine.mythic.bukkit.MythicBukkit;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.FightSystem.RuneDamage;
 import me.Vark123.EpicRPG.Players.PlayerManager;
@@ -65,6 +67,9 @@ public class KrzykUmarlych extends ARune {
 					return true;
 				return false;
 			}
+			if(!MythicBukkit.inst().getMobManager().isMythicMob(e)
+					&& e.getType().equals(EntityType.ARMOR_STAND))
+				return false;
 			if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 				return false;
 			AbstractEntity ae = BukkitAdapter.adapt(e);
@@ -131,6 +136,9 @@ public class KrzykUmarlych extends ARune {
 									&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
 								return false;
 						}
+						if(!MythicBukkit.inst().getMobManager().isMythicMob(e)
+								&& e.getType().equals(EntityType.ARMOR_STAND))
+							return false;
 						if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 							return false;
 						return true;
@@ -188,6 +196,9 @@ public class KrzykUmarlych extends ARune {
 									&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
 								return false;
 						}
+						if(!MythicBukkit.inst().getMobManager().isMythicMob(e)
+								&& e.getType().equals(EntityType.ARMOR_STAND))
+							return false;
 						if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 							return false;
 						return true;
@@ -233,6 +244,9 @@ public class KrzykUmarlych extends ARune {
 				if(set.queryValue(null, Flags.PVP) == null || set.queryValue(null, Flags.PVP).equals(StateFlag.State.DENY) || loc.getWorld().getName().toLowerCase().contains("dungeon"))
 					continue;
 			}
+			if(!MythicBukkit.inst().getMobManager().isMythicMob(e)
+					&& e.getType().equals(EntityType.ARMOR_STAND))
+				continue;
 			RuneDamage.damageNormal(p, (LivingEntity) e, dr, dmg);
 		}
 	}

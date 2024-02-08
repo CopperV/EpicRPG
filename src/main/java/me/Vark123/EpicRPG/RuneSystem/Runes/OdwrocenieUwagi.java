@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -50,6 +51,9 @@ public class OdwrocenieUwagi extends ARune {
 			if(e instanceof Player)
 				return false;
 			if(e.getLocation().distance(loc) > dr.getObszar())
+				return false;
+			if(!MythicBukkit.inst().getMobManager().isMythicMob(e)
+					&& e.getType().equals(EntityType.ARMOR_STAND))
 				return false;
 			if(!BukkitAdapter.adapt(e).isDamageable())
 				return false;

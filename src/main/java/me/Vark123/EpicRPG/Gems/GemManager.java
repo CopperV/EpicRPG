@@ -211,6 +211,8 @@ public class GemManager {
 			return s.contains(": ");
 		}).forEach(s -> {
 			String[] tmpArr = s.split(": §7");
+			if(tmpArr.length < 2)
+				return;
 			int value = Integer.parseInt(tmpArr[1]);
 			int present = staty.getOrDefault(tmpArr[0], 0);
 			staty.put(tmpArr[0], present+value);

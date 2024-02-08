@@ -16,6 +16,8 @@ public class SelfShootProtectionListener implements Listener {
 			return;
 		
 		Entity damager = e.getDamager();
+		if(damager == null)
+			return;
 		Entity victim = e.getEntity();
 		if(!(victim instanceof Player))
 			return;
@@ -24,6 +26,8 @@ public class SelfShootProtectionListener implements Listener {
 		
 		Projectile projectile = (Projectile) damager;
 		damager = (Entity) projectile.getShooter();
+		if(damager == null)
+			return;
 		if(!damager.equals(victim))
 			return;
 		

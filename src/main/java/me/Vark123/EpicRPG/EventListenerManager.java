@@ -10,6 +10,7 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 
 import me.Vark123.EpicRPG.API.EpicRPGApi;
+import me.Vark123.EpicRPG.AdvancedBuySystem.AdvancedBuyListener;
 import me.Vark123.EpicRPG.BlackrockSystem.Events.BlackrockAddAllEvent;
 import me.Vark123.EpicRPG.BlackrockSystem.Events.BlackrockAddEvent;
 import me.Vark123.EpicRPG.BlackrockSystem.Events.BlackrockEntryEvent;
@@ -19,18 +20,22 @@ import me.Vark123.EpicRPG.BlackrockSystem.Events.BlackrockRemoveEvent;
 import me.Vark123.EpicRPG.BlackrockSystem.Events.BlackrockResetEvent;
 import me.Vark123.EpicRPG.BoosterSystem.Listeners.BoosterModifyListener;
 import me.Vark123.EpicRPG.Chat.ChatMsgSendEvent;
+import me.Vark123.EpicRPG.Core.CPS.CPSClickListener;
 import me.Vark123.EpicRPG.Core.Events.PlayerUseDisabledBlockEvent;
 import me.Vark123.EpicRPG.Core.Events.PlayerUseLeverEvent;
 import me.Vark123.EpicRPG.Core.Listeners.ExecutableItemUseListener;
 import me.Vark123.EpicRPG.Core.Listeners.LevelSystemControlListener;
 import me.Vark123.EpicRPG.Core.Listeners.VipBoostControlListener;
+import me.Vark123.EpicRPG.Dungeons.Listeners.KoszmarKrukaPotionDebuffListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.CustomProjectileDamageListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.EntityDamageListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.EntityDeathListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.FallDamageListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.InvincibleControllerListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.LavaDamageListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.MagicDamageListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.MeleeDragonAttackListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.PlayerDeathListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.ProjectileLaunchListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.SelfShootProtectionListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.VoidDamageListener;
@@ -66,6 +71,7 @@ import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Custom.ScaleDamageModifi
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Custom.ShulkerModifierEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Custom.VanillaPotionModifierEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Defense.LodowyBlokEffectListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Defense.PvPListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Defense.TransfuzjaEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Magic.KrewPrzodkowEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Magic.OgnistaSferaEffectListener;
@@ -78,9 +84,11 @@ import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Magic.ZewKrwiEffectListe
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Melee.CienAssasynaEffectModifierListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Melee.RytualWzniesieniaEffectModifierListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Melee.WampiryzmEffectModifierListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Misc.AnubRekhanDamageEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Misc.ConditionalDebuffEffectModifierListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Misc.CriticalEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Misc.DodgeEffectModifierListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Misc.DuchAkashyDamageEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Misc.KlatwaKrwiEffectModifierListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Misc.TrujacaAuraEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Projectile.NoDamageTicksEffectListener;
@@ -90,15 +98,18 @@ import me.Vark123.EpicRPG.Gems.GemPlaceProtEvent;
 import me.Vark123.EpicRPG.HealthSystem.PlayerHealEvent;
 import me.Vark123.EpicRPG.HorseSystem.HorseDismountEvent;
 import me.Vark123.EpicRPG.HorseSystem.HorseInventoryEvent;
+import me.Vark123.EpicRPG.HorseSystem.HorseProtectionListener;
 import me.Vark123.EpicRPG.HorseSystem.HorseRemoveOnPlayerDeathEvent;
 import me.Vark123.EpicRPG.HorseSystem.HorseStickUseEvent;
 import me.Vark123.EpicRPG.Jewelry.JewelryMenuOpenEvent;
+import me.Vark123.EpicRPG.Klejnoty.GrindstoneUseEvent;
 import me.Vark123.EpicRPG.KosturSystem.KosturUseEvent;
 import me.Vark123.EpicRPG.MMExtension.CustomConditionLoadEvent;
 import me.Vark123.EpicRPG.MMExtension.CustomMechanicsLoadEvent;
 import me.Vark123.EpicRPG.MMExtension.CustomTargeterLoadEvent;
 import me.Vark123.EpicRPG.MMExtension.Misc.ProtectorDropKillEvent;
 import me.Vark123.EpicRPG.Options.Listeners.CompassOptionRegistryListener;
+import me.Vark123.EpicRPG.Options.Listeners.HorseOptionRegistryListener;
 import me.Vark123.EpicRPG.Options.Listeners.MarkerRegistryListener;
 import me.Vark123.EpicRPG.Options.Listeners.ResourceInfoRegistryListener;
 import me.Vark123.EpicRPG.Options.Listeners.ScoreboardOptionRegistryListener;
@@ -121,6 +132,10 @@ import me.Vark123.EpicRPG.RuneSystem.Events.KamiennyObserwatorEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.LodowyBlokDisableMoveEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.ProwokacjaChangeTargetEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.WedrownyCienTargetEvent;
+import me.Vark123.EpicRPG.ScriptedFightsAndSkills.Loatheb.LoathebHealDebuffListener;
+import me.Vark123.EpicRPG.ScriptedFightsAndSkills.Loatheb.LoathebProjectileNeutralizeListener;
+import me.Vark123.EpicRPG.ScriptedFightsAndSkills.Loatheb.LoathebProjectileReflectListener;
+import me.Vark123.EpicRPG.ScriptedFightsAndSkills.Loatheb.LoathebWaeponDebuffListener;
 import me.Vark123.EpicRPG.Scrolls.EpicBossScrollEvent;
 import me.Vark123.EpicRPG.Scrolls.Katedra2ScrollEvent;
 import me.Vark123.EpicRPG.Scrolls.KatedraScrollEvent;
@@ -148,7 +163,8 @@ public class EventListenerManager {
 //		Bukkit.getPluginManager().registerEvents(new RpgDeathEvent(), inst);
 //		Bukkit.getPluginManager().registerEvents(new DamageModifyEvent(), inst);
 //		Bukkit.getPluginManager().registerEvents(new LavaDamageEvent(), inst);
-		
+
+		Bukkit.getPluginManager().registerEvents(new InvincibleControllerListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new EntityDamageListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new MagicDamageListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new CustomProjectileDamageListener(), inst);
@@ -157,6 +173,7 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new VoidDamageListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new ProjectileLaunchListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new EntityDeathListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new PlayerDeathListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new SelfShootProtectionListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new MeleeDragonAttackListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new WeaknessAttackListener(), inst);
@@ -166,6 +183,7 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new ProfCritCalcListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new StatsCritCalcListener(), inst);
 
+		Bukkit.getPluginManager().registerEvents(new PvPListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new PotionMagicModifierListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new ProfMagicModifierListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new RuneMagicModifierListener(), inst);
@@ -216,6 +234,8 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new SwietaStrzalaAreaEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new KlatwaKrwiEffectModifierListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new TrujacaAuraEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new AnubRekhanDamageEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new DuchAkashyDamageEffectListener(), inst);
 
 		Bukkit.getPluginManager().registerEvents(new RuneInteractEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new RuneTimeCheckEvent(), inst);
@@ -270,25 +290,21 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new ScoreboardOptionRegistryListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new ResourceInfoRegistryListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new MarkerRegistryListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new HorseOptionRegistryListener(), inst);
 		
 		Bukkit.getPluginManager().registerEvents(new PlayerCompassUpdateEvent(), inst);
-		
-		//Damage Modifiers
-//		DamageModifierManager.getInstance().registerModifier(new WedrownyCienModifier(), EventPriority.LOWEST);
-//		DamageModifierManager.getInstance().registerModifier(new WeaknessModifier(), EventPriority.LOW);
-//		DamageModifierManager.getInstance().registerModifier(new StrengthModifier(), EventPriority.LOW);
-//		DamageModifierManager.getInstance().registerModifier(new ShulkerModifier(), EventPriority.NORMAL);
-//		DamageModifierManager.getInstance().registerModifier(new ScaleDamageModifier(), EventPriority.HIGH);
-//		DamageModifierManager.getInstance().registerModifier(new LodowyBlokModifier(), EventPriority.HIGHEST);
-//		DamageModifierManager.getInstance().registerModifier(new TransfuzjaModifier(), EventPriority.HIGHEST);
-//		DamageModifierManager.getInstance().registerModifier(new ProjectileRuneEffectModifier(), EventPriority.HIGHEST);
-//		DamageModifierManager.getInstance().registerModifier(new EntityTauntModifier(), EventPriority.MONITOR);
-//		DamageModifierManager.getInstance().registerModifier(new ManekinDamage(), EventPriority.MONITOR);
-//		DamageModifierManager.getInstance().registerModifier(new ZewKrwiModifier(), EventPriority.MONITOR);
-//		DamageModifierManager.getInstance().registerModifier(new RytualKrwiModifier(), EventPriority.MONITOR);
-//		DamageModifierManager.getInstance().registerModifier(new HPInfo(), EventPriority.MONITOR);
-//		DamageModifierManager.getInstance().registerModifier(new NoDamageTicksModifier(), EventPriority.MONITOR);
-//		DamageModifierManager.getInstance().registerModifier(new BeeStingModifier(), EventPriority.MONITOR);
+
+		Bukkit.getPluginManager().registerEvents(new AdvancedBuyListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new GrindstoneUseEvent(), inst);
+
+		Bukkit.getPluginManager().registerEvents(new LoathebHealDebuffListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new LoathebProjectileNeutralizeListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new LoathebProjectileReflectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new LoathebWaeponDebuffListener(), inst);
+
+		Bukkit.getPluginManager().registerEvents(new KoszmarKrukaPotionDebuffListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new CPSClickListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new HorseProtectionListener(), inst);
 		
 		//Calendar Events
 		if(EpicRPGApi.getApi().getCalendarManager().isRegisteredEvent("reset_blackrock")) 

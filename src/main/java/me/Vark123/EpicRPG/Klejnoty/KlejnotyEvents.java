@@ -54,9 +54,6 @@ public class KlejnotyEvents {
 
 	private EventCreator<InventoryClickEvent> insertClickEventCreator(){
 		Consumer<InventoryClickEvent> event = e -> {
-			if(e.isCancelled())
-				return;
-
 			Inventory inv = e.getClickedInventory();
 			if(inv == null || !inv.getType().equals(InventoryType.CHEST)) 
 				return;
@@ -353,9 +350,6 @@ public class KlejnotyEvents {
 	
 	private EventCreator<InventoryClickEvent> removeClickEventCreator() {
 		Consumer<InventoryClickEvent> event = e -> {
-			if(e.isCancelled())
-				return;
-			
 			int slot = e.getSlot();
 			if(slot != 22)
 				return;
