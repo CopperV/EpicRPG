@@ -54,7 +54,7 @@
 			<groupId>me.Vark123.ArcholosRPG</groupId>
 			<artifactId>EpicOptions</artifactId>
 			<scope>provided</scope>
-			<version>1.0.0</version>
+			<version>1.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>com.comphenix.protocol</groupId>
