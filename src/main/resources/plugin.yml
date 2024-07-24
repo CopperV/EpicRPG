@@ -1,5 +1,5 @@
 name: EpicRPG
-version: 2.0.0-ALPHA
+version: 2.0.2-ALPHA
 main: me.Vark123.EpicRPG.Main
 author: Vark123
 depend: [CalendarEvents,MythicMobs,NBTAPI,ProtocolLib,EpicOptions]
