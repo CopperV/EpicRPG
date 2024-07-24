@@ -38,7 +38,7 @@ public class RudaSystem {
 						ResourcesInfoSerializable option = (ResourcesInfoSerializable) pOption.getValue();
 						if(!option.isRudaInfo())
 							return;
-						rpg.getPlayer().sendMessage("§9§o+"+ _amount +" brylek rudy §7[§3§o"+vault.getBrylkiRudy()+" brylek rudy§7]");
+						rpg.getPlayer().sendMessage("§9§o+"+ _amount +" brylek rudy §7[§9§o"+vault.getBrylkiRudy()+" brylek rudy§7]");
 					});
 			});
 	}

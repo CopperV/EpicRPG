@@ -9,7 +9,6 @@ import de.tr7zw.nbtapi.NBTItem;
 import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
-import io.github.rysefoxx.inventory.plugin.enums.Action;
 import io.github.rysefoxx.inventory.plugin.enums.DisabledEvents;
 import io.github.rysefoxx.inventory.plugin.enums.DisabledInventoryClick;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
@@ -86,7 +85,7 @@ public final class AdditionalMenuManager {
 			.rows(1)
 			.disableUpdateTask()
 			.ignoredSlots(4)
-			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.disableUpdateTask()

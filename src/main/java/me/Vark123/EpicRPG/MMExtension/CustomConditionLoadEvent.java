@@ -8,7 +8,9 @@ import io.lumine.mythic.core.skills.SkillCondition;
 import me.Vark123.EpicRPG.MMExtension.Conditions.CasterFieldOfViewCondition;
 import me.Vark123.EpicRPG.MMExtension.Conditions.GeneralMobsInRadiusCondition;
 import me.Vark123.EpicRPG.MMExtension.Conditions.HealthCheckpointCondition;
+import me.Vark123.EpicRPG.MMExtension.Conditions.SneakingCondition;
 import me.Vark123.EpicRPG.MMExtension.Conditions.SzansaCondition;
+import me.Vark123.EpicRPG.MMExtension.Conditions.VariableStanceCondition;
 
 public class CustomConditionLoadEvent implements Listener {
 
@@ -31,6 +33,14 @@ public class CustomConditionLoadEvent implements Listener {
 				break;
 			case "casterfieldofview":
 				condition = new CasterFieldOfViewCondition(e.getConfig().getLine(), e.getConfig());
+				e.register(condition);
+				break;
+			case "vstance":
+				condition = new VariableStanceCondition(e.getConfig().getLine(), e.getConfig());
+				e.register(condition);
+				break;
+			case "sneaking":
+				condition = new SneakingCondition(e.getConfig().getLine(), e.getConfig());
 				e.register(condition);
 				break;
 		}

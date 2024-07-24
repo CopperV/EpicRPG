@@ -78,11 +78,11 @@ public class RpgRzemiosla implements Serializable, ChatPrintable {
 		this.jubilerstwo = false;
 		
 		String name = rpg.getPlayer().getName();
-		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "lp user "+name+" permission unset Skill.Platnerstwo");
-		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "lp user "+name+" permission unset Skill.Kowalstwo");
-		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "lp user "+name+" permission unset Skill.Luczarstwo");
-		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "lp user "+name+" permission unset Skill.Alchemia");
-		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "lp user "+name+" permission unset Skill.Jubilerstwo");
+		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "lp user "+name+" permission unset Skill.Platnerstwo epicrpg");
+		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "lp user "+name+" permission unset Skill.Kowalstwo epicrpg");
+		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "lp user "+name+" permission unset Skill.Luczarstwo epicrpg");
+		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "lp user "+name+" permission unset Skill.Alchemia epicrpg");
+		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "lp user "+name+" permission unset Skill.Jubilerstwo epicrpg");
 	}
 
 	@Override

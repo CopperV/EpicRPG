@@ -23,7 +23,6 @@ public class ZewKrwi extends ARune {
 
 	public ZewKrwi(ItemStackRune dr, Player p) {
 		super(dr, p);
-		this.modifier1 = true;
 	}
 
 	@Override
@@ -34,7 +33,6 @@ public class ZewKrwi extends ARune {
 		modifiers.setZewKrwi(true);
 		modifiers.resetZewKrwiMod();
 		modifiers.addZewKrwiMod(1.5);
-		modifiers.setModifier1_lock(true);
 		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
 		
 		new BukkitRunnable() {
@@ -75,7 +73,6 @@ public class ZewKrwi extends ARune {
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, 1, 1.7f);
 					modifiers.setZewKrwi(false);
 					modifiers.resetZewKrwiMod();
-					modifiers.setModifier1_lock(false);
 					this.cancel();
 					return;
 				}

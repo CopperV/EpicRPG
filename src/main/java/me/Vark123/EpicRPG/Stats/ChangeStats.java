@@ -5,8 +5,10 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -16,6 +18,7 @@ import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgJewelry;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import me.Vark123.EpicRPG.Utils.Utils;
+import net.minecraft.world.item.ItemArmor;
 
 public class ChangeStats {
 	
@@ -65,8 +68,13 @@ public class ChangeStats {
 		if((p.getEquipment().getBoots() != null) && (p.getEquipment().getBoots().getItemMeta().hasLore()))
 			itemy.put(36, p.getEquipment().getBoots());
 		
-		if(useBackItem && backItem != null && backItem.getItemMeta().hasLore())
-			itemy.put(-1, backItem);
+		if(useBackItem && backItem != null && backItem.getItemMeta().hasLore()) {
+			if(CraftItemStack.asNMSCopy(backItem).c() instanceof ItemArmor
+					|| backItem.getItemMeta().getDisplayName().contains("Demoniczny Sen"))
+				dropBackItem(rpg);
+			else
+				itemy.put(-1, backItem);
+		}
 		
 		jewelry.getAkcesoria().forEach((i, jewItem) -> {
 			ItemStack tmp = jewItem.getItem();
@@ -121,6 +129,31 @@ public class ChangeStats {
 		if(weaponCheck && CheckStats.check(rpg, weapon)) {
 			changeStatsItem(stats, weapon);
 			weaponCheck = false;
+		}
+		
+		if(rpg.getModifiers().hasOstatniBoj()) {
+			stats.setFinalSila((int) (stats.getFinalSila()*1.2));
+			stats.setFinalWytrzymalosc((int) (stats.getFinalWytrzymalosc()*1.2));
+		}
+		if(rpg.getModifiers().hasOstatniBoj_h()) {
+			stats.setFinalSila((int) (stats.getFinalSila()*1.23));
+			stats.setFinalWytrzymalosc((int) (stats.getFinalWytrzymalosc()*1.23));
+		}
+		if(rpg.getModifiers().hasSzostyZmysl()) {
+			stats.setFinalZrecznosc((int) (stats.getFinalZrecznosc()*1.2));
+			stats.setFinalZdolnosciMysliwskie((int) (stats.getFinalZdolnosciMysliwskie()*1.2));
+		}
+		if(rpg.getModifiers().hasSzostyZmysl_h()) {
+			stats.setFinalZrecznosc((int) (stats.getFinalZrecznosc()*1.23));
+			stats.setFinalZdolnosciMysliwskie((int) (stats.getFinalZdolnosciMysliwskie()*1.23));
+		}
+		if(rpg.getModifiers().hasPrzyplywEnergii()) {
+			stats.setFinalInteligencja((int) (stats.getFinalInteligencja()*1.2));
+			stats.setFinalMana((int) (stats.getFinalMana()*1.2));
+		}
+		if(rpg.getModifiers().hasPrzyplywEnergii_h()) {
+			stats.setFinalInteligencja((int) (stats.getFinalInteligencja()*1.23));
+			stats.setFinalMana((int) (stats.getFinalMana()*1.23));
 		}
 	}
 	
@@ -181,10 +214,15 @@ public class ChangeStats {
 				return false;
 			if(s.contains("Klasa") || s.contains("Krag"))
 				return false;
+			if(s.endsWith("%"))
+				return false;
 			return true;
 		}).forEach(s -> {
 			s = s.replace("+", "");
-			int toAdd = Integer.parseInt(ChatColor.stripColor(s.split(": ")[1]));
+			String tmp = ChatColor.stripColor(s.split(": ")[1]);
+			if(!StringUtils.isNumeric(tmp))
+				return;
+			int toAdd = Integer.parseInt(tmp);
 			s = s.replace("§4- §8", "");
 			s = s.split(":")[0];
 			s = Utils.convertToClassConvention(s);

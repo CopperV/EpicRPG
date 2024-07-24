@@ -95,14 +95,14 @@ public class ZyciodajnaZiemia_M extends ARune {
 						State flag = set.queryValue(null, Flags.PVP);
 						if(flag != null && flag.equals(State.ALLOW)
 								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
-							return true;
-						return false;
+							return false;
 					}
 					return true;
 				}).forEach(e -> {
 					Player temp = (Player) e;
 					if(!debuff_tmp.contains(temp))
 						debuff_tmp.add(temp);
+					effected.add(temp);
 					RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(temp);
 					rpg.getModifiers().setZyciodajnaZiemia_m(true);
 				});

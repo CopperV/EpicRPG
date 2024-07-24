@@ -6,7 +6,10 @@ import java.lang.reflect.Method;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import de.tr7zw.nbtapi.NBTItem;
@@ -101,6 +104,8 @@ public class PotionUtils {
 			case "Mikstura_Szermieza":
 			case "Mikstura_Tarczownika":
 				return RpgPotionType.STALE;
+			case "Alkohol_Mlecznik":
+				return RpgPotionType.ALKOHOL;
 		}
 		return RpgPotionType.NONE;
 	}
@@ -338,6 +343,20 @@ public class PotionUtils {
 							break;
 					}
 				};
+				break;
+			case ALKOHOL:
+			{
+				effect = rpg -> {
+					Player p = rpg.getPlayer();
+					switch(potion.getItemMeta().getDisplayName().toLowerCase()) {
+						case "§f§omlecznik":
+							p.getActivePotionEffects().forEach(eff -> p.removePotionEffect(eff.getType()));
+							PotionEffect pot = new PotionEffect(PotionEffectType.CONFUSION, 40, 9);
+							p.addPotionEffect(pot);
+							break;
+					}
+				};
+			}
 				break;
 			default:
 				effect = rp -> {};

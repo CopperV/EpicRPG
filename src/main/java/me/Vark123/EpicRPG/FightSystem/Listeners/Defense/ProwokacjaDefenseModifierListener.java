@@ -27,7 +27,7 @@ public class ProwokacjaDefenseModifierListener implements Listener {
 		RpgModifiers modifiers = rpg.getModifiers();
 		if(!modifiers.hasProwokacja())
 			return;
-		
+
 		e.setDmg(Math.ceil(e.getDmg() / 10.));
 	}
 

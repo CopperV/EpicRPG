@@ -23,7 +23,8 @@ public class PlayerUseDisabledBlockEvent implements Listener {
 				|| m.equals(Material.ANVIL)
 				|| m.equals(Material.CHIPPED_ANVIL)
 				|| m.equals(Material.DAMAGED_ANVIL)
-				|| m.equals(Material.SMITHING_TABLE)))
+				|| m.equals(Material.SMITHING_TABLE)
+				|| m.equals(Material.BREWING_STAND)))
 			return;
 		
 		if(e.getPlayer().isOp())

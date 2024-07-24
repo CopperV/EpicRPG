@@ -27,6 +27,7 @@ public class RpgVault implements Serializable, ChatPrintable {
 	private int brylkiRudy;
 	
 	private int eventCurrency;
+	private int eventCurrency2;
 	
 	public RpgVault(RpgPlayer rpg) {
 		this.rpg = rpg;
@@ -38,6 +39,7 @@ public class RpgVault implements Serializable, ChatPrintable {
 		dragonCoins = set.getInt("player_stats.p_coins");
 		brylkiRudy = set.getInt("player_stats.p_brylki");
 		this.eventCurrency = set.getInt("player_stats.p_event");
+		this.eventCurrency2 = set.getInt("player_stats.p_event2");
 		set.first();
 	}
 	
@@ -122,12 +124,25 @@ public class RpgVault implements Serializable, ChatPrintable {
 	public void removeEventCurrency(int eventCurrency) {
 		this.eventCurrency -= eventCurrency;
 	}
+	
+	public boolean hasEnoughEventCurrency2(int eventCurrency) {
+		return eventCurrency2 <= this.eventCurrency;
+	}
+	
+	public void addEventCurrency2(int eventCurrency) {
+		this.eventCurrency2 += eventCurrency;
+	}
+	
+	public void removeEventCurrency2(int eventCurrency) {
+		this.eventCurrency2 -= eventCurrency;
+	}
 
 	@Override
 	public void print(CommandSender sender) {
 		TableGenerator generator = new TableGenerator(TableGenerator.Alignment.LEFT, TableGenerator.Alignment.LEFT, TableGenerator.Alignment.LEFT);
 		generator.addRow("", "§2Kasa: §e"+String.format("%.2f", getMoney())+" $", "§2Smocze monety: §4"+dragonCoins);
 		generator.addRow("", "§2Stygia: §3"+stygia, "§2Brylki rudy: §9"+brylkiRudy);
+		generator.addRow("", "§2Karnet: §c"+eventCurrency, "§2Palemki: §a"+eventCurrency2);
 		List<String> lines = generator.generate(Receiver.CLIENT, true, true);
 		
 		sender.sendMessage("§6§l========================= ");

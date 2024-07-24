@@ -65,7 +65,7 @@ public class CheckStats {
 			}
 			s = s.replace("§4- §8", "");
 			
-			String tmp = ChatColor.stripColor(s.split(": ")[1]);
+			String tmp = ChatColor.stripColor(s.split(": ")[1].replace(" ", ""));
 			if(!StringUtils.isNumeric(tmp))
 				return;
 			
@@ -73,8 +73,7 @@ public class CheckStats {
 //			int toCheck = Integer.parseInt(s.replace(": ", ChatColor.stripColor(s)));
 //			int toCheck = Integer.parseInt(s.replace(": §c", ""));
 			int result;
-			s = s.split(":")[0];
-			s = s.split(" ")[0];
+			s = Utils.convertToClassConvention(s.split(":")[0]);
 //			s = Utils.convertToClassConvention(s);
 			Class<?> _class = stats.getClass();
 			String strMethod = "getFinal"+s;

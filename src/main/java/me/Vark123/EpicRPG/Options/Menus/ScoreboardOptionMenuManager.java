@@ -133,7 +133,7 @@ public final class ScoreboardOptionMenuManager {
 				"%epicscoreboard_hp%",
 				"%epicscoreboard_percent_hp%"));
 		scoreboardValues = new LinkedHashMap<>();
-		scoreboardPlaceholdedrs.parallelStream().forEach(placeholder -> {
+		scoreboardPlaceholdedrs.stream().forEach(placeholder -> {
 			ItemStack it = new ItemStack(Material.PAPER);
 			ItemMeta im = it.getItemMeta();
 			im.setDisplayName(placeholder);

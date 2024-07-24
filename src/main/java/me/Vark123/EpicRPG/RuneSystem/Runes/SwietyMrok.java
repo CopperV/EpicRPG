@@ -43,7 +43,7 @@ public class SwietyMrok extends ARune {
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		RpgStats stats = rpg.getStats();
 		
-		double dmg = stats.getFinalSila() * 0.85 + stats.getFinalWytrzymalosc() * 0.65;
+		double dmg = stats.getFinalSila() * 2 + stats.getFinalWytrzymalosc() * 1.4;
 		double r = dr.getObszar();
 		loc.getWorld().getNearbyEntities(loc, r, r, r, e -> {
 			if(e.getLocation().distanceSquared(loc) > (r*r))

@@ -87,7 +87,7 @@ public class MalaBurzaOgnista extends ARune {
 					le = (LivingEntity)e;
 					RuneDamage.damageNormal(p, le, dr, (p, le, dr)->{
 						new BukkitRunnable() {
-							int timer = 3;
+							int timer = 5;
 							double dmg = dr.getDamage()/50.0;
 							@Override
 							public void run() {
@@ -166,7 +166,7 @@ public class MalaBurzaOgnista extends ARune {
 			le = (LivingEntity)e;
 			RuneDamage.damageNormal(p, le, dr,(p, le, dr) -> {
 				new BukkitRunnable() {
-					int timer = 2;
+					int timer = 3;
 					double dmg = dr.getDamage()/50.0;
 					@Override
 					public void run() {

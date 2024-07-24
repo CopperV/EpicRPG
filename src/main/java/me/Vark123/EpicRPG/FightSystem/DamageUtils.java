@@ -71,6 +71,10 @@ public final class DamageUtils {
 		
 		if(rpg.getModifiers().hasWtopienie())
 			chance += 0.08;
+		if(rpg.getModifiers().hasWtopienie_h())
+			chance += 0.1;
+		if(rpg.getModifiers().hasWtopienie_m())
+			chance += 0.125;
 		
 		if(chance > 30)
 			chance = 30;

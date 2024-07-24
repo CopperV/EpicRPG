@@ -48,6 +48,9 @@ public class ProjectileLaunchListener implements Listener {
 		if(!rpg.getSkills().hasUnlimitedArrows())
 			return;
 		
+		if(!arrow.getPickupStatus().equals(PickupStatus.ALLOWED))
+			return;
+		
 		arrow.setPickupStatus(PickupStatus.CREATIVE_ONLY);
 		if(e.getBow().getType().equals(Material.CROSSBOW)) {
 			ItemStack arr = e.getConsumable();

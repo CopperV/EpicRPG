@@ -74,6 +74,8 @@ public class RubyUseEvent implements Listener {
 			
 			if(hpRuby) {
 				int toHeal = (int) (p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() - p.getHealth());
+				if(toHeal < 0)
+					return;
 				if(toHeal < present)
 					toUse = toHeal;
 				present -= toUse;
@@ -87,6 +89,8 @@ public class RubyUseEvent implements Listener {
 				lore.add("§cZycie: §7"+present+"/"+nbt.getString("MaxValue"));
 			} else {
 				int toRegen = rpg.getStats().getFinalMana() - rpg.getStats().getPresentMana();
+				if(toRegen < 0)
+					return;
 				if(toRegen < present)
 					toUse = toRegen;
 				present -= toUse;

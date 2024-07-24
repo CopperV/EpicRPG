@@ -3,40 +3,27 @@ package me.Vark123.EpicRPG.RuneSystem.Events;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityTargetEvent;
 
-import me.Vark123.EpicRPG.Players.PlayerManager;
-import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
-import me.Vark123.EpicRPG.RuneSystem.Runes.Prowokacja;
+import io.lumine.mythic.bukkit.MythicBukkit;
+import me.Vark123.EpicRPG.FightSystem.Events.EpicEffectEvent;
 
 public class ProwokacjaChangeTargetEvent implements Listener {
 
-	@EventHandler
-	public void onTarget(EntityTargetEvent e) {
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onTarget(EpicEffectEvent e) {
 		if(e.isCancelled())
 			return;
 		
-		Entity entity = e.getEntity();
-		if(!Prowokacja.getTargets().containsKey(entity))
+		Entity entity = e.getVictim();
+		if(entity instanceof Player)
 			return;
 		
-		Player oldTarget = Prowokacja.getTargets().get(entity);
-		Entity newTarget = e.getTarget();
-		if(oldTarget.equals(newTarget))
-			return;
-		
-		if(!PlayerManager.getInstance().playerExists(oldTarget))
-			return;
-		
-		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(oldTarget);
-		RpgModifiers modifiers = rpg.getModifiers();
-		if(!(modifiers.hasZryw()
-				|| modifiers.hasProwokacja()))
-			return;
-		
-		e.setCancelled(true);
+		MythicBukkit.inst().getMobManager().getActiveMob(entity.getUniqueId()).ifPresent(mob -> {
+			if(!mob.hasThreatTable())
+				return;
+		});
 	}
 
 }

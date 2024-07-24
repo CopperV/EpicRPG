@@ -50,7 +50,7 @@ public class FishSellEvents {
 			
 			MutableInt price = new MutableInt();
 			
-			tmpList.parallelStream().filter(i -> {
+			tmpList.stream().filter(i -> {
 				ItemStack it = inv.getItem(i);
 				if(it == null || it.getType().equals(Material.AIR))
 					return false;

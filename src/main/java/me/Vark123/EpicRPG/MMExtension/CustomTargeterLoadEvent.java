@@ -9,6 +9,7 @@ import io.lumine.mythic.bukkit.events.MythicTargeterLoadEvent;
 import me.Vark123.EpicRPG.MMExtension.Targeters.AngleTargeter;
 import me.Vark123.EpicRPG.MMExtension.Targeters.CircleSegmentTargeter;
 import me.Vark123.EpicRPG.MMExtension.Targeters.ConditionalTarget;
+import me.Vark123.EpicRPG.MMExtension.Targeters.EMountTargeter;
 import me.Vark123.EpicRPG.MMExtension.Targeters.ForwardLevelTargeter;
 import me.Vark123.EpicRPG.MMExtension.Targeters.WorldLimitTargeter;
 
@@ -37,6 +38,10 @@ public class CustomTargeterLoadEvent implements Listener {
 				break;
 			case "worldlimit":
 				target = new WorldLimitTargeter(MythicBukkit.inst().getSkillManager(), e.getConfig());
+				e.register(target);
+				break;
+			case "emount":
+				target = new EMountTargeter(MythicBukkit.inst().getSkillManager(), e.getConfig());
 				e.register(target);
 				break;
 		}

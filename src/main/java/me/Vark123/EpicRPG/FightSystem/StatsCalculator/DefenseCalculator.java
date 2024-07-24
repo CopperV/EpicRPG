@@ -40,18 +40,18 @@ public class DefenseCalculator implements IDamageCalculator {
 		
 		if(damager instanceof Player 
 				&& PlayerManager.getInstance().playerExists((Player) damager)) {
-			pair.setKey(dmg);
+			pair.setKey(dmg - stats.getFinalOchrona());
 			return pair;
 		}
 		
 		int wytrzymalosc = stats.getFinalWytrzymalosc() < 0 ? 0 : stats.getFinalWytrzymalosc();
 		double def;
-		if(info.getLevel() < 70) {
+		if(info.getLevel() < 80) {
 			def = 0.13 * wytrzymalosc * stats.getFinalOchrona() / (100*0.05*info.getLevel());
 		} else {
-			def = 0.13 * wytrzymalosc * stats.getFinalOchrona() / (100*0.05*70);
+			def = 0.13 * wytrzymalosc * stats.getFinalOchrona() / (100*0.05*80);
 		}
-		double def2 = stats.getFinalOchrona()*0.35;
+		double def2 = stats.getFinalOchrona()*0.33;
 		
 		dmg -= def;
 		dmg -= def2;

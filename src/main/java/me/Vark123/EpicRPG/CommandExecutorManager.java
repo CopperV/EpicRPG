@@ -8,6 +8,7 @@ import me.Vark123.EpicRPG.BoosterSystem.Commands.BaseBoostCommand;
 import me.Vark123.EpicRPG.BoosterSystem.Commands.BoostCommandManager;
 import me.Vark123.EpicRPG.BoosterSystem.Commands.BoosterMenuCommand;
 import me.Vark123.EpicRPG.BoosterSystem.Commands.Impl.CoinsBoosterCommand;
+import me.Vark123.EpicRPG.BoosterSystem.Commands.Impl.EventCurrency2BoosterCommand;
 import me.Vark123.EpicRPG.BoosterSystem.Commands.Impl.ExpBoosterCommand;
 import me.Vark123.EpicRPG.BoosterSystem.Commands.Impl.MoneyBoosterCommand;
 import me.Vark123.EpicRPG.BoosterSystem.Commands.Impl.RudaBoosterCommand;
@@ -30,8 +31,10 @@ import me.Vark123.EpicRPG.Core.Commands.UniquetemCommand;
 import me.Vark123.EpicRPG.Core.Commands.SystemCmds.DragonCoinsBuyCommand;
 import me.Vark123.EpicRPG.Core.Commands.SystemCmds.DragonCoinsChangeCommand;
 import me.Vark123.EpicRPG.Core.Commands.SystemCmds.DragonCoinsCmdRunCommand;
+import me.Vark123.EpicRPG.Core.Commands.SystemCmds.EventCurrency2ChangeCommand;
 import me.Vark123.EpicRPG.Core.Commands.SystemCmds.EventCurrencyChangeCommand;
 import me.Vark123.EpicRPG.Core.Commands.SystemCmds.ExpChangeCommand;
+import me.Vark123.EpicRPG.Core.Commands.SystemCmds.MoneyChangeCommand;
 import me.Vark123.EpicRPG.Core.Commands.SystemCmds.RudaBuyCommand;
 import me.Vark123.EpicRPG.Core.Commands.SystemCmds.RudaChangeCommand;
 import me.Vark123.EpicRPG.Core.Commands.SystemCmds.StygiaBuyCommand;
@@ -69,7 +72,9 @@ public class CommandExecutorManager {
 		Bukkit.getPluginCommand("brbuy").setExecutor(new RudaBuyCommand());
 		Bukkit.getPluginCommand("ruda").setExecutor(new RudaChangeCommand());
 		Bukkit.getPluginCommand("event").setExecutor(new EventCurrencyChangeCommand());
+		Bukkit.getPluginCommand("event2").setExecutor(new EventCurrency2ChangeCommand());
 		Bukkit.getPluginCommand("epicexp").setExecutor(new ExpChangeCommand());
+		Bukkit.getPluginCommand("epicmoney").setExecutor(new MoneyChangeCommand());
 
 		Bukkit.getPluginCommand("kon").setExecutor(new HorseSummonCommand());
 		Bukkit.getPluginCommand("rotacja").setExecutor(new RotacjaCommand());
@@ -92,6 +97,7 @@ public class CommandExecutorManager {
 		BoostCommandManager.get().registerSubcommand(new MoneyBoosterCommand());
 		BoostCommandManager.get().registerSubcommand(new RudaBoosterCommand());
 		BoostCommandManager.get().registerSubcommand(new StygiaBoosterCommand());
+		BoostCommandManager.get().registerSubcommand(new EventCurrency2BoosterCommand());
 	}
 	
 }

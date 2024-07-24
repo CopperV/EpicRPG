@@ -14,7 +14,6 @@ import de.tr7zw.nbtapi.NBTItem;
 import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
-import io.github.rysefoxx.inventory.plugin.enums.Action;
 import io.github.rysefoxx.inventory.plugin.enums.DisabledEvents;
 import io.github.rysefoxx.inventory.plugin.enums.DisabledInventoryClick;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
@@ -267,7 +266,7 @@ public class SzponBeliaraManager {
 			.title("§5§lUlepszanie Szponu Beliara")
 			.size(27)
 			.ignoredSlots(awakeningFreeSlots)
-			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.listener(SzponBeliaraEvents.getEvents().getAwakeningClickEvent())
@@ -283,7 +282,7 @@ public class SzponBeliaraManager {
 			.title("§5§lBeliar")
 			.size(27)
 			.ignoredSlots(upgradeFreeSlots)
-			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.disableUpdateTask()

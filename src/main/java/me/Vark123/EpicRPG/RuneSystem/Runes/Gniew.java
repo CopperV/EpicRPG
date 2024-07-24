@@ -23,7 +23,6 @@ public class Gniew extends ARune {
 
 	public Gniew(ItemStackRune dr, Player p) {
 		super(dr, p);
-		this.modifier1 = true;
 	}
 
 	@Override
@@ -32,7 +31,6 @@ public class Gniew extends ARune {
 		RpgModifiers modifiers = rpg.getModifiers();
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 1, 1);
 		modifiers.setGniew(true);
-		modifiers.setModifier1_lock(true);
 		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
 		
 		new BukkitRunnable() {
@@ -54,7 +52,6 @@ public class Gniew extends ARune {
 					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 1, 0.3f);
 					modifiers.setGniew(false);
-					modifiers.setModifier1_lock(false);
 					this.cancel();
 					return;
 				}

@@ -42,6 +42,8 @@ public class ConditionalDebuffEffectModifierListener implements Listener {
 		Entity victim = e.getVictim();
 		Material m = damager.getLocation().getBlock().getType();
 		Material m2 = victim.getLocation().getBlock().getType();
+		if(p.getWorld().getName().equalsIgnoreCase("eastermap"))
+			return;
 		if((m.equals(Material.WATER) || m.equals(Material.LAVA)
 				|| m2.equals(Material.WATER) || m2.equals(Material.LAVA))
 				&& !EpicRPGMobManager.getInstance().isWaterMob(victim.getName())) {

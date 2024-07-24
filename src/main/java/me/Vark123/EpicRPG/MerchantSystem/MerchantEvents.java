@@ -1,5 +1,6 @@
 package me.Vark123.EpicRPG.MerchantSystem;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -15,9 +16,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import de.tr7zw.nbtapi.NBTItem;
 import io.github.rysefoxx.inventory.plugin.other.EventCreator;
 import lombok.Getter;
-import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Core.MoneySystem;
+import me.Vark123.EpicRPG.Players.PlayerManager;
+import me.Vark123.EpicRPG.Players.RpgPlayer;
+import me.Vark123.EpicRPG.RyseInventory.InventoryUtils;
 import me.Vark123.EpicRPG.Utils.Utils;
-import net.milkbowl.vault.economy.EconomyResponse;
 
 @Getter
 public class MerchantEvents {
@@ -40,13 +43,14 @@ public class MerchantEvents {
 		Consumer<InventoryClickEvent> event = e -> {
 			int slot = e.getSlot();
 			Inventory inv = e.getClickedInventory();
+
+			final int[] freeSlots = MerchantManager.getInstance().getFreeSlots();
 			if(slot == 49) {
 				if(!inv.getItem(slot).equals(MerchantManager.getInstance().getSell()))
 					return;
 				
 				ItemStack sellPrice = MerchantManager.getInstance().getSellPriceTemplate();
 				int totalValue = 0;
-				final int[] freeSlots = MerchantManager.getInstance().getFreeSlots();
 				for(int i = 0; i < freeSlots.length; ++i) {
 					ItemStack it = inv.getItem(i);
 					if(it == null 
@@ -103,6 +107,10 @@ public class MerchantEvents {
 				sellNBT.setInteger("sell_info", totalValue);
 				sellNBT.applyNBT(sellPrice);
 				inv.setItem(49, sellPrice);
+				
+				InventoryUtils.openConfirmationMenu((Player) e.getWhoClicked(), 
+						e.getView().getTitle(), inv.getSize(),
+						Arrays.asList(clickEvent, closeEvent), inv);
 				return;
 			}
 			
@@ -113,6 +121,11 @@ public class MerchantEvents {
 				inv.setItem(46, MerchantManager.getInstance().getEmpty());
 				inv.setItem(52, MerchantManager.getInstance().getEmpty());
 				inv.setItem(49, MerchantManager.getInstance().getSell());
+				
+				InventoryUtils.openNormalMenu((Player) e.getWhoClicked(), 
+						e.getView().getTitle(), inv.getSize(),
+						freeSlots,
+						Arrays.asList(clickEvent, closeEvent), inv);
 				return;
 			}
 			
@@ -121,8 +134,10 @@ public class MerchantEvents {
 					return;
 				int value = new NBTItem(e.getInventory().getItem(49)).getInteger("sell_info");
 				e.getInventory().clear();
-				EconomyResponse r = Main.eco.depositPlayer((Player)e.getWhoClicked(), value);
-				if(r.transactionSuccess()) e.getWhoClicked().sendMessage(Main.getInstance().getPrefix()+" §aOtrzymales za sprzedanie itemow u §6§l§oKupca §e"+value+"$");
+				RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer((Player) e.getWhoClicked());
+				MoneySystem.getInstance().addMoney(rpg, value, "merchant");
+//				EconomyResponse r = Main.eco.depositPlayer((Player)e.getWhoClicked(), value);
+//				if(r.transactionSuccess()) e.getWhoClicked().sendMessage(Main.getInstance().getPrefix()+" §aOtrzymales za sprzedanie itemow u §6§l§oKupca §e"+value+"$");
 				e.getWhoClicked().closeInventory();
 				return;
 			}

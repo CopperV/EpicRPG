@@ -50,41 +50,41 @@ public class MagicCalculator implements IDamageCalculator {
 			String type = ir.getMagicType().toLowerCase();
 			switch(type) {
 				case "ogien":
-					dmg = wplyw*7.2*dmg;
+					dmg = wplyw*20.25*dmg;
 					break;
 				case "woda":
-					dmg = wplyw*2.8*dmg;
+					dmg = wplyw*7.875*dmg;
 					break;
 				case "natura":
-					dmg = wplyw*3.6*dmg;
+					dmg = wplyw*10.125*dmg;
 					break;
 				case "tajemna":
-					dmg = wplyw*3.65*dmg;
+					dmg = wplyw*10.35*dmg;
 					break;
 				case "mrok":
-					dmg = (wplyw*0.4+0.2)*dmg;
+					dmg = (wplyw*1.125+0.5625)*dmg;
 					break;
 				case "swiatlo":
-					dmg = wplyw*7.2*dmg;
+					dmg = wplyw*20.25*dmg;
 					break;
 				case "rownowaga":
-					dmg = wplyw*0.72*dmg;
+					dmg = wplyw*2.025*dmg;
 					break;
 				case "chaos":
-					dmg = wplyw*1.8*dmg;
+					dmg = wplyw*5.0625*dmg;
 					break;
 				case "krew":
-					dmg = wplyw*2*dmg;
+					dmg = wplyw*5.625*dmg;
 					break;
 				default:
-					dmg = wplyw*dmg*0.4;
+					dmg = wplyw*dmg*1.125;
 					break;
 			}
-			dmgLevel = (dmg*0.002*info.getLevel());
+			dmgLevel = (dmg*0.003*info.getLevel());
 		} else {
 			if(crit) {
-				dmg *= 1.5;
-				wplyw *= 1.2;
+				dmg *= 2;
+				wplyw *= 1.25;
 			}
 				
 			addDmg = wplyw * stats.getFinalInteligencja() * dmg / 100.0;
@@ -94,7 +94,7 @@ public class MagicCalculator implements IDamageCalculator {
 			dmgMana = dmg * 0.0001 * stats.getFinalMana();
 		}
 		
-		dmgKrag = dmg * 0.05 * stats.getKrag();
+		dmgKrag = dmg * 0.06 * stats.getKrag();
 		
 		dmg += dmgKrag;
 		dmg += dmgLevel;

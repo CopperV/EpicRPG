@@ -59,7 +59,7 @@ public class SlugaBeliaraModifierListener implements Listener {
 		victim.getWorld().spawnParticle(Particle.REDSTONE, victim.getLocation().add(0,1,0), 10, 0.5f, 0.5f, 0.5f, 0.15f, dust);
 		p.getWorld().playSound(p.getLocation(), Sound.ITEM_FLINTANDSTEEL_USE, 1, 0.1f);
 		
-		double extraDamage = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 1.25;
+		double extraDamage = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 2 + rpg.getStats().getFinalObrazenia();
 		e.setDmg(e.getDmg() + extraDamage);
 	}
 

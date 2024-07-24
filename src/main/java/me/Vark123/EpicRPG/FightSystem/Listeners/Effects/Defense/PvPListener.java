@@ -8,6 +8,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import me.Vark123.EpicRPG.FightSystem.Events.EpicEffectEvent;
+import me.Vark123.EpicRPG.Players.PlayerManager;
+import me.Vark123.EpicRPG.Players.RpgPlayer;
 
 public class PvPListener implements Listener {
 	
@@ -23,8 +25,15 @@ public class PvPListener implements Listener {
 		if(!(damager instanceof Player && victim instanceof Player))
 			return;
 		
-		double modifier = e.getCalculatedDamage().getValue() ? 0.35 : 0.1;
-		e.setDmg(e.getDmg() * modifier);
+		double modifier = e.getCalculatedDamage().getValue() ? 0.5 : 0.1;
+		
+		double dmg = e.getDmg() * modifier;
+		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer((Player) victim);
+		int level = rpg.getInfo().getLevel();
+		if(dmg < ((level / 10.) + 2))
+			dmg = (level / 10.) + 2;
+		
+		e.setDmg(dmg);
 	}
 
 }

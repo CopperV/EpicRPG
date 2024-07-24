@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -40,6 +41,11 @@ public class PotionManager {
 		RpgPotionType type = PotionUtils.getPotionType(potion);
 		if(type.equals(RpgPotionType.NONE))
 			return false;
+		PotionUseEvent event = new PotionUseEvent(p, potion, type);
+		Bukkit.getPluginManager().callEvent(event);
+		if(event.isCancelled())
+			return false;
+		
 		RpgPotionEffect effect = PotionUtils.getPotionEffect(type, potion);
 		
 		PlayerInventory inv = p.getInventory();

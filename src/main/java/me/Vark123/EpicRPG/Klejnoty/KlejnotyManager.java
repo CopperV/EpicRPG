@@ -10,7 +10,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
-import io.github.rysefoxx.inventory.plugin.enums.Action;
 import io.github.rysefoxx.inventory.plugin.enums.DisabledEvents;
 import io.github.rysefoxx.inventory.plugin.enums.DisabledInventoryClick;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
@@ -139,7 +138,7 @@ public class KlejnotyManager {
 			.title("§6§lWkladanie Klejnotow")
 			.size(27)
 			.ignoredSlots(insertFreeSlots)
-			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.disableUpdateTask()
@@ -155,7 +154,7 @@ public class KlejnotyManager {
 			.title("§6§lWyjmowanie Klejnotow")
 			.size(27)
 			.ignoredSlots(removeFreeSlots)
-			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.disableUpdateTask()

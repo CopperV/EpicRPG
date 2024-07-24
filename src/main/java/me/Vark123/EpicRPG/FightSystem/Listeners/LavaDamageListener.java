@@ -16,6 +16,8 @@ public class LavaDamageListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onDamage(EntityDamageEvent e) {
+		if(e.isCancelled())
+			return;
 		Entity victim = e.getEntity();
 		if(!(victim instanceof Player))
 			return;

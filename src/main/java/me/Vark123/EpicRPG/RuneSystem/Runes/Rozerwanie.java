@@ -138,7 +138,7 @@ public class Rozerwanie extends ARune {
 						return true;
 					}).forEach(en -> {
 						double dist = en.getLocation().distance(loc);
-						double closePercent = dist / (double) dr.getObszar();
+						double closePercent = Math.abs(dist / (double) dr.getObszar() - 1);
 						
 						double percent = MAX - (MAX-MIN) * closePercent;
 						double dmg = dr.getDamage() * percent;

@@ -89,7 +89,7 @@ public class DuzaBurzaOgnista extends ARune {
 					le = (LivingEntity)e;
 					RuneDamage.damageNormal(p, le, dr, (p, le, dr)->{
 						new BukkitRunnable() {
-							int timer = 7;
+							int timer = 11;
 							double dmg = dr.getDamage()/50.0;
 							@Override
 							public void run() {
@@ -169,7 +169,7 @@ public class DuzaBurzaOgnista extends ARune {
 			le = (LivingEntity) e;
 			RuneDamage.damageNormal(p, le, dr,(p, le, dr) -> {
 				new BukkitRunnable() {
-					int timer = 6;
+					int timer = 9;
 					double dmg = dr.getDamage()/50.0;
 					@Override
 					public void run() {

@@ -67,7 +67,7 @@ public class ProjectileCalculator implements IDamageCalculator {
 		boolean crit = DamageUtils.checkCrit(rpg, victim);
 		pair.setValue(crit);
 		if(victim instanceof Player) {
-			dmg = DamageUtils.randomizeDamage(dmg) * 0.4;
+			dmg = DamageUtils.randomizeDamage(dmg);
 			pair.setKey(dmg);
 			return pair;
 		}
@@ -103,7 +103,7 @@ public class ProjectileCalculator implements IDamageCalculator {
 			wspDmgInt = 0.02;
 		}
 	
-		if(info.getLevel() < 70) {
+		if(info.getLevel() < 80) {
 			dmgZd = wspDmgZd * stats.getFinalZdolnosciMysliwskie() * dmg / (100*0.04*info.getLevel());
 			dmgZr = wspDmgZr * stats.getFinalZrecznosc() * dmg / (100*0.04*info.getLevel());
 			dmgStr = wspDmgStr * stats.getFinalSila() * dmg / (100*0.04*info.getLevel());
@@ -111,12 +111,12 @@ public class ProjectileCalculator implements IDamageCalculator {
 			dmgWytrz = wspDmgWytrz * stats.getFinalWytrzymalosc() * dmg / (100*0.04*info.getLevel());
 			dmgMana = wspDmgMana * stats.getFinalMana() * dmg / (100*0.04*info.getLevel());
 		} else {
-			dmgZd = wspDmgZd * stats.getFinalZdolnosciMysliwskie() * dmg / (100*0.04*70);
-			dmgZr = wspDmgZr * stats.getFinalZrecznosc() * dmg / (100*0.04*70);
-			dmgStr = wspDmgStr * stats.getFinalSila() * dmg / (100*0.04*70);
-			dmgInt = wspDmgInt * stats.getFinalInteligencja() * dmg / (100*0.04*70);
-			dmgWytrz = wspDmgWytrz * stats.getFinalWytrzymalosc() * dmg / (100*0.04*70);
-			dmgMana = wspDmgMana * stats.getFinalMana() * dmg / (100*0.04*70);
+			dmgZd = wspDmgZd * stats.getFinalZdolnosciMysliwskie() * dmg / (100*0.04*80);
+			dmgZr = wspDmgZr * stats.getFinalZrecznosc() * dmg / (100*0.04*80);
+			dmgStr = wspDmgStr * stats.getFinalSila() * dmg / (100*0.04*80);
+			dmgInt = wspDmgInt * stats.getFinalInteligencja() * dmg / (100*0.04*80);
+			dmgWytrz = wspDmgWytrz * stats.getFinalWytrzymalosc() * dmg / (100*0.04*80);
+			dmgMana = wspDmgMana * stats.getFinalMana() * dmg / (100*0.04*80);
 		}
 		
 		dmg = dmg + dmgZd + dmgZr + dmgStr + dmgInt + dmgWytrz + dmgMana;

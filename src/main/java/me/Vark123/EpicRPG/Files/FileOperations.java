@@ -107,7 +107,7 @@ public class FileOperations {
 			}
 			
 			if(fYml.contains(s+".points")) {
-				fYml.getConfigurationSection(s+".points").getKeys(false).parallelStream().forEach(k ->{
+				fYml.getConfigurationSection(s+".points").getKeys(false).stream().forEach(k ->{
 					EpicRPGMobManager.getInstance().addMobPoints(mob, k, fYml.getInt(s+".points."+k));
 				});
 			}

@@ -1,4 +1,4 @@
-package me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Misc;
+package me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Magic;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
@@ -15,6 +15,7 @@ import me.Vark123.EpicRPG.HealthSystem.RpgPlayerHealEvent;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
+import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
 public class KlatwaKrwiEffectModifierListener implements Listener {
 	
@@ -29,11 +30,19 @@ public class KlatwaKrwiEffectModifierListener implements Listener {
 		if(!(damager instanceof Player))
 			return;
 		
+		Object[] args = e.getArgs();
+		if(args == null 
+				|| args.length <= 0
+				|| !(args[0] instanceof ItemStackRune))
+			return;
+
+		ItemStackRune ir = (ItemStackRune) args[0];
 		Player p = (Player) damager;
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		RpgModifiers modifiers = rpg.getModifiers();
-		
-		if(!modifiers.hasKlatwaKrwi())
+
+		if(!(modifiers.hasKlatwaKrwi() 
+				&& ir.getMagicType().equalsIgnoreCase("krew")))
 			return;
 		
 		if(p.equals(e.getVictim()))

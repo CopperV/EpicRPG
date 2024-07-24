@@ -42,7 +42,7 @@ public class CoinsSystem {
 						ResourcesInfoSerializable option = (ResourcesInfoSerializable) pOption.getValue();
 						if(!option.isCoinsInfo())
 							return;
-						rpg.getPlayer().sendMessage("§c§o+"+ amount +" Smoczych Monet §7[§c§o"+vault.getDragonCoins()+" Smoczych Monet§7]");
+						rpg.getPlayer().sendMessage("§c§o+"+ _amount +" Smoczych Monet §7[§c§o"+vault.getDragonCoins()+" Smoczych Monet§7]");
 					});
 			});
 	}

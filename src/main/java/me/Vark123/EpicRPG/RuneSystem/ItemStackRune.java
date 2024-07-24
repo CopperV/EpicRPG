@@ -28,7 +28,7 @@ public class ItemStackRune {
 	
 	public ItemStackRune(ItemStack it) {
 		name = it.getItemMeta().getDisplayName();
-		it.getItemMeta().getLore().parallelStream().filter(s -> {
+		it.getItemMeta().getLore().stream().filter(s -> {
 			if(!s.contains(": "))
 				return false;
 			if(s.contains("%"))

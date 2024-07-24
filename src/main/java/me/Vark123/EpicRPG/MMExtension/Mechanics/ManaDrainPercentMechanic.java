@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.config.MythicLineConfig;
@@ -13,6 +14,7 @@ import io.lumine.mythic.api.skills.SkillResult;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
 import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.skills.SkillMechanic;
+import me.Vark123.EpicOptions.Main;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
@@ -37,7 +39,12 @@ public class ManaDrainPercentMechanic extends SkillMechanic implements ITargeted
 		RpgStats stats = rpg.getStats();
 		
 		int toRemove = (int) (stats.getFinalMana() * manaPercent.get(data, target));
-		stats.removePresentManaSmart(toRemove);
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				stats.removePresentManaSmart(toRemove);
+			}
+		}.runTask(Main.getInst());
 		
 		return SkillResult.SUCCESS;
 	}

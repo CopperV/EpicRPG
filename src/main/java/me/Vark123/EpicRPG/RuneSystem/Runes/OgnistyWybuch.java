@@ -126,7 +126,7 @@ public class OgnistyWybuch extends ARune {
 		}).forEach(e -> {
 			RuneDamage.damageNormal(p, e, dr, (p, le, dr)->{
 				new BukkitRunnable() {
-					int timer = 6;
+					int timer = 9;
 					double dmg = dr.getDamage()/50.0;
 					@Override
 					public void run() {

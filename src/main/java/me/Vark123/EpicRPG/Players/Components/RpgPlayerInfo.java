@@ -24,6 +24,7 @@ public class RpgPlayerInfo implements Serializable, ChatPrintable{
 	private RpgPlayer rpg;
 	
 	private int level = 1;
+	@Setter
 	private int exp = 0;
 	private int nextLevel;
 	private int pn = 10;

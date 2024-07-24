@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import com.sk89q.worldguard.internal.flywaydb.core.internal.util.StringUtils;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Core.StygiaSystem;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgVault;
@@ -41,7 +42,7 @@ public class StygiaChangeCommand implements CommandExecutor {
 		int cena = Integer.parseInt(args[2]);
 		switch(args[0].toLowerCase()) {
 		case "add":
-			vault.addStygia(cena);
+			StygiaSystem.getInstance().addStygia(rpg, cena, "cmd");
 			p.sendMessage(Main.getInstance().getPrefix()+" §aOtrzymales §9§o"+cena+" Stygii");
 			break;
 		case "remove":

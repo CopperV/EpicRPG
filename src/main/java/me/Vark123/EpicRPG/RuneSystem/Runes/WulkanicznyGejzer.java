@@ -125,7 +125,7 @@ public class WulkanicznyGejzer extends ARune {
 		}).forEach(e -> {
 			RuneDamage.damageNormal(p, (LivingEntity)e, dr, (p, le, dr) -> {
 				new BukkitRunnable() {
-					int timer = 5;
+					int timer = 8;
 					double dmg = dr.getDamage()/50.0;
 					@Override
 					public void run() {

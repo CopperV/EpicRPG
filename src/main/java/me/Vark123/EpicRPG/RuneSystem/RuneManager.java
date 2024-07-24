@@ -33,6 +33,7 @@ import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
+import me.Vark123.EpicRPG.RuneSystem.Events.RuneUseEvent;
 import me.Vark123.EpicRPG.RuneSystem.Runes.*;
 
 public class RuneManager {
@@ -94,10 +95,10 @@ public class RuneManager {
 			p.sendMessage(Main.getInstance().getPrefix()+" §cUzywasz obecnie innej runy modyfikujacej obrazenia.");
 			return false;
 		}
-		if(modifiers.hasModifier2_lock() && r.hasModifier2()) {
-			p.sendMessage(Main.getInstance().getPrefix()+" §cUzyles przed chwila masowej runy obszarowej. Poczekaj chwile.");
-			return false;
-		}
+//		if(modifiers.hasModifier2_lock() && r.hasModifier2()) {
+//			p.sendMessage(Main.getInstance().getPrefix()+" §cUzyles przed chwila masowej runy obszarowej. Poczekaj chwile.");
+//			return false;
+//		}
 		
 		createGlobalCd(p);
 		
@@ -113,6 +114,8 @@ public class RuneManager {
 			p.getWorld().spawnParticle(Particle.NAUTILUS, p.getLocation().add(0, 1, 0), 20, 0.75, 0.5, 0.75, 0.2);
 		}
 
+		RuneUseEvent event = new RuneUseEvent(p, ir);
+		Bukkit.getPluginManager().callEvent(event);
 		
 		rpg.displayUpdate();
 		r.castSpell();
@@ -186,7 +189,11 @@ public class RuneManager {
 		
 		if((old.getTime() + regenTime) > present.getTime()) {
 			int nextUse = (int) Math.ceil(((double)(old.getTime() + regenTime - present.getTime()))/1000.0);
-			p.sendMessage("§7[§6EpicRPG§7] §cRuny "+ir.getName()+" §cbedziesz mogl uzyc za §7"+nextUse+" §csekund");
+			if(nextUse < 2) {
+				p.playSound(p, Sound.ENTITY_ZOMBIFIED_PIGLIN_AMBIENT, 2, .7f);
+				p.spawnParticle(Particle.SMOKE_NORMAL, p.getLocation().add(0,1,0), 6, .4f, .4f, .4f, .03f);
+			} else
+				p.sendMessage("§7[§6EpicRPG§7] §cRuny "+ir.getName()+" §cbedziesz mogl uzyc za §7"+nextUse+" §csekund");
 			return false;
 		}
 		return true;
@@ -202,10 +209,12 @@ public class RuneManager {
 		ItemStackRune ir = new ItemStackRune(rune);
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		
-		String prof = ChatColor.stripColor(rpg.getInfo().getProffesion());
-		if(!prof.equalsIgnoreCase(ir.getKlasa())) {
-			p.sendMessage("§7[§bEpicRPG§7] §c Tylko "+ir.getKlasa()+" §cmoze uzyc tej runy!");
-			return false;
+		if(ir.isReqKlasa()) {
+			String proffesion = ChatColor.stripColor(rpg.getInfo().getProffesion());
+			if(!proffesion.equalsIgnoreCase(ir.getKlasa())) {
+				p.sendMessage("§7[§bEpicRPG§7] §c Tylko "+ir.getKlasa()+" §cmoze uzyc tej runy!");
+				return false;
+			}
 		}
 		if(rpg.getStats().getKrag() < ir.getKrag()) {
 			p.sendMessage(Main.getInstance().getPrefix()+" §cMusisz posiadac §7§o"+ir.getKrag()+" §ckrag magii, by uzyc "+ir.getName());
@@ -400,6 +409,10 @@ public class RuneManager {
 					case "§c§oognisty wybuch":	return new OgnistyWybuch(dr, p);
 					case "§c§orozerwanie":		return new Rozerwanie(dr, p);
 					case "§4§owulkaniczny gejzer":return new WulkanicznyGejzer(dr, p);
+					case "§c§lzwiastun wojny":	return new ZwiastunWojny(dr, p);
+					case "§c§lzwiastun wojny i":return new ZwiastunWojny_H(dr, p);
+					case "§4§lwieczny ogien":	return new WiecznyOgien(dr, p);
+					case "§4§lwieczny ogien i":	return new WiecznyOgien(dr, p);
 					default:					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_BLOCKS:
@@ -458,6 +471,8 @@ public class RuneManager {
 					case "§3§lfala dezorientacyjna ii":return new FalaDezorientacyjna(dr, p);
 					case "§3swiety mrok":		return new SwietyMrok(dr, p);
 					case "§3wybraniec beliara":	return new WybraniecBeliara(dr, p);
+					case "§3§lostatni boj":		return new OstatniBoj(dr, p);
+					case "§3§lostatni boj i":	return new OstatniBoj_H(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_MALL:
@@ -486,6 +501,8 @@ public class RuneManager {
 					case "§a§leksplodujaca strzala ii":return new EksplodujacaStrzala_M(dr, p);
 					case "§atrujaca aura":		return new TrujacaAura(dr, p);
 					case "§azakleta strzala":	return new ZakletaStrzala(dr, p);
+					case "§a§lszosty zmysl":	return new SzostyZmysl(dr, p);
+					case "§a§lszosty zmysl i":	return new SzostyZmysl_H(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_STAL:
@@ -501,6 +518,10 @@ public class RuneManager {
 					case "§7§lteleportacja krotkodystansowa":	return new TeleportacjaKrotkodystansowa(dr, p);
 					case "§e§lfala uderzeniowa":return new FalaUderzeniowa(dr, p);
 					case "§2§lwtopienie":		return new Wtopienie(dr, p);
+					case "§2§lwtopienie i":		return new Wtopienie_H(dr, p);
+					case "§2§lwtopienie ii":	return new Wtopienie_M(dr, p);
+					case "§x§5§c§a§d§c§d§lpozeracz dusz":	return new PozeraczDusz(dr, p);
+					case "§x§5§c§a§d§c§d§lpozeracz dusz i":	return new PozeraczDusz_H(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_STRAD:
@@ -544,6 +565,8 @@ public class RuneManager {
 					case "§8§ozmrok":			return new Zmrok(dr, p);
 					case "§8zaglada":			return new Zaglada(dr, p);
 					case "§8§lczarny sen":		return new CzarnySen(dr, p);
+					case "§8§lczarny sen i":	return new CzarnySen(dr, p);
+					case "§8§lczarny sen ii":	return new CzarnySen(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_13:
@@ -578,6 +601,8 @@ public class RuneManager {
 					case "§5§lpotezna runa domisia ii":return new PoteznaRunaDomisia_M(dr, p);
 					case "§c§lzyciodajna ziemia":return new ZyciodajnaZiemia(dr, p);
 					case "§c§lzyciodajna ziemia i":return new ZyciodajnaZiemia_M(dr, p);
+					case "§e§lprzyplyw energii":return new PrzyplywEnergii(dr, p);
+					case "§e§lprzyplyw energii i":return new PrzyplywEnergii_H(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_WARD:
@@ -589,8 +614,12 @@ public class RuneManager {
 					case "§d§l§oszept przedwiecznych":	return new SzeptPrzedwiecznych(dr, p);
 					case "§c§l§oszpon beliara":		return new SzponBeliaraInt(dr, p);
 					case "§c§l§oszpon beliara i":	return new SzponBeliaraInt(dr, p);
+					case "§c§l§oszpon beliara ii":	return new SzponBeliaraInt(dr, p);
+					case "§c§l§oszpon beliara iii":	return new SzponBeliaraInt(dr, p);
 					case "§c§lszpon beliara":		return new SzponBeliaraMana(dr, p);
 					case "§c§lszpon beliara i":		return new SzponBeliaraMana(dr, p);
+					case "§c§lszpon beliara ii":	return new SzponBeliaraMana(dr, p);
+					case "§c§lszpon beliara iii":	return new SzponBeliaraMana(dr, p);
 					case "§5§lszal beliara":		return new SzalBeliara(dr, p);
 					case "§5§lzakazany rytual":		return new ZakazanyRytual(dr, p);
 					case "§5§lzakazany rytual i":	return new ZakazanyRytual_H(dr, p);
@@ -601,6 +630,10 @@ public class RuneManager {
 					case "§x§9§a§0§3§0§3§lrozprucie":return new Rozprucie(dr, p);
 					case "§x§8§a§0§3§0§3furia":		return new Furia(dr, p);
 					case "§5§lkoszmar beliara":		return new KoszmarBeliara(dr, p);
+					case "§5§lkoszmar beliara i":	return new KoszmarBeliara(dr, p);
+					case "§5§lkoszmar beliara ii":	return new KoszmarBeliara(dr, p);
+					case "§c§l§ogniew przodkow":	return new GniewPrzodkow(dr, p);
+					case "§c§l§ogniew przodkow i":	return new GniewPrzodkow(dr, p);
 					default: 						return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_WAIT:
@@ -609,6 +642,7 @@ public class RuneManager {
 					case "§7czystka":					return new Czystka(dr, p);
 					case "§x§0§0§f§f§f§fwlocznia elysian":	return new WloczniaElysian(dr, p);
 					case "§7§lkamienny obserwator":		return new KamiennyObserwator(dr, p);
+					case "§a§lsekret wielkanocy":		return new SekretWielkanocy(dr, p);
 					default: 							return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_PIGSTEP:
@@ -621,6 +655,8 @@ public class RuneManager {
 					case "§x§c§d§0§0§0§0§ldrenaz":			return new Drenaz(dr, p);
 					case "§x§8§a§0§3§0§3§lklatwa krwi":		return new KlatwaKrwi(dr, p);
 					case "§x§e§e§0§5§0§5§ltransfuzja":		return new Transfuzja(dr, p);
+					case "§x§c§d§0§0§0§0§lpakt krwi":		return new PaktKrwi(dr, p);
+					case "§x§c§d§0§0§0§0§lpakt krwi i":		return new PaktKrwi_H(dr, p);
 					default: 							return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_OTHERSIDE:

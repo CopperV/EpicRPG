@@ -188,7 +188,6 @@ public class EntityDamageListener implements Listener {
 		}
 		
 		e.setDamage(dmg);
-		
 	}
 	
 }
