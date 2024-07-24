@@ -12,7 +12,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import de.tr7zw.nbtapi.NBTItem;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
-import io.github.rysefoxx.inventory.plugin.enums.Action;
 import io.github.rysefoxx.inventory.plugin.enums.DisabledEvents;
 import io.github.rysefoxx.inventory.plugin.enums.DisabledInventoryClick;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
@@ -194,7 +193,7 @@ public class KosturMenuManager {
 			.title("§3§lRuniczny kostur")
 			.size(27)
 			.ignoredSlots(kosturFreeSlots)
-			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.disableUpdateTask()
@@ -210,7 +209,7 @@ public class KosturMenuManager {
 			.title("§3§lRuniczny kostur")
 			.size(27)
 			.ignoredSlots(runesFreeSlots)
-			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.disableUpdateTask()
@@ -226,7 +225,7 @@ public class KosturMenuManager {
 			.title("§3§lTworzenie kostura")
 			.size(36)
 			.ignoredSlots(createFreeSlots)
-			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.disableUpdateTask()

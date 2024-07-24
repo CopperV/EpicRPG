@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import com.sk89q.worldguard.internal.flywaydb.core.internal.util.StringUtils;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Core.CoinsSystem;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgVault;
@@ -41,7 +42,7 @@ public class DragonCoinsChangeCommand implements CommandExecutor {
 		int cena = Integer.parseInt(args[2]);
 		switch(args[0].toLowerCase()) {
 		case "add":
-			vault.addDragonCoins(cena);
+			CoinsSystem.getInstance().addCoins(rpg, cena, "cmd");
 			p.sendMessage(Main.getInstance().getPrefix()+" §aOtrzymales §c§o"+cena+" Smoczych Monet");
 			break;
 		case "remove":

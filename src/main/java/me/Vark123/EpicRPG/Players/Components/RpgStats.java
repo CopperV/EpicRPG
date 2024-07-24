@@ -21,7 +21,8 @@ import lombok.Setter;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.HealthSystem.RpgPlayerHealEvent;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.Potions.RpgPlayerManaRegenEvent;
+import me.Vark123.EpicRPG.Players.Events.RpgPlayerManaRegenEvent;
+import me.Vark123.EpicRPG.Players.Events.RpgPlayerManaUseEvent;
 import me.Vark123.EpicRPG.Utils.ChatPrintable;
 import me.Vark123.EpicRPG.Utils.TableGenerator;
 import me.Vark123.EpicRPG.Utils.TableGenerator.Receiver;
@@ -264,6 +265,12 @@ public class RpgStats implements Serializable, ChatPrintable {
 	}
 	
 	public void removePresentMana(int presentMana) {
+		RpgPlayerManaUseEvent event = new RpgPlayerManaUseEvent(rpg, presentMana);
+		Bukkit.getPluginManager().callEvent(event);
+		if(event.isCancelled())
+			return;
+		
+		presentMana = event.getMana();
 		this.presentMana -= presentMana;
 	}
 	
@@ -282,6 +289,12 @@ public class RpgStats implements Serializable, ChatPrintable {
 	}
 	
 	public void removePresentManaSmart(int presentMana) {
+		RpgPlayerManaUseEvent event = new RpgPlayerManaUseEvent(rpg, presentMana);
+		Bukkit.getPluginManager().callEvent(event);
+		if(event.isCancelled())
+			return;
+		
+		presentMana = event.getMana();
 		if(this.presentMana - presentMana < 0) {
 			this.presentMana = 0;
 		}else {

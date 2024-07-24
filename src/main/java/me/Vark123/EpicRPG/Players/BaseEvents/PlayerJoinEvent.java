@@ -3,6 +3,7 @@ package me.Vark123.EpicRPG.Players.BaseEvents;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -13,7 +14,7 @@ import me.Vark123.EpicRPG.Players.RpgPlayer;
 
 public class PlayerJoinEvent implements Listener {
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onJoin(org.bukkit.event.player.PlayerJoinEvent e) {
 //		Player p = e.getPlayer();
 //		RpgPlayer rpg = PlayerManager.getInstance().loadPlayer(p);

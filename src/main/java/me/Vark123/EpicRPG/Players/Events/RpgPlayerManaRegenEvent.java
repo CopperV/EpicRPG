@@ -1,4 +1,4 @@
-package me.Vark123.EpicRPG.Potions;
+package me.Vark123.EpicRPG.Players.Events;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;

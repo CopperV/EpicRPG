@@ -50,6 +50,7 @@ public class KasaCommand implements CommandExecutor{
 			p.sendMessage("§a§oSmocze monety: §c§o"+vault.getDragonCoins());
 		p.sendMessage("§a§oBrylki rudy: §9§o"+vault.getBrylkiRudy());
 //		p.sendMessage("§a§oSloneczka: §e§o"+vault.getEventCurrency());
+		p.sendMessage("§a§oPalemki: §e§o"+vault.getEventCurrency2());
 		p.sendMessage("§a§l=========="+Main.getInstance().getPrefix()+"§a§l==========");
 		
 		return true;

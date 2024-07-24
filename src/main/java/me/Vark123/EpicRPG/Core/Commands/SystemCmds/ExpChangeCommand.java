@@ -40,7 +40,7 @@ public class ExpChangeCommand implements CommandExecutor {
 		int cena = Integer.parseInt(args[2]);
 		switch(args[0].toLowerCase()) {
 		case "add":
-			ExpSystem.getInstance().addExp(rpg, cena, "boost");
+			ExpSystem.getInstance().addExp(rpg, cena, "cmd");
 			break;
 		case "remove":
 			ExpSystem.getInstance().addRawExp(rpg, -cena);

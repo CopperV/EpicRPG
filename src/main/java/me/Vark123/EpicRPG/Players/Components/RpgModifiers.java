@@ -75,6 +75,20 @@ public class RpgModifiers implements Serializable {
 	private boolean zakletaStrzala;
 	private boolean wybraniecBeliara;
 	private boolean wtopienie;
+	private boolean wtopienie_h;
+	private boolean wtopienie_m;
+	private boolean ostatniBoj;
+	private boolean paktKrwi;
+	private boolean paktKrwiMeasure;
+	private double paktKrwiHp;
+	private boolean szostyZmysl;
+	private boolean przyplywEnergii;
+	private boolean ostatniBoj_h;
+	private boolean paktKrwi_h;
+	private boolean paktKrwiMeasure_h;
+	private double paktKrwiHp_h;
+	private boolean szostyZmysl_h;
+	private boolean przyplywEnergii_h;
 	
 	private int potionSila;
 	private int potionZrecznosc;
@@ -643,4 +657,117 @@ public class RpgModifiers implements Serializable {
 	public void setWtopienie(boolean wtopienie) {
 		this.wtopienie = wtopienie;
 	}
+
+	public boolean hasWtopienie_h() {
+		return wtopienie_h;
+	}
+
+	public void setWtopienie_h(boolean wtopienie_h) {
+		this.wtopienie_h = wtopienie_h;
+	}
+
+	public boolean hasWtopienie_m() {
+		return wtopienie_m;
+	}
+
+	public void setWtopienie_m(boolean wtopienie_m) {
+		this.wtopienie_m = wtopienie_m;
+	}
+
+	public boolean hasOstatniBoj() {
+		return ostatniBoj;
+	}
+
+	public void setOstatniBoj(boolean ostatniBoj) {
+		this.ostatniBoj = ostatniBoj;
+	}
+
+	public boolean hasPaktKrwi() {
+		return paktKrwi;
+	}
+
+	public void setPaktKrwi(boolean paktKrwi) {
+		this.paktKrwi = paktKrwi;
+	}
+
+	public boolean hasPaktKrwiMeasure() {
+		return paktKrwiMeasure;
+	}
+
+	public void setPaktKrwiMeasure(boolean paktKrwiMeasure) {
+		this.paktKrwiMeasure = paktKrwiMeasure;
+	}
+
+	public double getPaktKrwiHp() {
+		return paktKrwiHp;
+	}
+
+	public void setPaktKrwiHp(double paktKrwiHp) {
+		this.paktKrwiHp = paktKrwiHp;
+	}
+
+	public boolean hasSzostyZmysl() {
+		return szostyZmysl;
+	}
+
+	public void setSzostyZmysl(boolean szostyZmysl) {
+		this.szostyZmysl = szostyZmysl;
+	}
+
+	public boolean hasPrzyplywEnergii() {
+		return przyplywEnergii;
+	}
+
+	public void setPrzyplywEnergii(boolean przyplywEnergii) {
+		this.przyplywEnergii = przyplywEnergii;
+	}
+
+	public boolean hasOstatniBoj_h() {
+		return ostatniBoj_h;
+	}
+
+	public void setOstatniBoj_h(boolean ostatniBoj) {
+		this.ostatniBoj_h = ostatniBoj;
+	}
+
+	public boolean hasPaktKrwi_h() {
+		return paktKrwi_h;
+	}
+
+	public void setPaktKrwi_h(boolean paktKrwi) {
+		this.paktKrwi_h = paktKrwi;
+	}
+
+	public boolean hasPaktKrwiMeasure_h() {
+		return paktKrwiMeasure_h;
+	}
+
+	public void setPaktKrwiMeasure_h(boolean paktKrwiMeasure) {
+		this.paktKrwiMeasure_h = paktKrwiMeasure;
+	}
+
+	public double getPaktKrwiHp_h() {
+		return paktKrwiHp_h;
+	}
+
+	public void setPaktKrwiHp_h(double paktKrwiHp) {
+		this.paktKrwiHp_h = paktKrwiHp;
+	}
+
+	public boolean hasSzostyZmysl_h() {
+		return szostyZmysl_h;
+	}
+
+	public void setSzostyZmysl_h(boolean szostyZmysl) {
+		this.szostyZmysl_h = szostyZmysl;
+	}
+
+	public boolean hasPrzyplywEnergii_h() {
+		return przyplywEnergii_h;
+	}
+
+	public void setPrzyplywEnergii_h(boolean przyplywEnergii) {
+		this.przyplywEnergii_h = przyplywEnergii;
+	}
+	
 }

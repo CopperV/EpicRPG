@@ -64,7 +64,7 @@ public class BoosterManager {
 		long hours = (time/(1000*60*60));
 		Bukkit.broadcastMessage(Main.getInstance().getPrefix()+" §a"+player+" §euzyl ksiegi wiedzy §7[§6"+display.toUpperCase()+" §e§o+"+String.format("%2d", (int)(modifier*100))+"%§7] "
 				+ "§ena czas §7"+String.format("%02d", hours)+":"+String.format("%02d", minutes)+"§e!");
-		Bukkit.getOnlinePlayers().parallelStream()
+		Bukkit.getOnlinePlayers().stream()
 			.forEach(p -> {
 				p.playSound(p, Sound.UI_TOAST_CHALLENGE_COMPLETE, 1, 1);
 				p.sendTitle("§e§lUZYTO KSIEGI WIEDZY", "§7[§6"+display.toUpperCase()+" §e§o+"+String.format("%2d", (int)(modifier*100))+"%§7] §aprzez §o"+player, 5, 10, 15);

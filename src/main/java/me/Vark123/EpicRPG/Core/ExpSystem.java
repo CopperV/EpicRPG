@@ -74,8 +74,14 @@ public class ExpSystem {
 		int exp = (int) (event.getAmount()*event.getModifier());
 		if(exp == 0)
 			return;
-
+		
 		RpgPlayerInfo info = rpg.getInfo();
+		if(info.getLevel() >= MAX_LEVEL &&
+				(info.getExp() - getNextLevelExp(MAX_LEVEL-1)) > (0.9 * (getNextLevelExp(MAX_LEVEL) - getNextLevelExp(MAX_LEVEL-1)))) {
+			info.setExp((int) (0.9 * (getNextLevelExp(MAX_LEVEL) - getNextLevelExp(MAX_LEVEL-1))) + getNextLevelExp(MAX_LEVEL-1));
+			return;
+		}
+		
 		info.addXP(exp);
 		checkLvl(info);
 		

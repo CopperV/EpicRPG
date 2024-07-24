@@ -17,7 +17,6 @@ import de.tr7zw.nbtapi.NBTItem;
 import de.tr7zw.nbtapi.NBTListCompound;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
-import io.github.rysefoxx.inventory.plugin.enums.Action;
 import io.github.rysefoxx.inventory.plugin.enums.DisabledEvents;
 import io.github.rysefoxx.inventory.plugin.enums.DisabledInventoryClick;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
@@ -143,7 +142,7 @@ public class GemManager {
 			.title("§3§lTworzenie Poteznych Gemow")
 			.size(36)
 			.ignoredSlots(powerfulFreeSlots)
-			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.listener(GemEvents.getEvents().getPowerfulClickEvent())
@@ -159,7 +158,7 @@ public class GemManager {
 			.title("§3§lLaczenie Gemow")
 			.size(36)
 			.ignoredSlots(annihilusFreeSlots)
-			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.listener(GemEvents.getEvents().getAnnihilusClickEvent())
@@ -175,7 +174,7 @@ public class GemManager {
 			.title("§6§lUlepszenie Annihilusa")
 			.size(45)
 			.ignoredSlots(annihilusUpgradeFreeSlots)
-			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.listener(GemEvents.getEvents().getAnnihilusUpgradeClickEvent())

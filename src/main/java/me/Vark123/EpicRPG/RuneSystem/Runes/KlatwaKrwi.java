@@ -27,7 +27,6 @@ public class KlatwaKrwi extends ARune {
 	
 	public KlatwaKrwi(ItemStackRune dr, Player p) {
 		super(dr, p);
-		this.modifier1 = true;
 	}
 
 	@Override
@@ -36,7 +35,6 @@ public class KlatwaKrwi extends ARune {
 		RpgModifiers modifiers = rpg.getModifiers();
 		
 		modifiers.setKlatwaKrwi(true);
-		modifiers.setModifier1_lock(true);
 		
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_EVOKER_PREPARE_SUMMON, 1, 0.7f);
 		p.getWorld().spawnParticle(Particle.REDSTONE, p.getLocation().add(0,1,0), 18, 0.4f, 0.6f, 0.4f, 0.1f, dust);
@@ -60,7 +58,6 @@ public class KlatwaKrwi extends ARune {
 					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_EVOKER_CAST_SPELL, 1, 0.6f);
 					modifiers.setKlatwaKrwi(false);
-					modifiers.setModifier1_lock(false);
 					this.cancel();
 					return;
 				}

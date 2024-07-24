@@ -60,6 +60,8 @@ commands:
     aliases: [ab,abs,advancedbuysystem]
   event:
     aliases: [evc, ev]
+  event2:
+    aliases: [evc2, ev2]
   epicboost:
   modyfikatory:
     aliases: [modyfikator, mod, booster, boosters, boost, boosts]
@@ -67,3 +69,4 @@ commands:
     aliases: [exp, eexp]
   ekwipunek:
     aliases: [eq]
+  epicmoney:

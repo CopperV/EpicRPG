@@ -23,12 +23,14 @@ import me.Vark123.EpicRPG.HorseSystem.Horses.DeathRider;
 import me.Vark123.EpicRPG.HorseSystem.Horses.DiamondHorse;
 import me.Vark123.EpicRPG.HorseSystem.Horses.ESkeletonHorse;
 import me.Vark123.EpicRPG.HorseSystem.Horses.EZombieHorse;
+import me.Vark123.EpicRPG.HorseSystem.Horses.ElvenHorse;
 import me.Vark123.EpicRPG.HorseSystem.Horses.GoldenHorse;
 import me.Vark123.EpicRPG.HorseSystem.Horses.GoldenSteed;
 import me.Vark123.EpicRPG.HorseSystem.Horses.HauntedHorse;
 import me.Vark123.EpicRPG.HorseSystem.Horses.IronHorse;
 import me.Vark123.EpicRPG.HorseSystem.Horses.KidHorse;
 import me.Vark123.EpicRPG.HorseSystem.Horses.MasterHorse;
+import me.Vark123.EpicRPG.HorseSystem.Horses.SpringSteed;
 
 public class HorseStickUseEvent implements Listener {
 
@@ -127,6 +129,18 @@ public class HorseStickUseEvent implements Listener {
 				horse = new GoldenSteed();
 				if(!horses.contains("11")) {
 					horses.add("11");
+				}
+				break;
+			case "Kon12":
+				horse = new SpringSteed();
+				if(!horses.contains("12")) {
+					horses.add("12");
+				}
+				break;
+			case "Kon13":
+				horse = new ElvenHorse();
+				if(!horses.contains("13")) {
+					horses.add("13");
 				}
 				break;
 			default:

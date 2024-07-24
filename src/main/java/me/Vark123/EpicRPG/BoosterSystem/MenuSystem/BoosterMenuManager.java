@@ -30,6 +30,7 @@ public class BoosterMenuManager {
 	private final ItemStack stygiaBoost;
 	private final ItemStack coinsBoost;
 	private final ItemStack rudaBoost;
+	private final ItemStack event2Boost;
 	
 	private final RyseInventory inv;
 	
@@ -52,6 +53,7 @@ public class BoosterMenuManager {
 		stygiaBoost = new ItemStack(Material.GHAST_TEAR, 1);
 		coinsBoost = new ItemStack(Material.REDSTONE, 1);
 		rudaBoost = new ItemStack(Material.LAPIS_LAZULI, 1);
+		event2Boost = new ItemStack(Material.KELP, 1);
 
 		inv = RyseInventory.builder()
 				.title(Main.getInstance().getPrefix() + " §6§lMODYFIKATORY")
@@ -140,12 +142,25 @@ public class BoosterMenuManager {
 			im.setLore(new LinkedList<>());
 			rudaBoost.setItemMeta(im);
 		}
+		booster = BoosterManager.get().getTopBooster("event2");
+		if (booster != null) {
+			ItemMeta im = event2Boost.getItemMeta();
+			im.setDisplayName("§aPalemki §o+"+String.format("%02d", (int)(booster.getKey().getModifier()*100))+"%");
+			im.setLore(Arrays.asList(" ","§7Aktywny do §a§o"+simpleDateFormat.format(booster.getValue())));
+			event2Boost.setItemMeta(im);
+		} else {
+			ItemMeta im = event2Boost.getItemMeta();
+			im.setDisplayName("§7Palemki §8[§cNIEAKTYWNY§8]");
+			im.setLore(new LinkedList<>());
+			event2Boost.setItemMeta(im);
+		}
 		
 		contents.set(9, expBoost);
 		contents.set(11, moneyBoost);
 		contents.set(13, stygiaBoost);
 		contents.set(15, coinsBoost);
 		contents.set(17, rudaBoost);
+		contents.set(22, event2Boost);
 	}
 
 }

@@ -207,7 +207,7 @@ public class BackpackEvents {
 				toDrop.add(backpack);
 			}
 			
-			toDrop.parallelStream().forEach(it -> {
+			toDrop.stream().forEach(it -> {
 				Utils.dropItemStack(p, it);
 			});
 		};
@@ -274,7 +274,7 @@ public class BackpackEvents {
 				}
 				toDropList.add(toDrop);
 			}
-			toDropList.parallelStream().forEach(toDrop -> {
+			toDropList.stream().forEach(toDrop -> {
 				Utils.dropItemStack(p, toDrop);
 			});
 			

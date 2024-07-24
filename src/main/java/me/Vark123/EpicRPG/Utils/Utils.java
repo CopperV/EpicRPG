@@ -64,6 +64,8 @@ public class Utils {
 	}
 	
 	public static void dropItemStack(Player p, ItemStack it) {
+		if(it == null)
+			return;
 		Inventory inv = p.getInventory();
 		int freeSlot = inv.firstEmpty();
 		if(freeSlot >= 0 && freeSlot < 36) {

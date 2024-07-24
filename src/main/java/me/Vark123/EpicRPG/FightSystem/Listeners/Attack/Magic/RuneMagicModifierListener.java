@@ -37,7 +37,7 @@ public class RuneMagicModifierListener implements Listener {
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		RpgModifiers modifiers = rpg.getModifiers();
 		double modifier = 0;
-		
+
 		if(modifiers.hasInkantacja() 
 				&& ir.getMagicType().equalsIgnoreCase("ogien"))
 			modifier += 0.3;
@@ -56,6 +56,9 @@ public class RuneMagicModifierListener implements Listener {
 		if(modifiers.hasZewKrwi() 
 				&& ir.getMagicType().equalsIgnoreCase("krew"))
 			modifier += ((double) modifiers.getZewKrwiMod())/100.0;
+		if(modifiers.hasKlatwaKrwi() 
+				&& ir.getMagicType().equalsIgnoreCase("krew"))
+			modifier += 0.4;
 		if(modifiers.hasPelnia() 
 				&& ir.getMagicType().equalsIgnoreCase("woda"))
 			modifier += 0.45;
@@ -83,8 +86,14 @@ public class RuneMagicModifierListener implements Listener {
 		if(modifiers.hasWybraniecBeliara() 
 				&& ir.getMagicType().equalsIgnoreCase("mrok"))
 			modifier += 0.6;
+		if(modifiers.hasPaktKrwi() && !modifiers.hasPaktKrwiMeasure() 
+				&& ir.getMagicType().equalsIgnoreCase("krew"))
+			modifier += 0.75;
+		if(modifiers.hasPaktKrwi_h() && !modifiers.hasPaktKrwiMeasure_h() 
+				&& ir.getMagicType().equalsIgnoreCase("krew"))
+			modifier += 0.85;
 		
 		e.increaseModifier(modifier);
 	}
-
+	
 }

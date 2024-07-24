@@ -49,7 +49,7 @@ public class MMRepairEvents {
 			ItemExecutor manag = MythicBukkit.inst().getItemManager();
 			List<Integer> slotsToCheck = Utils.intArrayToList(MMRepairManager.getInstance().getFreeSlots());
 			
-			slotsToCheck.parallelStream().filter(i -> {
+			slotsToCheck.stream().filter(i -> {
 				ItemStack it = inv.getItem(i);
 				if(it == null 
 						|| it.getType().equals(Material.AIR))
@@ -73,7 +73,7 @@ public class MMRepairEvents {
 				
 				it2.setAmount(it.getAmount());
 				NBTItem nbt2 = new NBTItem(it2);
-				nbt.getKeys().parallelStream().filter(key -> {
+				nbt.getKeys().stream().filter(key -> {
 					return (key.contains("Random") && !key.equals("Random"));
 				}).findAny().ifPresent(s -> {
 					Random rand = new Random();

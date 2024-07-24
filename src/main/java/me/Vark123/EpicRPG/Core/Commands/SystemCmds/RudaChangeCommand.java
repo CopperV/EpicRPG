@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import com.sk89q.worldguard.internal.flywaydb.core.internal.util.StringUtils;
 
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Core.RudaSystem;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgVault;
@@ -41,7 +42,7 @@ public class RudaChangeCommand implements CommandExecutor {
 		int cena = Integer.parseInt(args[2]);
 		switch(args[0].toLowerCase()) {
 		case "add":
-			vault.addBrylkiRudy(cena);
+			RudaSystem.getInstance().addRuda(rpg, cena, "cmd");
 			p.sendMessage(Main.getInstance().getPrefix()+" §aOtrzymales §9§o"+cena+" Brylek Rudy");
 			break;
 		case "remove":

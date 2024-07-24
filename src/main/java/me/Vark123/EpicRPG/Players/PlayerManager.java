@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 
+import lombok.Getter;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.MySQL.DBOperations;
 import me.Vark123.EpicRPG.Stats.ChangeStats;
@@ -19,6 +20,7 @@ public class PlayerManager {
 
 	private final static PlayerManager instance = new PlayerManager();
 	
+	@Getter
 	private final Map<UUID, RpgPlayer> playerContainer;
 	
 	private PlayerManager() {

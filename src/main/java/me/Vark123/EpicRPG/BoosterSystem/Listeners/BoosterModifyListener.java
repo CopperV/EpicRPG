@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import me.Vark123.EpicRPG.BoosterSystem.Booster;
 import me.Vark123.EpicRPG.BoosterSystem.BoosterManager;
 import me.Vark123.EpicRPG.Core.Events.CoinsModifyEvent;
+import me.Vark123.EpicRPG.Core.Events.EventCurrency2ModifyEvent;
 import me.Vark123.EpicRPG.Core.Events.ExpModifyEvent;
 import me.Vark123.EpicRPG.Core.Events.MoneyModifyEvent;
 import me.Vark123.EpicRPG.Core.Events.RudaModifyEvent;
@@ -87,6 +88,22 @@ public class BoosterModifyListener implements Listener {
 			return;
 		
 		Entry<Booster, Date> result = BoosterManager.get().getTopBooster("ruda");
+		if(result == null)
+			return;
+		
+		Booster booster = result.getKey();
+		double modifier = booster.getModifier();
+		if(e.getReason().equalsIgnoreCase("quest"))
+			modifier /= 10.;
+		e.setModifier(e.getModifier()+modifier);
+	}
+
+	@EventHandler(priority = EventPriority.LOW)
+	public void onEvent2(EventCurrency2ModifyEvent e) {
+		if(e.isCancelled())
+			return;
+		
+		Entry<Booster, Date> result = BoosterManager.get().getTopBooster("event2");
 		if(result == null)
 			return;
 		

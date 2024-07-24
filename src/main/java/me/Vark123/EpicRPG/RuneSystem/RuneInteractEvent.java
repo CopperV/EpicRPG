@@ -7,6 +7,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import de.tr7zw.nbtapi.NBTItem;
+import io.lumine.mythic.bukkit.MythicBukkit;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Utils.Utils;
@@ -28,6 +30,10 @@ public class RuneInteractEvent implements Listener {
 		if(!Utils.isRune(item))
 			return;
 	
+		NBTItem nbt = new NBTItem(item);
+		String mmType = nbt.getString("MYTHIC_TYPE");
+		item = MythicBukkit.inst().getItemManager().getItemStack(mmType);
+		
 		RuneManager.getInstance().castRune(rpg, item);
 	}
 

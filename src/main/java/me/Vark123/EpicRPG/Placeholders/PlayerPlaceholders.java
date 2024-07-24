@@ -1,5 +1,8 @@
 package me.Vark123.EpicRPG.Placeholders;
 
+import java.util.Optional;
+
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -7,11 +10,13 @@ import org.jetbrains.annotations.NotNull;
 
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Core.ExpSystem;
+import me.Vark123.EpicRPG.MySQL.DBOperations;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import me.Vark123.EpicRPG.Players.Components.RpgVault;
+import me.Vark123.EpicRPG.Utils.Pair;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 
 public class PlayerPlaceholders extends PlaceholderExpansion {
@@ -41,9 +46,22 @@ public class PlayerPlaceholders extends PlaceholderExpansion {
 		RpgPlayerInfo info = rpg.getInfo();
 		RpgStats stats = rpg.getStats();
 		RpgVault vault = rpg.getVault();
+		if(identifier.contains("topevent_")) {
+			String strTop = identifier.split("_")[1];
+			if(!StringUtils.isNumeric(strTop))
+				return "Unmatched Placeholder";
+			int top = Integer.parseInt(strTop);
+			Optional<Pair<String, Integer>> result = DBOperations.getPlayerEvent2OnPos(top);
+			if(result.isPresent()) {
+				Pair<String, Integer> para = result.get();
+				return para.getKey()+"    §e"+para.getValue();
+			}
+		}
 		switch(identifier) {
 			case "level":
 				return info.getLevel()+"";
+			case "level-50":
+				return (info.getLevel()-50)+"";
 			case "exp":
 				return info.getExp()+"";
 			case "nextlevel":

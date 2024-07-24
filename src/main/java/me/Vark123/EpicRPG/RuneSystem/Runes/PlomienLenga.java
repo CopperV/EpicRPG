@@ -88,7 +88,7 @@ public class PlomienLenga extends ARune {
 					le = (LivingEntity)e;
 					RuneDamage.damageNormal(p, le, dr, (p, le, dr)->{
 						new BukkitRunnable() {
-							int timer = 8;
+							int timer = 12;
 							double dmg = dr.getDamage()/50.0;
 							@Override
 							public void run() {
@@ -167,7 +167,7 @@ public class PlomienLenga extends ARune {
 			le = (LivingEntity)e;
 			RuneDamage.damageNormal(p, le, dr,(p, le, dr) -> {
 				new BukkitRunnable() {
-					int timer = 7;
+					int timer = 10;
 					double dmg = dr.getDamage()/50.0;
 					@Override
 					public void run() {

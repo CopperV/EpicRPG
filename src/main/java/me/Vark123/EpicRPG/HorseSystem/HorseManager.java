@@ -22,12 +22,14 @@ import me.Vark123.EpicRPG.HorseSystem.Horses.DeathRider;
 import me.Vark123.EpicRPG.HorseSystem.Horses.DiamondHorse;
 import me.Vark123.EpicRPG.HorseSystem.Horses.ESkeletonHorse;
 import me.Vark123.EpicRPG.HorseSystem.Horses.EZombieHorse;
+import me.Vark123.EpicRPG.HorseSystem.Horses.ElvenHorse;
 import me.Vark123.EpicRPG.HorseSystem.Horses.GoldenHorse;
 import me.Vark123.EpicRPG.HorseSystem.Horses.GoldenSteed;
 import me.Vark123.EpicRPG.HorseSystem.Horses.HauntedHorse;
 import me.Vark123.EpicRPG.HorseSystem.Horses.IronHorse;
 import me.Vark123.EpicRPG.HorseSystem.Horses.KidHorse;
 import me.Vark123.EpicRPG.HorseSystem.Horses.MasterHorse;
+import me.Vark123.EpicRPG.HorseSystem.Horses.SpringSteed;
 
 @Getter
 public class HorseManager {
@@ -71,6 +73,10 @@ public class HorseManager {
 				return new DeathRider();
 			case "11":
 				return new GoldenSteed();
+			case "12":
+				return new SpringSteed();
+			case "13":
+				return new ElvenHorse();
 			default:
 				return null;
 		}

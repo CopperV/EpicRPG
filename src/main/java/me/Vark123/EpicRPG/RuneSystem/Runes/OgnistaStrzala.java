@@ -76,7 +76,7 @@ public class OgnistaStrzala extends ARune {
 					}).ifPresent(e -> {
 						RuneDamage.damageNormal(p, (LivingEntity)e, dr, (p, le, dr) -> {
 							new BukkitRunnable() {
-								int timer = 2;
+								int timer = 3;
 								double dmg = dr.getDamage()/50.0;
 								@Override
 								public void run() {

@@ -57,6 +57,14 @@ public class ManualDamage {
 		
 		victim.setLastDamageCause(e);
 		victim.playEffect(EntityEffect.HURT);
+		double absorption = victim.getAbsorptionAmount();
+		if(absorption > 0) {
+			if(absorption > damage) {
+				victim.setAbsorptionAmount(absorption - damage);
+				return true;
+			}
+			victim.setAbsorptionAmount(0);
+		}
 		victim.setHealth(victim.getHealth() - damage);
 		
 //		victim.setLastDamageCause(e);

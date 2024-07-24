@@ -161,8 +161,34 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 						+"  §c❤ "+((int)player.getHealth())+"/"
 						+((int)player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())
 						+(player.getAbsorptionAmount() >= 1 ? "§6§l♰ §6"+((int)player.getAbsorptionAmount()):"")
+						+getGamemodeInfo()
 						+"  §b✺ "+stats.getPresentMana()+"/"+stats.getFinalMana()
 						+"  §2§l🛡 §2"+stats.getFinalOchrona()));
+	}
+	
+	private String getGamemodeInfo() {
+		if(!player.hasPermission("group.builder"))
+			return "";
+		
+		int gm;
+		switch(player.getGameMode()) {
+			case ADVENTURE:
+				gm = 2;
+				break;
+			case CREATIVE:
+				gm = 1;
+				break;
+			case SPECTATOR:
+				gm = 3;
+				break;
+			case SURVIVAL:
+				gm = 0;
+				break;
+			default:
+				return "";
+		}
+		
+		return " §e☤ "+gm;
 	}
 	
 	public void endTasks() {

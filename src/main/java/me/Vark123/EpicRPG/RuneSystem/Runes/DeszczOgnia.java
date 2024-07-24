@@ -87,7 +87,7 @@ public class DeszczOgnia extends ARune{
 					le = (LivingEntity) e;
 					RuneDamage.damageNormal(p, le, dr, (p, le, dr) -> {
 						new BukkitRunnable() {
-							int timer = 9;
+							int timer = 14;
 							double dmg = dr.getDamage()/50.0;
 							@Override
 							public void run() {

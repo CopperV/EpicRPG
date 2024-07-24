@@ -5,7 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import me.Vark123.EpicRPG.HealthSystem.RpgPlayerHealEvent;
-import me.Vark123.EpicRPG.Potions.RpgPlayerManaRegenEvent;
+import me.Vark123.EpicRPG.Players.Events.RpgPlayerManaRegenEvent;
 
 public class KoszmarKrukaPotionDebuffListener implements Listener {
 
@@ -16,9 +16,16 @@ public class KoszmarKrukaPotionDebuffListener implements Listener {
 		}
 		
 		Player p = e.getP();
-		if(!p.getWorld().getName().toLowerCase().equalsIgnoreCase("dungeon13"))
+		String world = p.getWorld().getName().toLowerCase();
+		if(!world.contains("dungeon13_"))
 			return;
-		double modifier = 0.7;
+		double modifier;
+		if(world.contains("heroic"))
+			modifier = 0.6;
+		else if(world.contains("mythic"))
+			modifier = 0.5;
+		else
+			modifier = 0.7;
 		e.setHeal(e.getHealAmount()*modifier);
 	}
 
@@ -29,9 +36,16 @@ public class KoszmarKrukaPotionDebuffListener implements Listener {
 		}
 		
 		Player p = e.getPlayer();
-		if(!p.getWorld().getName().toLowerCase().equalsIgnoreCase("dungeon13"))
+		String world = p.getWorld().getName().toLowerCase();
+		if(!world.toLowerCase().contains("dungeon13_"))
 			return;
-		double modifier = 0.7;
+		double modifier;
+		if(world.contains("heroic"))
+			modifier = 0.6;
+		else if(world.contains("mythic"))
+			modifier = 0.5;
+		else
+			modifier = 0.7;
 		e.setRegen((int) (e.getRegen()*modifier));
 	}
 

@@ -43,10 +43,8 @@ public class OgnistaSferaEffectListener implements Listener {
 		Entity damager = e.getDamager();
 		if(damager instanceof Projectile)
 			damager = (Entity) ((Projectile) damager).getShooter();
-		Bukkit.broadcastMessage("Test1");
 		EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(victim, damager, DamageCause.CONTACT, dmg);
 		Bukkit.getPluginManager().callEvent(event);
-		Bukkit.broadcastMessage("Test2 "+e.isCancelled());
 		if(!event.isCancelled()) {
 			ManualDamage.doDamage((Player) victim, (LivingEntity) damager, dmg, event);
 			victim.getWorld().playSound(victim.getLocation(), Sound.ENTITY_GHAST_SHOOT, 1, 1);

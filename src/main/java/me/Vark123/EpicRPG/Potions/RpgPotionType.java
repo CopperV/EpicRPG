@@ -10,6 +10,7 @@ public enum RpgPotionType {
 	T_WIEDZMIN,
 	WYWAR,
 	STALE,
+	ALKOHOL,
 	NONE;
 	
 }

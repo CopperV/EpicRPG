@@ -44,6 +44,10 @@ public class Main extends JavaPlugin {
 	public void onEnable() {
 		instance = this;
 		
+		manager = new InventoryManager(instance);
+		manager.invoke();
+		protocolManager = ProtocolLibrary.getProtocolManager();
+		
 		FileOperations.checkFiles();
 		Config.get().init();
 		DBOperations.init();
@@ -55,10 +59,6 @@ public class Main extends JavaPlugin {
 		playerPlaceholders.register();
 		scoreboardPlaceholders = new ScoreboardPlaceholders();
 		scoreboardPlaceholders.register();
-		
-		manager = new InventoryManager(instance);
-		manager.invoke();
-		protocolManager = ProtocolLibrary.getProtocolManager();
 		
 		EventListenerManager.registerEvents();
 		CommandExecutorManager.setExecutors();
@@ -73,10 +73,22 @@ public class Main extends JavaPlugin {
 		if(saveTask != null && !saveTask.isCancelled())
 			saveTask.cancel();
 		
-		Bukkit.getOnlinePlayers().stream()
-			.map(PlayerManager.getInstance()::getRpgPlayer)
-			.forEach(DBOperations::savePlayer);
+//		Bukkit.getOnlinePlayers().stream()
+//			.map(PlayerManager.getInstance()::getRpgPlayer)
+//			.forEach(DBOperations::savePlayer);
 		
+		PlayerManager.getInstance().getPlayerContainer().values()
+			.stream()
+			.forEach(rpg -> {
+				rpg.endTasks();
+				DBOperations.savePlayer(rpg);
+				FileOperations.savePlayerJewerly(rpg);
+				FileOperations.savePlayerBackItem(rpg);
+				DBOperations.savePlayer(rpg);
+				rpg.getPlayer().kickPlayer("Restart serwera");
+			});
+
+		PlayerManager.getInstance().getPlayerContainer().clear();
 		DBOperations.close();
 		FileOperations.saveBlackrockCompleted();
 		FileOperations.saveBoosters();

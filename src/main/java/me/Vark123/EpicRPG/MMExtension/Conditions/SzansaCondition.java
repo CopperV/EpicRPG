@@ -45,7 +45,7 @@ public class SzansaCondition extends SkillCondition implements ISkillMetaConditi
 			return true;
 		}
 		double los = Math.random();
-		final double szansa = chance.get(arg0);
+		final double szansa = chance.get(arg0, arg1);
 		boolean check = los <= szansa;
 		if(check)
 			tmp.add(id);

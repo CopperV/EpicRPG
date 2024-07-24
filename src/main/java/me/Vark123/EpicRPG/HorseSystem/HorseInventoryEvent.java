@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.HorseInventory;
+import org.bukkit.inventory.AbstractHorseInventory;
 
 public class HorseInventoryEvent implements Listener {
 	
@@ -23,7 +23,7 @@ public class HorseInventoryEvent implements Listener {
 		if(!(vehicle instanceof AbstractHorse))
 			return;
 		
-		if(!(e.getClickedInventory() instanceof HorseInventory))
+		if(!(e.getClickedInventory() instanceof AbstractHorseInventory))
 			return;
 		
 		e.setCancelled(true);

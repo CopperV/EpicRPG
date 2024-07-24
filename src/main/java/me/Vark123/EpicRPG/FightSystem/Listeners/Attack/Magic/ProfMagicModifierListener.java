@@ -33,7 +33,7 @@ public class ProfMagicModifierListener implements Listener {
 		if(!ChatColor.stripColor(info.getShortProf().toLowerCase()).equalsIgnoreCase("mag"))
 			return;
 		
-		e.increaseModifier(1.1);
+		e.increaseModifier(0.1);
 	}
 
 }

@@ -131,7 +131,7 @@ public class KlejnotyEvents {
 			Map<String, Double> speedSlots = new ConcurrentHashMap<>();
 			Map<String, Double> knockSlots = new ConcurrentHashMap<>();
 			
-			klejnot.getItemMeta().getLore().parallelStream().filter(line -> {
+			klejnot.getItemMeta().getLore().stream().filter(line -> {
 				return line.contains(": §7") && line.contains("§4- §8");
 			}).forEach(line -> {
 				String[] tmpArr = line.split(": §7");
