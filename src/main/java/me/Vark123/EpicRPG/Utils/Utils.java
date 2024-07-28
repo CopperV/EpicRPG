@@ -64,7 +64,7 @@ public class Utils {
 	}
 	
 	public static void dropItemStack(Player p, ItemStack it) {
-		if(it == null)
+		if(it == null || it.getType().equals(Material.AIR))
 			return;
 		Inventory inv = p.getInventory();
 		int freeSlot = inv.firstEmpty();

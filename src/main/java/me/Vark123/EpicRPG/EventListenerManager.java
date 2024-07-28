@@ -148,6 +148,9 @@ import me.Vark123.EpicRPG.Scrolls.Katedra2ScrollEvent;
 import me.Vark123.EpicRPG.Scrolls.KatedraScrollEvent;
 import me.Vark123.EpicRPG.Scrolls.KlasaResetScrollEvent;
 import me.Vark123.EpicRPG.Scrolls.StatResetScrollEvent;
+import me.Vark123.EpicRPG.UpgradableSystem.Listeners.InhibitorInventoryClickListener;
+import me.Vark123.EpicRPG.UpgradableSystem.Listeners.InhibitorInventoryCloseListener;
+import me.Vark123.EpicRPG.UpgradableSystem.Listeners.UpgradableAnvilUseListener;
 
 public class EventListenerManager {
 
@@ -319,6 +322,10 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new CPSClickListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new HorseProtectionListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new PlayerJumpModifyListener(), inst);
+
+		Bukkit.getPluginManager().registerEvents(new InhibitorInventoryClickListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new InhibitorInventoryCloseListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new UpgradableAnvilUseListener(), inst);
 		
 		//Calendar Events
 		if(EpicRPGApi.getApi().getCalendarManager().isRegisteredEvent("reset_blackrock")) 

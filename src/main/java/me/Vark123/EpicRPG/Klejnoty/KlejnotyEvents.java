@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -22,6 +23,7 @@ import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.NBTCompoundList;
 import de.tr7zw.nbtapi.NBTItem;
 import de.tr7zw.nbtapi.NBTListCompound;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.github.rysefoxx.inventory.plugin.other.EventCreator;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.items.ItemExecutor;
@@ -303,6 +305,11 @@ public class KlejnotyEvents {
 				staty.forEach((stat, value) -> {
 					if(value == 0)
 						return;
+					if(itemNBT.hasTag("epic-upgrades")) {
+						ReadWriteNBT statsCompound = itemNBT.getCompound("epic-upgrades").getCompound("stats");
+						if(statsCompound.hasTag(stat+": "))
+							value += statsCompound.getInteger(stat+": ");
+					}
 					if(!(stat.contains("Obrazenia") || stat.contains("Ochrona"))) {
 						if(value > 0) {
 							lore.add(lorePlace.getValue(), stat+": §7+"+value);
@@ -382,7 +389,41 @@ public class KlejnotyEvents {
 			List<ItemStack> toDrop = new LinkedList<>();
 			ItemExecutor manager = MythicBukkit.inst().getItemManager();
 			
-			toDrop.add(manager.getItemStack(nbt.getString("MYTHIC_TYPE")));
+			ItemStack newItem = manager.getItemStack(nbt.getString("MYTHIC_TYPE"));
+			if(nbt.hasTag("epic-upgrades")) {
+				NBTItem newItemNbt = new NBTItem(newItem);
+				ReadWriteNBT upgradesCompound = nbt.getCompound("epic-upgrades");
+				ReadWriteNBT newUpgradesCompound = newItemNbt.getOrCreateCompound("epic-upgrades");
+				newUpgradesCompound.mergeCompound(upgradesCompound);
+				newItemNbt.applyNBT(newItem);
+				
+				ReadWriteNBT statsCompound = upgradesCompound.getOrCreateCompound("stats");
+				ItemMeta im = newItem.getItemMeta();
+				im.setDisplayName(im.getDisplayName()+" §r§7§l+"+upgradesCompound.getInteger("level"));
+				List<String> lore = im.getLore();
+				List<String> loreCopy = new LinkedList<>(lore);
+				for(String line : loreCopy) {
+					if(!line.contains(": §7") || !line.contains("§4- §8") || line.endsWith("%"))
+						continue;
+					
+					String[] arr = line.replace("+", "").split("§7");
+					if(arr.length < 2 || !StringUtils.isNumeric(arr[1])
+							|| arr[1].contains("."))
+						continue;
+						
+					String key = arr[0];
+					Integer value = Integer.parseInt(arr[1]);
+					if(!statsCompound.hasTag(key))
+						continue;
+					
+					lore.set(loreCopy.indexOf(line), 
+							arr[0]+(line.contains("§7+")?"§7+":"§7")
+								+(statsCompound.getInteger(arr[0])+value));
+				}
+				im.setLore(lore);
+				newItem.setItemMeta(im);
+			}
+			toDrop.add(newItem);
 			
 			NBTCompound nbtCompound = nbt.getCompound("Klejnoty");
 			int size = nbtCompound.getInteger("amount");

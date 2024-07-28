@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
@@ -31,6 +33,10 @@ import me.Vark123.EpicRPG.Players.Components.RpgRzemiosla;
 import me.Vark123.EpicRPG.Players.Components.RpgSkills;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import me.Vark123.EpicRPG.Players.Components.RpgVault;
+import me.Vark123.EpicRPG.UpgradableSystem.UpgradableInhibitor;
+import me.Vark123.EpicRPG.UpgradableSystem.UpgradableLevel;
+import me.Vark123.EpicRPG.UpgradableSystem.UpgradableManager;
+import me.Vark123.EpicRPG.UpgradableSystem.UpgradableInhibitor.InhibitorCrafting;
 import me.Vark123.EpicRPG.Utils.Pair;
 
 public class FileOperations {
@@ -43,6 +49,7 @@ public class FileOperations {
 	private static File exp = new File(Main.getInstance().getDataFolder(), "exp.yml");
 	private static File blackrock = new File(Main.getInstance().getDataFolder(), "blackrock.yml");
 	private static File boosters = new File(Main.getInstance().getDataFolder(), "boosters.yml");
+	private static File upgrades = new File(Main.getInstance().getDataFolder(), "upgrades.yml");
 	@Getter
 	private static File config = new File(Main.getInstance().getDataFolder(), "config.yml");
 
@@ -80,6 +87,12 @@ public class FileOperations {
 		if(!boosters.exists())
 			try {
 				boosters.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		if(!upgrades.exists())
+			try {
+				upgrades.createNewFile();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -134,6 +147,52 @@ public class FileOperations {
 				BoosterManager.get().initBooster(name, display, modifier, exp);
 			});
 		});
+		
+		YamlConfiguration upgradesYml = YamlConfiguration.loadConfiguration(upgrades);
+		if(upgradesYml.isConfigurationSection("upgrades")) {
+			ConfigurationSection section = upgradesYml.getConfigurationSection("upgrades");
+			section.getKeys(false).stream()
+				.filter(section::isConfigurationSection)
+				.map(section::getConfigurationSection)
+				.forEach(upgradeSection -> {
+					int level = upgradeSection.getInt("level");
+					double chance = upgradeSection.getDouble("chance");
+					Map<String, Integer> items = new LinkedHashMap<>();
+					if(upgradeSection.isConfigurationSection("items")) {
+						ConfigurationSection itemSection = upgradeSection.getConfigurationSection("items");
+						itemSection.getKeys(false).stream()
+							.filter(itemSection::isInt)
+							.forEach(key -> items.put(key, itemSection.getInt(key)));
+					}
+					UpgradableManager.get().registerUpgradableLevel(new UpgradableLevel(level, chance, items));
+				});
+		}
+		if(upgradesYml.isConfigurationSection("inhibitors")) {
+			ConfigurationSection section = upgradesYml.getConfigurationSection("inhibitors");
+			section.getKeys(false).stream()
+				.filter(section::isConfigurationSection)
+				.forEach(mmId -> {
+					ConfigurationSection inhibitorSection = section.getConfigurationSection(mmId);
+					double chance = inhibitorSection.getDouble("chance", 0);
+					if(inhibitorSection.isConfigurationSection("crafting")) {
+						ConfigurationSection craftingSection = inhibitorSection.getConfigurationSection("crafting");
+						double money = craftingSection.getDouble("money");
+						Map<String, Integer> items = new LinkedHashMap<>();
+						if(craftingSection.isConfigurationSection("items")) {
+							ConfigurationSection itemSection = craftingSection.getConfigurationSection("items");
+							itemSection.getKeys(false).stream()
+								.filter(itemSection::isInt)
+								.forEach(item -> items.put(item, itemSection.getInt(item)));
+						}
+						InhibitorCrafting crafting = new InhibitorCrafting(money, items);
+						UpgradableManager.get().registerInhibitor(UpgradableInhibitor.builder()
+								.mmId(mmId)
+								.chance(chance)
+								.crafting(crafting)
+								.build());
+					}
+				});
+		}
 	}
 	
 	@Deprecated

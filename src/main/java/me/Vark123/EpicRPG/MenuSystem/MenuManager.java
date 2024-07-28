@@ -16,6 +16,8 @@ import me.Vark123.EpicRPG.RubySystem.RubyManager;
 import me.Vark123.EpicRPG.RuneSystem.Runes.KamiennyObserwator;
 import me.Vark123.EpicRPG.Stats.ResetStatsMenuManager;
 import me.Vark123.EpicRPG.SzponBeliara.SzponBeliaraManager;
+import me.Vark123.EpicRPG.UpgradableSystem.InhibitorMenuManager;
+import me.Vark123.EpicRPG.UpgradableSystem.UpgradableMenuManager;
 
 @Getter
 public class MenuManager {
@@ -93,6 +95,12 @@ public class MenuManager {
 				return true;
 			case 22:
 				SzponBeliaraManager.getInstance().openSzponUpgradeMenu(p);
+				return true;
+			case 23:
+				UpgradableMenuManager.get().openUpgradableMenu(p);
+				return true;
+			case 24:
+				InhibitorMenuManager.get().openRecipesCraftMenu(p, 0);
 				return true;
 		}
 		return false;

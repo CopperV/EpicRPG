@@ -48,4 +48,20 @@ public class MoneySystem {
 		addMoney(rpg, EpicRPGMobManager.getInstance().getMobMoney(mob), "mob");
 	}
 	
+	public void removeMoney(RpgPlayer rpg, double amount) {
+		RpgVault vault = rpg.getVault();
+		vault.removeMoney(amount);
+	
+		OptionsAPI.get().getPlayerManager().getPlayerOptions(rpg.getPlayer())
+			.ifPresent(op -> {
+				op.getPlayerOptionByID("epicrpg_resources")
+					.ifPresent(pOption -> {
+						ResourcesInfoSerializable option = (ResourcesInfoSerializable) pOption.getValue();
+						if(!option.isMoneyInfo())
+							return;
+						rpg.getPlayer().sendMessage("§e§o-"+ String.format("%.2f", amount) +"$ §7[§e§o"+String.format("%.2f", vault.getMoney())+"$§7]");
+					});
+			});
+	}
+	
 }
