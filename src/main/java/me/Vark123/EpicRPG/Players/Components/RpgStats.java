@@ -113,6 +113,8 @@ public class RpgStats implements Serializable, ChatPrintable {
 		this.potionMana = set.getInt("player_stats.potion_mana");
 		this.potionInteligencja = set.getInt("player_stats.potion_int");
 		this.potionWalka = set.getInt("player_stats.potion_walka");
+		this.potionObrazenia = set.getInt("player_stats.potion_dmg");
+		this.potionOchrona = set.getInt("player_stats.potion_def");
 		this.potionHealth = set.getInt("player_info.p_health");
 
 		this.krag = set.getInt("player_stats.p_krag");
