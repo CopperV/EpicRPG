@@ -21,6 +21,7 @@ import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import io.lumine.mythic.api.adapters.AbstractEntity;
+import io.lumine.mythic.api.adapters.AbstractLocation;
 import io.lumine.mythic.api.adapters.AbstractPlayer;
 import io.lumine.mythic.api.adapters.AbstractVector;
 import io.lumine.mythic.bukkit.BukkitAdapter;
@@ -73,11 +74,26 @@ public class KrzykUmarlych extends ARune {
 			if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(e).isDamageable())
 				return false;
 			AbstractEntity ae = BukkitAdapter.adapt(e);
-			AbstractVector entityVector = ap.getEyeLocation().toVector();
-			AbstractVector targetVector = ae.getEyeLocation().toVector();
-			AbstractVector headDirection = ap.getEyeLocation().getDirection();
-			AbstractVector targetDirection = targetVector.subtract(entityVector).normalize();
-			double targetAngle = Math.toDegrees((double)targetDirection.angle(headDirection));
+			AbstractLocation loc1 = ap.getEyeLocation();
+			AbstractLocation loc2 = ae.getLocation().clone().add(0,1,0);
+			
+			AbstractVector vec1 = loc2.clone().subtract(loc1).toVector().normalize();
+			AbstractVector vec2 = loc1.getDirection();
+			
+			vec2.setY(0);
+			AbstractLocation loc3 = loc1.clone().add(vec2.multiply(3));
+			vec2 = loc3.clone().subtract(loc1).toVector().normalize();
+			
+			vec1.setY(0);
+			vec2.setY(0);
+			
+			double targetAngle = Math.abs(Math.toDegrees(vec1.angle(vec2)));
+			
+//			AbstractVector entityVector = ap.getEyeLocation().toVector();
+//			AbstractVector targetVector = ae.getLocation().add(0, 1, 0).toVector();
+//			AbstractVector headDirection = ap.getEyeLocation().getDirection();
+//			AbstractVector targetDirection = targetVector.subtract(entityVector).normalize();
+//			double targetAngle = Math.toDegrees((double)targetDirection.angle(headDirection));
 			if(targetAngle > 30)
 				return false;
 			return true;

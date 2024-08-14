@@ -34,10 +34,11 @@ import me.Vark123.EpicRPG.Players.Components.RpgSkills;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import me.Vark123.EpicRPG.Players.Components.RpgVault;
 import me.Vark123.EpicRPG.UpgradableSystem.UpgradableInhibitor;
+import me.Vark123.EpicRPG.UpgradableSystem.UpgradableInhibitor.InhibitorCrafting;
 import me.Vark123.EpicRPG.UpgradableSystem.UpgradableLevel;
 import me.Vark123.EpicRPG.UpgradableSystem.UpgradableManager;
-import me.Vark123.EpicRPG.UpgradableSystem.UpgradableInhibitor.InhibitorCrafting;
 import me.Vark123.EpicRPG.Utils.Pair;
+import me.Vark123.EpicRPG.WildHuntEvents.WHEManager;
 
 public class FileOperations {
 
@@ -50,6 +51,8 @@ public class FileOperations {
 	private static File blackrock = new File(Main.getInstance().getDataFolder(), "blackrock.yml");
 	private static File boosters = new File(Main.getInstance().getDataFolder(), "boosters.yml");
 	private static File upgrades = new File(Main.getInstance().getDataFolder(), "upgrades.yml");
+	@Getter
+	private static File events = new File(Main.getInstance().getDataFolder(), "events.yml");
 	@Getter
 	private static File config = new File(Main.getInstance().getDataFolder(), "config.yml");
 
@@ -96,9 +99,17 @@ public class FileOperations {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		if(!events.exists())
+			try {
+				events.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		
 		if(oldJewelry.exists())
 			convert();
+		
+		WHEManager.get().setup();
 		
 		YamlConfiguration fYml = YamlConfiguration.loadConfiguration(exp);
 		fYml.getKeys(false).stream().parallel().forEach(s -> {

@@ -120,7 +120,7 @@ public class ProjectileCalculator implements IDamageCalculator {
 		}
 		
 		dmg = dmg + dmgZd + dmgZr + dmgStr + dmgInt + dmgWytrz + dmgMana;
-		dmg = DamageUtils.randomizeDamage(dmg, stats);
+		dmg = DamageUtils.randomizeDamage(dmg, rpg);
 
 		if(!extraFlag) {
 			float force = projectile.getMetadata("rpg_force").get(0).asFloat();

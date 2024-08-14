@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import me.Vark123.EpicRPG.FightSystem.Events.CritCalculateEvent;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
+import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
 
 public final class DamageUtils {
@@ -31,10 +32,16 @@ public final class DamageUtils {
 		return dmg;
 	}
 	
-	public static double randomizeDamage(double dmg, RpgStats stats) {
-		double zrMod = stats.getFinalZrecznosc() / 35.;
-		double min = 95 - zrMod;
-		double max = 105 + zrMod;
+	public static double randomizeDamage(double dmg, RpgPlayer rpg) {
+		RpgStats stats = rpg.getStats();
+		RpgModifiers modifiers = rpg.getModifiers();
+		
+		double mod = stats.getFinalZrecznosc() / 35.;
+		if(modifiers.hasSzalPrzedwiecznych())
+			mod += 15;
+		
+		double min = 95 - mod;
+		double max = 105 + mod;
 		return randomizeDamage(dmg, min, max);
 	}
 	

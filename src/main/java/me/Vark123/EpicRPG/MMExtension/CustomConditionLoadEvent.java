@@ -5,6 +5,7 @@ import org.bukkit.event.Listener;
 
 import io.lumine.mythic.bukkit.events.MythicConditionLoadEvent;
 import io.lumine.mythic.core.skills.SkillCondition;
+import me.Vark123.EpicRPG.MMExtension.Conditions.BlockBelowCondition;
 import me.Vark123.EpicRPG.MMExtension.Conditions.CasterFieldOfViewCondition;
 import me.Vark123.EpicRPG.MMExtension.Conditions.GeneralMobsInRadiusCondition;
 import me.Vark123.EpicRPG.MMExtension.Conditions.HealthCheckpointCondition;
@@ -41,6 +42,10 @@ public class CustomConditionLoadEvent implements Listener {
 				break;
 			case "sneaking":
 				condition = new SneakingCondition(e.getConfig().getLine(), e.getConfig());
+				e.register(condition);
+				break;
+			case "blockbelow":
+				condition = new BlockBelowCondition(e.getConfig().getLine(), e.getConfig());
 				e.register(condition);
 				break;
 		}

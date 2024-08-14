@@ -29,6 +29,8 @@ public class KyraDamageEffectListener implements Listener {
 		
 		if(victim.getWorld().getName().toLowerCase().contains("heroic"))
 			e.setDmg(e.getDmg() * 0.5);
+		else if(victim.getWorld().getName().toLowerCase().contains("mythic"))
+			e.setDmg(e.getDmg() * 0.4);
 		else
 			e.setDmg(e.getDmg() * 0.6);
 	}

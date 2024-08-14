@@ -14,6 +14,7 @@ import me.Vark123.EpicRPG.FightSystem.Events.EpicAttackEvent;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
+import me.Vark123.EpicRPG.RuneSystem.Runes.BlogoslawienstwoPrzedwiecznych;
 
 public class RuneProjectileModifierListener implements Listener {
 	
@@ -75,6 +76,10 @@ public class RuneProjectileModifierListener implements Listener {
 				modifier += 0.4;
 			}
 		}
+		if(modifiers.hasSzalPrzedwiecznych())
+			modifier += 0.3;
+		if(BlogoslawienstwoPrzedwiecznych.getEffected().containsKey(p))
+			modifier += BlogoslawienstwoPrzedwiecznych.getEffected().get(p)*0.03;
 		
 		e.increaseModifier(modifier);
 	}

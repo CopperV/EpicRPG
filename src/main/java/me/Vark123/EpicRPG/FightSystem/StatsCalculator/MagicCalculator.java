@@ -99,7 +99,7 @@ public class MagicCalculator implements IDamageCalculator {
 		dmg += dmgKrag;
 		dmg += dmgLevel;
 		dmg += dmgMana;
-		dmg = DamageUtils.randomizeDamage(dmg, stats);
+		dmg = DamageUtils.randomizeDamage(dmg, rpg);
 
 		pair.setKey(dmg);
 		return pair;

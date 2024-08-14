@@ -97,6 +97,7 @@ import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Misc.DuchAkashyDamageEff
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Misc.EligorDamageEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Misc.EsAlareMeDamageEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Misc.KyraDamageEffectListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Misc.MobsDamageModifierEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Misc.TrujacaAuraEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Projectile.NoDamageTicksEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Projectile.ProjectileEffectsListener;
@@ -151,6 +152,7 @@ import me.Vark123.EpicRPG.Scrolls.StatResetScrollEvent;
 import me.Vark123.EpicRPG.UpgradableSystem.Listeners.InhibitorInventoryClickListener;
 import me.Vark123.EpicRPG.UpgradableSystem.Listeners.InhibitorInventoryCloseListener;
 import me.Vark123.EpicRPG.UpgradableSystem.Listeners.UpgradableAnvilUseListener;
+import me.Vark123.EpicRPG.WildHuntEvents.Listeners.WHEListener;
 
 public class EventListenerManager {
 
@@ -252,6 +254,7 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new KyraDamageEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new EsAlareMeDamageEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new PaktKrwiEffectModifierListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new MobsDamageModifierEffectListener(), inst);
 
 		Bukkit.getPluginManager().registerEvents(new RuneInteractEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new RuneTimeCheckEvent(), inst);
@@ -326,11 +329,23 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new InhibitorInventoryClickListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new InhibitorInventoryCloseListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new UpgradableAnvilUseListener(), inst);
+
+		Bukkit.getPluginManager().registerEvents(new WHEListener(), inst);
 		
 		//Calendar Events
 		if(EpicRPGApi.getApi().getCalendarManager().isRegisteredEvent("reset_blackrock")) 
 			EpicRPGApi.getApi().getCalendarManager().removeEvent("reset_blackrock");
 		EpicRPGApi.getApi().getCalendarManager().addEvent("reset_blackrock", "every day", "00:05");
+		
+		if(EpicRPGApi.getApi().getCalendarManager().isRegisteredEvent("wildhunt1")) 
+			EpicRPGApi.getApi().getCalendarManager().removeEvent("wildhunt1");
+		EpicRPGApi.getApi().getCalendarManager().addEvent("wildhunt1", "every day", "17:15");
+		if(EpicRPGApi.getApi().getCalendarManager().isRegisteredEvent("wildhunt2")) 
+			EpicRPGApi.getApi().getCalendarManager().removeEvent("wildhunt2");
+		EpicRPGApi.getApi().getCalendarManager().addEvent("wildhunt2", "every day", "17:25");
+		if(EpicRPGApi.getApi().getCalendarManager().isRegisteredEvent("wildhunt3")) 
+			EpicRPGApi.getApi().getCalendarManager().removeEvent("wildhunt3");
+		EpicRPGApi.getApi().getCalendarManager().addEvent("wildhunt3", "every day", "17:30");
 		
 		addDisableDamageParticlesPacketListener();
 	}

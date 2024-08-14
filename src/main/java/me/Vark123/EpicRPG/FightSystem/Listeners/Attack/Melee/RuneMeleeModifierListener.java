@@ -17,6 +17,7 @@ import me.Vark123.EpicRPG.FightSystem.Events.EpicAttackEvent;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
+import me.Vark123.EpicRPG.RuneSystem.Runes.BlogoslawienstwoPrzedwiecznych;
 
 public class RuneMeleeModifierListener implements Listener {
 	
@@ -48,6 +49,10 @@ public class RuneMeleeModifierListener implements Listener {
 			modifier += 0.75;
 		if(modifiers.hasMord())
 			modifier += 0.9;
+		if(modifiers.hasSzalPrzedwiecznych())
+			modifier += 0.3;
+		if(BlogoslawienstwoPrzedwiecznych.getEffected().containsKey(p))
+			modifier += BlogoslawienstwoPrzedwiecznych.getEffected().get(p)*0.03;
 		
 		if(modifiers.hasCiosWPlecy()) {
 			Entity victim = e.getVictim();

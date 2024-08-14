@@ -89,6 +89,18 @@ public class RpgModifiers implements Serializable {
 	private double paktKrwiHp_h;
 	private boolean szostyZmysl_h;
 	private boolean przyplywEnergii_h;
+	private boolean ostatniBoj_m;
+	private boolean paktKrwi_m;
+	private boolean paktKrwiMeasure_m;
+	private double paktKrwiHp_m;
+	private boolean szostyZmysl_m;
+	private boolean przyplywEnergii_m;
+	
+	private boolean zewNatury;
+	
+	private boolean szalPrzedwiecznych;
+	private static final double BLOGOSLAWIENSTWO_PRZEDWIECZNYCH_BASE_RENEW_PERCENT = 0.9;
+	private double blogoslawienstwoPrzedwiecznychRenewChance = BLOGOSLAWIENSTWO_PRZEDWIECZNYCH_BASE_RENEW_PERCENT;
 	
 	private int potionSila;
 	private int potionZrecznosc;
@@ -769,5 +781,83 @@ public class RpgModifiers implements Serializable {
 	public void setPrzyplywEnergii_h(boolean przyplywEnergii) {
 		this.przyplywEnergii_h = przyplywEnergii;
 	}
+
+	public boolean hasOstatniBoj_m() {
+		return ostatniBoj_m;
+	}
+
+	public void setOstatniBoj_m(boolean ostatniBoj) {
+		this.ostatniBoj_m = ostatniBoj;
+	}
+
+	public boolean hasPaktKrwi_m() {
+		return paktKrwi_m;
+	}
+
+	public void setPaktKrwi_m(boolean paktKrwi) {
+		this.paktKrwi_m = paktKrwi;
+	}
+
+	public boolean hasPaktKrwiMeasure_m() {
+		return paktKrwiMeasure_m;
+	}
+
+	public void setPaktKrwiMeasure_m(boolean paktKrwiMeasure) {
+		this.paktKrwiMeasure_m = paktKrwiMeasure;
+	}
+
+	public double getPaktKrwiHp_m() {
+		return paktKrwiHp_m;
+	}
+
+	public void setPaktKrwiHp_m(double paktKrwiHp) {
+		this.paktKrwiHp_m = paktKrwiHp;
+	}
+
+	public boolean hasSzostyZmysl_m() {
+		return szostyZmysl_m;
+	}
+
+	public void setSzostyZmysl_m(boolean szostyZmysl) {
+		this.szostyZmysl_m = szostyZmysl;
+	}
+
+	public boolean hasPrzyplywEnergii_m() {
+		return przyplywEnergii_m;
+	}
+
+	public void setPrzyplywEnergii_m(boolean przyplywEnergii) {
+		this.przyplywEnergii_m = przyplywEnergii;
+	}
+	
+	public boolean hasZewNatury() {
+		return zewNatury;
+	}
+	
+	public void setZewNatury(boolean zewNatury) {
+		this.zewNatury = zewNatury;
+	}
+
+	public boolean hasSzalPrzedwiecznych() {
+		return szalPrzedwiecznych;
+	}
+
+	public void setSzalPrzedwiecznych(boolean szalPrzedwiecznych) {
+		this.szalPrzedwiecznych = szalPrzedwiecznych;
+	}
+
+	public double getBlogoslawienstwoPrzedwiecznychRenewChance() {
+		return blogoslawienstwoPrzedwiecznychRenewChance;
+	}
+
+	public void setBlogoslawienstwoPrzedwiecznychRenewChance(double blogoslawienstwoPrzedwiecznychRenewChance) {
+		this.blogoslawienstwoPrzedwiecznychRenewChance = blogoslawienstwoPrzedwiecznychRenewChance;
+	}
+
+	public static double getBlogoslawienstwoPrzedwiecznychBaseRenewPercent() {
+		return BLOGOSLAWIENSTWO_PRZEDWIECZNYCH_BASE_RENEW_PERCENT;
+	}
+	
+	
 	
 }

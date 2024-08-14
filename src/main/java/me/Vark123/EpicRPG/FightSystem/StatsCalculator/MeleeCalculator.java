@@ -114,7 +114,7 @@ public class MeleeCalculator implements IDamageCalculator {
 		}
 		
 		dmg = dmg + dmgZd + dmgZr + dmgStr + dmgInt + dmgWytrz + dmgMana;
-		dmg = DamageUtils.randomizeDamage(dmg, stats);
+		dmg = DamageUtils.randomizeDamage(dmg, rpg);
 		
 		pair.setKey(dmg);
 		return pair;

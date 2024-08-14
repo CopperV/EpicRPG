@@ -30,6 +30,8 @@ public class PaktKrwiEffectModifierListener implements Listener {
 			modifiers.setPaktKrwiHp(modifiers.getPaktKrwiHp() + e.getFinalDamage());
 		if(modifiers.hasPaktKrwiMeasure_h())
 			modifiers.setPaktKrwiHp_h(modifiers.getPaktKrwiHp_h() + e.getFinalDamage());
+		if(modifiers.hasPaktKrwiMeasure_m())
+			modifiers.setPaktKrwiHp_m(modifiers.getPaktKrwiHp_m() + e.getFinalDamage());
 	}
 
 }

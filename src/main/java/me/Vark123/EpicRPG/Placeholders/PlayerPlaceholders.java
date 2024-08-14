@@ -82,6 +82,8 @@ public class PlayerPlaceholders extends PlaceholderExpansion {
 				return stats.getFinalMana()+"";
 			case "percent_mana":
 				return (double) stats.getPresentMana() / (double) stats.getFinalMana()+"";
+			case "present_mana":
+				return stats.getPresentMana()+"";
 			case "walka":
 				return stats.getFinalWalka()+"";
 			case "krag":

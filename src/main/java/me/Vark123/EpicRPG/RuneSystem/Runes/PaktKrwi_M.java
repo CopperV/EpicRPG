@@ -21,7 +21,7 @@ import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.RuneSystem.ARune;
 import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 
-public class PaktKrwi_H extends ARune {
+public class PaktKrwi_M extends ARune {
 
 	private static final double red = 138./255.;
 	private static final double green = 3./255.;
@@ -29,9 +29,9 @@ public class PaktKrwi_H extends ARune {
 	private static final DustOptions dust = new DustOptions(Color.fromRGB(128, 3, 3), 1.2f);
 	private static final Random rand = new Random();
 	
-	private static final double HP_TO_TAKE = 240.;
+	private static final double HP_TO_TAKE = 300.;
 
-	public PaktKrwi_H(ItemStackRune dr, Player p) {
+	public PaktKrwi_M(ItemStackRune dr, Player p) {
 		super(dr, p);
 		this.modifier1 = true;
 	}
@@ -41,9 +41,9 @@ public class PaktKrwi_H extends ARune {
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_WITHER_AMBIENT, 1, 0.75f);
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		RpgModifiers modifiers = rpg.getModifiers();
-		modifiers.setPaktKrwi_h(true);
-		modifiers.setPaktKrwiMeasure_h(true);
-		modifiers.setPaktKrwiHp_h(0);
+		modifiers.setPaktKrwi_m(true);
+		modifiers.setPaktKrwiMeasure_m(true);
+		modifiers.setPaktKrwiHp_m(0);
 		modifiers.setModifier1_lock(true);
 		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
 		
@@ -75,9 +75,9 @@ public class PaktKrwi_H extends ARune {
 					hpBar.setVisible(false);
 					p.sendMessage("§7[§6EpicRPG§7] §c§lTWOJA DUSZA NALEZY DO MNIE!");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_WITHER_DEATH, 1, 0.6f);
-					modifiers.setPaktKrwi_h(false);
-					modifiers.setPaktKrwiMeasure_h(false);
-					modifiers.setPaktKrwiHp_h(0);
+					modifiers.setPaktKrwi_m(false);
+					modifiers.setPaktKrwiMeasure_m(false);
+					modifiers.setPaktKrwiHp_m(0);
 					modifiers.setModifier1_lock(false);
 					
 					Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
@@ -88,7 +88,7 @@ public class PaktKrwi_H extends ARune {
 					cancel();
 					return;
 				}
-				if(modifiers.getPaktKrwiHp_h() > HP_TO_TAKE) {
+				if(modifiers.getPaktKrwiHp_m() > HP_TO_TAKE) {
 					infoBar.removeAll();
 					infoBar.setVisible(false);
 					hpBar.removeAll();
@@ -103,7 +103,7 @@ public class PaktKrwi_H extends ARune {
 				infoBar.setTitle(dr.getName()+"§f: "+(int)timer+" sekund");
 				infoBar.setProgress(timer/time);
 				
-				double hpPercent = modifiers.getPaktKrwiHp_h() / HP_TO_TAKE;
+				double hpPercent = modifiers.getPaktKrwiHp_m() / HP_TO_TAKE;
 				if(hpPercent > 1) hpPercent = 1;
 				if(hpPercent < 0) hpPercent = 0;
 				
@@ -117,13 +117,13 @@ public class PaktKrwi_H extends ARune {
 			
 			@Override
 			public void run() {
-				if(!modifiers.hasPaktKrwi_h()) {
+				if(!modifiers.hasPaktKrwi_m()) {
 					this.cancel();
 					return;
 				}
 				
 				Location loc = p.getLocation().clone().add(0,1,0);
-				if(modifiers.hasPaktKrwiMeasure_h()) {
+				if(modifiers.hasPaktKrwiMeasure_m()) {
 					for(int i = 0; i < 6; ++i) {
 						double x = rand.nextDouble(1.2) - 0.6;
 						double y = rand.nextDouble(1.2) - 0.6;
@@ -143,9 +143,9 @@ public class PaktKrwi_H extends ARune {
 		p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIFIED_PIGLIN_ANGRY, 1, 0.6f);
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		RpgModifiers modifiers = rpg.getModifiers();
-		modifiers.setPaktKrwi_h(true);
-		modifiers.setPaktKrwiMeasure_h(false);
-		modifiers.setPaktKrwiHp_h(0);
+		modifiers.setPaktKrwi_m(true);
+		modifiers.setPaktKrwiMeasure_m(false);
+		modifiers.setPaktKrwiHp_m(0);
 
 		p.sendMessage("§7[§6EpicRPG§7] §c§lPAKT DOKONANY");
 		
@@ -162,9 +162,9 @@ public class PaktKrwi_H extends ARune {
 				if(timer <= 0 || !casterInCastWorld()) {
 					bar.removeAll();
 					bar.setVisible(false);
-					modifiers.setPaktKrwi_h(false);
-					modifiers.setPaktKrwiMeasure_h(false);
-					modifiers.setPaktKrwiHp_h(0);
+					modifiers.setPaktKrwi_m(false);
+					modifiers.setPaktKrwiMeasure_m(false);
+					modifiers.setPaktKrwiHp_m(0);
 					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GHAST_SHOOT, 1, 1.2f);
 					this.cancel();

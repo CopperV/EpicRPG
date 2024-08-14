@@ -34,8 +34,8 @@ public class EsAlareMeDamageEffectListener implements Listener {
 		if(stance == null || !stance.equalsIgnoreCase("spear"))
 			return;
 		
-		victim.getWorld().playSound(damager.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1, 0.6f);
-		victim.getWorld().spawnParticle(Particle.CRIT_MAGIC, damager.getLocation().add(0,1.2,0), 12, .7f, .7f, .7f, .05f);
+		damager.getWorld().playSound(damager.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1, 0.6f);
+		damager.getWorld().spawnParticle(Particle.CRIT_MAGIC, victim.getLocation().add(0,1.2,0), 12, .7f, .7f, .7f, .05f);
 		
 		e.setDmg(e.getDmg() * 0.6);
 	}

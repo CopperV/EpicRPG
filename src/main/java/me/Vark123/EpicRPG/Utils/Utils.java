@@ -7,11 +7,15 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import io.lumine.mythic.api.adapters.AbstractLocation;
+import io.lumine.mythic.api.adapters.AbstractVector;
+import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
 
 public class Utils {
@@ -111,6 +115,34 @@ public class Utils {
 	
 	public static List<Integer> intArrayToList(int[] arr){
 		return Arrays.stream(arr).boxed().collect(Collectors.toList());
+	}
+	
+	public static double getAngle(Player p, Entity e) {
+		return getAngle(p.getEyeLocation(), e.getLocation().clone().add(0,1,0));
+	}
+	
+	public static double getAngle(Entity e1, Entity e2) {
+		return getAngle(e1.getLocation().clone().add(0,1,0), e2.getLocation().clone().add(0,1,0));
+	}
+	
+	public static double getAngle(Location loc1, Location loc2) {
+		return getAngle(BukkitAdapter.adapt(loc1),
+				BukkitAdapter.adapt(loc2));
+	}
+	
+	public static double getAngle(AbstractLocation loc1, AbstractLocation loc2) {
+		
+		AbstractVector vec1 = loc2.clone().subtract(loc1).toVector().normalize();
+		AbstractVector vec2 = loc1.getDirection();
+		
+		vec2.setY(0);
+		AbstractLocation loc3 = loc1.clone().add(vec2.multiply(3));
+		vec2 = loc3.clone().subtract(loc1).toVector().normalize();
+		
+		vec1.setY(0);
+		vec2.setY(0);
+		
+		return Math.abs(Math.toDegrees(vec1.angle(vec2)));
 	}
 	
 }

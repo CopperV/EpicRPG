@@ -50,7 +50,9 @@ public class EpicRPGMobManager {
 			ChatColor.translateAlternateColorCodes('&', "&2&lElement Zero - BOSS"),
 			ChatColor.translateAlternateColorCodes('&', "&8Szczur kanalowy"),
 			ChatColor.translateAlternateColorCodes('&', "&3Megawonsz9"),
-			ChatColor.translateAlternateColorCodes('&', "&4&l&oBeltessor"));
+			ChatColor.translateAlternateColorCodes('&', "&4&l&oBeltessor"),
+			ChatColor.translateAlternateColorCodes('&', "&3&oUtopiec"),
+			ChatColor.translateAlternateColorCodes('&', "&9&lWicht - BOSS"));
 	
 	private EpicRPGMobManager() {
 		rand = new Random();

@@ -27,6 +27,7 @@ import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
 import io.lumine.mythic.bukkit.MythicBukkit;
+import lombok.Getter;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.FightSystem.ManualDamage;
 import me.Vark123.EpicRPG.Players.PlayerManager;
@@ -41,6 +42,7 @@ public class RuneManager {
 	private static final RuneManager instance = new RuneManager();
 	
 	private final List<Player> globalCd;
+	@Getter
 	private final Map<Player,Map<String, ItemStackRune>> playerRuneCd;
 	private final Map<Player, Date> playerObszarowkiCd;
 	
@@ -411,8 +413,10 @@ public class RuneManager {
 					case "§4§owulkaniczny gejzer":return new WulkanicznyGejzer(dr, p);
 					case "§c§lzwiastun wojny":	return new ZwiastunWojny(dr, p);
 					case "§c§lzwiastun wojny i":return new ZwiastunWojny_H(dr, p);
+					case "§c§lzwiastun wojny ii":return new ZwiastunWojny_M(dr, p);
 					case "§4§lwieczny ogien":	return new WiecznyOgien(dr, p);
 					case "§4§lwieczny ogien i":	return new WiecznyOgien(dr, p);
+					case "§4§lwieczny ogien ii":return new WiecznyOgien(dr, p);
 					default:					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_BLOCKS:
@@ -440,6 +444,7 @@ public class RuneManager {
 					case "§blodowy pocisk":		return new LodowyPocisk(dr, p);
 					case "§3§lzamiec":			return new Zamiec(dr, p);
 					case "§b§olodowy blok":		return new LodowyBlok(dr, p);
+					case "§9lodowa wlocznia":	return new LodowaWlocznia(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_FAR:
@@ -473,6 +478,8 @@ public class RuneManager {
 					case "§3wybraniec beliara":	return new WybraniecBeliara(dr, p);
 					case "§3§lostatni boj":		return new OstatniBoj(dr, p);
 					case "§3§lostatni boj i":	return new OstatniBoj_H(dr, p);
+					case "§3§lostatni boj ii":	return new OstatniBoj_M(dr, p);
+					case "§3§lblogoslawienstwo przedwiecznych":	return new BlogoslawienstwoPrzedwiecznych(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_MALL:
@@ -503,6 +510,8 @@ public class RuneManager {
 					case "§azakleta strzala":	return new ZakletaStrzala(dr, p);
 					case "§a§lszosty zmysl":	return new SzostyZmysl(dr, p);
 					case "§a§lszosty zmysl i":	return new SzostyZmysl_H(dr, p);
+					case "§a§lszosty zmysl ii":	return new SzostyZmysl_M(dr, p);
+					case "§a§lszal przedwiecznych":	return new SzalPrzedwiecznych(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_STAL:
@@ -522,6 +531,8 @@ public class RuneManager {
 					case "§2§lwtopienie ii":	return new Wtopienie_M(dr, p);
 					case "§x§5§c§a§d§c§d§lpozeracz dusz":	return new PozeraczDusz(dr, p);
 					case "§x§5§c§a§d§c§d§lpozeracz dusz i":	return new PozeraczDusz_H(dr, p);
+					case "§x§5§c§a§d§c§d§lpozeracz dusz ii":return new PozeraczDusz_M(dr, p);
+					case "§5§lszept n'zotha":	return new SzeptNZotha(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_STRAD:
@@ -535,6 +546,7 @@ public class RuneManager {
 					case "§2trujace ukaszenie":	return new TrujaceUkaszenie(dr, p);
 					case "§x§0§0§b§b§0§0toksyczna chmura":	return new ToksycznaChmura(dr, p);
 					case "§x§0§0§9§a§0§0§lzrodlo natury":	return new ZrodloNatury(dr, p);
+					case "§2§ozew natury":		return new ZewNatury(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_11:
@@ -567,6 +579,7 @@ public class RuneManager {
 					case "§8§lczarny sen":		return new CzarnySen(dr, p);
 					case "§8§lczarny sen i":	return new CzarnySen(dr, p);
 					case "§8§lczarny sen ii":	return new CzarnySen(dr, p);
+					case "§x§0§0§5§5§0§0§l§otrupi jek":	return new TrupiJek(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_13:
@@ -603,6 +616,7 @@ public class RuneManager {
 					case "§c§lzyciodajna ziemia i":return new ZyciodajnaZiemia_M(dr, p);
 					case "§e§lprzyplyw energii":return new PrzyplywEnergii(dr, p);
 					case "§e§lprzyplyw energii i":return new PrzyplywEnergii_H(dr, p);
+					case "§e§lprzyplyw energii ii":return new PrzyplywEnergii_M(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_WARD:
@@ -634,6 +648,8 @@ public class RuneManager {
 					case "§5§lkoszmar beliara ii":	return new KoszmarBeliara(dr, p);
 					case "§c§l§ogniew przodkow":	return new GniewPrzodkow(dr, p);
 					case "§c§l§ogniew przodkow i":	return new GniewPrzodkow(dr, p);
+					case "§c§l§ogniew przodkow ii":	return new GniewPrzodkow(dr, p);
+					case "§x§8§a§0§3§0§3krwawy bicz":return new KrwawyBicz(dr, p);
 					default: 						return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_WAIT:
@@ -643,20 +659,25 @@ public class RuneManager {
 					case "§x§0§0§f§f§f§fwlocznia elysian":	return new WloczniaElysian(dr, p);
 					case "§7§lkamienny obserwator":		return new KamiennyObserwator(dr, p);
 					case "§a§lsekret wielkanocy":		return new SekretWielkanocy(dr, p);
+					case "§b§llodowa aura":				return new LodowaAura(dr, p);
+					case "§d§ltajemny grad":			return new TajemnyGrad(dr, p);
+					case "§d§l§omagiczna sfera":		return new MagicznaSfera(dr, p);
 					default: 							return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_PIGSTEP:
 				switch(name) {
-					case "§x§d§a§0§3§0§3§lzew krwi":		return new ZewKrwi(dr, p);
-					case "§x§d§a§0§3§0§3§orytual krwi":		return new RytualKrwi(dr, p);
-					case "§x§9§a§4§3§0§3§oplugawa krew":	return new PlugawaKrew(dr, p);
-					case "§x§9§a§0§3§4§3krew przodkow":		return new KrewPrzodkow(dr, p);
-					case "§x§8§a§0§3§0§3§ogniew":			return new Gniew(dr, p);
-					case "§x§c§d§0§0§0§0§ldrenaz":			return new Drenaz(dr, p);
-					case "§x§8§a§0§3§0§3§lklatwa krwi":		return new KlatwaKrwi(dr, p);
-					case "§x§e§e§0§5§0§5§ltransfuzja":		return new Transfuzja(dr, p);
-					case "§x§c§d§0§0§0§0§lpakt krwi":		return new PaktKrwi(dr, p);
-					case "§x§c§d§0§0§0§0§lpakt krwi i":		return new PaktKrwi_H(dr, p);
+					case "§x§d§a§0§3§0§3§lzew krwi":	return new ZewKrwi(dr, p);
+					case "§x§d§a§0§3§0§3§orytual krwi":	return new RytualKrwi(dr, p);
+					case "§x§9§a§4§3§0§3§oplugawa krew":return new PlugawaKrew(dr, p);
+					case "§x§9§a§0§3§4§3krew przodkow":	return new KrewPrzodkow(dr, p);
+					case "§x§8§a§0§3§0§3§ogniew":		return new Gniew(dr, p);
+					case "§x§c§d§0§0§0§0§ldrenaz":		return new Drenaz(dr, p);
+					case "§x§8§a§0§3§0§3§lklatwa krwi":	return new KlatwaKrwi(dr, p);
+					case "§x§e§e§0§5§0§5§ltransfuzja":	return new Transfuzja(dr, p);
+					case "§x§c§d§0§0§0§0§lpakt krwi":	return new PaktKrwi(dr, p);
+					case "§x§c§d§0§0§0§0§lpakt krwi i":	return new PaktKrwi_H(dr, p);
+					case "§x§c§d§0§0§0§0§lpakt krwi ii":return new PaktKrwi_M(dr, p);
+					case "§x§8§a§0§3§0§3§owiezy krwi":	return new WiezyKrwi(dr, p);
 					default: 							return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_OTHERSIDE:
@@ -667,7 +688,6 @@ public class RuneManager {
 					default: 							return new OgnistaStrzala(dr, p);
 				}
 			default:
-				System.out.println(name);
 				return new OgnistaStrzala(dr, p);
 		}
 	}

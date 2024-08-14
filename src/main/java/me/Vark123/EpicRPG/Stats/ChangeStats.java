@@ -139,6 +139,10 @@ public class ChangeStats {
 			stats.setFinalSila((int) (stats.getFinalSila()*1.23));
 			stats.setFinalWytrzymalosc((int) (stats.getFinalWytrzymalosc()*1.23));
 		}
+		if(rpg.getModifiers().hasOstatniBoj_m()) {
+			stats.setFinalSila((int) (stats.getFinalSila()*1.27));
+			stats.setFinalWytrzymalosc((int) (stats.getFinalWytrzymalosc()*1.27));
+		}
 		if(rpg.getModifiers().hasSzostyZmysl()) {
 			stats.setFinalZrecznosc((int) (stats.getFinalZrecznosc()*1.2));
 			stats.setFinalZdolnosciMysliwskie((int) (stats.getFinalZdolnosciMysliwskie()*1.2));
@@ -147,6 +151,10 @@ public class ChangeStats {
 			stats.setFinalZrecznosc((int) (stats.getFinalZrecznosc()*1.23));
 			stats.setFinalZdolnosciMysliwskie((int) (stats.getFinalZdolnosciMysliwskie()*1.23));
 		}
+		if(rpg.getModifiers().hasSzostyZmysl_m()) {
+			stats.setFinalZrecznosc((int) (stats.getFinalZrecznosc()*1.27));
+			stats.setFinalZdolnosciMysliwskie((int) (stats.getFinalZdolnosciMysliwskie()*1.27));
+		}
 		if(rpg.getModifiers().hasPrzyplywEnergii()) {
 			stats.setFinalInteligencja((int) (stats.getFinalInteligencja()*1.2));
 			stats.setFinalMana((int) (stats.getFinalMana()*1.2));
@@ -154,6 +162,10 @@ public class ChangeStats {
 		if(rpg.getModifiers().hasPrzyplywEnergii_h()) {
 			stats.setFinalInteligencja((int) (stats.getFinalInteligencja()*1.23));
 			stats.setFinalMana((int) (stats.getFinalMana()*1.23));
+		}
+		if(rpg.getModifiers().hasPrzyplywEnergii_m()) {
+			stats.setFinalInteligencja((int) (stats.getFinalInteligencja()*1.27));
+			stats.setFinalMana((int) (stats.getFinalMana()*1.27));
 		}
 	}
 	

@@ -12,10 +12,12 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.util.RayTraceResult;
 
-import io.lumine.mythic.api.mobs.MythicMob;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import me.Vark123.EpicRPG.FightSystem.ManualDamage;
+import me.libraryaddict.disguise.DisguiseAPI;
+import me.libraryaddict.disguise.disguisetypes.Disguise;
+import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 
 public class MeleeDragonAttackListener implements Listener {
 
@@ -40,8 +42,10 @@ public class MeleeDragonAttackListener implements Listener {
 						return false;
 					if (!(entity instanceof LivingEntity))
 						return false;
-					MythicMob mob = MythicBukkit.inst().getMobManager().getMythicMobInstance(entity).getType();
-					if (mob.getDisguise() == null || !mob.getDisguise().toLowerCase().contains("ender_dragon"))
+					if(!DisguiseAPI.isDisguised(entity))
+						return false;
+					Disguise disguise = DisguiseAPI.getDisguise(entity);
+					if(!disguise.getType().equals(DisguiseType.ENDER_DRAGON))
 						return false;
 					return true;
 				});

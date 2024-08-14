@@ -11,6 +11,7 @@ import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
+import me.Vark123.EpicRPG.RuneSystem.Runes.BlogoslawienstwoPrzedwiecznych;
 
 public class RuneMagicModifierListener implements Listener {
 	
@@ -62,6 +63,9 @@ public class RuneMagicModifierListener implements Listener {
 		if(modifiers.hasPelnia() 
 				&& ir.getMagicType().equalsIgnoreCase("woda"))
 			modifier += 0.45;
+		if(modifiers.hasZewNatury() 
+				&& ir.getMagicType().equalsIgnoreCase("natura"))
+			modifier += 0.4;
 		if(modifiers.hasSilaRownowagi()) {
 			if(ir.getMagicType().equalsIgnoreCase("rownowaga"))
 				modifier += 0.35;
@@ -92,6 +96,11 @@ public class RuneMagicModifierListener implements Listener {
 		if(modifiers.hasPaktKrwi_h() && !modifiers.hasPaktKrwiMeasure_h() 
 				&& ir.getMagicType().equalsIgnoreCase("krew"))
 			modifier += 0.85;
+		if(modifiers.hasPaktKrwi_m() && !modifiers.hasPaktKrwiMeasure_m() 
+				&& ir.getMagicType().equalsIgnoreCase("krew"))
+			modifier += 1;
+		if(BlogoslawienstwoPrzedwiecznych.getEffected().containsKey(p))
+			modifier += BlogoslawienstwoPrzedwiecznych.getEffected().get(p)*0.03;
 		
 		e.increaseModifier(modifier);
 	}
