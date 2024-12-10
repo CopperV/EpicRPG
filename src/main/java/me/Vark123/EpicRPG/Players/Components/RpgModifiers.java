@@ -95,12 +95,23 @@ public class RpgModifiers implements Serializable {
 	private double paktKrwiHp_m;
 	private boolean szostyZmysl_m;
 	private boolean przyplywEnergii_m;
+	private boolean lodowaTarcza;
+	private boolean lodowaTarcza_h;
+	private boolean lodowaTarcza_m;
 	
 	private boolean zewNatury;
 	
 	private boolean szalPrzedwiecznych;
 	private static final double BLOGOSLAWIENSTWO_PRZEDWIECZNYCH_BASE_RENEW_PERCENT = 0.9;
 	private double blogoslawienstwoPrzedwiecznychRenewChance = BLOGOSLAWIENSTWO_PRZEDWIECZNYCH_BASE_RENEW_PERCENT;
+	private boolean szalPrzedwiecznych_h;
+	private static final double BLOGOSLAWIENSTWO_PRZEDWIECZNYCH_H_BASE_RENEW_PERCENT = 0.95;
+	private double blogoslawienstwoPrzedwiecznych_hRenewChance = BLOGOSLAWIENSTWO_PRZEDWIECZNYCH_H_BASE_RENEW_PERCENT;
+	private boolean tajemnyBlask;
+	private boolean szalPrzedwiecznych_m;
+	private static final double BLOGOSLAWIENSTWO_PRZEDWIECZNYCH_M_BASE_RENEW_PERCENT = 1;
+	private double blogoslawienstwoPrzedwiecznych_mRenewChance = BLOGOSLAWIENSTWO_PRZEDWIECZNYCH_H_BASE_RENEW_PERCENT;
+	private boolean tajemnyBlask_m;
 	
 	private int potionSila;
 	private int potionZrecznosc;
@@ -154,9 +165,9 @@ public class RpgModifiers implements Serializable {
 	}
 
 	public boolean hasModifier2_lock() {
-		if(!RuneManager.getInstance().getObszarowkiCd().containsKey(rpg.getPlayer()))
+		if(!RuneManager.getInstance().getObszarowkiCd().containsKey(rpg.getPlayer().getUniqueId()))
 			return false;
-		Date date = RuneManager.getInstance().getObszarowkiCd().get(rpg.getPlayer());
+		Date date = RuneManager.getInstance().getObszarowkiCd().get(rpg.getPlayer().getUniqueId());
 		if((new Date().getTime()) - date.getTime() < 1000*5)
 			return true;
 		return false;
@@ -857,7 +868,85 @@ public class RpgModifiers implements Serializable {
 	public static double getBlogoslawienstwoPrzedwiecznychBaseRenewPercent() {
 		return BLOGOSLAWIENSTWO_PRZEDWIECZNYCH_BASE_RENEW_PERCENT;
 	}
-	
-	
+
+	public boolean hasSzalPrzedwiecznych_h() {
+		return szalPrzedwiecznych_h;
+	}
+
+	public void setSzalPrzedwiecznych_h(boolean szalPrzedwiecznych_h) {
+		this.szalPrzedwiecznych_h = szalPrzedwiecznych_h;
+	}
+
+	public double getBlogoslawienstwoPrzedwiecznych_hRenewChance() {
+		return blogoslawienstwoPrzedwiecznych_hRenewChance;
+	}
+
+	public void setBlogoslawienstwoPrzedwiecznych_hRenewChance(double blogoslawienstwoPrzedwiecznych_hRenewChance) {
+		this.blogoslawienstwoPrzedwiecznych_hRenewChance = blogoslawienstwoPrzedwiecznych_hRenewChance;
+	}
+
+	public static double getBlogoslawienstwoPrzedwiecznych_hBaseRenewPercent() {
+		return BLOGOSLAWIENSTWO_PRZEDWIECZNYCH_H_BASE_RENEW_PERCENT;
+	}
+
+	public boolean hasTajemnyBlask() {
+		return tajemnyBlask;
+	}
+
+	public void setTajemnyBlask(boolean tajemnyBlask) {
+		this.tajemnyBlask = tajemnyBlask;
+	}
+
+	public boolean hasSzalPrzedwiecznych_m() {
+		return szalPrzedwiecznych_m;
+	}
+
+	public void setSzalPrzedwiecznych_m(boolean szalPrzedwiecznych_m) {
+		this.szalPrzedwiecznych_m = szalPrzedwiecznych_m;
+	}
+
+	public double getBlogoslawienstwoPrzedwiecznych_mRenewChance() {
+		return blogoslawienstwoPrzedwiecznych_mRenewChance;
+	}
+
+	public void setBlogoslawienstwoPrzedwiecznych_mRenewChance(double blogoslawienstwoPrzedwiecznych_mRenewChance) {
+		this.blogoslawienstwoPrzedwiecznych_mRenewChance = blogoslawienstwoPrzedwiecznych_mRenewChance;
+	}
+
+	public static double getBlogoslawienstwoPrzedwiecznych_mBaseRenewPercent() {
+		return BLOGOSLAWIENSTWO_PRZEDWIECZNYCH_M_BASE_RENEW_PERCENT;
+	}
+
+	public boolean hasTajemnyBlask_m() {
+		return tajemnyBlask_m;
+	}
+
+	public void setTajemnyBlask_m(boolean tajemnyBlask_m) {
+		this.tajemnyBlask_m = tajemnyBlask_m;
+	}
+
+	public boolean hasLodowaTarcza() {
+		return lodowaTarcza;
+	}
+
+	public void setLodowaTarcza(boolean lodowaTarcza) {
+		this.lodowaTarcza = lodowaTarcza;
+	}
+
+	public boolean hasLodowaTarcza_h() {
+		return lodowaTarcza_h;
+	}
+
+	public void setLodowaTarcza_h(boolean lodowaTarcza_h) {
+		this.lodowaTarcza_h = lodowaTarcza_h;
+	}
+
+	public boolean hasLodowaTarcza_m() {
+		return lodowaTarcza_m;
+	}
+
+	public void setLodowaTarcza_m(boolean lodowaTarcza_m) {
+		this.lodowaTarcza_m = lodowaTarcza_m;
+	}
 	
 }

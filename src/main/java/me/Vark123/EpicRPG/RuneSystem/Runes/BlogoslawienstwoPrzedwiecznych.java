@@ -30,6 +30,7 @@ public class BlogoslawienstwoPrzedwiecznych extends ARune {
 	@Getter
 	private static Map<Player, Integer> effected = new LinkedHashMap<>();
 	private static Map<Player, BukkitTask> tasks = new LinkedHashMap<>();
+	private static Map<Player, BossBar> bars = new LinkedHashMap<>();
 	
 	private static Map<Player, Map<Player, Integer>> localEffected = new LinkedHashMap<>();
 
@@ -45,7 +46,7 @@ public class BlogoslawienstwoPrzedwiecznych extends ARune {
 			p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 0.6f, 0.8f);
 			modifiers.setBlogoslawienstwoPrzedwiecznychRenewChance(modifiers.getBlogoslawienstwoPrzedwiecznychRenewChance()*0.9);
 			p.sendMessage("§7[§6EpicRPG§7] §aPrzedwieczni obdarzyli Ciebie swoim blogoslawienstwem!");
-			RuneManager.getInstance().getPlayerRuneCd().get(p).remove(dr.getName());
+			RuneManager.getInstance().getPlayerRuneCd().get(p.getUniqueId()).remove(dr.getName());
 		} else {
 			p.getWorld().playSound(p.getLocation(), Sound.ENTITY_WITHER_AMBIENT, 0.6f, 0.8f);
 			modifiers.setBlogoslawienstwoPrzedwiecznychRenewChance(RpgModifiers.getBlogoslawienstwoPrzedwiecznychBaseRenewPercent());
@@ -87,6 +88,11 @@ public class BlogoslawienstwoPrzedwiecznych extends ARune {
 		
 		if(tasks.containsKey(p) && !tasks.get(p).isCancelled())
 			tasks.get(p).cancel();
+		if(bars.containsKey(p)) {
+			BossBar bar = bars.get(p);
+			bar.removeAll();
+			bar.setVisible(false);
+		}
 		
 		BukkitTask task = new BukkitRunnable() {
 			double time = dr.getDurationTime();
@@ -95,12 +101,13 @@ public class BlogoslawienstwoPrzedwiecznych extends ARune {
 				bar.setVisible(true);
 				bar.addPlayer(p);
 				bar.setProgress(timer/time);
+				bars.put(p, bar);
 			}
 			@Override
 			public void run() {
 				if(isCancelled()) {
-					bar.removeAll();
 					bar.setVisible(false);
+					bar.removeAll();
 					return;
 				}
 				if(timer <= 0 || !casterInCastWorld()) {
@@ -133,6 +140,12 @@ public class BlogoslawienstwoPrzedwiecznych extends ARune {
 					Location loc = player.getLocation().clone().add(0,1,0);
 					player.getWorld().spawnParticle(Particle.DRAGON_BREATH, loc, 4, 0.4f, 1, 0.4f, 0.12f);
 				});
+				
+				if(isCancelled()) {
+					bar.setVisible(false);
+					bar.removeAll();
+					return;
+				}
 			}
 		}.runTaskTimer(Main.getInstance(), 0, 5);
 		tasks.put(p, task);

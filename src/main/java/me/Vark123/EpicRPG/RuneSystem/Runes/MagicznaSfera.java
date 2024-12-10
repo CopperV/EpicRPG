@@ -37,7 +37,7 @@ public class MagicznaSfera extends ARune {
 
 	@Override
 	public void castSpell() {
-		Location loc = p.getLocation().clone().add(0,1.5,0);
+		Location loc = p.getLocation().clone();
 		p.getLocation().getWorld().playSound(loc, Sound.ENTITY_EVOKER_PREPARE_ATTACK, 1.1f, 1.2f);
 		p.getWorld().spawnParticle(Particle.REVERSE_PORTAL, loc, 100, 0.5, 0.5F, 0.5F, 3);
 		
@@ -64,7 +64,7 @@ public class MagicznaSfera extends ARune {
 						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
 						State flag = set.queryValue(null, Flags.PVP);
 						if(flag != null && flag.equals(State.ALLOW)
-								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+								&& !(e.getWorld().getName().toLowerCase().contains("dungeon") || e.getWorld().getName().toLowerCase().contains("raid")))
 							return true;
 						return false;
 					}
@@ -80,7 +80,7 @@ public class MagicznaSfera extends ARune {
 					RuneDamage.damageNormal(p, (LivingEntity) e, dr);
 					p.getWorld().spawnParticle(Particle.SPELL_WITCH, e.getLocation().clone().add(0, 1, 0), 8, 0.3, 0.8, 0.3, 0.07);
 					p.getWorld().playSound(loc, Sound.ENTITY_EVOKER_CAST_SPELL, 0.5f, 1.3f);
-					radius.subtract(.15);
+					radius.subtract(.5);
 				});
 				
 				if(radius.getValue() < 1.5) {

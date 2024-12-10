@@ -44,10 +44,11 @@ public final class UpgradableMenuManager {
 	private final ItemStack upgrade;
 	private final ItemStack chance;
 	private final ItemStack inhibitor;
+	private final ItemStack flask;
 	
 	private UpgradableMenuManager() {
-		upgradableFreeSlots = new int[] {10, 32,33,34, 37};
-		nonDisabledSlots = Arrays.asList(10,11, 14,15,16, 28, 32,33,34,35, 37,38, 49,50);
+		upgradableFreeSlots = new int[] {10, 23,24,25, 36, 39};
+		nonDisabledSlots = Arrays.asList(10,11, 5,6,7, 27,30, 23,24,25,26, 36,37, 39,40,  42,51);
 		
 		disabled = new ItemStack(Material.BLACK_STAINED_GLASS_PANE, 1);{
 			ItemMeta im = disabled.getItemMeta();
@@ -93,6 +94,12 @@ public final class UpgradableMenuManager {
 			inhibitor.setItemMeta(im);
 		}
 		
+		flask = MythicBukkit.inst().getItemManager().getItemStack("Miod_Dragrotowy");{
+			ItemMeta im = flask.getItemMeta();
+			im.setDisplayName("§6§lMiod Pitny");
+			flask.setItemMeta(im);
+		}
+		
 		upgradableProvider = new InventoryProvider() {
 			@Override
 			public void init(Player player, InventoryContents contents) {
@@ -103,16 +110,18 @@ public final class UpgradableMenuManager {
 				}
 				
 				contents.set(11, gray);
-				contents.set(35, gray);
-				contents.set(38, gray);
+				contents.set(26, gray);
+				contents.set(37, gray);
+				contents.set(40, gray);
 
-				contents.set(14, empty);
-				contents.set(15, empty);
-				contents.set(16, empty);
+				contents.set(5, empty);
+				contents.set(6, empty);
+				contents.set(7, empty);
 
-				contents.set(28, inhibitor);
+				contents.set(27, inhibitor);
+				contents.set(30, flask);
 				
-				contents.set(49, IntelligentItem.of(upgrade, e -> {
+				contents.set(51, IntelligentItem.of(upgrade, e -> {
 					Player p = (Player) e.getWhoClicked();
 					Inventory inv = e.getView().getTopInventory();
 					
@@ -132,12 +141,12 @@ public final class UpgradableMenuManager {
 					
 					UpgradableManager.get().getUpgradableLevel(level+1).ifPresentOrElse(upgradableLevel -> {
 						Map<ItemStack, Integer> items = new LinkedHashMap<>();
-						if(inv.getItem(32) != null && !inv.getItem(32).getType().equals(Material.AIR))
-							items.put(inv.getItem(32), 32);
-						if(inv.getItem(33) != null && !inv.getItem(33).getType().equals(Material.AIR))
-							items.put(inv.getItem(33), 33);
-						if(inv.getItem(34) != null && !inv.getItem(34).getType().equals(Material.AIR))
-							items.put(inv.getItem(34), 34);
+						if(inv.getItem(23) != null && !inv.getItem(23).getType().equals(Material.AIR))
+							items.put(inv.getItem(23), 23);
+						if(inv.getItem(24) != null && !inv.getItem(24).getType().equals(Material.AIR))
+							items.put(inv.getItem(24), 24);
+						if(inv.getItem(25) != null && !inv.getItem(25).getType().equals(Material.AIR))
+							items.put(inv.getItem(25), 25);
 						if(!upgradableLevel.matchRecipe(items.keySet())) {
 							p.closeInventory();
 							return;
@@ -146,7 +155,7 @@ public final class UpgradableMenuManager {
 						double chance = upgradableLevel.getChance();
 						
 						boolean inhibitor = false;
-						ItemStack inhibitorItem = inv.getItem(37);
+						ItemStack inhibitorItem = inv.getItem(36);
 						if(inhibitorItem != null && !inhibitorItem.getType().equals(Material.AIR)
 								&& UpgradableManager.get().canUseInhibitor(chance, inhibitorItem)) {
 							chance += UpgradableManager.get().getInhibitor(inhibitorItem)
@@ -155,6 +164,16 @@ public final class UpgradableMenuManager {
 							inhibitor = true;
 						}
 						
+						boolean flask = false;
+						ItemStack flaskItem = inv.getItem(39);
+						if(flaskItem != null && !flaskItem.getType().equals(Material.AIR)) {
+							if(UpgradableManager.get().canUseFlask(flaskItem, upgradableItem)) {
+								flask = true;
+							} else {
+								p.closeInventory();
+								return;
+							}
+						}
 
 						Collection<String> check = new LinkedList<>();
 						Map<String,Integer> recipe = upgradableLevel.getMmIdCosts();
@@ -179,13 +198,25 @@ public final class UpgradableMenuManager {
 						
 						if(inhibitor) {
 							if(inhibitorItem.getAmount() < 2) {
-								inv.setItem(37, null);
+								inv.setItem(36, null);
 							} else {
 								inhibitorItem.setAmount(inhibitorItem.getAmount() - 1);
 							}
 						}
 						
-						UpgradableManager.get().upgradeItem(p, upgradableItem, chance, upgradableLevel.getLevel());
+						if(flask) {
+							if(flaskItem.getAmount() < 2) {
+								inv.setItem(39, null);
+							} else {
+								flaskItem.setAmount(flaskItem.getAmount() - 1);
+							}
+						}
+						
+						if(flask) {
+							UpgradableManager.get().upgradeItem(p, upgradableItem, flaskItem, chance, upgradableLevel.getLevel());
+						} else {
+							UpgradableManager.get().upgradeItem(p, upgradableItem, chance, upgradableLevel.getLevel());
+						}
 						
 						for(int slot : upgradableFreeSlots) {
 							Utils.dropItemStack(p, inv.getItem(slot));
@@ -196,7 +227,7 @@ public final class UpgradableMenuManager {
 						p.closeInventory();
 					});
 				}));
-				contents.set(50, chance.clone());
+				contents.set(42, chance.clone());
 				
 			}
 			@Override
@@ -206,26 +237,28 @@ public final class UpgradableMenuManager {
 				ItemStack upgradableItem = inv.getItem(10);
 				if(upgradableItem == null || upgradableItem.getType().equals(Material.AIR)) {
 					inv.setItem(11, gray);
-					inv.setItem(35, gray);
-					inv.setItem(38, gray);
+					inv.setItem(26, gray);
+					inv.setItem(37, gray);
+					inv.setItem(40, gray);
 
-					inv.setItem(14, empty);
-					inv.setItem(15, empty);
-					inv.setItem(16, empty);
+					inv.setItem(5, empty);
+					inv.setItem(6, empty);
+					inv.setItem(7, empty);
 
-					inv.setItem(50, chance.clone());
+					inv.setItem(42, chance.clone());
 					return;
 				}
 				if(!UpgradableManager.get().isItemUpgradable(upgradableItem)) {
 					inv.setItem(11, red);
-					inv.setItem(35, gray);
-					inv.setItem(38, gray);
+					inv.setItem(26, gray);
+					inv.setItem(37, gray);
+					inv.setItem(40, gray);
 
-					inv.setItem(14, empty);
-					inv.setItem(15, empty);
-					inv.setItem(16, empty);
+					inv.setItem(5, empty);
+					inv.setItem(6, empty);
+					inv.setItem(7, empty);
 
-					inv.setItem(50, chance.clone());
+					inv.setItem(42, chance.clone());
 					return;
 				}
 				
@@ -240,17 +273,27 @@ public final class UpgradableMenuManager {
 					
 					double chance = upgradableLevel.getChance();
 					
-					ItemStack inhibitorItem = inv.getItem(37);
+					ItemStack inhibitorItem = inv.getItem(36);
 					if(inhibitorItem == null || inhibitorItem.getType().equals(Material.AIR)) {
-						inv.setItem(38, red);
+						inv.setItem(37, red);
 					} else {
 						if(UpgradableManager.get().canUseInhibitor(chance, inhibitorItem)) {
-							inv.setItem(38, green);
+							inv.setItem(37, green);
 							chance += UpgradableManager.get().getInhibitor(inhibitorItem)
 									.map(_inhibitor -> _inhibitor.getChance())
 									.orElse(0.);
 						}
 					}
+					
+					ItemStack flaskItem = inv.getItem(39);
+					if(flaskItem != null && !flaskItem.getType().equals(Material.AIR)) {
+						if(UpgradableManager.get().canUseFlask(flaskItem, upgradableItem)) {
+							inv.setItem(40, green);
+						} else {
+							inv.setItem(40, red);
+						}
+					}
+
 					
 					List<ItemStack> recipe = upgradableLevel.getMmIdCosts().keySet().stream()
 						.map(upgradableLevel::getItem)
@@ -258,45 +301,46 @@ public final class UpgradableMenuManager {
 								&& !item.getType().equals(Material.AIR))
 						.collect(Collectors.toList());
 					{
-						int j = 14;
-						for(int i = 0; i < recipe.size() && j < 17; ++i, ++j) {
+						int j = 5;
+						for(int i = 0; i < recipe.size() && j < 8; ++i, ++j) {
 							inv.setItem(j, recipe.get(i));
 						}
-						for(;j < 17; ++j) {
+						for(;j < 8; ++j) {
 							inv.setItem(j, empty);
 						}
 					}
 					
 					List<ItemStack> items = new LinkedList<>();
-					if(inv.getItem(32) != null && !inv.getItem(32).getType().equals(Material.AIR))
-						items.add(inv.getItem(32));
-					if(inv.getItem(33) != null && !inv.getItem(33).getType().equals(Material.AIR))
-						items.add(inv.getItem(33));
-					if(inv.getItem(34) != null && !inv.getItem(34).getType().equals(Material.AIR))
-						items.add(inv.getItem(34));
+					if(inv.getItem(23) != null && !inv.getItem(23).getType().equals(Material.AIR))
+						items.add(inv.getItem(23));
+					if(inv.getItem(24) != null && !inv.getItem(24).getType().equals(Material.AIR))
+						items.add(inv.getItem(24));
+					if(inv.getItem(25) != null && !inv.getItem(25).getType().equals(Material.AIR))
+						items.add(inv.getItem(25));
 					if(upgradableLevel.matchRecipe(items)) {
-						inv.setItem(35, green);
+						inv.setItem(26, green);
 					} else {
-						inv.setItem(35, red);
+						inv.setItem(26, red);
 					}
 					
-					ItemStack chanceItem = inv.getItem(50);{
+					ItemStack chanceItem = inv.getItem(42);{
 						ItemMeta im = chanceItem.getItemMeta();
 						im.setDisplayName("§e§lSzansa  §7»  §f§l"+((int) (chance*100))+"%");
 						chanceItem.setItemMeta(im);
 					}
-					inv.setItem(50, chanceItem);
+					inv.setItem(42, chanceItem);
 					
 				}, () -> {
 					inv.setItem(11, red);
-					inv.setItem(35, gray);
-					inv.setItem(38, gray);
+					inv.setItem(26, gray);
+					inv.setItem(37, gray);
+					inv.setItem(40, gray);
 
-					inv.setItem(14, empty);
-					inv.setItem(15, empty);
-					inv.setItem(16, empty);
+					inv.setItem(5, empty);
+					inv.setItem(6, empty);
+					inv.setItem(7, empty);
 
-					inv.setItem(50, chance.clone());
+					inv.setItem(42, chance.clone());
 				});
 				
 			}
@@ -311,6 +355,7 @@ public final class UpgradableMenuManager {
 						continue;
 					Utils.dropItemStack(player, it);
 				}
+				inv.clear();
 			}
 			
 		};

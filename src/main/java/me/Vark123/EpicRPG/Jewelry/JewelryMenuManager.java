@@ -2,8 +2,10 @@ package me.Vark123.EpicRPG.Jewelry;
 
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -74,6 +76,47 @@ public class JewelryMenuManager {
 	}
 	
 	public void openMenu(Player viewer, Player owner) {
+		if(!PlayerManager.getInstance().playerExists(owner))
+			return;
+		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(owner);
+		
+		Inventory inv = Bukkit.createInventory(new BaseJewelryMenu(viewer, owner), 18, "§6§lBizuteria");
+		
+		List<Integer> tmpList = Utils.intArrayToList(freeSlots);
+		for(int i = 0; i < 18; ++i) {
+			if(tmpList.contains(i))
+				continue;
+			if(i == 1) {
+				inv.setItem(i, baseAmulet);
+				continue;
+			}
+			if(i == 3) {
+				inv.setItem(i, baseRing);
+				continue;
+			}
+			if(i == 5) {
+				inv.setItem(i, baseRing);
+				continue;
+			}
+			if(i == 7) {
+				inv.setItem(i, baseGloves);
+				continue;
+			}
+			inv.setItem(i, empty);
+		}
+		
+		RpgJewelry jewelry = rpg.getJewelry();
+		jewelry.getAkcesoria().forEach((i, item) -> {
+			if(item.getItem() == null)
+				return;
+			inv.setItem(10+i*2, item.getItem());
+		});
+		
+		viewer.openInventory(inv);
+	}
+	
+	@Deprecated
+	public void oldOpenMenu(Player viewer, Player owner) {
 		if(!PlayerManager.getInstance().playerExists(owner))
 			return;
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(owner);
@@ -156,18 +199,19 @@ public class JewelryMenuManager {
 				});
 				
 				ChangeStats.change(owner);
+				inventory.getInventory().clear();
 			}
 		};
 		
 		return provider;
 	}
 	
-	private boolean isJewelryItem(ItemStack it) {
+	public boolean isJewelryItem(ItemStack it) {
 		NBTItem nbt = new NBTItem(it);
 		return nbt.hasTag("JewerlyType");
 	}
 	
-	private boolean isCorrectJewelrySlotType(ItemStack it, JewelryItem jewelry) {
+	public boolean isCorrectJewelrySlotType(ItemStack it, JewelryItem jewelry) {
 		NBTItem nbt = new NBTItem(it);
 		String type = nbt.getString("JewerlyType").toUpperCase();
 		return jewelry.getType().equals(JewelryType.valueOf(type));

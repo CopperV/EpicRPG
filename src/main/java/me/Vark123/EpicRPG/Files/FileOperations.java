@@ -33,6 +33,7 @@ import me.Vark123.EpicRPG.Players.Components.RpgRzemiosla;
 import me.Vark123.EpicRPG.Players.Components.RpgSkills;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import me.Vark123.EpicRPG.Players.Components.RpgVault;
+import me.Vark123.EpicRPG.UpgradableSystem.UpgradableFlask;
 import me.Vark123.EpicRPG.UpgradableSystem.UpgradableInhibitor;
 import me.Vark123.EpicRPG.UpgradableSystem.UpgradableInhibitor.InhibitorCrafting;
 import me.Vark123.EpicRPG.UpgradableSystem.UpgradableLevel;
@@ -202,6 +203,21 @@ public class FileOperations {
 								.crafting(crafting)
 								.build());
 					}
+				});
+		}
+		if(upgradesYml.isConfigurationSection("flasks")) {
+			ConfigurationSection section = upgradesYml.getConfigurationSection("flasks");
+			section.getKeys(false).stream()
+				.filter(section::isConfigurationSection)
+				.forEach(mmId -> {
+					ConfigurationSection flaskSection = section.getConfigurationSection(mmId);
+					String lineModifier = ChatColor.translateAlternateColorCodes('&', flaskSection.getString("line-modifier", "&4- &8Unmatched: &7"));
+					
+					UpgradableFlask flask = UpgradableFlask.builder()
+							.mmId(mmId)
+							.lineModifier(lineModifier)
+							.build();
+					UpgradableManager.get().registerFlask(flask);
 				});
 		}
 	}

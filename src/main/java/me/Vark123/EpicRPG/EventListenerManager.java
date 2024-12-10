@@ -24,6 +24,7 @@ import me.Vark123.EpicRPG.Core.CPS.CPSClickListener;
 import me.Vark123.EpicRPG.Core.Events.PlayerUseDisabledBlockEvent;
 import me.Vark123.EpicRPG.Core.Events.PlayerUseLeverEvent;
 import me.Vark123.EpicRPG.Core.Listeners.ExecutableItemUseListener;
+import me.Vark123.EpicRPG.Core.Listeners.HalloweenBossSpawnListener;
 import me.Vark123.EpicRPG.Core.Listeners.LevelSystemControlListener;
 import me.Vark123.EpicRPG.Core.Listeners.PlayerJumpModifyListener;
 import me.Vark123.EpicRPG.Core.Listeners.VipBoostControlListener;
@@ -50,6 +51,7 @@ import me.Vark123.EpicRPG.FightSystem.Listeners.Attack.Melee.ProfMeleeModifierLi
 import me.Vark123.EpicRPG.FightSystem.Listeners.Attack.Melee.RuneMeleeModifierListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Attack.Melee.SlugaBeliaraModifierListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Attack.Misc.CiosKrytycznyModifierListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Attack.Misc.MegaCritModifierListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Attack.Misc.ProwokacjaModifierListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Attack.Misc.ZadzaKrwiModifierListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Attack.Misc.ZyciodajnaZiemiaModifierListener;
@@ -69,7 +71,6 @@ import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Custom.BeeStingEffectLis
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Custom.DollInfoEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Custom.EntityTauntEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Custom.HpDisplayEffectListener;
-import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Custom.ScaleDamageModifierEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Custom.ShulkerModifierEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Custom.VanillaPotionModifierEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Defense.LodowyBlokEffectListener;
@@ -98,10 +99,24 @@ import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Misc.EligorDamageEffectL
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Misc.EsAlareMeDamageEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Misc.KyraDamageEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Misc.MobsDamageModifierEffectListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Misc.SindragosaDamageAttackListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Misc.TrujacaAuraEffectListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Misc.ValithriaKoszmarneWidmoProtectionListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Projectile.NoDamageTicksEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Projectile.ProjectileEffectsListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Projectile.SwietaStrzalaAreaEffectListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Sets.GrobowyZniwiarzSetListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Sets.MroznaZamiecSetListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Sets.MroznaZamiec_HSetListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Sets.MroznaZamiec_MSetListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Sets.OstrzeMrozuSetComboListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Sets.OstrzeMrozu_MSetComboListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Sets.RunicznyEgzekutorSetListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Sets.RunicznyEgzekutor_HSetListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Sets.RunicznyEgzekutor_MSetListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Sets.WiecznyWedrowiecSetListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Sets.WiecznyWedrowiec_HSetListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Sets.WiecznyWedrowiec_MSetListener;
 import me.Vark123.EpicRPG.Gems.GemPlaceProtEvent;
 import me.Vark123.EpicRPG.HealthSystem.PlayerHealEvent;
 import me.Vark123.EpicRPG.HorseSystem.HorseDismountEvent;
@@ -109,7 +124,8 @@ import me.Vark123.EpicRPG.HorseSystem.HorseInventoryEvent;
 import me.Vark123.EpicRPG.HorseSystem.HorseProtectionListener;
 import me.Vark123.EpicRPG.HorseSystem.HorseRemoveOnPlayerDeathEvent;
 import me.Vark123.EpicRPG.HorseSystem.HorseStickUseEvent;
-import me.Vark123.EpicRPG.Jewelry.JewelryMenuOpenEvent;
+import me.Vark123.EpicRPG.Jewelry.Listeners.JewelryMenuInteractListener;
+import me.Vark123.EpicRPG.Jewelry.Listeners.JewelryMenuOpenListener;
 import me.Vark123.EpicRPG.Klejnoty.GrindstoneUseEvent;
 import me.Vark123.EpicRPG.KosturSystem.KosturUseEvent;
 import me.Vark123.EpicRPG.MMExtension.CustomConditionLoadEvent;
@@ -166,7 +182,8 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new PlayerChangeEqEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new PlayerArrowWeaponUseEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new ChatMsgSendEvent(), inst);
-		Bukkit.getPluginManager().registerEvents(new JewelryMenuOpenEvent(), inst);
+		Bukkit.getPluginManager().registerEvents(new JewelryMenuOpenListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new JewelryMenuInteractListener(), inst);
 
 		Bukkit.getPluginManager().registerEvents(new PlayerHealEvent(), inst);
 
@@ -222,7 +239,7 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new DollInfoEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new EntityTauntEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new HpDisplayEffectListener(), inst);
-		Bukkit.getPluginManager().registerEvents(new ScaleDamageModifierEffectListener(), inst);
+//		Bukkit.getPluginManager().registerEvents(new ScaleDamageModifierEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new ShulkerModifierEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new VanillaPotionModifierEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new LodowyBlokEffectListener(), inst);
@@ -331,6 +348,26 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new UpgradableAnvilUseListener(), inst);
 
 		Bukkit.getPluginManager().registerEvents(new WHEListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new HalloweenBossSpawnListener(), inst);
+
+		Bukkit.getPluginManager().registerEvents(new SindragosaDamageAttackListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new ValithriaKoszmarneWidmoProtectionListener(), inst);
+		
+		Bukkit.getPluginManager().registerEvents(new GrobowyZniwiarzSetListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new RunicznyEgzekutorSetListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new RunicznyEgzekutor_HSetListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new RunicznyEgzekutor_MSetListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new WiecznyWedrowiecSetListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new WiecznyWedrowiec_HSetListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new WiecznyWedrowiec_MSetListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new MroznaZamiecSetListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new MroznaZamiec_HSetListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new MroznaZamiec_MSetListener(), inst);
+
+		Bukkit.getPluginManager().registerEvents(new OstrzeMrozuSetComboListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new OstrzeMrozu_MSetComboListener(), inst);
+
+		Bukkit.getPluginManager().registerEvents(new MegaCritModifierListener(), inst);
 		
 		//Calendar Events
 		if(EpicRPGApi.getApi().getCalendarManager().isRegisteredEvent("reset_blackrock")) 
@@ -346,6 +383,9 @@ public class EventListenerManager {
 		if(EpicRPGApi.getApi().getCalendarManager().isRegisteredEvent("wildhunt3")) 
 			EpicRPGApi.getApi().getCalendarManager().removeEvent("wildhunt3");
 		EpicRPGApi.getApi().getCalendarManager().addEvent("wildhunt3", "every day", "17:30");
+		if(EpicRPGApi.getApi().getCalendarManager().isRegisteredEvent("halloween_event")) 
+			EpicRPGApi.getApi().getCalendarManager().removeEvent("halloween_event");
+		EpicRPGApi.getApi().getCalendarManager().addEvent("halloween_event", "31.10", "xx:00,xx:15,xx:30,xx:45");
 		
 		addDisableDamageParticlesPacketListener();
 	}

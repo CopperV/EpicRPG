@@ -142,7 +142,7 @@ public class RpgVault implements Serializable, ChatPrintable {
 		TableGenerator generator = new TableGenerator(TableGenerator.Alignment.LEFT, TableGenerator.Alignment.LEFT, TableGenerator.Alignment.LEFT);
 		generator.addRow("", "§2Kasa: §e"+String.format("%.2f", getMoney())+" $", "§2Smocze monety: §4"+dragonCoins);
 		generator.addRow("", "§2Stygia: §3"+stygia, "§2Brylki rudy: §9"+brylkiRudy);
-		generator.addRow("", "§2Karnet: §c"+eventCurrency, "§2Palemki: §a"+eventCurrency2);
+		generator.addRow("", "§2Karnet: §c"+eventCurrency, "§2Dynki: §6"+eventCurrency2);
 		List<String> lines = generator.generate(Receiver.CLIENT, true, true);
 		
 		sender.sendMessage("§6§l========================= ");

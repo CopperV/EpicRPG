@@ -1,7 +1,10 @@
 package me.Vark123.EpicRPG.RuneSystem.Runes;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -33,6 +36,8 @@ import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import net.minecraft.world.phys.AxisAlignedBB;
 
 public class SzponBeliaraMana extends ARune {
+	
+	private final Collection<UUID> shootedCd = new HashSet<>();
 
 	public SzponBeliaraMana(ItemStackRune dr, Player p) {
 		super(dr, p);
@@ -112,14 +117,14 @@ public class SzponBeliaraMana extends ARune {
 						return false;
 					if(e.equals(p) || !(e instanceof LivingEntity))
 						return false;
-					if(shooted.contains(e))
+					if(shooted.contains(e) || shootedCd.contains(e.getUniqueId()))
 						return false;
 					if(e instanceof Player) {
 						RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
 						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
 						State flag = set.queryValue(null, Flags.PVP);
 						if(flag != null && flag.equals(State.ALLOW)
-								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+								&& !(e.getWorld().getName().toLowerCase().contains("dungeon") || e.getWorld().getName().toLowerCase().contains("raid")))
 							return true;
 						return false;
 					}
@@ -136,9 +141,20 @@ public class SzponBeliaraMana extends ARune {
 						return 0;
 					return dist1 < dist2 ? -1 : 1;
 				}).ifPresent(e -> {
+					UUID uid = e.getUniqueId();
+					if(shootedCd.contains(uid))
+						return;
 					shooted.add(e);
 					RuneDamage.damageNormal(p, (LivingEntity)e, dr);
 					p.getWorld().spawnParticle(Particle.REDSTONE, e.getLocation(), 10, 0.3f, 0.3f, 0.3f, 0.1f, dust);
+					
+					shootedCd.add(uid);
+					new BukkitRunnable() {
+						@Override
+						public void run() {
+							shootedCd.remove(uid);
+						}
+					}.runTaskLater(Main.getInstance(), 5);
 				});
 				
 			}
@@ -174,14 +190,14 @@ public class SzponBeliaraMana extends ARune {
 						return false;
 					if(e.equals(p) || !(e instanceof LivingEntity))
 						return false;
-					if(shooted.contains(e))
+					if(shooted.contains(e) || shootedCd.contains(e.getUniqueId()))
 						return false;
 					if(e instanceof Player) {
 						RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
 						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
 						State flag = set.queryValue(null, Flags.PVP);
 						if(flag != null && flag.equals(State.ALLOW)
-								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+								&& !(e.getWorld().getName().toLowerCase().contains("dungeon") || e.getWorld().getName().toLowerCase().contains("raid")))
 							return true;
 						return false;
 					}
@@ -198,9 +214,20 @@ public class SzponBeliaraMana extends ARune {
 						return 0;
 					return dist1 < dist2 ? -1 : 1;
 				}).ifPresent(e -> {
+					UUID uid = e.getUniqueId();
+					if(shootedCd.contains(uid))
+						return;
 					shooted.add(e);
 					RuneDamage.damageNormal(p, (LivingEntity)e, dr);
 					p.getWorld().spawnParticle(Particle.REDSTONE, e.getLocation(), 10, 0.3f, 0.3f, 0.3f, 0.1f, dust);
+					
+					shootedCd.add(uid);
+					new BukkitRunnable() {
+						@Override
+						public void run() {
+							shootedCd.remove(uid);
+						}
+					}.runTaskLater(Main.getInstance(), 5);
 				});
 				
 				loc.subtract(x, y, z);

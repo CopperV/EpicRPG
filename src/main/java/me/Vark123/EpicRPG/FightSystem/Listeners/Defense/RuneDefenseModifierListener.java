@@ -35,6 +35,17 @@ public class RuneDefenseModifierListener implements Listener {
 			modifier += 0.15;
 		if(modifiers.hasZyciodajnaZiemia_m())
 			modifier += 0.2;
+		if(modifiers.hasTajemnyBlask_m() && rpg.getInfo().getProffesion().equals("§cWojownik")) {
+			modifier += 0.5;
+		} else if(modifiers.hasTajemnyBlask() && rpg.getInfo().getProffesion().equals("§cWojownik")) {
+			modifier += 0.3;
+		}
+		if(modifiers.hasLodowaTarcza())
+			modifier += 0.18;
+		if(modifiers.hasLodowaTarcza_h())
+			modifier += 0.21;
+		if(modifiers.hasLodowaTarcza_m())
+			modifier += 0.25;
 		
 		e.decreaseModifier(modifier);
 	}

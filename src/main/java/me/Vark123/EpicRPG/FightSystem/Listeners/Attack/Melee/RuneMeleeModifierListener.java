@@ -1,5 +1,7 @@
 package me.Vark123.EpicRPG.FightSystem.Listeners.Attack.Melee;
 
+import java.util.Random;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -18,8 +20,12 @@ import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.RuneSystem.Runes.BlogoslawienstwoPrzedwiecznych;
+import me.Vark123.EpicRPG.RuneSystem.Runes.BlogoslawienstwoPrzedwiecznych_H;
+import me.Vark123.EpicRPG.RuneSystem.Runes.BlogoslawienstwoPrzedwiecznych_M;
 
 public class RuneMeleeModifierListener implements Listener {
+	
+	private static final Random rand = new Random();
 	
 	@EventHandler
 	public void onMod(EpicAttackEvent e) {
@@ -51,8 +57,27 @@ public class RuneMeleeModifierListener implements Listener {
 			modifier += 0.9;
 		if(modifiers.hasSzalPrzedwiecznych())
 			modifier += 0.3;
+		if(modifiers.hasSzalPrzedwiecznych_h())
+			modifier += 0.44;
+		if(modifiers.hasSzalPrzedwiecznych_m())
+			modifier += 0.6;
 		if(BlogoslawienstwoPrzedwiecznych.getEffected().containsKey(p))
 			modifier += BlogoslawienstwoPrzedwiecznych.getEffected().get(p)*0.03;
+		if(BlogoslawienstwoPrzedwiecznych_H.getEffected().containsKey(p))
+			modifier += BlogoslawienstwoPrzedwiecznych_H.getEffected().get(p)*0.04;
+		if(BlogoslawienstwoPrzedwiecznych_M.getEffected().containsKey(p))
+			modifier += BlogoslawienstwoPrzedwiecznych_M.getEffected().get(p)*0.05;
+		if(modifiers.hasTajemnyBlask_m()) {
+			if(rpg.getInfo().getProffesion().equals("§cWojownik"))
+				modifier += 0.5;
+			else if(rpg.getInfo().getProffesion().equals("§2Mysliwy"))
+				modifier += rand.nextDouble(0.5) + 0.25;
+		} else if(modifiers.hasTajemnyBlask()) {
+			if(rpg.getInfo().getProffesion().equals("§cWojownik"))
+				modifier += 0.3;
+			else if(rpg.getInfo().getProffesion().equals("§2Mysliwy"))
+				modifier += rand.nextDouble(0.3) + 0.15;
+		}
 		
 		if(modifiers.hasCiosWPlecy()) {
 			Entity victim = e.getVictim();

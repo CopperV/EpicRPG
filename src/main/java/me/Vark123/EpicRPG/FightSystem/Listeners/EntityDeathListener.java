@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.Sound;
@@ -40,6 +41,7 @@ import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.Players.Components.RpgSkills;
+import me.Vark123.EpicRPG.RuneSystem.Runes.CukierekAlboPsikus;
 
 public class EntityDeathListener implements Listener {
 	
@@ -136,6 +138,39 @@ public class EntityDeathListener implements Listener {
 					ManualDamage.doDamage(killer, (LivingEntity) v, dmg, event);
 				});
 			}
+		}
+		if(CukierekAlboPsikus.getEffected().containsKey(victim) && CukierekAlboPsikus.getEffected().get(victim).isOnline()) {
+			Location loc = victim.getLocation().clone().add(0,1,0);
+			victim.getWorld().spawnParticle(Particle.CAMPFIRE_COSY_SMOKE, loc, 30, 0.4f, 0.4f, 0.4f, 0.3f);
+			victim.getWorld().playSound(victim.getLocation(), Sound.ENTITY_BLAZE_DEATH, 1.2f, 0.8f);
+			
+			RpgPlayer _rpg = PlayerManager.getInstance().getRpgPlayer(CukierekAlboPsikus.getEffected().get(victim));
+			double dmg = _rpg.getInfo().getLevel()*50;
+			victim.getWorld().getNearbyEntities(victim.getLocation(), 4, 4, 4, v -> {
+				if(v.equals(killer) || !(v instanceof LivingEntity))
+					return false;
+				if(v.equals(victim))
+					return false;
+				if(v instanceof Player) {
+					RegionQuery query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
+					ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(v.getLocation()));
+					State flag = set.queryValue(null, Flags.PVP);
+					if(flag != null && flag.equals(State.ALLOW)
+							&& !v.getWorld().getName().toLowerCase().contains("dungeon"))
+						return true;
+					return false;
+				}
+				if(!io.lumine.mythic.bukkit.BukkitAdapter.adapt(v).isDamageable())
+					return false;
+				return true;
+			}).forEach(v -> {
+				EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(killer, v, DamageCause.CONTACT, dmg);
+				Bukkit.getPluginManager().callEvent(event);
+				if(event.isCancelled()) {
+					return;
+				}
+				ManualDamage.doDamage(killer, (LivingEntity) v, dmg, event);
+			});
 		}
 
 		if(modifiers.hasWampiryzm()) {

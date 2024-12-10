@@ -3,10 +3,13 @@ package me.Vark123.EpicRPG.Players.Components;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -33,6 +36,9 @@ public class RpgPlayerInfo implements Serializable, ChatPrintable{
 	
 	private boolean drop = false;
 	private boolean tutorial = true;
+	
+	private Map<String, Integer> setCounts = new LinkedHashMap<>();
+	private Map<String, List<ItemStack>> setItems = new LinkedHashMap<>();
 	
 	public RpgPlayerInfo(RpgPlayer rpg) {
 		this.rpg = rpg;

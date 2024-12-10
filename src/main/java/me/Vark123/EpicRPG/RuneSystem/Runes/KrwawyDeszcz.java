@@ -89,7 +89,7 @@ public class KrwawyDeszcz extends ARune {
 						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
 						State flag = set.queryValue(null, Flags.PVP);
 						if(flag != null && flag.equals(State.ALLOW)
-								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+								&& !(e.getWorld().getName().toLowerCase().contains("dungeon") || e.getWorld().getName().toLowerCase().contains("raid")))
 							return true;
 						return false;
 					}
@@ -141,7 +141,7 @@ public class KrwawyDeszcz extends ARune {
 			
 		}.runTaskTimer(Main.getInstance(), 0, 10);
 
-		RuneManager.getInstance().getObszarowkiCd().put(p, new Date());
+		RuneManager.getInstance().getObszarowkiCd().put(p.getUniqueId(), new Date());
 	}
 	
 	private void spellEffect(Location loc) {

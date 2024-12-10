@@ -1,10 +1,9 @@
 package me.Vark123.EpicRPG.RuneSystem;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
@@ -17,7 +16,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
@@ -36,18 +34,20 @@ import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import me.Vark123.EpicRPG.RuneSystem.Events.RuneUseEvent;
 import me.Vark123.EpicRPG.RuneSystem.Runes.*;
+import me.Vark123.EpicRPG.Utils.Utils;
 
 public class RuneManager {
 	
 	private static final RuneManager instance = new RuneManager();
 	
-	private final List<Player> globalCd;
+//	private final List<Player> globalCd;
+	private final Map<UUID, Date> globalCd;
 	@Getter
-	private final Map<Player,Map<String, ItemStackRune>> playerRuneCd;
-	private final Map<Player, Date> playerObszarowkiCd;
+	private final Map<UUID, Map<String, ItemStackRune>> playerRuneCd;
+	private final Map<UUID, Date> playerObszarowkiCd;
 	
 	private RuneManager() {
-		globalCd = new ArrayList<>();
+		globalCd = new ConcurrentHashMap<>();
 		playerRuneCd = new ConcurrentHashMap<>();
 		playerObszarowkiCd = new ConcurrentHashMap<>();
 	}
@@ -102,7 +102,7 @@ public class RuneManager {
 //			return false;
 //		}
 		
-		createGlobalCd(p);
+		createGlobalCd(rpg);
 		
 		if(!rpg.getSkills().hasSilaZywiolow()
 				|| !silaZywiolowEffect()) {
@@ -127,30 +127,40 @@ public class RuneManager {
 		return true;
 	}
 	
-	public void createGlobalCd(Player p) {
-		if(globalCd.contains(p))
-			globalCd.remove(p);
-		globalCd.add(p);
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				globalCd.remove(p);
-			}
-		}.runTaskLater(Main.getInstance(), 15);
+	public void createGlobalCd(RpgPlayer rpg) {
+		Date now = new Date();
+		long globalCd = 1000;
+		if(rpg.getStats().getFinalInteligencja() >= 1350)
+			globalCd = 250;
+		else {
+			globalCd = (long) Utils.scaleValue(0, 1350, 1000, 250, rpg.getStats().getFinalInteligencja());
+		}
+		Date cd = new Date(now.getTime()+globalCd);
+		this.globalCd.put(rpg.getPlayer().getUniqueId(), cd);
 	}
 	
 	public void createRuneCd(RpgPlayer rpg, ItemStackRune ir) {
 		Player p = rpg.getPlayer();
-		if(rpg.getStats().getFinalMana() > 49) {
+
+		if((rpg.getModifiers().hasTajemnyBlask() || rpg.getModifiers().hasTajemnyBlask_m()) 
+				&& rpg.getInfo().getProffesion().equals("§5Mag")
+				&& !ir.getName().toLowerCase().contains("tajemny blask")) {
+			if(rpg.getModifiers().hasTajemnyBlask_m()) {
+				ir.setRegenTime((int)(ir.getRegenTime()*0.25));
+			} else if(rpg.getModifiers().hasTajemnyBlask()) {
+				ir.setRegenTime((int)(ir.getRegenTime()*0.4));
+			}
+		}
+		else if(rpg.getStats().getFinalMana() > 49) {
 			ir.modifyRegenTime(rpg.getStats());
 		}
-		Map<String, ItemStackRune> cds = playerRuneCd.getOrDefault(p, new ConcurrentHashMap<>());
+		Map<String, ItemStackRune> cds = playerRuneCd.getOrDefault(p.getUniqueId(), new ConcurrentHashMap<>());
 		cds.put(ir.getName(), ir);
-		playerRuneCd.put(p, cds);
+		playerRuneCd.put(p.getUniqueId(), cds);
 	}
 
 	public boolean hasGlobalCd(Player p) {
-		return globalCd.contains(p);
+		return globalCd.containsKey(p.getUniqueId()) && globalCd.get(p.getUniqueId()).after(new Date());
 	}
 	
 	public boolean usableInRegion(Player p, ItemStackRune ir) {
@@ -159,7 +169,8 @@ public class RuneManager {
 		ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(p.getLocation()));
 		State flag = set.queryValue(null, Flags.PVP);
 		if(flag == null || flag.equals(State.DENY) 
-				|| p.getWorld().getName().toLowerCase().contains("dungeon")) 
+				|| p.getWorld().getName().toLowerCase().contains("dungeon")
+				|| p.getWorld().getName().toLowerCase().contains("raid")) 
 			allowPvP = false;
 		switch(ir.getPvp()) {
 			case 0:
@@ -178,9 +189,9 @@ public class RuneManager {
 	}
 	
 	public boolean regenTimePass(Player p, ItemStackRune ir) {
-		if(!playerRuneCd.containsKey(p))
+		if(!playerRuneCd.containsKey(p.getUniqueId()))
 			return true;
-		Map<String, ItemStackRune> playerCd = playerRuneCd.get(p);
+		Map<String, ItemStackRune> playerCd = playerRuneCd.get(p.getUniqueId());
 		if(!playerCd.containsKey(ir.getName()))
 			return true;
 		
@@ -234,7 +245,14 @@ public class RuneManager {
 		Player p = rpg.getPlayer();
 		RpgStats stats = rpg.getStats();
 		int price = ir.getPrice();
-		if(rpg.getModifiers().hasZrodloNatury())
+		if(!ir.getName().toLowerCase().contains("tajemny blask")) {
+			if(rpg.getModifiers().hasTajemnyBlask_m() && rpg.getInfo().getProffesion().equals("§5Mag")) {
+				price *= 0.5;
+			} else if(rpg.getModifiers().hasTajemnyBlask() && rpg.getInfo().getProffesion().equals("§5Mag")) {
+				price *= 0.7;
+			}
+		}
+		else if(rpg.getModifiers().hasZrodloNatury())
 			price *= 0.8;
 		if(p.getWorld().getName().toLowerCase().contains("dungeon12")
 				&& p.getNearbyEntities(30, 10, 30)
@@ -377,7 +395,7 @@ public class RuneManager {
 		return (rand.nextInt(100) < 5);
 	}
 
-	public Map<Player, Date> getObszarowkiCd() {
+	public Map<UUID, Date> getObszarowkiCd() {
 		return playerObszarowkiCd;
 	}
 	
@@ -480,6 +498,11 @@ public class RuneManager {
 					case "§3§lostatni boj i":	return new OstatniBoj_H(dr, p);
 					case "§3§lostatni boj ii":	return new OstatniBoj_M(dr, p);
 					case "§3§lblogoslawienstwo przedwiecznych":	return new BlogoslawienstwoPrzedwiecznych(dr, p);
+					case "§3§lblogoslawienstwo przedwiecznych i":return new BlogoslawienstwoPrzedwiecznych_H(dr, p);
+					case "§3§lblogoslawienstwo przedwiecznych ii":return new BlogoslawienstwoPrzedwiecznych_M(dr, p);
+					case "§3§lplomien swiatlosci":return new PlomienSwiatlosci(dr, p);
+					case "§3§lplomien swiatlosci i":return new PlomienSwiatlosci_H(dr, p);
+					case "§3§lplomien swiatlosci ii":return new PlomienSwiatlosci_M(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_MALL:
@@ -512,6 +535,11 @@ public class RuneManager {
 					case "§a§lszosty zmysl i":	return new SzostyZmysl_H(dr, p);
 					case "§a§lszosty zmysl ii":	return new SzostyZmysl_M(dr, p);
 					case "§a§lszal przedwiecznych":	return new SzalPrzedwiecznych(dr, p);
+					case "§a§lszal przedwiecznych i":return new SzalPrzedwiecznych_H(dr, p);
+					case "§a§lszal przedwiecznych ii":return new SzalPrzedwiecznych_M(dr, p);
+					case "§a§ltoksyczna pulapka":return new ToksycznaPulapka(dr, p);
+					case "§a§ltoksyczna pulapka i":return new ToksycznaPulapka(dr, p);
+					case "§a§ltoksyczna pulapka ii":return new ToksycznaPulapka(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_STAL:
@@ -533,6 +561,8 @@ public class RuneManager {
 					case "§x§5§c§a§d§c§d§lpozeracz dusz i":	return new PozeraczDusz_H(dr, p);
 					case "§x§5§c§a§d§c§d§lpozeracz dusz ii":return new PozeraczDusz_M(dr, p);
 					case "§5§lszept n'zotha":	return new SzeptNZotha(dr, p);
+					case "§5§lszept n'zotha i":	return new SzeptNZotha_H(dr, p);
+					case "§5§lszept n'zotha ii":return new SzeptNZotha_M(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_STRAD:
@@ -580,6 +610,7 @@ public class RuneManager {
 					case "§8§lczarny sen i":	return new CzarnySen(dr, p);
 					case "§8§lczarny sen ii":	return new CzarnySen(dr, p);
 					case "§x§0§0§5§5§0§0§l§otrupi jek":	return new TrupiJek(dr, p);
+					case "§f§lcukierek albo psikus":	return new CukierekAlboPsikus(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_13:
@@ -617,6 +648,9 @@ public class RuneManager {
 					case "§e§lprzyplyw energii":return new PrzyplywEnergii(dr, p);
 					case "§e§lprzyplyw energii i":return new PrzyplywEnergii_H(dr, p);
 					case "§e§lprzyplyw energii ii":return new PrzyplywEnergii_M(dr, p);
+					case "§b§llodowa tarcza":	return new LodowaTarcza(dr, p);
+					case "§b§llodowa tarcza i":	return new LodowaTarcza_H(dr, p);
+					case "§b§llodowa tarcza ii":return new LodowaTarcza_M(dr, p);
 					default: 					return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_WARD:
@@ -661,7 +695,16 @@ public class RuneManager {
 					case "§a§lsekret wielkanocy":		return new SekretWielkanocy(dr, p);
 					case "§b§llodowa aura":				return new LodowaAura(dr, p);
 					case "§d§ltajemny grad":			return new TajemnyGrad(dr, p);
+					case "§d§ltajemny grad i":			return new TajemnyGrad_H(dr, p);
+					case "§d§ltajemny grad ii":			return new TajemnyGrad_M(dr, p);
 					case "§d§l§omagiczna sfera":		return new MagicznaSfera(dr, p);
+					case "§d§l§omagiczna sfera i":		return new MagicznaSfera(dr, p);
+					case "§d§l§omagiczna sfera ii":		return new MagicznaSfera(dr, p);
+					case "§d§ltajemny blask":			return new TajemnyBlask(dr, p);
+					case "§d§ltajemny blask i":			return new TajemnyBlask_M(dr, p);
+					case "§8§lsplugawienie":			return new Splugawienie(dr, p);
+					case "§8§lsplugawienie i":			return new Splugawienie(dr, p);
+					case "§8§lsplugawienie ii":			return new Splugawienie(dr, p);
 					default: 							return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_PIGSTEP:
@@ -678,6 +721,9 @@ public class RuneManager {
 					case "§x§c§d§0§0§0§0§lpakt krwi i":	return new PaktKrwi_H(dr, p);
 					case "§x§c§d§0§0§0§0§lpakt krwi ii":return new PaktKrwi_M(dr, p);
 					case "§x§8§a§0§3§0§3§owiezy krwi":	return new WiezyKrwi(dr, p);
+					case "§x§c§d§0§0§0§0§lzew smierci":	return new ZewSmierci(dr, p);
+					case "§x§c§d§0§0§0§0§lzew smierci i":	return new ZewSmierci_H(dr, p);
+					case "§x§c§d§0§0§0§0§lzew smierci ii":	return new ZewSmierci_M(dr, p);
 					default: 							return new OgnistaStrzala(dr, p);
 				}
 			case MUSIC_DISC_OTHERSIDE:

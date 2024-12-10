@@ -78,7 +78,7 @@ public class SzponBeliaraInt extends ARune {
 						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
 						State flag = set.queryValue(null, Flags.PVP);
 						if(flag != null && flag.equals(State.ALLOW)
-								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+								&& !(e.getWorld().getName().toLowerCase().contains("dungeon") || e.getWorld().getName().toLowerCase().contains("raid")))
 							return true;
 						return false;
 					}
@@ -141,7 +141,7 @@ public class SzponBeliaraInt extends ARune {
 						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
 						State flag = set.queryValue(null, Flags.PVP);
 						if(flag != null && flag.equals(State.ALLOW)
-								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+								&& !(e.getWorld().getName().toLowerCase().contains("dungeon") || e.getWorld().getName().toLowerCase().contains("raid")))
 							return true;
 						return false;
 					}
@@ -159,7 +159,7 @@ public class SzponBeliaraInt extends ARune {
 					return dist1 < dist2 ? -1 : 1;
 				}).ifPresent(e -> {
 					shooted.add(e);
-					RuneDamage.damageNormal(p, (LivingEntity)e, dr);
+					RuneDamage.damageNormal(p, (LivingEntity)e, dr, dr.getDamage() * 0.6);
 					p.getWorld().spawnParticle(Particle.REDSTONE, e.getLocation(), 10, 0.3f, 0.3f, 0.3f, 0.1f, dust);
 				});
 				

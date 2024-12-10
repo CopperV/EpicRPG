@@ -29,7 +29,7 @@ public class EventCurrency2System {
 		RpgVault vault = rpg.getVault();
 		vault.addEventCurrency2(_amount);
 
-		rpg.getPlayer().sendMessage("§a§o+"+ _amount +" Palemek §7[§a§o"+vault.getEventCurrency2()+" Palemek§7]");
+		rpg.getPlayer().sendMessage("§6§o+"+ _amount +" Dyniek §7[§6§o"+vault.getEventCurrency2()+" Dyniek§7]");
 	}
 
 }

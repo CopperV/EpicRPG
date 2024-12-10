@@ -2,6 +2,8 @@ package me.Vark123.EpicRPG.Stats;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -16,6 +18,7 @@ import org.bukkit.inventory.PlayerInventory;
 import de.tr7zw.nbtapi.NBTItem;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgJewelry;
+import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import me.Vark123.EpicRPG.Utils.Utils;
 import net.minecraft.world.item.ItemArmor;
@@ -42,7 +45,12 @@ public class ChangeStats {
 		
 		RpgJewelry jewelry = rpg.getJewelry();
 		RpgStats stats = rpg.getStats();
+		RpgPlayerInfo info = rpg.getInfo();
 		ItemStack backItem = rpg.getBackItem();
+		
+		info.getSetCounts().clear();
+		info.getSetItems().clear();
+		
 		rpg.updateHp();
 		stats.setFinalInteligencja(stats.getInteligencja()+stats.getPotionInteligencja());
 		stats.setFinalSila(stats.getSila()+stats.getPotionSila());
@@ -108,6 +116,15 @@ public class ChangeStats {
 					else
 						changeStatsItem(stats, item);
 					itemy.remove(slot);
+					
+					NBTItem itemNBT = new NBTItem(item);
+					if(itemNBT.hasTag("EpicSet")) {
+						String set = itemNBT.getString("EpicSet");
+						info.getSetCounts().put(set, info.getSetCounts().getOrDefault(set, 0) + 1);
+						List<ItemStack> items = info.getSetItems().getOrDefault(set, new LinkedList<>());
+						items.add(item);
+						info.getSetItems().put(set, items);
+					}
 				}
 			});
 			
@@ -115,6 +132,12 @@ public class ChangeStats {
 			presentSize = itemy.size();
 		}
 		
+		info.getSetItems().entrySet().forEach(entry -> {
+			int level = info.getSetCounts().get(entry.getKey());
+			entry.getValue().stream().forEach(item -> {
+				Utils.setItemSetInfo(item, level);
+			});
+		});
 		itemy.forEach((slot, item) -> {
 			p.sendMessage("§cNie mozesz zalozyc "+item.getItemMeta().getDisplayName()+" §cna siebie!");
 			if(akcesoria.containsKey(slot+1000) && akcesoria.get(slot+1000).equals(item)) {
@@ -131,41 +154,43 @@ public class ChangeStats {
 			weaponCheck = false;
 		}
 		
-		if(rpg.getModifiers().hasOstatniBoj()) {
-			stats.setFinalSila((int) (stats.getFinalSila()*1.2));
-			stats.setFinalWytrzymalosc((int) (stats.getFinalWytrzymalosc()*1.2));
-		}
-		if(rpg.getModifiers().hasOstatniBoj_h()) {
-			stats.setFinalSila((int) (stats.getFinalSila()*1.23));
-			stats.setFinalWytrzymalosc((int) (stats.getFinalWytrzymalosc()*1.23));
-		}
 		if(rpg.getModifiers().hasOstatniBoj_m()) {
 			stats.setFinalSila((int) (stats.getFinalSila()*1.27));
 			stats.setFinalWytrzymalosc((int) (stats.getFinalWytrzymalosc()*1.27));
 		}
-		if(rpg.getModifiers().hasSzostyZmysl()) {
-			stats.setFinalZrecznosc((int) (stats.getFinalZrecznosc()*1.2));
-			stats.setFinalZdolnosciMysliwskie((int) (stats.getFinalZdolnosciMysliwskie()*1.2));
+		else if(rpg.getModifiers().hasOstatniBoj_h()) {
+			stats.setFinalSila((int) (stats.getFinalSila()*1.23));
+			stats.setFinalWytrzymalosc((int) (stats.getFinalWytrzymalosc()*1.23));
 		}
-		if(rpg.getModifiers().hasSzostyZmysl_h()) {
-			stats.setFinalZrecznosc((int) (stats.getFinalZrecznosc()*1.23));
-			stats.setFinalZdolnosciMysliwskie((int) (stats.getFinalZdolnosciMysliwskie()*1.23));
+		else if(rpg.getModifiers().hasOstatniBoj()) {
+			stats.setFinalSila((int) (stats.getFinalSila()*1.2));
+			stats.setFinalWytrzymalosc((int) (stats.getFinalWytrzymalosc()*1.2));
 		}
+		
 		if(rpg.getModifiers().hasSzostyZmysl_m()) {
 			stats.setFinalZrecznosc((int) (stats.getFinalZrecznosc()*1.27));
 			stats.setFinalZdolnosciMysliwskie((int) (stats.getFinalZdolnosciMysliwskie()*1.27));
 		}
-		if(rpg.getModifiers().hasPrzyplywEnergii()) {
-			stats.setFinalInteligencja((int) (stats.getFinalInteligencja()*1.2));
-			stats.setFinalMana((int) (stats.getFinalMana()*1.2));
+		else if(rpg.getModifiers().hasSzostyZmysl_h()) {
+			stats.setFinalZrecznosc((int) (stats.getFinalZrecznosc()*1.23));
+			stats.setFinalZdolnosciMysliwskie((int) (stats.getFinalZdolnosciMysliwskie()*1.23));
 		}
-		if(rpg.getModifiers().hasPrzyplywEnergii_h()) {
-			stats.setFinalInteligencja((int) (stats.getFinalInteligencja()*1.23));
-			stats.setFinalMana((int) (stats.getFinalMana()*1.23));
+		else if(rpg.getModifiers().hasSzostyZmysl()) {
+			stats.setFinalZrecznosc((int) (stats.getFinalZrecznosc()*1.2));
+			stats.setFinalZdolnosciMysliwskie((int) (stats.getFinalZdolnosciMysliwskie()*1.2));
 		}
+		
 		if(rpg.getModifiers().hasPrzyplywEnergii_m()) {
 			stats.setFinalInteligencja((int) (stats.getFinalInteligencja()*1.27));
 			stats.setFinalMana((int) (stats.getFinalMana()*1.27));
+		}
+		else if(rpg.getModifiers().hasPrzyplywEnergii_h()) {
+			stats.setFinalInteligencja((int) (stats.getFinalInteligencja()*1.23));
+			stats.setFinalMana((int) (stats.getFinalMana()*1.23));
+		}
+		else if(rpg.getModifiers().hasPrzyplywEnergii()) {
+			stats.setFinalInteligencja((int) (stats.getFinalInteligencja()*1.2));
+			stats.setFinalMana((int) (stats.getFinalMana()*1.2));
 		}
 	}
 	

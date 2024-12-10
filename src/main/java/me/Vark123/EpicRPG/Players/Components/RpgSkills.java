@@ -162,9 +162,23 @@ public class RpgSkills implements Serializable, ChatPrintable {
 			return;
 		RpgStats stats = rpg.getStats();
 		this.manaRegTask = Bukkit.getScheduler().runTaskTimer(Main.getInstance(), ()->{
-			
+			if(!manaReg) {
+				return;
+			}
 			if(stats.getPresentMana() != stats.getFinalMana()) {
-				int tmp = (int)(stats.getFinalMana() * 0.015);
+				double percent = 0.004 * stats.getKrag();
+				
+				if(rpg.getInfo().getSetCounts().getOrDefault("Mroczna_Zamiec", 0) > 1) {
+					percent += 0.015;
+				}
+				if(rpg.getInfo().getSetCounts().getOrDefault("Mroczna_Zamiec_H", 0) > 1) {
+					percent += 0.02;
+				}
+				if(rpg.getInfo().getSetCounts().getOrDefault("Mroczna_Zamiec_M", 0) > 1) {
+					percent += 0.025;
+				}
+				
+				int tmp = (int)(stats.getFinalMana() * percent);
 				if(tmp == 0) tmp = 1;
 				stats.addPresentManaSmart(tmp);
 				RpgScoreboard.updateScore(rpg.getPlayer());

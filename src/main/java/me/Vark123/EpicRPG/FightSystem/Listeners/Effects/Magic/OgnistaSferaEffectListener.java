@@ -29,6 +29,9 @@ public class OgnistaSferaEffectListener implements Listener {
 		if(!(victim instanceof Player))
 			return;
 		
+		if(e.getDamager() != null && victim.equals(e.getDamager()))
+			return;
+		
 		Player p = (Player) victim;
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		RpgModifiers modifiers = rpg.getModifiers();

@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
 import lombok.Getter;
+import lombok.Setter;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
 
 @Getter
@@ -14,6 +15,7 @@ public class ItemStackRune {
 	private String name;
 	private int damage;
 	private Date date = new Date();
+	@Setter
 	private long regenTime;
 	private int durationTime;
 	private int krag;
@@ -82,7 +84,7 @@ public class ItemStackRune {
 	}
 
 	public void modifyRegenTime(RpgStats stats) {
-		double percent = (stats.getFinalMana() / (50. * 100.));
+		double percent = (stats.getFinalMana() / (70. * 100.));
 		if(percent > 0.5)
 			percent = 0.5;
 		regenTime *= 1. - percent;

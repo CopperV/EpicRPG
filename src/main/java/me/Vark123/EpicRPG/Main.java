@@ -13,6 +13,7 @@ import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
 import lombok.Getter;
 import me.Vark123.EpicRPG.Files.FileOperations;
 import me.Vark123.EpicRPG.MySQL.DBOperations;
+import me.Vark123.EpicRPG.Placeholders.MiscPlaceholders;
 import me.Vark123.EpicRPG.Placeholders.PlayerPlaceholders;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.Components.Scoreboard.ScoreboardPlaceholders;
@@ -29,6 +30,7 @@ public class Main extends JavaPlugin {
 	
 	private static PlaceholderExpansion playerPlaceholders;
 	private static PlaceholderExpansion scoreboardPlaceholders;
+	private static PlaceholderExpansion miscPlaceholders;
 	
 	private final String prefix = "§7[§bEpicRPG§7]";
 	
@@ -59,6 +61,8 @@ public class Main extends JavaPlugin {
 		playerPlaceholders.register();
 		scoreboardPlaceholders = new ScoreboardPlaceholders();
 		scoreboardPlaceholders.register();
+		miscPlaceholders = new MiscPlaceholders();
+		miscPlaceholders.register();
 		
 		EventListenerManager.registerEvents();
 		CommandExecutorManager.setExecutors();
@@ -95,6 +99,8 @@ public class Main extends JavaPlugin {
 		EpicRPGMobManager.getInstance().clear();
 		
 		playerPlaceholders.unregister();
+		scoreboardPlaceholders.unregister();
+		miscPlaceholders.unregister();
 		super.onDisable();
 	}
 	

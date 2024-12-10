@@ -125,6 +125,7 @@ public final class AdditionalMenuManager {
 					
 					rpg.setBackItem(it);
 					ChangeStats.change(rpg);
+					inventory.getInventory().clear();
 				}
 			})
 			.build(Main.getInstance())

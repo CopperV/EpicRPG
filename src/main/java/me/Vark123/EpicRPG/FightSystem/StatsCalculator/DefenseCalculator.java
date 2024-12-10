@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
-import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import me.Vark123.EpicRPG.RuneSystem.Runes.SilaJednosci;
 import me.Vark123.EpicRPG.Utils.Pair;
@@ -25,7 +24,6 @@ public class DefenseCalculator implements IDamageCalculator {
 		Player p = (Player) victim;
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		RpgStats stats = rpg.getStats();
-		RpgPlayerInfo info = rpg.getInfo();
 		RpgModifiers modifiers = rpg.getModifiers();
 		
 		if(modifiers.hasSilaJednosci() && SilaJednosci.getGlobalEffected().containsKey(rpg.getPlayer())) {
@@ -45,12 +43,7 @@ public class DefenseCalculator implements IDamageCalculator {
 		}
 		
 		int wytrzymalosc = stats.getFinalWytrzymalosc() < 0 ? 0 : stats.getFinalWytrzymalosc();
-		double def;
-		if(info.getLevel() < 80) {
-			def = 0.13 * wytrzymalosc * stats.getFinalOchrona() / (100*0.05*info.getLevel());
-		} else {
-			def = 0.13 * wytrzymalosc * stats.getFinalOchrona() / (100*0.05*80);
-		}
+		double def = 0.0003 * wytrzymalosc * stats.getFinalOchrona();
 		double def2 = stats.getFinalOchrona()*0.33;
 		
 		dmg -= def;

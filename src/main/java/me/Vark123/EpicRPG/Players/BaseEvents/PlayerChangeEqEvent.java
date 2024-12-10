@@ -23,8 +23,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
+import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 import me.Vark123.EpicRPG.Stats.ChangeStats;
 import me.Vark123.EpicRPG.Stats.CheckStats;
+import me.Vark123.EpicRPG.Utils.Utils;
 import net.minecraft.world.item.ItemArmor;
 
 public class PlayerChangeEqEvent implements Listener {
@@ -90,6 +92,12 @@ public class PlayerChangeEqEvent implements Listener {
 			e.setResult(Result.DENY);
 			return;
 		}
+		
+		RpgPlayerInfo info = rpg.getInfo();
+		info.getSetItems().values()
+			.stream().forEach(list -> list
+					.stream()
+					.forEach(Utils::resetSetInfo));
 		new BukkitRunnable() {
 			@Override
 			public void run() {
@@ -143,6 +151,11 @@ public class PlayerChangeEqEvent implements Listener {
 			e.setUseItemInHand(Result.DENY);
 			return;
 		}
+		RpgPlayerInfo info = rpg.getInfo();
+		info.getSetItems().values()
+			.stream().forEach(list -> list
+					.stream()
+					.forEach(Utils::resetSetInfo));
 		new BukkitRunnable() {
 			@Override
 			public void run() {
@@ -186,6 +199,11 @@ public class PlayerChangeEqEvent implements Listener {
 			e.setResult(Result.DENY);
 			return;
 		}
+		RpgPlayerInfo info = rpg.getInfo();
+		info.getSetItems().values()
+			.stream().forEach(list -> list
+					.stream()
+					.forEach(Utils::resetSetInfo));
 		new BukkitRunnable() {
 			@Override
 			public void run() {

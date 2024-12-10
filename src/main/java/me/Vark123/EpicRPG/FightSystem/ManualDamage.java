@@ -1,6 +1,7 @@
 package me.Vark123.EpicRPG.FightSystem;
 
 import org.bukkit.EntityEffect;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_18_R2.event.CraftEventFactory;
 import org.bukkit.entity.LivingEntity;
@@ -65,6 +66,8 @@ public class ManualDamage {
 			}
 			victim.setAbsorptionAmount(0);
 		}
+		if(victim.getHealth() > victim.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())
+			victim.setHealth(victim.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 		victim.setHealth(victim.getHealth() - damage);
 		
 //		victim.setLastDamageCause(e);

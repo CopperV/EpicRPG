@@ -62,7 +62,8 @@ public class SwietaStrzalaAreaEffectListener implements Listener {
 					ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(entity.getLocation()));
 					State flag = set.queryValue(null, Flags.PVP);
 					if(flag != null && flag.equals(State.ALLOW)
-							&& !entity.getWorld().getName().toLowerCase().contains("dungeon"))
+							&& !(entity.getWorld().getName().toLowerCase().contains("dungeon")
+									|| entity.getWorld().getName().toLowerCase().contains("raid")))
 						return true;
 					return false;
 				}

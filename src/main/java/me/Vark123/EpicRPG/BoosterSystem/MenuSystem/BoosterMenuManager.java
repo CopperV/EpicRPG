@@ -145,12 +145,12 @@ public class BoosterMenuManager {
 		booster = BoosterManager.get().getTopBooster("event2");
 		if (booster != null) {
 			ItemMeta im = event2Boost.getItemMeta();
-			im.setDisplayName("§aPalemki §o+"+String.format("%02d", (int)(booster.getKey().getModifier()*100))+"%");
+			im.setDisplayName("§6Dynki §o+"+String.format("%02d", (int)(booster.getKey().getModifier()*100))+"%");
 			im.setLore(Arrays.asList(" ","§7Aktywny do §a§o"+simpleDateFormat.format(booster.getValue())));
 			event2Boost.setItemMeta(im);
 		} else {
 			ItemMeta im = event2Boost.getItemMeta();
-			im.setDisplayName("§7Palemki §8[§cNIEAKTYWNY§8]");
+			im.setDisplayName("§7Dynki §8[§cNIEAKTYWNY§8]");
 			im.setLore(new LinkedList<>());
 			event2Boost.setItemMeta(im);
 		}

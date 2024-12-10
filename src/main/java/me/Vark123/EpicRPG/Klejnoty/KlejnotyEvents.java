@@ -349,6 +349,7 @@ public class KlejnotyEvents {
 					continue;
 				Utils.dropItemStack(p, it);
 			}
+			inv.clear();
 		};
 		
 		EventCreator<InventoryCloseEvent> creator = new EventCreator<>(InventoryCloseEvent.class, event);
@@ -366,7 +367,8 @@ public class KlejnotyEvents {
 			int itemSlot = KlejnotyManager.getInstance().getRemoveFreeSlots()[0];
 			ItemStack it = inv.getItem(itemSlot);
 			if(it == null
-					|| it.getType().equals(Material.AIR)) {
+					|| it.getType().equals(Material.AIR)
+					|| it.getAmount() > 1) {
 				p.closeInventory();
 				return;
 			}
@@ -456,6 +458,7 @@ public class KlejnotyEvents {
 					continue;
 				Utils.dropItemStack(p, it);
 			}
+			inv.clear();
 		};
 		
 		EventCreator<InventoryCloseEvent> creator = new EventCreator<>(InventoryCloseEvent.class, event);

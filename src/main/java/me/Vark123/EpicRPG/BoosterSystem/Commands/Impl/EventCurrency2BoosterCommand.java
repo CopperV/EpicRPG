@@ -28,7 +28,7 @@ public class EventCurrency2BoosterCommand extends ABoostCommand {
 		double modifier = Double.parseDouble(args[1]);
 		long time = Long.parseLong(args[2]) * 1000;
 		
-		BoosterManager.get().registerBooster(player, "event2", "§a§lpalemki", modifier, time);
+		BoosterManager.get().registerBooster(player, "event2", "§6§ldynki", modifier, time);
 		return true;
 	}
 

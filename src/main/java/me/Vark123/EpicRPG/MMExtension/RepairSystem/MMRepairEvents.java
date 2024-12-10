@@ -17,7 +17,6 @@ import io.github.rysefoxx.inventory.plugin.other.EventCreator;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.items.ItemExecutor;
 import lombok.Getter;
-import me.Vark123.EpicRPG.FishSystem.FishSellManager;
 import me.Vark123.EpicRPG.Utils.Utils;
 
 @Getter
@@ -99,13 +98,14 @@ public class MMRepairEvents {
 		Consumer<InventoryCloseEvent> event = e -> {
 			Inventory inv = e.getView().getTopInventory();
 			Player p = (Player) e.getPlayer();
-			for(int slot : FishSellManager.getInstance().getFreeSlots()) {
+			for(int slot : MMRepairManager.getInstance().getFreeSlots()) {
 				ItemStack it = inv.getItem(slot);
 				if(it == null 
 						|| it.getType().equals(Material.AIR))
 					continue;
 				Utils.dropItemStack(p, it);
 			}
+			inv.clear();
 		};
 		
 		EventCreator<InventoryCloseEvent> creator = new EventCreator<>(InventoryCloseEvent.class, event);

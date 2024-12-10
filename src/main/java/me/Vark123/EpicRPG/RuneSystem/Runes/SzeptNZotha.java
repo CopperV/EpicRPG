@@ -71,7 +71,7 @@ public class SzeptNZotha extends ARune {
 						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
 						State flag = set.queryValue(null, Flags.PVP);
 						if(flag != null && flag.equals(State.ALLOW)
-								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+								&& !(e.getWorld().getName().toLowerCase().contains("dungeon") || e.getWorld().getName().toLowerCase().contains("raid")))
 							return true;
 						return false;
 					}
@@ -88,7 +88,7 @@ public class SzeptNZotha extends ARune {
 							loc.getY() - eLoc.getY(),
 							loc.getZ() - eLoc.getZ())
 							.normalize()
-							.multiply(0.2);
+							.multiply(0.1);
 					e.setVelocity(vec);
 				});
 				
@@ -100,7 +100,7 @@ public class SzeptNZotha extends ARune {
 	
 	public void spellEffect(Location loc) {
 		loc.getWorld().playSound(loc, Sound.ENTITY_ELDER_GUARDIAN_HURT, 2.5f, 1.2f);
-		for(int i = 0; i < 40; ++i) {
+		for(int i = 0; i < 20; ++i) {
 			double x = rand.nextDouble(2) - 1;
 			double y = rand.nextDouble(.4) - .2;
 			double z = rand.nextDouble(2) - 1;
@@ -140,7 +140,7 @@ public class SzeptNZotha extends ARune {
 						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
 						State flag = set.queryValue(null, Flags.PVP);
 						if(flag != null && flag.equals(State.ALLOW)
-								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+								&& !(e.getWorld().getName().toLowerCase().contains("dungeon") || e.getWorld().getName().toLowerCase().contains("raid")))
 							return true;
 						return false;
 					}

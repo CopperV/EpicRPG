@@ -1,17 +1,27 @@
 package me.Vark123.EpicRPG.FightSystem.StatsCalculator;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.mutable.MutableDouble;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.FightSystem.DamageUtils;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
-import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 import me.Vark123.EpicRPG.Players.Components.RpgSkills;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import me.Vark123.EpicRPG.Stats.ChangeStats;
@@ -19,6 +29,24 @@ import me.Vark123.EpicRPG.Stats.CheckStats;
 import me.Vark123.EpicRPG.Utils.Pair;
 
 public class MeleeCalculator implements IDamageCalculator {
+	
+	private static Map<String, Integer> normalStatsPriority = new LinkedHashMap<>();
+	private static Map<String, Integer> critStatsPriority = new LinkedHashMap<>();
+	static {
+		normalStatsPriority.put("str", 0);
+		normalStatsPriority.put("zr", 1);
+		normalStatsPriority.put("zd", 2);
+		normalStatsPriority.put("wytrz", 3);
+		normalStatsPriority.put("int", 4);
+		normalStatsPriority.put("mana", 5);
+
+		critStatsPriority.put("zr", 0);
+		critStatsPriority.put("str", 1);
+		critStatsPriority.put("zd", 2);
+		critStatsPriority.put("int", 3);
+		critStatsPriority.put("wytrz", 4);
+		critStatsPriority.put("mana", 5);
+	}
 
 	@Override
 	public Pair<Double, Boolean> calc(Entity damager, Entity victim, double dmg, Object... args) {
@@ -49,7 +77,6 @@ public class MeleeCalculator implements IDamageCalculator {
 		
 		RpgStats stats = rpg.getStats();
 		RpgSkills skills = rpg.getSkills();
-		RpgPlayerInfo info = rpg.getInfo();
 		RpgModifiers modifiers = rpg.getModifiers();
 		
 		boolean crit = DamageUtils.checkCrit(rpg, victim);
@@ -69,52 +96,19 @@ public class MeleeCalculator implements IDamageCalculator {
 			return pair;
 		}
 		
-		double dmgZr = 0;
-		double dmgZd = 0;
-		double dmgStr = 0;
-		double dmgWytrz = 0;
-		double dmgInt = 0;
-		double dmgMana = 0;
-		
-		double wspDmgZr = 0;
-		double wspDmgZd = 0;
-		double wspDmgStr = 0;
-		double wspDmgWytrz = 0;
-		double wspDmgInt = 0;
-		double wspDmgMana = 0;
-		
-		if(crit) {
-			dmg = Math.ceil(1.3 * stats.getFinalObrazenia() + 1);
-			wspDmgStr = 0.65;
-			wspDmgZr = 0.85;
-			wspDmgZd = 0.05;
-			wspDmgInt = 0.05;
-		} else {
-			dmg = Math.ceil(stats.getFinalObrazenia() + 1);
-			wspDmgStr = 0.65;
-			wspDmgZr = 0.5;
-			wspDmgZd = 0.01;
-			wspDmgInt = 0.01;
+		dmg = crit ? Math.max(Math.ceil(1.25 * stats.getFinalObrazenia()), 1) : Math.max(stats.getFinalObrazenia(), 1);
+		MutableDouble totalDamage = new MutableDouble(dmg);
+		Collection<StatInfo> statInfos = getMostSignificantStats(stats, crit);
+		if(skills.hasPolnocnyBarbarzynca() || hasWeapon(p)) {
+			Collection<Double> statDmgs = statInfos.stream()
+					.map(statInfo -> (totalDamage.getValue() * 0.25 + statInfo.getValue()) * statInfo.getFactor())
+					.collect(Collectors.toList());
+			statDmgs.forEach(totalDamage::add);
 		}
 		
-		if(info.getLevel() < 80) {
-			dmgZd = wspDmgZd * stats.getFinalZdolnosciMysliwskie() * dmg / (100*0.05*info.getLevel());
-			dmgZr = wspDmgZr * stats.getFinalZrecznosc() * dmg / (100*0.05*info.getLevel());
-			dmgStr = wspDmgStr * stats.getFinalSila() * dmg / (100*0.05*info.getLevel());
-			dmgInt = wspDmgInt * stats.getFinalInteligencja() * dmg / (100*0.05*info.getLevel());
-			dmgWytrz = wspDmgWytrz * stats.getFinalWytrzymalosc() * dmg / (100*0.05*info.getLevel());
-			dmgMana = wspDmgMana * stats.getFinalMana() * dmg / (100*0.05*info.getLevel());
-		} else {
-			dmgZd = wspDmgZd * stats.getFinalZdolnosciMysliwskie() * dmg / (100*0.05*80);
-			dmgZr = wspDmgZr * stats.getFinalZrecznosc() * dmg / (100*0.05*80);
-			dmgStr = wspDmgStr * stats.getFinalSila() * dmg / (100*0.05*80);
-			dmgInt = wspDmgInt * stats.getFinalInteligencja() * dmg / (100*0.05*80);
-			dmgWytrz = wspDmgWytrz * stats.getFinalWytrzymalosc() * dmg / (100*0.05*80);
-			dmgMana = wspDmgMana * stats.getFinalMana() * dmg / (100*0.05*80);
-		}
-		
-		dmg = dmg + dmgZd + dmgZr + dmgStr + dmgInt + dmgWytrz + dmgMana;
-		dmg = DamageUtils.randomizeDamage(dmg, rpg);
+		dmg = DamageUtils.randomizeDamage(totalDamage.doubleValue(), rpg);
+		if(victim instanceof LivingEntity)
+			dmg = DamageUtils.randomizeEntityHpDamage(dmg, rpg, (LivingEntity) victim);
 		
 		pair.setKey(dmg);
 		return pair;
@@ -131,6 +125,49 @@ public class MeleeCalculator implements IDamageCalculator {
 				return true;
 			return false;
 		});
+	}
+	
+	private Collection<StatInfo> getMostSignificantStats(RpgStats stats, boolean isCrit) {
+		//INIT
+		List<StatInfo> startList = new ArrayList<>(6);
+		startList.add(new StatInfo("str", stats.getFinalSila(), stats.getFinalSila(), isCrit ? 4 : 4));
+		startList.add(new StatInfo("wytrz", stats.getFinalWytrzymalosc(), stats.getFinalWytrzymalosc(), isCrit ? 1.4 : 1.4));
+		startList.add(new StatInfo("zr", stats.getFinalZrecznosc(), stats.getFinalZrecznosc(), isCrit ? 6.5 : 2));
+		startList.add(new StatInfo("zd", stats.getFinalZdolnosciMysliwskie(), stats.getFinalZdolnosciMysliwskie(), isCrit ? 2.7 : 1.8));
+		startList.add(new StatInfo("int", stats.getFinalInteligencja(), stats.getFinalInteligencja(), isCrit ? 1.8 : 1.5));
+		startList.add(new StatInfo("mana", stats.getFinalMana(), stats.getFinalMana() * 0.5, isCrit ? 0.7 : 0.5));
+		
+		//SORT
+		List<StatInfo> sortedList = startList.stream()
+				.filter(stat -> stat.getComparableValue() > 0)
+				.sorted((stat1, stat2) -> {
+					int compare = Double.compare(stat1.comparableValue, stat2.comparableValue);
+					if(compare != 0)
+						return Math.negateExact(compare);
+					return isCrit ? 
+							Integer.compare(critStatsPriority.getOrDefault(stat1.getId(), 6), critStatsPriority.getOrDefault(stat2.getId(), 6)) :
+							Integer.compare(normalStatsPriority.getOrDefault(stat1.getId(), 6), normalStatsPriority.getOrDefault(stat2.getId(), 6));
+				})
+				.collect(Collectors.toList());
+		
+		//PICK
+		List<StatInfo> pickedList = new LinkedList<>();
+		if(sortedList.size() > 0)
+			pickedList.add(sortedList.get(0));
+		if(sortedList.size() > 1) {
+			StatInfo statInfo = sortedList.get(1);
+			pickedList.add(new StatInfo(statInfo.getId(), statInfo.getValue()/2, statInfo.getComparableValue(), statInfo.getFactor()));
+		}
+		return pickedList;
+	}
+	
+	@Getter
+	@AllArgsConstructor
+	private class StatInfo {
+		private String id;
+		private int value;
+		private double comparableValue;
+		private double factor;
 	}
 
 }

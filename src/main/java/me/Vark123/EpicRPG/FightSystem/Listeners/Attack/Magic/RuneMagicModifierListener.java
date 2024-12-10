@@ -1,5 +1,7 @@
 package me.Vark123.EpicRPG.FightSystem.Listeners.Attack.Magic;
 
+import java.util.Random;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,8 +14,12 @@ import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
 import me.Vark123.EpicRPG.RuneSystem.Runes.BlogoslawienstwoPrzedwiecznych;
+import me.Vark123.EpicRPG.RuneSystem.Runes.BlogoslawienstwoPrzedwiecznych_H;
+import me.Vark123.EpicRPG.RuneSystem.Runes.BlogoslawienstwoPrzedwiecznych_M;
 
 public class RuneMagicModifierListener implements Listener {
+	
+	private static final Random rand = new Random();
 	
 	@EventHandler
 	public void onMod(EpicAttackEvent e) {
@@ -101,6 +107,15 @@ public class RuneMagicModifierListener implements Listener {
 			modifier += 1;
 		if(BlogoslawienstwoPrzedwiecznych.getEffected().containsKey(p))
 			modifier += BlogoslawienstwoPrzedwiecznych.getEffected().get(p)*0.03;
+		if(BlogoslawienstwoPrzedwiecznych_H.getEffected().containsKey(p))
+			modifier += BlogoslawienstwoPrzedwiecznych_H.getEffected().get(p)*0.04;
+		if(BlogoslawienstwoPrzedwiecznych_M.getEffected().containsKey(p))
+			modifier += BlogoslawienstwoPrzedwiecznych_M.getEffected().get(p)*0.05;
+		if(modifiers.hasTajemnyBlask_m() && rpg.getInfo().getProffesion().equals("§2Mysliwy")) {
+			modifier += rand.nextDouble(0.5) + 0.25;
+		} else if(modifiers.hasTajemnyBlask() && rpg.getInfo().getProffesion().equals("§2Mysliwy")) {
+			modifier += rand.nextDouble(0.3) + 0.15;
+		}
 		
 		e.increaseModifier(modifier);
 	}

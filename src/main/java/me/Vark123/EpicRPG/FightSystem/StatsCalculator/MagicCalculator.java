@@ -1,6 +1,7 @@
 package me.Vark123.EpicRPG.FightSystem.StatsCalculator;
 
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import me.Vark123.EpicRPG.FightSystem.DamageUtils;
@@ -38,6 +39,16 @@ public class MagicCalculator implements IDamageCalculator {
 		double addDmg = 0;
 		double dmgKrag = 0;
 		double dmgMana = 0;
+
+		if(info.getSetCounts().getOrDefault("Mroczna_Zamiec", 0) > 3) {
+			wplyw += 0.1;
+		}
+		if(info.getSetCounts().getOrDefault("Mroczna_Zamiec_H", 0) > 3) {
+			wplyw += 0.13;
+		}
+		if(info.getSetCounts().getOrDefault("Mroczna_Zamiec_M", 0) > 3) {
+			wplyw += 0.17;
+		}
 		
 		if(wplyw > 0) {
 			double wplywDmg = rpg.getStats().getFinalObrazenia() / wplyw / 100.;
@@ -82,7 +93,7 @@ public class MagicCalculator implements IDamageCalculator {
 			}
 			dmgLevel = (dmg*0.003*info.getLevel());
 		} else {
-			if(crit) {
+			if(crit){
 				dmg *= 2;
 				wplyw *= 1.25;
 			}
@@ -90,16 +101,18 @@ public class MagicCalculator implements IDamageCalculator {
 			addDmg = wplyw * stats.getFinalInteligencja() * dmg / 100.0;
 			dmg += addDmg;
 				
-			dmgLevel = dmg * 0.005 * info.getLevel();
-			dmgMana = dmg * 0.0001 * stats.getFinalMana();
+			dmgLevel = dmg * 0.008 * info.getLevel();
+			dmgMana = dmg * 0.0002 * stats.getFinalMana();
 		}
 		
-		dmgKrag = dmg * 0.06 * stats.getKrag();
+		dmgKrag = dmg * 0.1 * stats.getKrag();
 		
 		dmg += dmgKrag;
 		dmg += dmgLevel;
 		dmg += dmgMana;
 		dmg = DamageUtils.randomizeDamage(dmg, rpg);
+		if(victim instanceof LivingEntity)
+			dmg = DamageUtils.randomizeEntityHpDamage(dmg, rpg, (LivingEntity) victim);
 
 		pair.setKey(dmg);
 		return pair;

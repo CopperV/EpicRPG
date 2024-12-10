@@ -3,6 +3,7 @@ package me.Vark123.EpicRPG;
 import org.bukkit.Bukkit;
 
 import me.Vark123.EpicRPG.AdvancedBuySystem.AdvancedBuyCommand;
+import me.Vark123.EpicRPG.AdvancedBuySystem.AdvancedBuyVaultCommand;
 import me.Vark123.EpicRPG.BlackrockSystem.BlackrockCommand;
 import me.Vark123.EpicRPG.BoosterSystem.Commands.BaseBoostCommand;
 import me.Vark123.EpicRPG.BoosterSystem.Commands.BoostCommandManager;
@@ -80,6 +81,7 @@ public class CommandExecutorManager {
 		Bukkit.getPluginCommand("rotacja").setExecutor(new RotacjaCommand());
 		Bukkit.getPluginCommand("kosz").setExecutor(new KoszCommand());
 		Bukkit.getPluginCommand("advancedbuy").setExecutor(new AdvancedBuyCommand());
+		Bukkit.getPluginCommand("advancedbuyvault").setExecutor(new AdvancedBuyVaultCommand());
 		Bukkit.getPluginCommand("blackrock").setExecutor(new BlackrockCommand());
 		Bukkit.getPluginCommand("drop").setExecutor(new DropCommand());
 

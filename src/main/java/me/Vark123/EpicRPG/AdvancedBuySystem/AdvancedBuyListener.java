@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import me.Vark123.EpicRPG.AdvancedBuySystem.PriceImpl.CoinsCost;
+import me.Vark123.EpicRPG.AdvancedBuySystem.PriceImpl.Event2Cost;
 import me.Vark123.EpicRPG.AdvancedBuySystem.PriceImpl.MoneyCost;
 import me.Vark123.EpicRPG.AdvancedBuySystem.PriceImpl.ReputationCost;
 import me.Vark123.EpicRPG.AdvancedBuySystem.PriceImpl.RudaCost;
@@ -38,6 +39,10 @@ public class AdvancedBuyListener implements Listener {
 				case "stygia":
 					int stygia = Integer.parseInt(value);
 					costs.add(new StygiaCost(stygia));
+					break;
+				case "event2":
+					int event2 = Integer.parseInt(value);
+					costs.add(new Event2Cost(event2));
 					break;
 				case "reputation":
 					String[] tab = value.split(":");

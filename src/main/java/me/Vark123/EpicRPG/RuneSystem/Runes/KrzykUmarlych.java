@@ -51,8 +51,9 @@ public class KrzykUmarlych extends ARune {
 		RpgStats stats = rpg.getStats();
 		if(stats.getPresentMana() < 1)
 			return;
-		dmg = stats.getPresentMana() * 3;
-		stats.removePresentMana(stats.getPresentMana());
+		int manaToTake = Math.min(2000, stats.getPresentMana());
+		dmg = manaToTake * 3;
+		stats.removePresentMana(manaToTake);
 		
 		AbstractPlayer ap = BukkitAdapter.adapt(p);
 		
@@ -64,7 +65,7 @@ public class KrzykUmarlych extends ARune {
 				ApplicableRegionSet set = query.getApplicableRegions(com.sk89q.worldedit.bukkit.BukkitAdapter.adapt(e.getLocation()));
 				State flag = set.queryValue(null, Flags.PVP);
 				if(flag != null && flag.equals(State.ALLOW)
-						&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+						&& !(e.getWorld().getName().toLowerCase().contains("dungeon") || e.getWorld().getName().toLowerCase().contains("raid")))
 					return true;
 				return false;
 			}
@@ -149,7 +150,7 @@ public class KrzykUmarlych extends ARune {
 							ApplicableRegionSet set = query.getApplicableRegions(com.sk89q.worldedit.bukkit.BukkitAdapter.adapt(e.getLocation()));
 							State flag = set.queryValue(null, Flags.PVP);
 							if(flag != null && flag.equals(State.ALLOW)
-									&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+									&& !(e.getWorld().getName().toLowerCase().contains("dungeon") || e.getWorld().getName().toLowerCase().contains("raid")))
 								return false;
 						}
 						if(!MythicBukkit.inst().getMobManager().isMythicMob(e)
@@ -209,7 +210,7 @@ public class KrzykUmarlych extends ARune {
 							ApplicableRegionSet set = query.getApplicableRegions(com.sk89q.worldedit.bukkit.BukkitAdapter.adapt(e.getLocation()));
 							State flag = set.queryValue(null, Flags.PVP);
 							if(flag != null && flag.equals(State.ALLOW)
-									&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+									&& !(e.getWorld().getName().toLowerCase().contains("dungeon") || e.getWorld().getName().toLowerCase().contains("raid")))
 								return false;
 						}
 						if(!MythicBukkit.inst().getMobManager().isMythicMob(e)

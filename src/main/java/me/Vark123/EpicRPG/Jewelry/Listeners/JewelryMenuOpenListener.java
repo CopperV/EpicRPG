@@ -1,4 +1,4 @@
-package me.Vark123.EpicRPG.Jewelry;
+package me.Vark123.EpicRPG.Jewelry.Listeners;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 
-public class JewelryMenuOpenEvent implements Listener {
+public class JewelryMenuOpenListener implements Listener {
 
 	@EventHandler
 	public void onClick(InventoryClickEvent e) {

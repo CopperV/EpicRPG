@@ -1,6 +1,7 @@
 package me.Vark123.EpicRPG.FightSystem.Listeners.Effects.Magic;
 
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,32 +21,32 @@ public class KrewPrzodkowEffectListener implements Listener {
 	public void onMod(EpicEffectEvent e) {
 		if(e.isCancelled())
 			return;
-		
+
 		if(!e.getDamageType().equals(EpicDamageType.MAGIC))
 			return;
-		
+
 		if(e.getArgs() == null 
 				|| e.getArgs().length == 0 
 				|| !(e.getArgs()[0] instanceof ItemStackRune))
 			return;
-		
-		Entity victim = e.getVictim();
-		if(!(victim instanceof Player))
+
+		Entity damager = e.getDamager();
+		if(damager == null || !(damager instanceof Player))
 			return;
 
-		Player p = (Player) victim;
+		Player p = (Player) damager;
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		RpgModifiers modifiers = rpg.getModifiers();
 		
-		if(p.getHealth() - e.getFinalDamage() < 1)
+		if(((LivingEntity)e.getVictim()).getHealth() - e.getFinalDamage() >= 1)
 			return;
 		if(!modifiers.hasKrewPrzodkow())
 			return;
-		
+
 		ItemStackRune ir = (ItemStackRune) e.getArgs()[0];
-		if(ir.getMagicType().equalsIgnoreCase("krew"))
+		if(!ir.getMagicType().equalsIgnoreCase("krew"))
 			return;
-		
+
 		RuneUtils.krewPrzodkowEffect(rpg);
 	}
 

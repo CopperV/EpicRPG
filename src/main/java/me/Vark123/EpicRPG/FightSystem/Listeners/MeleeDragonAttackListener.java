@@ -14,6 +14,7 @@ import org.bukkit.util.RayTraceResult;
 
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
+import io.lumine.mythic.core.mobs.ActiveMob;
 import me.Vark123.EpicRPG.FightSystem.ManualDamage;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.Disguise;
@@ -58,7 +59,9 @@ public class MeleeDragonAttackListener implements Listener {
 		Bukkit.getPluginManager().callEvent(event);
 		if(event.isCancelled())
 			return;
-		
+
+		ActiveMob ae = MythicBukkit.inst().getMobManager().getMythicMobInstance(entity);
+		ae.getEntity().setNoDamageTicks(ae.getNoDamageTicks()/2);
 		ManualDamage.doDamage(p, (LivingEntity) entity, event.getDamage(), event);
 	}
 

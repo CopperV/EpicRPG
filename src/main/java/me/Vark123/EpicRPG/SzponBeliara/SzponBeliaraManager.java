@@ -253,6 +253,7 @@ public class SzponBeliaraManager {
 						continue;
 					Utils.dropItemStack(player, it);
 				}
+				inv.clear();
 			}
 		};
 	}

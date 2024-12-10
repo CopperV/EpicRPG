@@ -39,22 +39,22 @@ public class CrossbowModifierListener implements Listener {
 		int enchant = bow.getEnchantmentLevel(Enchantment.QUICK_CHARGE);
 		switch(enchant) {
 			case 0:
-				modifier = 1.3;
+				modifier = 1.6;
 				break;
 			case 1:
-				modifier = 1.15;
+				modifier = 1.4;
 				break;
 			case 2:
-				modifier = 1;
+				modifier = 1.2;
 				break;
 			case 3:
-				modifier = 0.85;
+				modifier = 1;
 				break;
 			case 4:
-				modifier = 0.7;
+				modifier = 0.8;
 				break;
 			case 5:
-				modifier = 0.55;
+				modifier = 0.6;
 				break;
 		}
 		

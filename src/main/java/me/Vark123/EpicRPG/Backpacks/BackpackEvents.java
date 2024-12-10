@@ -154,6 +154,7 @@ public class BackpackEvents {
 					continue;
 				Utils.dropItemStack(p, it);
 			}
+			inv.clear();
 		};
 		
 		EventCreator<InventoryCloseEvent> creator = new EventCreator<>(InventoryCloseEvent.class, event);
@@ -210,6 +211,7 @@ public class BackpackEvents {
 			toDrop.stream().forEach(it -> {
 				Utils.dropItemStack(p, it);
 			});
+			inv.clear();
 		};
 		
 		EventCreator<InventoryCloseEvent> creator = new EventCreator<>(InventoryCloseEvent.class, event);
@@ -300,6 +302,7 @@ public class BackpackEvents {
 					continue;
 				Utils.dropItemStack(p, it);
 			}
+			inv.clear();
 		};
 		
 		EventCreator<InventoryCloseEvent> creator = new EventCreator<>(InventoryCloseEvent.class, event);

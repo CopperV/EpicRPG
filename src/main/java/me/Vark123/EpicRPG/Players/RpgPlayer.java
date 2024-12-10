@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Scoreboard;
@@ -156,14 +157,28 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 	}
 	
 	public void displayUpdate() {
+		StringBuilder actionMessage = new StringBuilder();
+		actionMessage.append("§4🗡 "+stats.getFinalObrazenia());
+		if(player.hasPotionEffect(PotionEffectType.WITHER)) {
+			actionMessage.append("  §8☠ ");
+			int lenght = String.valueOf((int) player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()).length();
+			for(int i = 0; i < lenght; ++i)
+				actionMessage.append("✘");
+			actionMessage.append("/");
+			for(int i = 0; i < lenght; ++i)
+				actionMessage.append("✘");
+		} else {
+			actionMessage.append("  §c❤ " + ((int) player.getHealth()) + "/"
+					+ ((int) player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
+			if(player.getAbsorptionAmount() >= 1)
+				actionMessage.append("  §6§l♰ §6"+((int)player.getAbsorptionAmount()));
+		}
+		actionMessage.append(getGamemodeInfo());
+		actionMessage.append("  §b✺ "+stats.getPresentMana()+"/"+stats.getFinalMana());
+		actionMessage.append("  §2§l🛡 §2"+stats.getFinalOchrona());
+		
 		player.spigot().sendMessage(ChatMessageType.ACTION_BAR, 
-				TextComponent.fromLegacyText("§4🗡 "+stats.getFinalObrazenia()
-						+"  §c❤ "+((int)player.getHealth())+"/"
-						+((int)player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())
-						+(player.getAbsorptionAmount() >= 1 ? "§6§l♰ §6"+((int)player.getAbsorptionAmount()):"")
-						+getGamemodeInfo()
-						+"  §b✺ "+stats.getPresentMana()+"/"+stats.getFinalMana()
-						+"  §2§l🛡 §2"+stats.getFinalOchrona()));
+				TextComponent.fromLegacyText(actionMessage.toString()));
 	}
 	
 	private String getGamemodeInfo() {
@@ -188,7 +203,7 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 				return "";
 		}
 		
-		return " §e☤ "+gm;
+		return "  §e☤ "+gm;
 	}
 	
 	public void endTasks() {

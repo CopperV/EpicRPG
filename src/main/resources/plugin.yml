@@ -58,6 +58,8 @@ commands:
     aliases: [repmod]
   advancedbuy:
     aliases: [ab,abs,advancedbuysystem]
+  advancedbuyvault:
+    aliases: [abv,absv,advancedbuyvaultsystem]
   event:
     aliases: [evc, ev]
   event2:

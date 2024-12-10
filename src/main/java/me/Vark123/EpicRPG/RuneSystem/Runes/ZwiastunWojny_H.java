@@ -51,7 +51,7 @@ public class ZwiastunWojny_H extends ARune {
 				--timer;
 				
 				Location loc = p.getLocation();
-				for(int i = 0; i < 6; ++i) {
+				for(int i = 0; i < 2; ++i) {
 					double r = rand.nextDouble(radius);
 					double angle = rand.nextDouble(Math.PI*2);
 					
@@ -135,7 +135,7 @@ public class ZwiastunWojny_H extends ARune {
 						ApplicableRegionSet set = query.getApplicableRegions(BukkitAdapter.adapt(e.getLocation()));
 						State flag = set.queryValue(null, Flags.PVP);
 						if(flag != null && flag.equals(State.ALLOW)
-								&& !e.getWorld().getName().toLowerCase().contains("dungeon"))
+								&& !(e.getWorld().getName().toLowerCase().contains("dungeon") || e.getWorld().getName().toLowerCase().contains("raid")))
 							return true;
 						return false;
 					}

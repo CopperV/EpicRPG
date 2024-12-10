@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.annotation.Nonnull;
+
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -12,7 +14,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import de.tr7zw.nbtapi.NBTItem;
 import io.lumine.mythic.api.adapters.AbstractLocation;
 import io.lumine.mythic.api.adapters.AbstractVector;
 import io.lumine.mythic.bukkit.BukkitAdapter;
@@ -21,6 +25,96 @@ import io.lumine.mythic.bukkit.MythicBukkit;
 public class Utils {
 
 	private Utils() {}
+	
+	public static void resetSetInfo(ItemStack it) {
+		if(it == null || it.getType().equals(Material.AIR))
+			return;
+		NBTItem nbt = new NBTItem(it);
+		if(!nbt.hasTag("EpicSet"))
+			return;
+		
+		ItemMeta im = it.getItemMeta();
+		List<String> lore = im.getLore();
+		if(lore == null || lore.isEmpty())
+			return;
+
+		int lineNumber = lore.stream()
+				.filter(line -> line.contains("§6§l》 §c§lSet "))
+				.map(lore::indexOf)
+				.findFirst()
+				.orElse(Integer.MIN_VALUE) + 1;
+		if(lineNumber < 1)
+			return;
+		
+		while(lineNumber < lore.size() && !lore.get(lineNumber).isBlank() && lore.get(lineNumber).length() > 2) {
+			String line = lore.get(lineNumber);
+			line = line.replace("§a", "§8").replace("●", "¤");
+			lore.set(lineNumber, line);
+			++lineNumber;
+		}
+		
+		im.setLore(lore);
+		it.setItemMeta(im);
+	}
+	
+	public static void setItemSetInfo(ItemStack it, int level) {
+		if(it == null || it.getType().equals(Material.AIR))
+			return;
+		NBTItem nbt = new NBTItem(it);
+		if(!nbt.hasTag("EpicSet"))
+			return;
+
+		ItemMeta im = it.getItemMeta();
+		List<String> lore = im.getLore();
+		if(lore == null || lore.isEmpty())
+			return;
+		
+		int lineNumber = lore.stream()
+				.filter(line -> line.contains("§6§l》 §c§lSet "))
+				.map(lore::indexOf)
+				.findFirst()
+				.orElse(Integer.MIN_VALUE) + 1;
+		if(lineNumber < 1)
+			return;
+
+		while(lineNumber < lore.size() && !lore.get(lineNumber).isBlank() && lore.get(lineNumber).length() > 2) {
+			String line = lore.get(lineNumber);
+			if(!line.endsWith(" czesci"))
+				continue;
+			int presentLevel = Integer.parseInt(line.split(" ")[1]);
+			if(presentLevel > level)
+				break;
+			line = line.replace("§8", "§a").replace("¤", "●");
+			lore.set(lineNumber, line);
+			++lineNumber;
+			while(lineNumber < lore.size() && !lore.get(lineNumber).isBlank() && lore.get(lineNumber).length() > 2
+					&& !lore.get(lineNumber).endsWith(" czesci")) {
+				line = lore.get(lineNumber);
+				line = line.replace("§8", "§a");
+				lore.set(lineNumber, line);
+				++lineNumber;
+			}
+		}
+
+		im.setLore(lore);
+		it.setItemMeta(im);
+	}
+	
+	public static int getFirstPossibleSlot(@Nonnull Inventory inv, @Nonnull ItemStack it) {
+		int slot = -1;
+		for(int i = 0; i < inv.getSize(); ++i) {
+			ItemStack slotItem = inv.getItem(i);
+			if(slotItem == null || slotItem.getType().equals(Material.AIR)) {
+				slot = i;
+				break;
+			}
+			if(slotItem.isSimilar(it) && slotItem.getAmount() < slotItem.getMaxStackSize()) {
+				slot = i;
+				break;
+			}
+		}
+		return slot;
+	}
 	
 	public static String convertToClassConvention(String s) {
 		String[] tab = s.split(" ");
@@ -56,6 +150,14 @@ public class Utils {
 	public static double scaleValue(double min1, double max1, double min2, double max2, double value) {
 		double percent = (value - min1) / (max1 - min1);
 		return percent*(max2 - min2) + min2;
+	}
+	
+	public static double limitValue(double min, double max, double value) {
+		if(value < min)
+			return min;
+		else if(value > max)
+			return max;
+		return value;
 	}
 	
 	public static boolean isRune(ItemStack item) {

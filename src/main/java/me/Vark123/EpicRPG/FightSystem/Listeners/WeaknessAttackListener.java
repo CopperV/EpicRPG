@@ -50,8 +50,9 @@ public class WeaknessAttackListener implements Listener {
 					if(ae.hasImmunityTable()) {
 						if(ae.getImmunityTable().onCooldown(BukkitAdapter.adapt(p)))
 							return false;
-					} else if(ae.getNoDamageTicks() > 0)
+					} else if(ae.getEntity().getNoDamageTicks() > 0){
 						return false;
+					}
 					if (mob.getDisguise() != null && mob.getDisguise().toLowerCase().contains("ender_dragon"))
 						return false;
 					return true;
@@ -66,6 +67,8 @@ public class WeaknessAttackListener implements Listener {
 		if(event.isCancelled())
 			return;
 		
+		ActiveMob ae = MythicBukkit.inst().getMobManager().getMythicMobInstance(entity);
+		ae.getEntity().setNoDamageTicks(ae.getNoDamageTicks()/2);
 		ManualDamage.doDamage(p, (LivingEntity) entity, event.getDamage(), event);
 	}
 

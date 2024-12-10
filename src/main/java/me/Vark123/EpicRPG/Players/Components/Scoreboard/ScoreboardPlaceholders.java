@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import me.Vark123.EpicRPG.Main;
@@ -143,9 +144,23 @@ public class ScoreboardPlaceholders extends PlaceholderExpansion {
 			case "max_mana":
 				return ChatColor.translateAlternateColorCodes('&', "  &bMax mana: &9"+rpg.getStats().getFinalMana());
 			case "hp":
-				return ChatColor.translateAlternateColorCodes('&', "  &bHP: &c"+((int)player.getHealth())+"&b/&c"+((int)player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
+				if(player.hasPotionEffect(PotionEffectType.WITHER)) {
+					StringBuilder message = new StringBuilder();
+					message.append("  &bHP: &8");
+					int lenght = String.valueOf((int) player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()).length();
+					for(int i = 0; i < lenght; ++i)
+						message.append("✘");
+					message.append("&b/&8");
+					for(int i = 0; i < lenght; ++i)
+						message.append("✘");
+					return ChatColor.translateAlternateColorCodes('&', message.toString());
+				} else
+					return ChatColor.translateAlternateColorCodes('&', "  &bHP: &c"+((int)player.getHealth())+"&b/&c"+((int)player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
 			case "percent_hp":
-				return ChatColor.translateAlternateColorCodes('&', "  &bHP: &c"+String.format("%.2f", player.getHealth()/player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()*100.)+"%");
+				if(player.hasPotionEffect(PotionEffectType.WITHER)) {
+					return ChatColor.translateAlternateColorCodes('&', "  &bHP: &8✘✘%");
+				} else
+					return ChatColor.translateAlternateColorCodes('&', "  &bHP: &c"+String.format("%.2f", player.getHealth()/player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()*100.)+"%");
 		}
 		return " ";
 	}
