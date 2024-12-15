@@ -63,27 +63,27 @@ public class OstrzeMrozuSetComboListener implements Listener {
 			case 4:
 			case 3:
 			case 2:
-				modifier = 0.04;
+				modifier += 0.04;
 			case 1:
-				modifier = 0.04;
+				modifier += 0.04;
 				break;
 		}
 		switch(info.getSetCounts().getOrDefault("Runiczny_Egzekutor_H", 0)) {
 			case 4:
 			case 3:
 			case 2:
-				modifier = 0.06;
+				modifier += 0.06;
 			case 1:
-				modifier = 0.06;
+				modifier += 0.06;
 				break;
 		}
 		switch(info.getSetCounts().getOrDefault("Runiczny_Egzekutor_M", 0)) {
 			case 4:
 			case 3:
 			case 2:
-				modifier = 0.09;
+				modifier += 0.09;
 			case 1:
-				modifier = 0.09;
+				modifier += 0.09;
 				break;
 		}
 		
@@ -116,19 +116,19 @@ public class OstrzeMrozuSetComboListener implements Listener {
 		switch(info.getSetCounts().getOrDefault("Runiczny_Egzekutor", 0)) {
 			case 4:
 			case 3:
-				modifier = 0.05;
+				modifier += 0.05;
 				break;
 		}
 		switch(info.getSetCounts().getOrDefault("Runiczny_Egzekutor_H", 0)) {
 			case 4:
 			case 3:
-				modifier = 0.09;
+				modifier += 0.09;
 				break;
 		}
 		switch(info.getSetCounts().getOrDefault("Runiczny_Egzekutor_M", 0)) {
 			case 4:
 			case 3:
-				modifier = 0.15;
+				modifier += 0.15;
 				break;
 		}
 		
@@ -276,35 +276,35 @@ public class OstrzeMrozuSetComboListener implements Listener {
 		
 		switch(info.getSetCounts().getOrDefault("Mroczna_Zamiec", 0)) {
 			case 4:
-				modifier = 0.04;
+				modifier += 0.04;
 			case 3:
-				modifier = 0.04;
+				modifier += 0.04;
 			case 2:
-				modifier = 0.04;
+				modifier += 0.04;
 			case 1:
-				modifier = 0.04;
+				modifier += 0.04;
 				break;
 		}
 		switch(info.getSetCounts().getOrDefault("Mroczna_Zamiec_H", 0)) {
 			case 4:
-				modifier = 0.05;
+				modifier += 0.05;
 			case 3:
-				modifier = 0.05;
+				modifier += 0.05;
 			case 2:
-				modifier = 0.05;
+				modifier += 0.05;
 			case 1:
-				modifier = 0.05;
+				modifier += 0.05;
 				break;
 		}
 		switch(info.getSetCounts().getOrDefault("Mroczna_Zamiec_M", 0)) {
 			case 4:
-				modifier = 0.06;
+				modifier += 0.06;
 			case 3:
-				modifier = 0.06;
+				modifier += 0.06;
 			case 2:
-				modifier = 0.06;
+				modifier += 0.06;
 			case 1:
-				modifier = 0.06;
+				modifier += 0.06;
 				break;
 		}
 		
