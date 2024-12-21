@@ -103,7 +103,7 @@ public class ZwiastunWojny_H extends ARune {
 	private void castExplode(Location loc) {
 		Collection<Entity> shooted = new HashSet<>();
 		new BukkitRunnable() {
-			double maxRadius = dr.getObszar() * 0.25;
+			double maxRadius = dr.getObszar() * 0.4;
 			double r = 0.5;
 			@Override
 			public void run() {
@@ -148,7 +148,7 @@ public class ZwiastunWojny_H extends ARune {
 				}).forEach(e -> {
 					RuneDamage.damageNormal(p, (LivingEntity) e, dr, (p, le, dr)->{
 						new BukkitRunnable() {
-							int timer = 14;
+							int timer = 18;
 							double dmg = dr.getDamage()/50.0;
 							@Override
 							public void run() {
