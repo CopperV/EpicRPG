@@ -7,8 +7,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import me.Vark123.EpicRPG.FightSystem.EpicDamageType;
-import me.Vark123.EpicRPG.FightSystem.Events.EpicEffectEvent;
+import me.Vark123.EpicRPG.OldFightSystem.EpicDamageType;
+import me.Vark123.EpicRPG.OldFightSystem.Events.EpicEffectEvent;
 
 public class LoathebWaeponDebuffListener implements Listener {
 
@@ -25,7 +25,7 @@ public class LoathebWaeponDebuffListener implements Listener {
 			return;
 
 		victim.getWorld().playSound(victim.getLocation(), Sound.ENTITY_SLIME_HURT, 1.5f, 0.8f);
-		victim.getWorld().spawnParticle(Particle.SLIME, victim.getLocation().add(0,1,0), 8, .7f, .7f, .7f, 0.15f);
+		victim.getWorld().spawnParticle(Particle.ITEM_SLIME, victim.getLocation().add(0,1,0), 8, .7f, .7f, .7f, 0.15f);
 		e.decreaseModifier(0.5);
 	}
 	

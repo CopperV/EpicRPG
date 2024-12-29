@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Base64;
 
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
@@ -51,15 +50,15 @@ public class BackpackUtils {
 		return item;
 	}
 
+	@Deprecated
 	public static String getStringData(ItemStack item, String tag) {
-		net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
-		NBTTagCompound itemCompound = nmsItem.r() ? nmsItem.u() : new NBTTagCompound();
+		NBTTagCompound itemCompound = new NBTTagCompound();
 		return itemCompound != null ? itemCompound.l(tag) : null;
 	}
 
+	@Deprecated
 	public int getIntData(ItemStack item, String tag) {
-		net.minecraft.world.item.ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
-		NBTTagCompound itemCompound = nmsItem.r() ? nmsItem.u() : new NBTTagCompound();
+		NBTTagCompound itemCompound = new NBTTagCompound();
 		return itemCompound != null ? itemCompound.h(tag) : -9304294;
 	}
 	

@@ -207,7 +207,7 @@ public final class UpgradableManager {
 		Random random = new Random();
 		double rand = random.nextDouble();
 		if(rand > chance) {
-			p.spawnParticle(Particle.SMOKE_LARGE, p.getLocation().clone().add(0,1,0), 
+			p.spawnParticle(Particle.LARGE_SMOKE, p.getLocation().clone().add(0,1,0), 
 					18, .5f, 1.1f, .5f, .08f);
 			p.playSound(p, Sound.ENTITY_ZOGLIN_ANGRY, 1, 1);
 			return;
@@ -271,7 +271,7 @@ public final class UpgradableManager {
 		Random random = new Random();
 		double rand = random.nextDouble();
 		if(rand > chance) {
-			p.spawnParticle(Particle.SMOKE_LARGE, p.getLocation().clone().add(0,1,0), 
+			p.spawnParticle(Particle.LARGE_SMOKE, p.getLocation().clone().add(0,1,0), 
 					18, .5f, 1.1f, .5f, .08f);
 			p.playSound(p, Sound.ENTITY_ZOGLIN_ANGRY, 1, 1);
 			return;

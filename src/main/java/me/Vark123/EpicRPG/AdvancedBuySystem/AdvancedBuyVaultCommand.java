@@ -3,13 +3,12 @@ package me.Vark123.EpicRPG.AdvancedBuySystem;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import com.sk89q.worldguard.internal.flywaydb.core.internal.util.StringUtils;
 
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Core.CoinsSystem;

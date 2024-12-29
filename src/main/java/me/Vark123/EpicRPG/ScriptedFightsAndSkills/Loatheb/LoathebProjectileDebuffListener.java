@@ -10,8 +10,8 @@ import org.bukkit.event.Listener;
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
-import me.Vark123.EpicRPG.FightSystem.EpicDamageType;
-import me.Vark123.EpicRPG.FightSystem.Events.EpicEffectEvent;
+import me.Vark123.EpicRPG.OldFightSystem.EpicDamageType;
+import me.Vark123.EpicRPG.OldFightSystem.Events.EpicEffectEvent;
 
 public class LoathebProjectileDebuffListener implements Listener {
 
@@ -33,7 +33,7 @@ public class LoathebProjectileDebuffListener implements Listener {
 			return;
 
 		victim.getWorld().playSound(victim.getLocation(), Sound.ENTITY_SLIME_HURT, 1.5f, 0.8f);
-		victim.getWorld().spawnParticle(Particle.SLIME, victim.getLocation().add(0,1,0), 8, .7f, .7f, .7f, 0.15f);
+		victim.getWorld().spawnParticle(Particle.ITEM_SLIME, victim.getLocation().add(0,1,0), 8, .7f, .7f, .7f, 0.15f);
 		e.decreaseModifier(0.4);
 	}
 	

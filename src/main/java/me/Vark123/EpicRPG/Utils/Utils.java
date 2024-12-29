@@ -10,17 +10,21 @@ import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import de.tr7zw.nbtapi.NBTItem;
+import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.adapters.AbstractLocation;
 import io.lumine.mythic.api.adapters.AbstractVector;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
+import io.lumine.mythic.core.mobs.ActiveMob;
 
 public class Utils {
 
@@ -245,6 +249,37 @@ public class Utils {
 		vec2.setY(0);
 		
 		return Math.abs(Math.toDegrees(vec1.angle(vec2)));
+	}
+	
+	public static void neutralizeEntityNoDamageTicks(LivingEntity damager, LivingEntity entity) {
+		if(MythicBukkit.inst().getMobManager().isMythicMob(entity)) {
+			ActiveMob mob = MythicBukkit.inst().getMobManager().getMythicMobInstance(entity);
+			if(mob.hasImmunityTable()) {
+				mob.getImmunityTable().clearCooldown(BukkitAdapter.adapt(damager));
+			} else {
+				mob.getEntity().setNoDamageTicks(0);
+			}
+		} else {
+			entity.setNoDamageTicks(0);
+		}
+	}
+	
+	public static void setLastDamageCause(Entity entity, EntityDamageEvent event) {
+		AbstractEntity aEntity = BukkitAdapter.adapt(entity);
+		if(aEntity == null) {
+			return;
+		}
+		
+		aEntity.setMetadata("LastDamageCause", event);
+	}
+	
+	public static EntityDamageEvent getLastDamageCause(Entity entity) {
+		AbstractEntity aEntity = BukkitAdapter.adapt(entity);
+		if(aEntity == null || !aEntity.hasMetadata("LastDamageCause")) {
+			return null;
+		}
+		
+		return (EntityDamageEvent) aEntity.getMetadata("LastDamageCause").get();
 	}
 	
 }

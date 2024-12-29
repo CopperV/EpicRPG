@@ -24,7 +24,7 @@ public class PlayerJumpModifyListener implements Listener {
 		if(cd.contains(p))
 			return;
 		
-		PotionEffect potion = p.getPotionEffect(PotionEffectType.SLOW);
+		PotionEffect potion = p.getPotionEffect(PotionEffectType.SLOWNESS);
 		if(potion == null)
 			return;
 		

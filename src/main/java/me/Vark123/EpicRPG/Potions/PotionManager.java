@@ -24,7 +24,7 @@ public class PotionManager {
 	private static final PotionManager instance = new PotionManager();
 	
 	public final int POTION_CD = 1450;
-	public final PotionEffect DRINK_EFFECT = new PotionEffect(PotionEffectType.SLOW, 20*1, 1);
+	public final PotionEffect DRINK_EFFECT = new PotionEffect(PotionEffectType.SLOWNESS, 20*1, 1);
 	private Map<UUID, Long> potionCooldown = new ConcurrentHashMap<>();
 	
 	private PotionManager() {}
@@ -73,7 +73,7 @@ public class PotionManager {
 					return;
 				}
 				p.playSound(p, Sound.ENTITY_GENERIC_DRINK, 1, 1);
-				p.spawnParticle(Particle.SPELL_MOB, p.getLocation().add(0, 1.25, 0), 0, 1, 0.2667, 0.4, 1);
+				p.spawnParticle(Particle.ENTITY_EFFECT, p.getLocation().add(0, 1.25, 0), 0, 1, 0.2667, 0.4, 1);
 				++timer;
 			}
 		}.runTaskTimer(Main.getInstance(), 0, 4);

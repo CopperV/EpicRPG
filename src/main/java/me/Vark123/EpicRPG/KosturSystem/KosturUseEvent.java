@@ -12,9 +12,9 @@ import org.bukkit.inventory.ItemStack;
 import de.tr7zw.nbtapi.NBTItem;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.items.ItemExecutor;
+import me.Vark123.EpicRPG.OldRuneSystem.RuneManager;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.RuneSystem.RuneManager;
 
 public class KosturUseEvent implements Listener {
 
@@ -67,7 +67,7 @@ public class KosturUseEvent implements Listener {
 		
 		if(!p.isSneaking()) {
 			if(!RuneManager.getInstance().castRune(rpg, rune)) {
-				p.getWorld().spawnParticle(Particle.SMOKE_NORMAL, p.getEyeLocation(), 15, 0.25, 0.25, 0.25, 0.1);
+				p.getWorld().spawnParticle(Particle.SMOKE, p.getEyeLocation(), 15, 0.25, 0.25, 0.25, 0.1);
 			}
 		} else {
 			RuneManager.getInstance().regenTimePass(p, rune);

@@ -351,7 +351,7 @@ public class PotionUtils {
 					switch(potion.getItemMeta().getDisplayName().toLowerCase()) {
 						case "§f§omlecznik":
 							p.getActivePotionEffects().forEach(eff -> p.removePotionEffect(eff.getType()));
-							PotionEffect pot = new PotionEffect(PotionEffectType.CONFUSION, 40, 9);
+							PotionEffect pot = new PotionEffect(PotionEffectType.NAUSEA, 40, 9);
 							p.addPotionEffect(pot);
 							break;
 					}

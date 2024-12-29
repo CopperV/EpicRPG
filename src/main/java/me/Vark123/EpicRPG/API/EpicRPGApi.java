@@ -10,12 +10,12 @@ import me.Vark123.EpicRPG.Core.CoinsSystem;
 import me.Vark123.EpicRPG.Core.ExpSystem;
 import me.Vark123.EpicRPG.Core.MoneySystem;
 import me.Vark123.EpicRPG.Core.StygiaSystem;
-import me.Vark123.EpicRPG.FightSystem.DamageManager;
 import me.Vark123.EpicRPG.HorseSystem.HorseManager;
 import me.Vark123.EpicRPG.MenuSystem.MenuManager;
+import me.Vark123.EpicRPG.OldFightSystem.DamageManager;
+import me.Vark123.EpicRPG.OldRuneSystem.RuneManager;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Potions.PotionManager;
-import me.Vark123.EpicRPG.RuneSystem.RuneManager;
 import me.nikl.calendarevents.CalendarEvents;
 import me.nikl.calendarevents.CalendarEventsApi;
 
@@ -55,7 +55,7 @@ public class EpicRPGApi {
 		this.moneySystem = MoneySystem.getInstance();
 		this.stygiaSystem = StygiaSystem.getInstance();
 		
-		this.calendarManager = ((CalendarEvents) Bukkit.getPluginManager().getPlugin("CalendarEvents")).getApi();
+		this.calendarManager = ((CalendarEvents) Bukkit.getPluginManager().getPlugin("EpicCalendarEvents")).getApi();
 	}
 	
 	public static EpicRPGApi getApi() {

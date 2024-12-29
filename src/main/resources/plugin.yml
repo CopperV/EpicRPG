@@ -1,9 +1,9 @@
 name: EpicRPG
-version: 2.0.2-ALPHA
+version: 2.0.3
 main: me.Vark123.EpicRPG.Main
 author: Vark123
-depend: [CalendarEvents,MythicMobs,NBTAPI,ProtocolLib,EpicOptions,LibsDisguises]
-api-version: 1.18
+depend: [EpicCalendarEvents,MythicMobs,NBTAPI,ProtocolLib,EpicOptions,LibsDisguises]
+api-version: 1.21
 
 libraries:
   - io.github.rysefoxx.inventory:RyseInventory-Plugin:1.6.5

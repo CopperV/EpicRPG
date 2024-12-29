@@ -12,8 +12,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import me.Vark123.EpicRPG.FightSystem.EpicDamageType;
-import me.Vark123.EpicRPG.FightSystem.Events.EpicEffectEvent;
+import me.Vark123.EpicRPG.OldFightSystem.EpicDamageType;
+import me.Vark123.EpicRPG.OldFightSystem.Events.EpicEffectEvent;
 
 public class LoathebProjectileNeutralizeListener implements Listener {
 
@@ -40,7 +40,7 @@ public class LoathebProjectileNeutralizeListener implements Listener {
 			return;
 
 		victim.getWorld().playSound(victim.getLocation(), Sound.ENTITY_SLIME_SQUISH, 1.5f, 0.6f);
-		damager.getWorld().spawnParticle(Particle.SLIME, damager.getLocation(), 12, .3f, .3f, .3f, 0.1f);
+		damager.getWorld().spawnParticle(Particle.ITEM_SLIME, damager.getLocation(), 12, .3f, .3f, .3f, 0.1f);
 		damager.remove();
 		e.setCancelled(true);
 	}

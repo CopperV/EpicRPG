@@ -157,7 +157,7 @@ public class UpgradableInhibitor {
 			});
 
 			p.playSound(p, Sound.ENTITY_DROWNED_AMBIENT_WATER, 1, 1.3f);
-			p.spawnParticle(Particle.CRIT_MAGIC, p.getLocation().add(0,1,0), 16, .5f, .5f, .5f, .1f);
+			p.spawnParticle(Particle.ENCHANTED_HIT, p.getLocation().add(0,1,0), 16, .5f, .5f, .5f, .1f);
 
 			Utils.dropItemStack(p, result);
 			cd.put(p, new Date());

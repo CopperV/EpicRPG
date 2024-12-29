@@ -1,10 +1,14 @@
 package me.Vark123.EpicRPG.Players.Components;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 
+import lombok.Getter;
+import me.Vark123.EpicRPG.OldRuneSystem.RuneManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.RuneSystem.RuneManager;
+import me.Vark123.EpicRPG.RuneSystem.ACastableRune.RuneLockerTypes;
 
 public class RpgModifiers implements Serializable {
 
@@ -119,6 +123,9 @@ public class RpgModifiers implements Serializable {
 	private int potionWytrzymalosc;
 	private int potionInteligencja;
 	private int potionWalka;
+	
+	@Getter
+	private Collection<RuneLockerTypes> activeLockers = new HashSet<>();
 	
 	public RpgModifiers(RpgPlayer rpg) {
 		this.rpg = rpg;

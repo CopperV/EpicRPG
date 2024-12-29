@@ -1,23 +1,23 @@
 package me.Vark123.EpicRPG.RuneSystem.Events;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import lombok.Getter;
-import me.Vark123.EpicRPG.RuneSystem.ItemStackRune;
+import me.Vark123.EpicRPG.Players.RpgPlayer;
+import me.Vark123.EpicRPG.RuneSystem.EpicRune;
 
 @Getter
 public class RuneUseEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
 
-	private Player player;
-	private ItemStackRune rune;
+	private RpgPlayer rpgPlayer;
+	private EpicRune rune;
 
-	public RuneUseEvent(Player player, ItemStackRune rune) {
+	public RuneUseEvent(RpgPlayer rpgPlayer, EpicRune rune) {
 		super();
-		this.player = player;
+		this.rpgPlayer = rpgPlayer;
 		this.rune = rune;
 	}
 

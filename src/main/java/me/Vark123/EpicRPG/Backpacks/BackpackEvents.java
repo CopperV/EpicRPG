@@ -161,6 +161,7 @@ public class BackpackEvents {
 		return creator;
 	}
 	
+	@Deprecated
 	private EventCreator<InventoryCloseEvent> repairCloseEventCreator(){
 		
 		Consumer<InventoryCloseEvent> event = e -> {

@@ -15,8 +15,8 @@ import org.bukkit.event.Listener;
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
-import me.Vark123.EpicRPG.FightSystem.EpicDamageType;
-import me.Vark123.EpicRPG.FightSystem.Events.EpicEffectEvent;
+import me.Vark123.EpicRPG.OldFightSystem.EpicDamageType;
+import me.Vark123.EpicRPG.OldFightSystem.Events.EpicEffectEvent;
 
 public class LoathebProjectileReflectListener implements Listener {
 

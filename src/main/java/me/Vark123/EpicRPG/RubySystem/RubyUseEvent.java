@@ -173,7 +173,7 @@ public class RubyUseEvent implements Listener {
 		}
 
 		p.playSound(p.getLocation(), sound, 1f, volume);
-		p.spawnParticle(Particle.REDSTONE, p.getLocation().add(0, 1, 0), 30, 1f, 1f, 1f, 1f, dust);
+		p.spawnParticle(Particle.DUST, p.getLocation().add(0, 1, 0), 30, 1f, 1f, 1f, 1f, dust);
 		
 		nbt.applyNBT(ruby);
 		ItemMeta im = ruby.getItemMeta();
