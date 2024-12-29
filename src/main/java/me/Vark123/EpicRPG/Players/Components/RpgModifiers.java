@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 
-import lombok.Getter;
 import me.Vark123.EpicRPG.OldRuneSystem.RuneManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.RuneSystem.ACastableRune.RuneLockerTypes;
@@ -124,8 +123,8 @@ public class RpgModifiers implements Serializable {
 	private int potionInteligencja;
 	private int potionWalka;
 	
-	@Getter
 	private Collection<RuneLockerTypes> activeLockers = new HashSet<>();
+	private Collection<EpicModifierTypes> activeModifiers = new HashSet<>();
 	
 	public RpgModifiers(RpgPlayer rpg) {
 		this.rpg = rpg;
@@ -137,6 +136,113 @@ public class RpgModifiers implements Serializable {
 
 	public void setPow(float pow) {
 		this.bowPower = pow;
+	}
+	
+	public boolean hasActiveLocker(RuneLockerTypes locker) {
+		return activeLockers.contains(locker);
+	}
+	
+	public void addActiveLocker(RuneLockerTypes locker) {
+		if(activeLockers.contains(locker))
+			return;
+		activeLockers.add(locker);
+	}
+	
+	public void removeActiveLocker(RuneLockerTypes locker) {
+		activeLockers.remove(locker);
+	}
+	
+	public boolean hasActiveModifier(EpicModifierTypes modifier) {
+		return activeModifiers.contains(modifier);
+	}
+	
+	public void addActiveModifier(EpicModifierTypes modifier) {
+		if(activeModifiers.contains(modifier))
+			return;
+		activeModifiers.add(modifier);
+	}
+	
+	public void removeActiveModifier(EpicModifierTypes modifier) {
+		activeModifiers.remove(modifier);
+	}
+	
+	public static enum EpicModifierTypes {
+		WYOSTRZONE_ZMYSLY,
+		OGNISTA_STRZALA,
+		ZATRUTA_STRZALA,
+		PRECYZYJNY_STRZAL,
+		TRANS,
+		SZAL_BITEWNY,
+		GRUBOSKORNOSC,
+		SFERA,
+		TOTEM_OBRONNY,
+		INKANTACJA,
+		SKRYTOBOJSTWO,
+		ZADZA_KRWI,
+		CIEN_ASSASYNA,
+		PROWOKACJA,
+		WAMPIRYZM,
+		WAMPIRYZM_H,
+		WAMPIRYZM_M,
+		PENETRACJA,
+		POSWIECENIE,
+		TARCZA_CIENIA,
+		AURA_ROZPROSZENIA,
+		RYTUAL_WZNIESIENIA,
+		SWIETA_STRZALA,
+		ZYCIODAJNA_ZIEMIA,
+		ZYCIODAJNA_ZIEMIA_M,
+		ZEW_KRWI,
+		ZAKAZANY_RYTUAL,
+		ZAKAZANY_RYTUAL_H,
+		ZAKAZANY_RYTUAL_M,
+		RYTUAL_KRWI,
+		KREW_PRZODKOW,
+		GNIEW,
+		TRANSFUZJA,
+		PELNIA,
+		LODOWY_BLOK,
+		ZRODLO_NATURY,
+		BARBARZYNSKI_SZAL,
+		SILA_JEDNOSCI,
+		ZRYW,
+		KRWAWA_STRZALA,
+		GRAD_STRZAL,
+		WEDROWNY_CIEN,
+		CIOS_W_PLECY,
+		MORD,
+		EKSPLODUJACA_STRZALA,
+		EKSPLODUJACA_STRZALA_H,
+		EKSPLODUJACA_STRZALA_M,
+		SILA_ROWNOWAGI,
+		SILA_ROWNOWAGI_H,
+		SILA_ROWNOWAGI_M,
+		KLATWA_KRWI,
+		LASKA_BELIARA,
+		TRUJACA_AURA,
+		ZAKLETA_STRZALA,
+		WYBRANIEC_BELIARA,
+		WTOPIENIE,
+		WTOPIENIE_H,
+		WTOPIENIE_M,
+		OSTATNI_BOJ,
+		PAKT_KRWI,
+		PAKT_KRWI_MEASURE,
+		SZOSTY_ZMYSL,
+		PRZYPLYW_ENERGII,
+		OSTATNI_BOJ_H,
+		PAKT_KRWI_H,
+		PAKT_KRWI_MEASURE_H,
+		SZOSTY_ZMYSL_H,
+		PRZYPLYW_ENERGII_H,
+		OSTATNI_BOJ_M,
+		PAKT_KRWI_M,
+		PAKT_KRWI_MEASURE_M,
+		SZOSTY_ZMYSL_M,
+		PRZYPLYW_ENERGII_M,
+		LODOWA_TARCZA,
+		LODOWA_TARCZA_H,
+		LODOWA_TARCZA_M
 	}
 
 	public void setPotionSila(int potionSila) {

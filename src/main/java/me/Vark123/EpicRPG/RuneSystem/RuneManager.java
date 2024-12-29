@@ -89,7 +89,7 @@ public final class RuneManager {
 		
 		RpgModifiers modifiers = rpg.getModifiers();
 		for(RuneLockerTypes locker : castableRune.lockers) {
-			if(modifiers.getActiveLockers().contains(locker)) {
+			if(modifiers.hasActiveLocker(locker)) {
 				p.sendMessage(Main.getInstance().getPrefix()+" "+locker.getMessage());
 				return false;
 			}

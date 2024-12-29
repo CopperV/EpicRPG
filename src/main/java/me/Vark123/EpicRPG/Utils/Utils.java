@@ -173,6 +173,19 @@ public class Utils {
 			return false;
 	}
 	
+	public static boolean hasWeapon(Player player) {
+		ItemStack hand = player.getInventory().getItemInMainHand();
+		if(hand == null || hand.getType().equals(Material.AIR))
+			return false;
+		if(!hand.hasItemMeta() || !hand.getItemMeta().hasLore())
+			return false;
+		return hand.getItemMeta().getLore().parallelStream().anyMatch(line -> {
+			if(line.contains(" Atrybuty ") || line.contains(" Wymagania "))
+				return true;
+			return false;
+		});
+	}
+	
 	public static void dropItemStack(Player p, ItemStack it) {
 		if(it == null || it.getType().equals(Material.AIR))
 			return;
@@ -261,6 +274,19 @@ public class Utils {
 			}
 		} else {
 			entity.setNoDamageTicks(0);
+		}
+	}
+	
+	public static boolean hasNoDamageTicks(LivingEntity damager, LivingEntity victim) {
+		if(MythicBukkit.inst().getMobManager().isMythicMob(victim)){
+			ActiveMob mob = MythicBukkit.inst().getMobManager().getMythicMobInstance(victim);
+			if(mob.hasImmunityTable()) {
+				return mob.getImmunityTable().onCooldown(BukkitAdapter.adapt(damager));
+			} else {
+				return mob.getEntity().getNoDamageTicks() > 0;
+			}
+		} else {
+			return victim.getNoDamageTicks() > 0;
 		}
 	}
 	

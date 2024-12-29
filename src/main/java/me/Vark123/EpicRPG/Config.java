@@ -19,6 +19,11 @@ public final class Config {
 	private double maxCPS;
 	private int measureDuration;
 	
+	private int maxWalkaCrit;
+	private double learnBreakFactor;
+	private double statBreakFactor;
+	private double maxLearnedStatPerLevel;
+	
 	private Config() {
 		
 	}
@@ -41,6 +46,11 @@ public final class Config {
 		
 		this.maxCPS = fYml.getDouble("CPS.max", 12);
 		this.measureDuration = fYml.getInt("CPS.measure-duration", 3);
+		
+		this.maxWalkaCrit = fYml.getInt("gameplay.max-walka-crit", 500);
+		this.learnBreakFactor = fYml.getDouble("gameplay.learn-break-factor", 2);
+		this.statBreakFactor = fYml.getDouble("gameplay.stat-break-factor", 0.33);
+		this.learnBreakFactor = fYml.getDouble("gameplay.max-learned-stat-per-level", 5);
 	}
 	
 	@Getter

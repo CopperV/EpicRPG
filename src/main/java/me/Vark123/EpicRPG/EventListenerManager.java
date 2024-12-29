@@ -29,8 +29,10 @@ import me.Vark123.EpicRPG.Core.Listeners.LevelSystemControlListener;
 import me.Vark123.EpicRPG.Core.Listeners.PlayerJumpModifyListener;
 import me.Vark123.EpicRPG.Core.Listeners.VipBoostControlListener;
 import me.Vark123.EpicRPG.Dungeons.Listeners.KoszmarKrukaPotionDebuffListener;
-import me.Vark123.EpicRPG.FightSystem.Listeners.EntityDamagerListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.EntityDamageListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.EntityLastDamageCauseListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.EntityPostDamageListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.ProjectileLaunchListener;
 import me.Vark123.EpicRPG.Gems.GemPlaceProtEvent;
 import me.Vark123.EpicRPG.HealthSystem.PlayerHealEvent;
 import me.Vark123.EpicRPG.HorseSystem.HorseDismountEvent;
@@ -162,8 +164,10 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new WHEListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new HalloweenBossSpawnListener(), inst);
 
-		Bukkit.getPluginManager().registerEvents(new EntityDamagerListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new EntityDamageListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new EntityPostDamageListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new EntityLastDamageCauseListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new ProjectileLaunchListener(), inst);
 
 		Bukkit.getPluginManager().registerEvents(new RuneInteractListener(), inst);
 		
