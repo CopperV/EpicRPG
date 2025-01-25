@@ -1,7 +1,11 @@
 package me.Vark123.EpicRPG;
 
 import java.io.File;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import lombok.AllArgsConstructor;
@@ -23,9 +27,12 @@ public final class Config {
 	private double learnBreakFactor;
 	private double statBreakFactor;
 	private double maxLearnedStatPerLevel;
+	private int pnPerLevel;
+	
+	private final Map<Integer, Integer> levelExpRequirements;
 	
 	private Config() {
-		
+		levelExpRequirements = new LinkedHashMap<>();
 	}
 	
 	public static final Config get() {
@@ -51,6 +58,15 @@ public final class Config {
 		this.learnBreakFactor = fYml.getDouble("gameplay.learn-break-factor", 2);
 		this.statBreakFactor = fYml.getDouble("gameplay.stat-break-factor", 0.33);
 		this.learnBreakFactor = fYml.getDouble("gameplay.max-learned-stat-per-level", 5);
+		this.pnPerLevel = fYml.getInt("pn-per-level", 10);
+		
+		if(fYml.contains("level-exp-tresholds") && fYml.isConfigurationSection("level-exp-tresholds")) {
+			ConfigurationSection expSection = fYml.getConfigurationSection("level-exp-tresholds");
+			expSection.getKeys(false).stream()
+				.filter(StringUtils::isNumeric)
+				.filter(expSection::isInt)
+				.forEach(key -> levelExpRequirements.put(Integer.parseInt(key), expSection.getInt(key)));
+		}
 	}
 	
 	@Getter

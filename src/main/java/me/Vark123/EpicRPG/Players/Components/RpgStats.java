@@ -18,6 +18,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import me.Vark123.EpicRPG.Config;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.HealthSystem.RpgPlayerHealEvent;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
@@ -332,8 +333,8 @@ public class RpgStats implements Serializable, ChatPrintable {
 			bonusKryt += 25;
 		kryt += bonusKryt;
 		
-		double percent1 = (double) kryt / 500. * 100.;
-		double percent2 = (double) kryt / 2500. * 100.;
+		double percent1 = (double) kryt / (double)(Config.get().getMaxWalkaCrit()) * 100.;
+		double percent2 = (double) kryt / (double)(Config.get().getMaxWalkaCrit()*5) * 100.;
 		
 		TableGenerator generator = new TableGenerator(TableGenerator.Alignment.LEFT, TableGenerator.Alignment.LEFT, TableGenerator.Alignment.LEFT);
 		generator.addRow("", "§2Obrazenia: §a"+obrazenia+"§7/§a"+potionObrazenia+"§7/§a"+finalObrazenia, 

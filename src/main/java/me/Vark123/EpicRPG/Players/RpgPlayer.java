@@ -17,6 +17,7 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.Vark123.EpicRPG.Config;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.RpgScoreboard;
 import me.Vark123.EpicRPG.Core.ExpSystem;
@@ -223,7 +224,7 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 		skills.reset();
 		stats.reset();
 		
-		info.setPN(info.getLevel() * 10);
+		info.setPN(info.getLevel() * Config.get().getPnPerLevel());
 		
 		ChangeStats.change(this);
 		return true;

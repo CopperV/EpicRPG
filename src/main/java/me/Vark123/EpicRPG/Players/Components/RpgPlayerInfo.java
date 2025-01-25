@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.Vark123.EpicRPG.Config;
 import me.Vark123.EpicRPG.Core.ExpSystem;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Utils.ChatPrintable;
@@ -30,7 +31,7 @@ public class RpgPlayerInfo implements Serializable, ChatPrintable{
 	@Setter
 	private int exp = 0;
 	private int nextLevel;
-	private int pn = 10;
+	private int pn = Config.get().getPnPerLevel();
 	@Setter
 	private String proffesion = "§aobywatel";
 	
