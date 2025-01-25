@@ -14,13 +14,13 @@ import org.bukkit.inventory.meta.SkullMeta;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
-import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
-import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
-import io.github.rysefoxx.inventory.plugin.enums.DisabledEvents;
-import io.github.rysefoxx.inventory.plugin.enums.DisabledInventoryClick;
-import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import lombok.AccessLevel;
 import lombok.Getter;
+import me.Vark123.EpicInventory.Content.InventoryContents;
+import me.Vark123.EpicInventory.Content.InventoryProvider;
+import me.Vark123.EpicInventory.Enums.DisabledEvents;
+import me.Vark123.EpicInventory.Enums.DisabledInventoryClick;
+import me.Vark123.EpicInventory.Pagination.EpicInventory;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Utils.Utils;
 
@@ -136,7 +136,7 @@ public class BackpackManager {
 	}
 	
 	public void openBackpackCreatorMenu(Player p) {
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§3§lTworzenie Plecakow")
 			.size(54)
 			.ignoredSlots(freeSlots)
@@ -152,7 +152,7 @@ public class BackpackManager {
 	}
 	
 	public void openBackpackRepairMenu(Player p) {
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§3§lNaprawa plecaka")
 			.size(9)
 			.ignoredSlots(repairFreeSlots)
@@ -167,7 +167,7 @@ public class BackpackManager {
 	}
 	
 	public void openBackpackUpgradeMenu(Player p) {
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§b§lUlepszenie Plecaka")
 			.size(36)
 			.ignoredSlots(upgradeFreeSlots)

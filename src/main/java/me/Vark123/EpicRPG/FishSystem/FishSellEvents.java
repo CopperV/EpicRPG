@@ -13,8 +13,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import de.tr7zw.nbtapi.NBTItem;
-import io.github.rysefoxx.inventory.plugin.other.EventCreator;
 import lombok.Getter;
+import me.Vark123.EpicInventory.Other.EventCreator;
 import me.Vark123.EpicRPG.Core.RudaSystem;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;

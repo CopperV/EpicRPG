@@ -8,13 +8,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import io.github.rysefoxx.inventory.anvilgui.AnvilGUI.Builder;
-import io.github.rysefoxx.inventory.anvilgui.AnvilGUI.ResponseAction;
-import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
-import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
-import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
-import io.github.rysefoxx.inventory.plugin.enums.InventoryOpenerType;
-import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
+import me.Vark123.EpicInventory.Content.IntelligentItem;
+import me.Vark123.EpicInventory.Content.InventoryContents;
+import me.Vark123.EpicInventory.Content.InventoryProvider;
+import me.Vark123.EpicInventory.Enums.InventoryOpenerType;
+import me.Vark123.EpicInventory.Pagination.EpicInventory;
 import me.Vark123.EpicOptions.MenuSystem.OptionMenuManager;
 import me.Vark123.EpicOptions.PlayerSystem.OPlayer;
 import me.Vark123.EpicOptions.PlayerSystem.PlayerOption;
@@ -22,6 +20,8 @@ import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Options.Serializables.MarkerSerializable;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
+import net.wesjd.anvilgui.AnvilGUI.Builder;
+import net.wesjd.anvilgui.AnvilGUI.ResponseAction;
 
 public class MarkerOptionMenuManager {
 	
@@ -88,7 +88,7 @@ public class MarkerOptionMenuManager {
 		@SuppressWarnings("unchecked")
 		PlayerOption<MarkerSerializable> option = (PlayerOption<MarkerSerializable>) op.getPlayerOptionByID("epicrpg_markers").orElseThrow();
 	
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§7§lUSTAWIENIA - §6§lZNACZNIK")
 			.disableUpdateTask()
 			.rows(2)
@@ -143,7 +143,7 @@ public class MarkerOptionMenuManager {
 	private void openXMarkerCreator(OPlayer op) {
 		Player p = op.getPlayer();
 
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§7§lUSTAWIENIA - §6§lZNACZNIK")
 			.disableUpdateTask()
 			.type(InventoryOpenerType.ANVIL)
@@ -183,7 +183,7 @@ public class MarkerOptionMenuManager {
 		@SuppressWarnings("unchecked")
 		PlayerOption<MarkerSerializable> option = (PlayerOption<MarkerSerializable>) op.getPlayerOptionByID("epicrpg_markers").orElseThrow();
 
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§7§lUSTAWIENIA - §6§lZNACZNIK")
 			.disableUpdateTask()
 			.type(InventoryOpenerType.ANVIL)

@@ -11,10 +11,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
-import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
-import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
-import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
+import me.Vark123.EpicInventory.Content.IntelligentItem;
+import me.Vark123.EpicInventory.Content.InventoryContents;
+import me.Vark123.EpicInventory.Content.InventoryProvider;
+import me.Vark123.EpicInventory.Pagination.EpicInventory;
 import me.Vark123.EpicOptions.MenuSystem.OptionMenuManager;
 import me.Vark123.EpicOptions.PlayerSystem.OPlayer;
 import me.Vark123.EpicOptions.PlayerSystem.PlayerOption;
@@ -81,7 +81,7 @@ public class HorseOptionMenuManager {
 			--size;
 		int rows = (size - 1) / 9 + 1;
 
-		RyseInventory.builder()
+		EpicInventory.builder()
 				.title("§7§lUSTAWIENIA - §a§lDOMYSLNY WIERZCHOWIEC")
 				.rows(rows)
 				.disableUpdateTask()

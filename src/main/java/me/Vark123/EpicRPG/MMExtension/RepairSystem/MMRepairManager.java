@@ -7,13 +7,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
-import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
-import io.github.rysefoxx.inventory.plugin.enums.DisabledEvents;
-import io.github.rysefoxx.inventory.plugin.enums.DisabledInventoryClick;
-import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import lombok.AccessLevel;
 import lombok.Getter;
+import me.Vark123.EpicInventory.Content.InventoryContents;
+import me.Vark123.EpicInventory.Content.InventoryProvider;
+import me.Vark123.EpicInventory.Enums.DisabledEvents;
+import me.Vark123.EpicInventory.Enums.DisabledInventoryClick;
+import me.Vark123.EpicInventory.Pagination.EpicInventory;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Utils.Utils;
 
@@ -67,7 +67,7 @@ public class MMRepairManager {
 	}
 	
 	public void open(Player p) {
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§eWymiana przedmiotow")
 			.size(54)
 			.ignoredSlots(freeSlots)

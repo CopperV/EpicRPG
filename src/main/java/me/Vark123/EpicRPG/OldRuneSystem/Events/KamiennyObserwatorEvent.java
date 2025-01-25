@@ -15,7 +15,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import de.tr7zw.nbtapi.NBTItem;
-import io.github.rysefoxx.inventory.plugin.other.EventCreator;
+import me.Vark123.EpicInventory.Other.EventCreator;
 
 public class KamiennyObserwatorEvent implements Listener {
 	

@@ -11,10 +11,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
-import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
-import io.github.rysefoxx.inventory.plugin.enums.TimeSetting;
-import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
+import me.Vark123.EpicInventory.Content.InventoryContents;
+import me.Vark123.EpicInventory.Content.InventoryProvider;
+import me.Vark123.EpicInventory.Enums.TimeSetting;
+import me.Vark123.EpicInventory.Pagination.EpicInventory;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.BoosterSystem.Booster;
 import me.Vark123.EpicRPG.BoosterSystem.BoosterManager;
@@ -32,7 +32,7 @@ public class BoosterMenuManager {
 	private final ItemStack rudaBoost;
 	private final ItemStack event2Boost;
 	
-	private final RyseInventory inv;
+	private final EpicInventory inv;
 	
 	private final String pattern;
 	private final SimpleDateFormat simpleDateFormat;
@@ -55,7 +55,7 @@ public class BoosterMenuManager {
 		rudaBoost = new ItemStack(Material.LAPIS_LAZULI, 1);
 		event2Boost = new ItemStack(Material.KELP, 1);
 
-		inv = RyseInventory.builder()
+		inv = EpicInventory.builder()
 				.title(Main.getInstance().getPrefix() + " §6§lMODYFIKATORY")
 				.size(27)
 				.period(5, TimeSetting.SECONDS)

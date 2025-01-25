@@ -15,15 +15,15 @@ import org.bukkit.inventory.meta.ItemMeta;
 import de.tr7zw.nbtapi.NBTCompoundList;
 import de.tr7zw.nbtapi.NBTItem;
 import de.tr7zw.nbtapi.NBTListCompound;
-import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
-import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
-import io.github.rysefoxx.inventory.plugin.enums.DisabledEvents;
-import io.github.rysefoxx.inventory.plugin.enums.DisabledInventoryClick;
-import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.items.ItemExecutor;
 import lombok.AccessLevel;
 import lombok.Getter;
+import me.Vark123.EpicInventory.Content.InventoryContents;
+import me.Vark123.EpicInventory.Content.InventoryProvider;
+import me.Vark123.EpicInventory.Enums.DisabledEvents;
+import me.Vark123.EpicInventory.Enums.DisabledInventoryClick;
+import me.Vark123.EpicInventory.Pagination.EpicInventory;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Utils.Utils;
 
@@ -138,7 +138,7 @@ public class GemManager {
 	}
 	
 	public void openPowerfulGemCreator(Player p) {
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§3§lTworzenie Poteznych Gemow")
 			.size(36)
 			.ignoredSlots(powerfulFreeSlots)
@@ -154,7 +154,7 @@ public class GemManager {
 	}
 	
 	public void openAnnihilusGemCreator(Player p) {
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§3§lLaczenie Gemow")
 			.size(36)
 			.ignoredSlots(annihilusFreeSlots)
@@ -170,7 +170,7 @@ public class GemManager {
 	}
 	
 	public void openAnnihilusGemUpgrade(Player p) {
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§6§lUlepszenie Annihilusa")
 			.size(45)
 			.ignoredSlots(annihilusUpgradeFreeSlots)

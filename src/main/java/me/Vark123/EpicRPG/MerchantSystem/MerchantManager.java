@@ -7,13 +7,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
-import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
-import io.github.rysefoxx.inventory.plugin.enums.DisabledEvents;
-import io.github.rysefoxx.inventory.plugin.enums.DisabledInventoryClick;
-import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import lombok.AccessLevel;
 import lombok.Getter;
+import me.Vark123.EpicInventory.Content.InventoryContents;
+import me.Vark123.EpicInventory.Content.InventoryProvider;
+import me.Vark123.EpicInventory.Enums.Action;
+import me.Vark123.EpicInventory.Enums.DisabledEvents;
+import me.Vark123.EpicInventory.Enums.DisabledInventoryClick;
+import me.Vark123.EpicInventory.Pagination.EpicInventory;
 import me.Vark123.EpicRPG.Main;
 
 @Getter
@@ -83,11 +84,11 @@ public class MerchantManager {
 	}
 	
 	public void openSellMenu(Player p) {
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§6§l§oKupiec")
 			.size(54)
 			.ignoredSlots(freeSlots)
-//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.listener(MerchantEvents.getEvents().getClickEvent())

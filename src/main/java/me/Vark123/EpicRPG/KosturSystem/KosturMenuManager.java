@@ -10,15 +10,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import de.tr7zw.nbtapi.NBTItem;
-import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
-import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
-import io.github.rysefoxx.inventory.plugin.enums.DisabledEvents;
-import io.github.rysefoxx.inventory.plugin.enums.DisabledInventoryClick;
-import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.items.ItemExecutor;
 import lombok.AccessLevel;
 import lombok.Getter;
+import me.Vark123.EpicInventory.Content.InventoryContents;
+import me.Vark123.EpicInventory.Content.InventoryProvider;
+import me.Vark123.EpicInventory.Enums.DisabledEvents;
+import me.Vark123.EpicInventory.Enums.DisabledInventoryClick;
+import me.Vark123.EpicInventory.Pagination.EpicInventory;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Utils.Utils;
 
@@ -189,7 +189,7 @@ public class KosturMenuManager {
 	}
 	
 	public void openMenu(Player p) {
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§3§lRuniczny kostur")
 			.size(27)
 			.ignoredSlots(kosturFreeSlots)
@@ -205,7 +205,7 @@ public class KosturMenuManager {
 	}
 	
 	public void openMenu(Player p, ItemStack kostur) {
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§3§lRuniczny kostur")
 			.size(27)
 			.ignoredSlots(runesFreeSlots)
@@ -221,7 +221,7 @@ public class KosturMenuManager {
 	}
 	
 	public void openCreateMenu(Player p) {
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§3§lTworzenie kostura")
 			.size(36)
 			.ignoredSlots(createFreeSlots)

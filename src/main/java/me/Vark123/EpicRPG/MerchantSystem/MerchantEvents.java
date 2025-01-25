@@ -14,8 +14,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import de.tr7zw.nbtapi.NBTItem;
-import io.github.rysefoxx.inventory.plugin.other.EventCreator;
 import lombok.Getter;
+import me.Vark123.EpicInventory.Other.EventCreator;
 import me.Vark123.EpicRPG.Core.MoneySystem;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;

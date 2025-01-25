@@ -13,13 +13,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import io.github.rysefoxx.inventory.anvilgui.AnvilGUI.Builder;
-import io.github.rysefoxx.inventory.anvilgui.AnvilGUI.ResponseAction;
-import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
-import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
-import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
-import io.github.rysefoxx.inventory.plugin.enums.InventoryOpenerType;
-import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
+import me.Vark123.EpicInventory.Content.IntelligentItem;
+import me.Vark123.EpicInventory.Content.InventoryContents;
+import me.Vark123.EpicInventory.Content.InventoryProvider;
+import me.Vark123.EpicInventory.Enums.InventoryOpenerType;
+import me.Vark123.EpicInventory.Pagination.EpicInventory;
 import me.Vark123.EpicOptions.MenuSystem.OptionMenuManager;
 import me.Vark123.EpicOptions.PlayerSystem.OPlayer;
 import me.Vark123.EpicOptions.PlayerSystem.PlayerOption;
@@ -29,6 +27,8 @@ import me.Vark123.EpicRPG.Options.Serializables.ScoreboardSerializable;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.clip.placeholderapi.PlaceholderAPI;
+import net.wesjd.anvilgui.AnvilGUI.Builder;
+import net.wesjd.anvilgui.AnvilGUI.ResponseAction;
 
 public final class ScoreboardOptionMenuManager {
 
@@ -158,7 +158,7 @@ public final class ScoreboardOptionMenuManager {
 		PlayerOption<ScoreboardSerializable> option = (PlayerOption<ScoreboardSerializable>) op.getPlayerOptionByID("epicrpg_scoreboard").orElseThrow();
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		
-		RyseInventory.builder()
+		EpicInventory.builder()
 //			.title("§7§lUSTAWIENIA - §e§lSCOREBOARD")
 			.disableUpdateTask()
 			.rows(3)
@@ -218,7 +218,7 @@ public final class ScoreboardOptionMenuManager {
 		@SuppressWarnings("unchecked")
 		PlayerOption<ScoreboardSerializable> option = (PlayerOption<ScoreboardSerializable>) op.getPlayerOptionByID("epicrpg_scoreboard").orElseThrow();
 		
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§7§lUSTAWIENIA - §e§lSCOREBOARD")
 			.disableUpdateTask()
 			.rows(2)
@@ -259,7 +259,7 @@ public final class ScoreboardOptionMenuManager {
 		@SuppressWarnings("unchecked")
 		PlayerOption<ScoreboardSerializable> option = (PlayerOption<ScoreboardSerializable>) op.getPlayerOptionByID("epicrpg_scoreboard").orElseThrow();
 		
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§7§lUSTAWIENIA - §e§lSCOREBOARD")
 			.rows(5)
 			.disableUpdateTask()
@@ -305,7 +305,7 @@ public final class ScoreboardOptionMenuManager {
 		@SuppressWarnings("unchecked")
 		PlayerOption<ScoreboardSerializable> option = (PlayerOption<ScoreboardSerializable>) op.getPlayerOptionByID("epicrpg_scoreboard").orElseThrow();
 		
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§7§lUSTAWIENIA - §e§lSCOREBOARD")
 			.disableUpdateTask()
 			.type(InventoryOpenerType.ANVIL)
@@ -343,7 +343,7 @@ public final class ScoreboardOptionMenuManager {
 		@SuppressWarnings("unchecked")
 		PlayerOption<ScoreboardSerializable> option = (PlayerOption<ScoreboardSerializable>) op.getPlayerOptionByID("epicrpg_scoreboard").orElseThrow();
 		
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§7§lUSTAWIENIA - §e§lSCOREBOARD")
 			.disableUpdateTask()
 			.type(InventoryOpenerType.ANVIL)
@@ -379,7 +379,7 @@ public final class ScoreboardOptionMenuManager {
 		@SuppressWarnings("unchecked")
 		PlayerOption<ScoreboardSerializable> option = (PlayerOption<ScoreboardSerializable>) op.getPlayerOptionByID("epicrpg_scoreboard").orElseThrow();
 		
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§7§lUSTAWIENIA - §e§lSCOREBOARD")
 			.rows(5)
 			.disableUpdateTask()

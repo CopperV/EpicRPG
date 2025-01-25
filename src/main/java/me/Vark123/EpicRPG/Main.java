@@ -9,8 +9,8 @@ import org.bukkit.scheduler.BukkitTask;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 
-import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
 import lombok.Getter;
+import me.Vark123.EpicInventory.Pagination.InventoryManager;
 import me.Vark123.EpicRPG.Files.FileOperations;
 import me.Vark123.EpicRPG.MySQL.DBOperations;
 import me.Vark123.EpicRPG.Placeholders.MiscPlaceholders;

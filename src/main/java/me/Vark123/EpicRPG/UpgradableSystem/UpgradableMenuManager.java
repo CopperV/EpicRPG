@@ -16,14 +16,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import de.tr7zw.nbtapi.NBTItem;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
-import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
-import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
-import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
-import io.github.rysefoxx.inventory.plugin.enums.DisabledEvents;
-import io.github.rysefoxx.inventory.plugin.enums.DisabledInventoryClick;
-import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.Getter;
+import me.Vark123.EpicInventory.Content.IntelligentItem;
+import me.Vark123.EpicInventory.Content.InventoryContents;
+import me.Vark123.EpicInventory.Content.InventoryProvider;
+import me.Vark123.EpicInventory.Enums.DisabledEvents;
+import me.Vark123.EpicInventory.Enums.DisabledInventoryClick;
+import me.Vark123.EpicInventory.Pagination.EpicInventory;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Utils.Utils;
 
@@ -345,7 +345,7 @@ public final class UpgradableMenuManager {
 				
 			}
 			@Override
-			public void close(Player player, RyseInventory inventory) {
+			public void close(Player player, EpicInventory inventory) {
 				Inventory inv = inventory.getInventory();
 				for(int i = 0; i < upgradableFreeSlots.length; ++i) {
 					int slot = upgradableFreeSlots[i];
@@ -366,7 +366,7 @@ public final class UpgradableMenuManager {
 	}
 	
 	public void openUpgradableMenu(Player p) {
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§7§lWielki Piec")
 			.rows(6)
 			.ignoredSlots(upgradableFreeSlots)

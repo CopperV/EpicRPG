@@ -6,12 +6,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import de.tr7zw.nbtapi.NBTItem;
-import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
-import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
-import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
-import io.github.rysefoxx.inventory.plugin.enums.DisabledEvents;
-import io.github.rysefoxx.inventory.plugin.enums.DisabledInventoryClick;
-import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
+import me.Vark123.EpicInventory.Content.IntelligentItem;
+import me.Vark123.EpicInventory.Content.InventoryContents;
+import me.Vark123.EpicInventory.Content.InventoryProvider;
+import me.Vark123.EpicInventory.Enums.DisabledEvents;
+import me.Vark123.EpicInventory.Enums.DisabledInventoryClick;
+import me.Vark123.EpicInventory.Pagination.EpicInventory;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Jewelry.JewelryMenuManager;
 import me.Vark123.EpicRPG.Stats.ChangeStats;
@@ -67,7 +67,7 @@ public final class AdditionalMenuManager {
 	}
 	
 	public void openBaseMenu(Player p) {
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§7Ekwipunek §7"+p.getName())
 			.rows(1)
 			.disableUpdateTask()
@@ -80,7 +80,7 @@ public final class AdditionalMenuManager {
 		if(!PlayerManager.getInstance().playerExists(p))
 			return;
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§7§lBRON NA PLECY")
 			.rows(1)
 			.disableUpdateTask()
@@ -104,7 +104,7 @@ public final class AdditionalMenuManager {
 					contents.set(4, it);
 				}
 				@Override
-				public void close(Player player, RyseInventory inventory) {
+				public void close(Player player, EpicInventory inventory) {
 					ItemStack it = inventory.getInventory().getItem(4);
 					if(it == null) {
 						rpg.setBackItem(it);

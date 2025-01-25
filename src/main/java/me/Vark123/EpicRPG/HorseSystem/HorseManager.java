@@ -9,12 +9,12 @@ import java.util.Map;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
-import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
-import io.github.rysefoxx.inventory.plugin.enums.DisabledEvents;
-import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import lombok.AccessLevel;
 import lombok.Getter;
+import me.Vark123.EpicInventory.Content.InventoryContents;
+import me.Vark123.EpicInventory.Content.InventoryProvider;
+import me.Vark123.EpicInventory.Enums.DisabledEvents;
+import me.Vark123.EpicInventory.Pagination.EpicInventory;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Files.FileOperations;
 import me.Vark123.EpicRPG.HorseSystem.Horses.BaseHorse;
@@ -89,7 +89,7 @@ public class HorseManager {
 				.map(this::getHorse).toList();
 		int size = 1 + (horses.size()-1)/9;
 		size *= 9;
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§7§lWybor wierzchowca")
 			.size(size)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)

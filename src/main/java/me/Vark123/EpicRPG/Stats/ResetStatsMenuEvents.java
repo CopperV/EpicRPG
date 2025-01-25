@@ -7,8 +7,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 
-import io.github.rysefoxx.inventory.plugin.other.EventCreator;
 import lombok.Getter;
+import me.Vark123.EpicInventory.Other.EventCreator;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 

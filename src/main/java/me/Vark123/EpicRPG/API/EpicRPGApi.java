@@ -2,8 +2,8 @@ package me.Vark123.EpicRPG.API;
 
 import org.bukkit.Bukkit;
 
-import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
 import lombok.Getter;
+import me.Vark123.EpicInventory.Pagination.InventoryManager;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Chat.ChatManager;
 import me.Vark123.EpicRPG.Core.CoinsSystem;

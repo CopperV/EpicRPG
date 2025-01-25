@@ -17,8 +17,8 @@ import org.bukkit.inventory.ItemStack;
 
 import de.tr7zw.nbtapi.NBTItem;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
-import io.github.rysefoxx.inventory.plugin.other.EventCreator;
 import lombok.Getter;
+import me.Vark123.EpicInventory.Other.EventCreator;
 import me.Vark123.EpicRPG.Utils.Utils;
 
 @Getter

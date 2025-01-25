@@ -10,12 +10,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import de.tr7zw.nbtapi.NBTItem;
-import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
-import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
-import io.github.rysefoxx.inventory.plugin.enums.DisabledEvents;
-import io.github.rysefoxx.inventory.plugin.enums.DisabledInventoryClick;
-import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import lombok.Getter;
+import me.Vark123.EpicInventory.Content.InventoryContents;
+import me.Vark123.EpicInventory.Content.InventoryProvider;
+import me.Vark123.EpicInventory.Enums.DisabledEvents;
+import me.Vark123.EpicInventory.Enums.DisabledInventoryClick;
+import me.Vark123.EpicInventory.Pagination.EpicInventory;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
@@ -120,7 +120,7 @@ public class JewelryMenuManager {
 		if(!PlayerManager.getInstance().playerExists(owner))
 			return;
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(owner);
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§6§lBizuteria")
 			.size(18)
 			.ignoredSlots(freeSlots)
@@ -169,7 +169,7 @@ public class JewelryMenuManager {
 			}
 
 			@Override
-			public void close(Player player, RyseInventory inventory) {
+			public void close(Player player, EpicInventory inventory) {
 				
 				Player p = owner.getPlayer();
 				RpgJewelry jewelry = owner.getJewelry();

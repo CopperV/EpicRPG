@@ -12,12 +12,12 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
-import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
-import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
-import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import lombok.AccessLevel;
 import lombok.Getter;
+import me.Vark123.EpicInventory.Content.IntelligentItem;
+import me.Vark123.EpicInventory.Content.InventoryContents;
+import me.Vark123.EpicInventory.Content.InventoryProvider;
+import me.Vark123.EpicInventory.Pagination.EpicInventory;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.UpgradableSystem.UpgradableInhibitor.InhibitorCrafting;
 
@@ -99,7 +99,7 @@ public final class InhibitorMenuManager {
 		int end = (MAX_RECIPES_TO_VIEW_PER_PAGE*(page+1)) > inhibitors.size() ? inhibitors.size() : (MAX_RECIPES_TO_VIEW_PER_PAGE*(page+1));
 		int pages = (inhibitors.size() - 1) / MAX_RECIPES_TO_VIEW_PER_PAGE + 1;
 		
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§6§lDestylacja Inhibitorow")
 			.size(MAX_RECIPES_TO_VIEW_PER_PAGE+9)
 			.disableUpdateTask()

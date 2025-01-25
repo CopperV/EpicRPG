@@ -14,10 +14,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import de.tr7zw.nbtapi.NBTItem;
-import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
-import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
-import io.github.rysefoxx.inventory.plugin.enums.DisabledEvents;
-import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
+import me.Vark123.EpicInventory.Content.InventoryContents;
+import me.Vark123.EpicInventory.Content.InventoryProvider;
+import me.Vark123.EpicInventory.Enums.DisabledEvents;
+import me.Vark123.EpicInventory.Pagination.EpicInventory;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.OldRuneSystem.ARune;
 import me.Vark123.EpicRPG.OldRuneSystem.ItemStackRune;
@@ -107,7 +107,7 @@ public class KamiennyObserwator extends ARune {
 	}
 	
 	public static void openRyseMenu(Player p) {
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§7§lKamienny obserwator")
 			.size(54)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)

@@ -5,11 +5,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
-import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
-import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 import lombok.AccessLevel;
 import lombok.Getter;
+import me.Vark123.EpicInventory.Content.InventoryContents;
+import me.Vark123.EpicInventory.Content.InventoryProvider;
+import me.Vark123.EpicInventory.Pagination.EpicInventory;
 import me.Vark123.EpicRPG.Main;
 
 @Getter
@@ -67,7 +67,7 @@ public class ResetStatsMenuManager {
 	}
 	
 	public void open(Player p) {
-		RyseInventory.builder()
+		EpicInventory.builder()
 			.title("§7§l§oResetowanie statystyk")
 			.size(9)
 			.listener(ResetStatsMenuEvents.getEvents().getClickEvent())
