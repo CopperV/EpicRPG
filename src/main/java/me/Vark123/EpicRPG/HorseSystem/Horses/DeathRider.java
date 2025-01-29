@@ -6,14 +6,15 @@ import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.craftbukkit.v1_21_R1.entity.CraftEntity;
 import org.bukkit.entity.Horse;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.Horse.Color;
 import org.bukkit.entity.Horse.Style;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.Vark123.EpicRPG.HorseSystem.AEpicHorse;
 import net.minecraft.world.entity.EntityLiving;
 
@@ -58,9 +59,10 @@ public class DeathRider extends AEpicHorse {
 				"§4★ §8Predkosc: §7"+String.format("%.2f", speed*100)+"%"));
 		it.setItemMeta(im);
 		
-		NBTItem nbt = new NBTItem(it);
+		ReadWriteNBT nbt = NBT.itemStackToNBT(it);
 		nbt.setString("MountSummonClass", getClass().getName());
-		nbt.applyNBT(it);
+//		nbt.applyNBT(it);
+		it = NBT.itemStackFromNBT(nbt);
 		
 		return it;
 	}

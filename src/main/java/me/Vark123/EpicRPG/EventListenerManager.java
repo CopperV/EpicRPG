@@ -30,9 +30,17 @@ import me.Vark123.EpicRPG.Core.Listeners.PlayerJumpModifyListener;
 import me.Vark123.EpicRPG.Core.Listeners.VipBoostControlListener;
 import me.Vark123.EpicRPG.Dungeons.Listeners.KoszmarKrukaPotionDebuffListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.EntityDamageListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.EntityDeathListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.EntityLastDamageCauseListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.EntityPostDamageListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.FallDamageListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.FireworkDamageListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.LavaDamageListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.ProjectileLaunchListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.SelfShootProtectionListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.VoidDamageListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Death.EntityDeathCmdExecuteListeners;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Death.EntityDeathVaultListener;
 import me.Vark123.EpicRPG.Gems.GemPlaceProtEvent;
 import me.Vark123.EpicRPG.HealthSystem.PlayerHealEvent;
 import me.Vark123.EpicRPG.HorseSystem.HorseDismountEvent;
@@ -165,9 +173,18 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new HalloweenBossSpawnListener(), inst);
 
 		Bukkit.getPluginManager().registerEvents(new EntityDamageListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new EntityDeathListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new EntityPostDamageListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new EntityLastDamageCauseListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new ProjectileLaunchListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new FallDamageListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new FireworkDamageListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new LavaDamageListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new VoidDamageListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new SelfShootProtectionListener(), inst);
+
+		Bukkit.getPluginManager().registerEvents(new EntityDeathCmdExecuteListeners(), inst);
+		Bukkit.getPluginManager().registerEvents(new EntityDeathVaultListener(), inst);
 
 		Bukkit.getPluginManager().registerEvents(new RuneInteractListener(), inst);
 		

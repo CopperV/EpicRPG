@@ -12,15 +12,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.tr7zw.nbtapi.NBTCompoundList;
-import de.tr7zw.nbtapi.NBTItem;
-import de.tr7zw.nbtapi.NBTListCompound;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBTCompoundList;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.items.ItemExecutor;
 import lombok.AccessLevel;
 import lombok.Getter;
 import me.Vark123.EpicInventory.Content.InventoryContents;
 import me.Vark123.EpicInventory.Content.InventoryProvider;
+import me.Vark123.EpicInventory.Enums.Action;
 import me.Vark123.EpicInventory.Enums.DisabledEvents;
 import me.Vark123.EpicInventory.Enums.DisabledInventoryClick;
 import me.Vark123.EpicInventory.Pagination.EpicInventory;
@@ -142,7 +143,7 @@ public class GemManager {
 			.title("§3§lTworzenie Poteznych Gemow")
 			.size(36)
 			.ignoredSlots(powerfulFreeSlots)
-//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.listener(GemEvents.getEvents().getPowerfulClickEvent())
@@ -158,7 +159,7 @@ public class GemManager {
 			.title("§3§lLaczenie Gemow")
 			.size(36)
 			.ignoredSlots(annihilusFreeSlots)
-//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.listener(GemEvents.getEvents().getAnnihilusClickEvent())
@@ -174,7 +175,7 @@ public class GemManager {
 			.title("§6§lUlepszenie Annihilusa")
 			.size(45)
 			.ignoredSlots(annihilusUpgradeFreeSlots)
-//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.listener(GemEvents.getEvents().getAnnihilusUpgradeClickEvent())
@@ -186,13 +187,13 @@ public class GemManager {
 	}
 	
 	public ItemStack getAnnihilus(ItemStack it1, ItemStack it2) {
-		NBTItem nbtit1 = new NBTItem(it1);
-		NBTItem nbtit2 = new NBTItem(it2);
+		ReadWriteNBT nbtit1 = NBT.itemStackToNBT(it1);
+		ReadWriteNBT nbtit2 = NBT.itemStackToNBT(it2);
 		
 		ItemExecutor manag = MythicBukkit.inst().getItemManager();
 		ItemStack it = manag.getItemStack("Gem_Annihilus");
-		if(nbtit1.hasTag("MYTHIC_TYPE")
-				&& nbtit1.getString("MYTHIC_TYPE").equals("Gem_Annihilus"))
+		if(Utils.isMythicMobItem(it1)
+				&& Utils.getMythicMobItemType(it1).equals("Gem_Annihilus"))
 			it = manag.getItemStack("Gem_Annihilus_I");
 		
 		Map<String, Integer> staty = new ConcurrentHashMap<>();
@@ -217,9 +218,9 @@ public class GemManager {
 			staty.put(tmpArr[0], present+value);
 		});
 		
-		NBTCompoundList listTmp = nbtit1.getCompoundList("AttributeModifiers");
+		ReadWriteNBTCompoundList listTmp = nbtit1.getCompoundList("AttributeModifiers");
 		for(int i = 0; i < listTmp.size(); ++i) {
-			NBTListCompound lc = listTmp.get(i);
+			ReadWriteNBT lc = listTmp.get(i);
 			switch(lc.getString("Name").toLowerCase().replace("generic.", "")) {
 				case "max_health":
 					hp += lc.getDouble("Amount");
@@ -235,7 +236,7 @@ public class GemManager {
 		
 		listTmp = nbtit2.getCompoundList("AttributeModifiers");
 		for(int i = 0; i < listTmp.size(); ++i) {
-			NBTListCompound lc = listTmp.get(i);
+			ReadWriteNBT lc = listTmp.get(i);
 			switch(lc.getString("Name").toLowerCase().replace("generic.", "")) {
 				case "max_health":
 					hp += lc.getDouble("Amount");
@@ -264,12 +265,12 @@ public class GemManager {
 			im.setLore(newLore);
 			it.setItemMeta(im);
 		}
-		NBTItem nbtit = new NBTItem(it);
-		NBTCompoundList attribute = nbtit.getCompoundList("AttributeModifiers");
+		ReadWriteNBT nbtit = NBT.itemStackToNBT(it);
+		ReadWriteNBTCompoundList attribute = nbtit.getCompoundList("AttributeModifiers");
 		
 		if(hp != 0) {
 			UUID uuid = UUID.randomUUID();
-			NBTListCompound hpTag = attribute.addCompound();
+			ReadWriteNBT hpTag = attribute.addCompound();
 			hpTag.setString("AttributeName", "generic.max_health");
 			hpTag.setString("Name", "generic.max_health");
 			hpTag.setDouble("Amount", hp);
@@ -281,7 +282,7 @@ public class GemManager {
 		
 		if(knock != 0) {
 			UUID uuid = UUID.randomUUID();
-			NBTListCompound knockTag = attribute.addCompound();
+			ReadWriteNBT knockTag = attribute.addCompound();
 			knockTag.setString("AttributeName", "generic.knockback_resistance");
 			knockTag.setString("Name", "generic.knockback_resistance");
 			knockTag.setDouble("Amount", knock);
@@ -293,7 +294,7 @@ public class GemManager {
 		
 		if(speed != 0) {
 			UUID uuid = UUID.randomUUID();
-			NBTListCompound speedTag = attribute.addCompound();
+			ReadWriteNBT speedTag = attribute.addCompound();
 			speedTag.setString("AttributeName", "generic.movement_speed");
 			speedTag.setString("Name", "generic.movement_speed");
 			speedTag.setDouble("Amount", speed);
@@ -307,7 +308,8 @@ public class GemManager {
 		if(nbtit.hasTag("annihilus"))
 			level = nbtit.getInteger("annihilus");
 		nbtit.setInteger("annihilus", level + 1);
-		nbtit.applyNBT(it);
+//		nbtit.applyNBT(it);
+		it = NBT.itemStackFromNBT(nbtit);
 		
 		return it;
 	}

@@ -15,7 +15,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Files.FileOperations;
 import me.Vark123.EpicRPG.HorseSystem.Horses.BaseHorse;
@@ -31,6 +32,7 @@ import me.Vark123.EpicRPG.HorseSystem.Horses.IronHorse;
 import me.Vark123.EpicRPG.HorseSystem.Horses.KidHorse;
 import me.Vark123.EpicRPG.HorseSystem.Horses.MasterHorse;
 import me.Vark123.EpicRPG.HorseSystem.Horses.SpringSteed;
+import me.Vark123.EpicRPG.Utils.Utils;
 
 public class HorseStickUseEvent implements Listener {
 
@@ -48,8 +50,7 @@ public class HorseStickUseEvent implements Listener {
 		if(!it.getType().equals(Material.CARROT_ON_A_STICK))
 			return;
 
-		NBTItem nbt = new NBTItem(it);
-		if(!nbt.hasTag("MYTHIC_TYPE"))
+		if(!Utils.isMythicMobItem(it))
 			return;
 		
 		if(p.isInsideVehicle()) {
@@ -64,7 +65,7 @@ public class HorseStickUseEvent implements Listener {
 		List<String> horses = fYml.contains("horses") ? fYml.getStringList("horses") : new LinkedList<>();
 
 		AEpicHorse horse;
-		switch(nbt.getString("MYTHIC_TYPE")) {
+		switch(Utils.getMythicMobItemType(it)) {
 			case "Kon1":
 				horse = new BaseHorse();
 				if(!horses.contains("1")) {

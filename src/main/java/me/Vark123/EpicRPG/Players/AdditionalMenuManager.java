@@ -5,10 +5,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.Vark123.EpicInventory.Content.IntelligentItem;
 import me.Vark123.EpicInventory.Content.InventoryContents;
 import me.Vark123.EpicInventory.Content.InventoryProvider;
+import me.Vark123.EpicInventory.Enums.Action;
 import me.Vark123.EpicInventory.Enums.DisabledEvents;
 import me.Vark123.EpicInventory.Enums.DisabledInventoryClick;
 import me.Vark123.EpicInventory.Pagination.EpicInventory;
@@ -85,7 +87,7 @@ public final class AdditionalMenuManager {
 			.rows(1)
 			.disableUpdateTask()
 			.ignoredSlots(4)
-//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.disableUpdateTask()
@@ -112,8 +114,8 @@ public final class AdditionalMenuManager {
 						return;
 					}
 					
-					NBTItem nbt = new NBTItem(it);
-					if(!nbt.hasTag("MYTHIC_TYPE") || nbt.hasTag("Klejnot")
+					ReadWriteNBT nbt = NBT.itemStackToNBT(it);
+					if(!Utils.isMythicMobItem(it) || nbt.hasTag("Klejnot")
 							|| (nbt.hasTag("RPGType") && nbt.getString("RPGType").equals("gem"))
 							|| nbt.hasTag("JewerlyType")) {
 						p.sendMessage(it.getItemMeta().getDisplayName()+"§cnie moze zostac zalozony na plecy!");

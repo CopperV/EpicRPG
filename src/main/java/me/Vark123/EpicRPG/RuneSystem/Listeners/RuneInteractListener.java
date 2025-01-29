@@ -11,7 +11,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.NBTItem;
 import de.tr7zw.nbtapi.iface.ReadableNBT;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import me.Vark123.EpicRPG.Players.PlayerManager;
@@ -70,8 +69,7 @@ public class RuneInteractListener implements Listener {
 		if(!Utils.isRune(originalRune))
 			return;
 	
-		NBTItem nbt = new NBTItem(originalRune);
-		String mmType = nbt.getString("MYTHIC_TYPE");
+		String mmType = Utils.getMythicMobItemType(originalRune);
 		ItemStack rune = MythicBukkit.inst().getItemManager().getItemStack(mmType);
 		
 		if(RuneManager.get().tryCastRune(rpg, rune)) {

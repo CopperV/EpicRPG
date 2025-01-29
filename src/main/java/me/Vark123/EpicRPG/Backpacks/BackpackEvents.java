@@ -15,6 +15,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.NBTItem;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import lombok.Getter;
@@ -28,6 +29,7 @@ public class BackpackEvents {
 	
 	private final EventCreator<InventoryClickEvent> clickEvent;
 	private final EventCreator<InventoryCloseEvent> closeEvent;
+	@Deprecated
 	private final EventCreator<InventoryCloseEvent> repairCloseEvent;
 	private final EventCreator<InventoryClickEvent> clickUpgradeEvent;
 	private final EventCreator<InventoryCloseEvent> closeUpgradeEvent;
@@ -69,7 +71,7 @@ public class BackpackEvents {
 						|| it.getType().equals(Material.AIR))
 					continue;
 				
-				NBTItem nbtIt = new NBTItem(it);
+				ReadWriteNBT nbtIt = NBT.itemStackToNBT(it);
 				if(!nbtIt.hasTag("soulbind")
 						|| !nbtIt.getString("soulbind").equalsIgnoreCase(e.getWhoClicked().getName())) {
 					toReturn.add(it);
@@ -243,7 +245,7 @@ public class BackpackEvents {
 					return;
 				}
 				
-				NBTItem nbtIt = new NBTItem(katedraIt);
+				ReadWriteNBT nbtIt = NBT.itemStackToNBT(katedraIt);
 				if(!nbtIt.hasTag("soulbind")
 						|| !nbtIt.getString("soulbind").equalsIgnoreCase(p.getName())) {
 					p.closeInventory();
@@ -261,7 +263,7 @@ public class BackpackEvents {
 			}
 
 			ItemStack oldBackpack = inv.getItem(slots[7]);
-			NBTItem nbt = new NBTItem(oldBackpack);
+			ReadWriteNBT nbt = NBT.itemStackToNBT(oldBackpack);
 			ReadWriteNBT compund = nbt.getCompound("PublicBukkitValues");
 			if(!compund.hasTag("fancybags:backpackid") || compund.getInteger("fancybags:backpackid") != 3){
 				p.closeInventory();

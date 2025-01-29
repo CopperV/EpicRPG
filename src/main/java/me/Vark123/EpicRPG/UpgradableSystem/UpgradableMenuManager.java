@@ -14,7 +14,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.Getter;
@@ -133,7 +133,7 @@ public final class UpgradableMenuManager {
 						return;
 					}
 					
-					NBTItem upgradableItemNbt = new NBTItem(upgradableItem);
+					ReadWriteNBT upgradableItemNbt = NBT.itemStackToNBT(upgradableItem);
 					ReadWriteNBT upgradableNbt = upgradableItemNbt.getOrCreateCompound("epic-upgrades");
 					int level = 0;
 					if(upgradableNbt.hasTag("level"))
@@ -178,10 +178,9 @@ public final class UpgradableMenuManager {
 						Collection<String> check = new LinkedList<>();
 						Map<String,Integer> recipe = upgradableLevel.getMmIdCosts();
 						items.forEach((item, slot) -> {
-							NBTItem nbt = new NBTItem(item);
-							if(!nbt.hasTag("MYTHIC_TYPE"))
+							if(!Utils.isMythicMobItem(item))
 								return;
-							String mmId = nbt.getString("MYTHIC_TYPE");
+							String mmId = Utils.getMythicMobItemType(item);
 							if(!recipe.containsKey(mmId))
 								return;
 							if(item.getAmount() < recipe.get(mmId))
@@ -262,7 +261,7 @@ public final class UpgradableMenuManager {
 					return;
 				}
 				
-				NBTItem upgradableItemNbt = new NBTItem(upgradableItem);
+				ReadWriteNBT upgradableItemNbt = NBT.itemStackToNBT(upgradableItem);
 				int level = 0;
 				if(upgradableItemNbt.hasTag("epic-upgrades")
 						&& upgradableItemNbt.getCompound("epic-upgrades").hasTag("level"))

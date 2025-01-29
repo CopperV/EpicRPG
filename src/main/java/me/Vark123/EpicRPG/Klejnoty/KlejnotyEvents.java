@@ -19,11 +19,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.tr7zw.nbtapi.NBTCompound;
-import de.tr7zw.nbtapi.NBTCompoundList;
-import de.tr7zw.nbtapi.NBTItem;
-import de.tr7zw.nbtapi.NBTListCompound;
+import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBTCompoundList;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.items.ItemExecutor;
 import lombok.Getter;
@@ -84,8 +82,8 @@ public class KlejnotyEvents {
 				return;
 			}
 			
-			NBTItem itemNBT = new NBTItem(item);
-			NBTItem klejnotNBT = new NBTItem(klejnot);
+			ReadWriteNBT itemNBT = NBT.itemStackToNBT(item);
+			ReadWriteNBT klejnotNBT = NBT.itemStackToNBT(klejnot);
 			if(!itemNBT.hasTag("FreeSlots")
 					|| !klejnotNBT.hasTag("Klejnot")) {
 				p.closeInventory();
@@ -103,9 +101,9 @@ public class KlejnotyEvents {
 				freeSlots = itemNBT.getInteger("FreeSlots");
 			}
 			
-			String klejnotName = klejnotNBT.getString("MYTHIC_TYPE");
+			String klejnotName = Utils.getMythicMobItemType(klejnot);
 			if(itemNBT.hasTag("Klejnoty")) {
-				NBTCompound nbt = itemNBT.getCompound("Klejnoty");
+				ReadWriteNBT nbt = itemNBT.getCompound("Klejnoty");
 				int size = nbt.getInteger("amount");
 				for(int i = 1; i <= size; ++i) {
 					if(nbt.getString("slot"+i).equalsIgnoreCase(klejnotName)){
@@ -117,7 +115,7 @@ public class KlejnotyEvents {
 				nbt.setInteger("amount", size);
 				nbt.setString("slot"+size, klejnotName);
 			}else {
-				NBTCompound comp = itemNBT.getOrCreateCompound("Klejnoty");
+				ReadWriteNBT comp = itemNBT.getOrCreateCompound("Klejnoty");
 				comp.setInteger("amount", 1);
 				comp.setString("slot1", klejnotName);
 			}
@@ -155,9 +153,9 @@ public class KlejnotyEvents {
 			lookingSlots.add("mainhand");
 			lookingSlots.add("offhand");
 			
-			NBTCompoundList klejnotStats = klejnotNBT.getCompoundList("AttributeModifiers");
+			ReadWriteNBTCompoundList klejnotStats = klejnotNBT.getCompoundList("AttributeModifiers");
 			for(int i = 0; i < klejnotStats.size(); ++i) {
-				NBTListCompound lc = klejnotStats.get(i);
+				ReadWriteNBT lc = klejnotStats.get(i);
 				if(!lc.hasTag("Slot")) {
 					lookingSlots.stream().forEach(s -> {
 						switch(lc.getString("Name").toLowerCase().replace("generic.", "")) {
@@ -191,9 +189,9 @@ public class KlejnotyEvents {
 				}
 			}
 
-			NBTCompoundList itemStats = itemNBT.getCompoundList("AttributeModifiers");
+			ReadWriteNBTCompoundList itemStats = itemNBT.getCompoundList("AttributeModifiers");
 			for(int i = 0; i < itemStats.size(); ++i) {
-				NBTListCompound lc = itemStats.get(i);
+				ReadWriteNBT lc = itemStats.get(i);
 				String strSlot = lc.getString("Slot");
 				double tmp;
 				switch(lc.getString("Name").toLowerCase().replace("generic.", "")) {
@@ -223,7 +221,7 @@ public class KlejnotyEvents {
 			
 			hpSlots.forEach((strSlot, value) -> {
 				UUID uuid = UUID.randomUUID();
-				NBTListCompound lc = itemStats.addCompound();
+				ReadWriteNBT lc = itemStats.addCompound();
 				lc.setString("AttributeName", "generic.max_health");
 				lc.setString("Name", "generic.max_health");
 				lc.setDouble("Amount", value);
@@ -234,7 +232,7 @@ public class KlejnotyEvents {
 			});
 			knockSlots.forEach((strSlot, value) -> {
 				UUID uuid = UUID.randomUUID();
-				NBTListCompound lc = itemStats.addCompound();
+				ReadWriteNBT lc = itemStats.addCompound();
 				lc.setString("AttributeName", "generic.knockback_resistance");
 				lc.setString("Name", "generic.knockback_resistance");
 				lc.setDouble("Amount", value);
@@ -245,7 +243,7 @@ public class KlejnotyEvents {
 			});
 			speedSlots.forEach((strSlot, value) -> {
 				UUID uuid = UUID.randomUUID();
-				NBTListCompound lc = itemStats.addCompound();
+				ReadWriteNBT lc = itemStats.addCompound();
 				lc.setString("AttributeName", "generic.movement_speed");
 				lc.setString("Name", "generic.movement_speed");
 				lc.setDouble("Amount", value);
@@ -255,7 +253,8 @@ public class KlejnotyEvents {
 				lc.setString("Slot", strSlot);
 			});
 
-			itemNBT.applyNBT(item);
+			item = NBT.itemStackFromNBT(itemNBT);
+//			itemNBT.applyNBT(item);
 			List<String> lore = item.getItemMeta().getLore();
 			
 			for(int i = 0; i < lore.size(); ++i) {
@@ -373,8 +372,8 @@ public class KlejnotyEvents {
 				return;
 			}
 			
-			NBTItem nbt = new NBTItem(it);
-			if(!nbt.hasTag("MYTHIC_TYPE")
+			ReadWriteNBT nbt = NBT.itemStackToNBT(it);
+			if(!Utils.isMythicMobItem(it)
 					|| !nbt.hasTag("FreeSlots")
 					|| !nbt.hasTag("Klejnoty")) {
 				p.closeInventory();
@@ -391,13 +390,14 @@ public class KlejnotyEvents {
 			List<ItemStack> toDrop = new LinkedList<>();
 			ItemExecutor manager = MythicBukkit.inst().getItemManager();
 			
-			ItemStack newItem = manager.getItemStack(nbt.getString("MYTHIC_TYPE"));
+			ItemStack newItem = manager.getItemStack(Utils.getMythicMobItemType(it));
 			if(nbt.hasTag("epic-upgrades")) {
-				NBTItem newItemNbt = new NBTItem(newItem);
+				ReadWriteNBT newItemNbt = NBT.itemStackToNBT(newItem);
 				ReadWriteNBT upgradesCompound = nbt.getCompound("epic-upgrades");
 				ReadWriteNBT newUpgradesCompound = newItemNbt.getOrCreateCompound("epic-upgrades");
 				newUpgradesCompound.mergeCompound(upgradesCompound);
-				newItemNbt.applyNBT(newItem);
+//				newItemNbt.applyNBT(newItem);
+				newItem = NBT.itemStackFromNBT(newItemNbt);
 				
 				ReadWriteNBT statsCompound = upgradesCompound.getOrCreateCompound("stats");
 				ItemMeta im = newItem.getItemMeta();
@@ -427,7 +427,7 @@ public class KlejnotyEvents {
 			}
 			toDrop.add(newItem);
 			
-			NBTCompound nbtCompound = nbt.getCompound("Klejnoty");
+			ReadWriteNBT nbtCompound = nbt.getCompound("Klejnoty");
 			int size = nbtCompound.getInteger("amount");
 			for(int i = 1; i <= size; ++i) {
 				String klejnotId = nbtCompound.getString("slot"+i);

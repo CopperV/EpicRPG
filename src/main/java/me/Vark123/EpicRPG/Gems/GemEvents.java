@@ -12,7 +12,8 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.Getter;
 import me.Vark123.EpicInventory.Other.EventCreator;
@@ -73,15 +74,15 @@ public class GemEvents {
 				return;
 			}
 			
-			NBTItem gemNBT = new NBTItem(gem);
+			ReadWriteNBT gemNBT = NBT.itemStackToNBT(gem);
 			if(!gemNBT.hasTag("RPGType")
 					|| !gemNBT.getString("RPGType").equalsIgnoreCase("gem")
-					|| !gemNBT.hasTag("MYTHIC_TYPE")) {
+					|| !Utils.isMythicMobItem(gem)) {
 				p.closeInventory();
 				return;
 			}
 			
-			String mmId = gemNBT.getString("MYTHIC_TYPE");
+			String mmId = Utils.getMythicMobItemType(gem);
 			int gemLevel = Character.getNumericValue(mmId.charAt(mmId.length()-1));
 			if(gemLevel != 3) {
 				p.closeInventory();
@@ -99,7 +100,7 @@ public class GemEvents {
 					return;
 				}
 				
-				NBTItem nbtIt = new NBTItem(it);
+				ReadWriteNBT nbtIt = NBT.itemStackToNBT(it);
 				if(!nbtIt.hasTag("soulbind")
 						|| !nbtIt.getString("soulbind").equalsIgnoreCase(e.getWhoClicked().getName())) {
 					p.closeInventory();
@@ -181,8 +182,8 @@ public class GemEvents {
 				return;
 			}
 			
-			NBTItem nbtGem1 = new NBTItem(gem1);
-			NBTItem nbtGem2 = new NBTItem(gem2);
+			ReadWriteNBT nbtGem1 = NBT.itemStackToNBT(gem1);
+			ReadWriteNBT nbtGem2 = NBT.itemStackToNBT(gem2);
 			if(!nbtGem1.hasTag("RPGType")
 					|| !nbtGem1.getString("RPGType").equalsIgnoreCase("gem")
 					|| (nbtGem1.hasTag("annihilus") && nbtGem1.getInteger("annihilus") == 1)
@@ -203,7 +204,7 @@ public class GemEvents {
 					return;
 				}
 				
-				NBTItem nbtIt = new NBTItem(it);
+				ReadWriteNBT nbtIt = NBT.itemStackToNBT(it);
 				if(!nbtIt.hasTag("soulbind")
 						|| !nbtIt.getString("soulbind").equalsIgnoreCase(e.getWhoClicked().getName())) {
 					p.closeInventory();
@@ -274,8 +275,8 @@ public class GemEvents {
 				return;
 			}
 			
-			NBTItem nbtAnnihilus = new NBTItem(annihilus);
-			NBTItem nbtGem = new NBTItem(gem);
+			ReadWriteNBT nbtAnnihilus = NBT.itemStackToNBT(annihilus);
+			ReadWriteNBT nbtGem = NBT.itemStackToNBT(gem);
 			if(!nbtAnnihilus.hasTag("RPGType")
 					|| !nbtAnnihilus.getString("RPGType").equalsIgnoreCase("gem")
 					|| !(nbtAnnihilus.hasTag("annihilus") && nbtAnnihilus.getInteger("annihilus") == 1)
@@ -296,7 +297,7 @@ public class GemEvents {
 					return;
 				}
 				
-				NBTItem nbtTrophy = new NBTItem(trophy);
+				ReadWriteNBT nbtTrophy = NBT.itemStackToNBT(trophy);
 				if(!nbtTrophy.hasTag("soulbind")
 						|| !nbtTrophy.getString("soulbind").equalsIgnoreCase(e.getWhoClicked().getName())) {
 					p.closeInventory();

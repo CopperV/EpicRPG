@@ -9,12 +9,14 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.items.ItemExecutor;
 import me.Vark123.EpicRPG.OldRuneSystem.RuneManager;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
+import me.Vark123.EpicRPG.Utils.Utils;
 
 public class KosturUseEvent implements Listener {
 
@@ -24,8 +26,8 @@ public class KosturUseEvent implements Listener {
 		if (kostur == null || kostur.getType().equals(Material.AIR))
 			return;
 
-		NBTItem nbt = new NBTItem(kostur);
-		if (!nbt.hasTag("Rozdzka") || !nbt.hasTag("MYTHIC_TYPE"))
+		ReadWriteNBT nbt = NBT.itemStackToNBT(kostur);
+		if (!nbt.hasTag("Rozdzka") || !Utils.isMythicMobItem(kostur))
 			return;
 
 		Player p = e.getPlayer();

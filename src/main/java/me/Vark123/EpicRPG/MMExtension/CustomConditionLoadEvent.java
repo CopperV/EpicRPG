@@ -7,6 +7,7 @@ import io.lumine.mythic.bukkit.events.MythicConditionLoadEvent;
 import io.lumine.mythic.core.skills.SkillCondition;
 import me.Vark123.EpicRPG.MMExtension.Conditions.BlockBelowCondition;
 import me.Vark123.EpicRPG.MMExtension.Conditions.CasterFieldOfViewCondition;
+import me.Vark123.EpicRPG.MMExtension.Conditions.DistanceFromSpawnLocationCondition;
 import me.Vark123.EpicRPG.MMExtension.Conditions.GeneralMobsInRadiusCondition;
 import me.Vark123.EpicRPG.MMExtension.Conditions.HealthCheckpointCondition;
 import me.Vark123.EpicRPG.MMExtension.Conditions.SneakingCondition;
@@ -46,6 +47,10 @@ public class CustomConditionLoadEvent implements Listener {
 				break;
 			case "blockbelow":
 				condition = new BlockBelowCondition(e.getConfig().getLine(), e.getConfig());
+				e.register(condition);
+				break;
+			case "distancefromspawnlocation":
+				condition = new DistanceFromSpawnLocationCondition(e.getConfig().getLine(), e.getConfig());
 				e.register(condition);
 				break;
 		}

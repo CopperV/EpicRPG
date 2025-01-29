@@ -9,7 +9,8 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.Getter;
 import me.Vark123.EpicInventory.Other.EventCreator;
@@ -51,9 +52,9 @@ public class SzponBeliaraEvents {
 				return;
 			}
 
-			NBTItem nbtSzpon = new NBTItem(szpon);
-			NBTItem nbtPakt = new NBTItem(pakt);
-			NBTItem nbtKamien = new NBTItem(kamien);
+			ReadWriteNBT nbtSzpon = NBT.itemStackToNBT(szpon);
+			ReadWriteNBT nbtPakt = NBT.itemStackToNBT(pakt);
+			ReadWriteNBT nbtKamien = NBT.itemStackToNBT(kamien);
 			if(!(nbtSzpon.hasTag("SzponBeliara") && !nbtSzpon.hasTag("FreeSlots"))
 					|| !nbtPakt.hasTag("SzponUpgrade")
 					|| !nbtKamien.hasTag("cave")) {

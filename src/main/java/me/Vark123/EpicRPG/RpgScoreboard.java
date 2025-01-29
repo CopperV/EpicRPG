@@ -4,8 +4,10 @@ import java.awt.Color;
 
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Criteria;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.RenderType;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
@@ -22,7 +24,11 @@ public class RpgScoreboard {
 			return;
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		Scoreboard board = rpg.getBoard();
-		Objective obj = board.registerNewObjective("test", "dummy", ChatColor.translateAlternateColorCodes('&', ChatColor.of(new Color(132, 165, 184)).toString()+""+ChatColor.BOLD+"Archolos &o#1"));
+		Objective obj = board.registerNewObjective(
+				"test", 
+				Criteria.DUMMY, 
+				ChatColor.translateAlternateColorCodes('&', ChatColor.of(new Color(132, 165, 184)).toString()+""+ChatColor.BOLD+"Archolos &o#1"),
+				RenderType.INTEGER);
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 		
 		board.registerNewTeam("rpg_info");

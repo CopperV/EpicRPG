@@ -10,7 +10,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
+import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class BackpackUtils {
@@ -63,7 +65,7 @@ public class BackpackUtils {
 	}
 	
 	public static boolean isBuggedBackpack(ItemStack it) {
-		NBTItem nbt = new NBTItem(it);
+		ReadWriteNBT nbt = NBT.itemStackToNBT(it);
 		return nbt.hasTag("BackpackID");
 	}
 	

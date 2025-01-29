@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import me.Vark123.EpicInventory.Content.InventoryContents;
 import me.Vark123.EpicInventory.Content.InventoryProvider;
+import me.Vark123.EpicInventory.Enums.Action;
 import me.Vark123.EpicInventory.Enums.DisabledEvents;
 import me.Vark123.EpicInventory.Enums.DisabledInventoryClick;
 import me.Vark123.EpicInventory.Pagination.EpicInventory;
@@ -71,7 +72,7 @@ public class MMRepairManager {
 			.title("§eWymiana przedmiotow")
 			.size(54)
 			.ignoredSlots(freeSlots)
-//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.listener(MMRepairEvents.getEvents().getClickEvent())

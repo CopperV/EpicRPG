@@ -8,7 +8,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
@@ -24,7 +25,7 @@ public class CheckStats {
 			return true;
 		if(Utils.isRune(item))
 			return false;
-		NBTItem nbtit = new NBTItem(item);
+		ReadWriteNBT nbtit = NBT.itemStackToNBT(item);
 		if(nbtit.hasTag("RPGType")) 
 			return false;
 		

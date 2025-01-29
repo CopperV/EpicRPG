@@ -17,8 +17,10 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.adapters.AbstractLocation;
 import io.lumine.mythic.api.adapters.AbstractVector;
@@ -33,7 +35,7 @@ public class Utils {
 	public static void resetSetInfo(ItemStack it) {
 		if(it == null || it.getType().equals(Material.AIR))
 			return;
-		NBTItem nbt = new NBTItem(it);
+		ReadWriteNBT nbt = NBT.itemStackToNBT(it);
 		if(!nbt.hasTag("EpicSet"))
 			return;
 		
@@ -64,7 +66,7 @@ public class Utils {
 	public static void setItemSetInfo(ItemStack it, int level) {
 		if(it == null || it.getType().equals(Material.AIR))
 			return;
-		NBTItem nbt = new NBTItem(it);
+		ReadWriteNBT nbt = NBT.itemStackToNBT(it);
 		if(!nbt.hasTag("EpicSet"))
 			return;
 
@@ -306,6 +308,14 @@ public class Utils {
 		}
 		
 		return (EntityDamageEvent) aEntity.getMetadata("LastDamageCause").get();
+	}
+	
+	public static boolean isMythicMobItem(@NotNull ItemStack it) {
+		return MythicBukkit.inst().getItemManager().isMythicItem(it);
+	}
+	
+	public static String getMythicMobItemType(@NotNull ItemStack it) {
+		return MythicBukkit.inst().getItemManager().getMythicTypeFromItem(it);
 	}
 	
 }

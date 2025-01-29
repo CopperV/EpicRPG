@@ -9,7 +9,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import de.tr7zw.nbtapi.NBTItem;
+import me.Vark123.EpicRPG.Utils.Utils;
 
 public class PotionDrinkEvent implements Listener {
 
@@ -22,8 +22,7 @@ public class PotionDrinkEvent implements Listener {
 		ItemStack it = e.getItem();
 		if (it == null || it.getType().equals(Material.AIR) || !it.getType().equals(Material.PLAYER_HEAD))
 			return;
-		NBTItem nbt = new NBTItem(it);
-		if (!nbt.hasTag("MYTHIC_TYPE"))
+		if (!Utils.isMythicMobItem(it))
 			return;
 		
 		Player p = e.getPlayer();

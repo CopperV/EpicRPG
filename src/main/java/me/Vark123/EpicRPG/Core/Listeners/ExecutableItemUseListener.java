@@ -17,7 +17,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.Vark123.EpicRPG.Main;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -41,7 +41,7 @@ public class ExecutableItemUseListener implements Listener {
 		if(item == null || item.getType().equals(Material.AIR))
 			return;
 
-		NBTItem nbtit = new NBTItem(item);
+		ReadWriteNBT nbtit = NBT.itemStackToNBT(item);
 		if(!nbtit.hasTag("epic_command") && !nbtit.hasTag("epic_commands"))
 			return;
 		

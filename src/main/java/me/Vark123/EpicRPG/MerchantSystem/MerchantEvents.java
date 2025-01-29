@@ -13,7 +13,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import lombok.Getter;
 import me.Vark123.EpicInventory.Other.EventCreator;
 import me.Vark123.EpicRPG.Core.MoneySystem;
@@ -57,7 +58,7 @@ public class MerchantEvents {
 							|| it.getType().equals(Material.AIR))
 						continue;
 					
-					NBTItem nbt = new NBTItem(it);
+					ReadWriteNBT nbt = NBT.itemStackToNBT(it);
 					if(nbt.hasTag("rpg_cost")) {
 						totalValue += it.getAmount()*Integer.valueOf(nbt.getString("rpg_cost"));
 					} else {
@@ -103,9 +104,10 @@ public class MerchantEvents {
 				
 				sellPrice.setItemMeta(im);
 				
-				NBTItem sellNBT = new NBTItem(sellPrice);
+				ReadWriteNBT sellNBT = NBT.itemStackToNBT(sellPrice);
 				sellNBT.setInteger("sell_info", totalValue);
-				sellNBT.applyNBT(sellPrice);
+				sellPrice = NBT.itemStackFromNBT(sellNBT);
+//				sellNBT.applyNBT(sellPrice);
 				inv.setItem(49, sellPrice);
 				
 				InventoryUtils.openConfirmationMenu((Player) e.getWhoClicked(), 
@@ -132,7 +134,7 @@ public class MerchantEvents {
 			if(slot == 46) {
 				if(!inv.getItem(slot).equals(MerchantManager.getInstance().getAccept()))
 					return;
-				int value = new NBTItem(e.getInventory().getItem(49)).getInteger("sell_info");
+				int value = NBT.itemStackToNBT(e.getInventory().getItem(49)).getInteger("sell_info");
 				e.getInventory().clear();
 				RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer((Player) e.getWhoClicked());
 				MoneySystem.getInstance().addMoney(rpg, value, "merchant");

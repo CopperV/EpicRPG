@@ -23,7 +23,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.Vark123.EpicRPG.HealthSystem.RpgPlayerHealEvent;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
@@ -43,7 +44,7 @@ public class RubyUseEvent implements Listener {
 				|| ruby.getType().equals(Material.AIR))
 			return;
 		
-		NBTItem nbt = new NBTItem(ruby);
+		ReadWriteNBT nbt = NBT.itemStackToNBT(ruby);
 		if(!(nbt.hasTag("RPGType")))
 			return;
 		
@@ -175,7 +176,8 @@ public class RubyUseEvent implements Listener {
 		p.playSound(p.getLocation(), sound, 1f, volume);
 		p.spawnParticle(Particle.DUST, p.getLocation().add(0, 1, 0), 30, 1f, 1f, 1f, 1f, dust);
 		
-		nbt.applyNBT(ruby);
+//		nbt.applyNBT(ruby);
+		ruby = NBT.itemStackFromNBT(nbt);
 		ItemMeta im = ruby.getItemMeta();
 		im.setLore(lore);
 		ruby.setItemMeta(im);

@@ -18,6 +18,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import me.Vark123.EpicInventory.Content.InventoryContents;
 import me.Vark123.EpicInventory.Content.InventoryProvider;
+import me.Vark123.EpicInventory.Enums.Action;
 import me.Vark123.EpicInventory.Enums.DisabledEvents;
 import me.Vark123.EpicInventory.Enums.DisabledInventoryClick;
 import me.Vark123.EpicInventory.Pagination.EpicInventory;
@@ -140,7 +141,7 @@ public class BackpackManager {
 			.title("§3§lTworzenie Plecakow")
 			.size(54)
 			.ignoredSlots(freeSlots)
-//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.disableUpdateTask()
@@ -156,7 +157,7 @@ public class BackpackManager {
 			.title("§3§lNaprawa plecaka")
 			.size(9)
 			.ignoredSlots(repairFreeSlots)
-//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.disableUpdateTask()
@@ -171,7 +172,7 @@ public class BackpackManager {
 			.title("§b§lUlepszenie Plecaka")
 			.size(36)
 			.ignoredSlots(upgradeFreeSlots)
-//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.disableUpdateTask()

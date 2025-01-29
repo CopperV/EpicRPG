@@ -13,7 +13,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.items.ItemExecutor;
 import lombok.Getter;
@@ -59,7 +60,7 @@ public class KosturMenuEvents {
 				return;
 			}
 
-			NBTItem nbt = new NBTItem(kostur);
+			ReadWriteNBT nbt = NBT.itemStackToNBT(kostur);
 			if(!nbt.hasTag("Rozdzka")) {
 				p.closeInventory();
 				return;
@@ -110,11 +111,11 @@ public class KosturMenuEvents {
 		Consumer<InventoryCloseEvent> event = e -> {
 			ItemExecutor manag = MythicBukkit.inst().getItemManager();
 			ItemStack kostur = manag.getItemStack("Runiczny_Kostur");
-			NBTItem kosturNBT = new NBTItem(kostur);
+			ReadWriteNBT kosturNBT = NBT.itemStackToNBT(kostur);
 			ItemMeta im = kostur.getItemMeta();
 			List<String> lore = im.getLore();
 			List<ItemStack> toReturn = new LinkedList<>();
-			NBTItem nbt;
+			ReadWriteNBT nbt;
 			
 			Inventory inv = e.getView().getTopInventory();
 			Player p = (Player) e.getPlayer();
@@ -129,20 +130,20 @@ public class KosturMenuEvents {
 					continue;
 				}
 				
-				nbt = new NBTItem(rune);
-				if(!nbt.hasTag("MYTHIC_TYPE")) {
+				if(!Utils.isMythicMobItem(rune)) {
 					kosturNBT.setString(strSlots[i], "-");
 					toReturn.add(rune);
 					continue;
 				}
 				
-				String mmId = nbt.getString("MYTHIC_TYPE");
+				String mmId = Utils.getMythicMobItemType(rune);
 				String name = rune.getItemMeta().getDisplayName();
 				lore.set(5+i, "§d☬ §7"+strSlots[i]+": "+name);
 				kosturNBT.setString(strSlots[i], mmId);
 			}
 			
-			kosturNBT.applyNBT(kostur);
+			kostur = NBT.itemStackFromNBT(kosturNBT);
+//			kosturNBT.applyNBT(kostur);
 			im = kostur.getItemMeta();
 			im.setLore(lore);
 			kostur.setItemMeta(im);
@@ -177,7 +178,7 @@ public class KosturMenuEvents {
 					return;
 				}
 				
-				NBTItem nbt = new NBTItem(it);
+				ReadWriteNBT nbt = NBT.itemStackToNBT(it);
 				if(!nbt.hasTag("soulbind")
 						|| !nbt.getString("soulbind").equalsIgnoreCase(p.getName())) {
 					p.closeInventory();
@@ -202,7 +203,7 @@ public class KosturMenuEvents {
 					return;
 				}
 				
-				NBTItem nbt = new NBTItem(it);
+				ReadWriteNBT nbt = NBT.itemStackToNBT(it);
 				if(!nbt.hasTag("cave")
 						|| nbt.getString("cave").equalsIgnoreCase("crimson")) {
 					p.closeInventory();

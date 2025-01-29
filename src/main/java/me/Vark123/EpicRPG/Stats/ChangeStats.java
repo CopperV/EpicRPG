@@ -15,7 +15,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgJewelry;
 import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
@@ -95,7 +96,7 @@ public class ChangeStats {
 		
 		ItemStack off = p.getInventory().getItemInOffHand();
 		if(off!=null && !off.getType().equals(Material.AIR)) {
-			NBTItem nbti = new NBTItem(off);
+			ReadWriteNBT nbti = NBT.itemStackToNBT(off);
 			if(nbti.hasTag("RPGType") && nbti.getString("RPGType").equalsIgnoreCase("gem"))
 				changeStatsItem(stats, off);
 		}
@@ -117,7 +118,7 @@ public class ChangeStats {
 						changeStatsItem(stats, item);
 					itemy.remove(slot);
 					
-					NBTItem itemNBT = new NBTItem(item);
+					ReadWriteNBT itemNBT = NBT.itemStackToNBT(item);
 					if(itemNBT.hasTag("EpicSet")) {
 						String set = itemNBT.getString("EpicSet");
 						info.getSetCounts().put(set, info.getSetCounts().getOrDefault(set, 0) + 1);

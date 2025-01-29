@@ -11,9 +11,11 @@ import javax.annotation.Nullable;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.Getter;
+import me.Vark123.EpicRPG.Utils.Utils;
 
 @Getter
 public class UpgradableLevel {
@@ -41,9 +43,10 @@ public class UpgradableLevel {
 		Random rand = new Random();
 		ItemStack it = MythicBukkit.inst().getItemManager().getItemStack(mmId, mmIdCosts.get(mmId));
 		
-		NBTItem nbt = new NBTItem(it);
+		ReadWriteNBT nbt = NBT.itemStackToNBT(it);
 		nbt.setInteger("rand-"+rand.nextInt(), rand.nextInt());
-		nbt.applyNBT(it);
+//		nbt.applyNBT(it);
+		it = NBT.itemStackFromNBT(nbt);
 		
 		mmItemCosts.put(mmId, it);
 		return it;
@@ -59,10 +62,9 @@ public class UpgradableLevel {
 		for(ItemStack it : items) {
 			if(it == null || it.getType().equals(Material.AIR))
 				continue;
-			NBTItem nbt = new NBTItem(it);
-			if(!nbt.hasTag("MYTHIC_TYPE"))
+			if(!Utils.isMythicMobItem(it))
 				return false;
-			String mmId = nbt.getString("MYTHIC_TYPE");
+			String mmId = Utils.getMythicMobItemType(it);
 			if(!mmItemCosts.containsKey(mmId))
 				continue;
 			if(it.getAmount() < mmIdCosts.get(mmId))

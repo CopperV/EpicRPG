@@ -18,7 +18,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -50,9 +51,10 @@ public class UpgradableInhibitor {
 		item = MythicBukkit.inst().getItemManager().getItemStack(mmId);
 		
 		Random rand = new Random();
-		NBTItem nbt = new NBTItem(item);
+		ReadWriteNBT nbt = NBT.itemStackToNBT(item);
 		nbt.setInteger("rand-"+rand.nextInt(), rand.nextInt());
-		nbt.applyNBT(item);
+//		nbt.applyNBT(item);
+		item = NBT.itemStackFromNBT(nbt);
 		
 		return item;
 	}
@@ -80,9 +82,10 @@ public class UpgradableInhibitor {
 			Random rand = new Random();
 			ItemStack it = MythicBukkit.inst().getItemManager().getItemStack(mmId, mmIdCosts.get(mmId));
 			
-			NBTItem nbt = new NBTItem(it);
+			ReadWriteNBT nbt = NBT.itemStackToNBT(it);
 			nbt.setInteger("rand-"+rand.nextInt(), rand.nextInt());
-			nbt.applyNBT(it);
+//			nbt.applyNBT(it);
+			it = NBT.itemStackFromNBT(nbt);
 			
 			mmItemCosts.put(mmId, it);
 			return it;
@@ -101,10 +104,9 @@ public class UpgradableInhibitor {
 			for(ItemStack it : items) {
 				if(it == null || it.getType().equals(Material.AIR))
 					continue;
-				NBTItem nbt = new NBTItem(it);
-				if(!nbt.hasTag("MYTHIC_TYPE"))
+				if(!Utils.isMythicMobItem(it))
 					return false;
-				String mmId = nbt.getString("MYTHIC_TYPE");
+				String mmId = Utils.getMythicMobItemType(it);
 				if(!mmItemCosts.containsKey(mmId))
 					continue;
 				if(it.getAmount() < mmIdCosts.get(mmId))
@@ -138,10 +140,9 @@ public class UpgradableInhibitor {
 				ItemStack it = inv.getItem(slot);
 				if(it == null || it.getType().equals(Material.AIR))
 					return;
-				NBTItem nbt = new NBTItem(it);
-				if(!nbt.hasTag("MYTHIC_TYPE"))
+				if(!Utils.isMythicMobItem(it))
 					return;
-				String mmId = nbt.getString("MYTHIC_TYPE");
+				String mmId = Utils.getMythicMobItemType(it);
 				if(!mmIdCosts.containsKey(mmId))
 					return;
 				if(it.getAmount() < mmIdCosts.get(mmId))

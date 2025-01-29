@@ -9,10 +9,12 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import lombok.Getter;
 import me.Vark123.EpicInventory.Content.InventoryContents;
 import me.Vark123.EpicInventory.Content.InventoryProvider;
+import me.Vark123.EpicInventory.Enums.Action;
 import me.Vark123.EpicInventory.Enums.DisabledEvents;
 import me.Vark123.EpicInventory.Enums.DisabledInventoryClick;
 import me.Vark123.EpicInventory.Pagination.EpicInventory;
@@ -124,7 +126,7 @@ public class JewelryMenuManager {
 			.title("§6§lBizuteria")
 			.size(18)
 			.ignoredSlots(freeSlots)
-//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.disableUpdateTask()
@@ -207,12 +209,12 @@ public class JewelryMenuManager {
 	}
 	
 	public boolean isJewelryItem(ItemStack it) {
-		NBTItem nbt = new NBTItem(it);
+		ReadWriteNBT nbt = NBT.itemStackToNBT(it);
 		return nbt.hasTag("JewerlyType");
 	}
 	
 	public boolean isCorrectJewelrySlotType(ItemStack it, JewelryItem jewelry) {
-		NBTItem nbt = new NBTItem(it);
+		ReadWriteNBT nbt = NBT.itemStackToNBT(it);
 		String type = nbt.getString("JewerlyType").toUpperCase();
 		return jewelry.getType().equals(JewelryType.valueOf(type));
 	}

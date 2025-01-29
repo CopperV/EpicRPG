@@ -12,22 +12,21 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import de.tr7zw.nbtapi.NBTItem;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.HealthSystem.RpgPlayerHealEvent;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
+import me.Vark123.EpicRPG.Utils.Utils;
 
 public class PotionUtils {
 	
 	private PotionUtils() {}
 	
 	public static RpgPotionType getPotionType(ItemStack it) {
-		NBTItem nbt = new NBTItem(it);
-		if (!nbt.hasTag("MYTHIC_TYPE"))
+		if (!Utils.isMythicMobItem(it))
 			return RpgPotionType.NONE;
 		
-		switch(nbt.getString("MYTHIC_TYPE")) {
+		switch(Utils.getMythicMobItemType(it)) {
 			case "Mana10":
 			case "Mana30":
 			case "Mana50":

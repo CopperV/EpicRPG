@@ -11,6 +11,7 @@ import org.bukkit.plugin.Plugin;
 
 import me.Vark123.EpicInventory.Content.InventoryContents;
 import me.Vark123.EpicInventory.Content.InventoryProvider;
+import me.Vark123.EpicInventory.Enums.Action;
 import me.Vark123.EpicInventory.Enums.DisabledEvents;
 import me.Vark123.EpicInventory.Enums.DisabledInventoryClick;
 import me.Vark123.EpicInventory.Other.EventCreator;
@@ -20,12 +21,14 @@ import me.Vark123.EpicRPG.Main;
 
 public class InventoryUtils {
 
+	@Deprecated
 	public static void openNormalMenu(Player p, String title, int size, int[] ignoredSlots,
 			List<EventCreator<? extends Event>> listeners, Inventory inv) {
 		Builder builder = EpicInventory.builder()
 				.title(title)
 				.size(size)
 				.ignoredSlots(ignoredSlots)
+				.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 				.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 				.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 				.disableUpdateTask();
@@ -35,7 +38,8 @@ public class InventoryUtils {
 			.open(p);
 		
 	}
-	
+
+	@Deprecated
 	public static void openConfirmationMenu(Player p, String title, int size,
 			List<EventCreator<? extends Event>> listeners, Inventory inv) {
 		Builder builder = EpicInventory.builder()
@@ -47,7 +51,8 @@ public class InventoryUtils {
 			.build(Main.getInstance())
 			.open(p);
 	}
-	
+
+	@Deprecated
 	private static InventoryProvider getProvider(Inventory inv) {
 		return new InventoryProvider() {
 			@Override
@@ -64,12 +69,14 @@ public class InventoryUtils {
 
 ///////////////////////////////////////////////////////////////////////////////////
 
+	@Deprecated
 	public static void openNormalMenu(Player p, String title, int size, int[] ignoredSlots,
 			List<EventCreator<? extends Event>> listeners, InventoryContents contents, Plugin plugin) {
 		Builder builder = EpicInventory.builder()
 				.title(title)
 				.size(size)
 				.ignoredSlots(ignoredSlots)
+				.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 				.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 				.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 				.disableUpdateTask();
@@ -79,7 +86,8 @@ public class InventoryUtils {
 			.open(p);
 		
 	}
-	
+
+	@Deprecated
 	public static void openConfirmationMenu(Player p, String title, int size,
 			List<EventCreator<? extends Event>> listeners, InventoryContents contents, Plugin plugin) {
 		Builder builder = EpicInventory.builder()
@@ -91,7 +99,8 @@ public class InventoryUtils {
 			.build(plugin)
 			.open(p);
 	}
-	
+
+	@Deprecated
 	private static InventoryProvider getProvider(InventoryContents cont) {
 		return new InventoryProvider() {
 			@Override

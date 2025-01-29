@@ -11,7 +11,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import lombok.Getter;
 import me.Vark123.EpicInventory.Other.EventCreator;
 import me.Vark123.EpicRPG.Main;
@@ -37,7 +38,7 @@ public class HorseMenuEvents {
 			if(it == null || it.getType().equals(Material.AIR))
 				return;
 			
-			NBTItem nbt = new NBTItem(it);
+			ReadWriteNBT nbt = NBT.itemStackToNBT(it);
 			if(!nbt.hasTag("MountSummonClass"))
 				return;
 			

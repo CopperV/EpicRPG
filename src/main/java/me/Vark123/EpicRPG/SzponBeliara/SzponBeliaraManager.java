@@ -10,13 +10,15 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.AccessLevel;
 import lombok.Getter;
 import me.Vark123.EpicInventory.Content.IntelligentItem;
 import me.Vark123.EpicInventory.Content.InventoryContents;
 import me.Vark123.EpicInventory.Content.InventoryProvider;
+import me.Vark123.EpicInventory.Enums.Action;
 import me.Vark123.EpicInventory.Enums.DisabledEvents;
 import me.Vark123.EpicInventory.Enums.DisabledInventoryClick;
 import me.Vark123.EpicInventory.Pagination.EpicInventory;
@@ -152,15 +154,12 @@ public class SzponBeliaraManager {
 						return;
 					}
 
-					NBTItem _szponNBT = new NBTItem(_szpon);
-					NBTItem _klejnotNBT = new NBTItem(_klejnot);
-					NBTItem _esencjaSzponaNBT = new NBTItem(_esencjaSzpona);
-					NBTItem _esencjaDemonaNBT = new NBTItem(_esencjaDemona);
+					ReadWriteNBT _szponNBT = NBT.itemStackToNBT(_szpon);
 					
-					if(!_esencjaSzponaNBT.hasTag("MYTHIC_TYPE")
-							|| !_esencjaSzponaNBT.getString("MYTHIC_TYPE").equals("Esencja_Szpona")
-							|| !_klejnotNBT.hasTag("MYTHIC_TYPE")
-							|| !_esencjaDemonaNBT.hasTag("MYTHIC_TYPE")) {
+					if(!Utils.isMythicMobItem(_esencjaSzpona)
+							|| !Utils.getMythicMobItemType(_esencjaSzpona).equals("Esencja_Szpona")
+							|| !Utils.isMythicMobItem(_klejnot)
+							|| !Utils.isMythicMobItem(_esencjaDemona)) {
 						p.closeInventory();
 						return;
 					}
@@ -169,7 +168,7 @@ public class SzponBeliaraManager {
 						return;
 					}
 
-					String _szponId = _szponNBT.getString("MYTHIC_TYPE");
+					String _szponId = Utils.getMythicMobItemType(_szpon);
 					String _klejnotId = null;
 					String _esencjaDemonaId = null;
 					switch(_szponId) {
@@ -226,8 +225,8 @@ public class SzponBeliaraManager {
 						return;
 					}
 					
-					if(!_klejnotNBT.getString("MYTHIC_TYPE").equals(_klejnotId)
-							|| !_esencjaDemonaNBT.getString("MYTHIC_TYPE").equals(_esencjaDemonaId)) {
+					if(!Utils.getMythicMobItemType(_klejnot).equals(_klejnotId)
+							|| !Utils.getMythicMobItemType(_esencjaDemona).equals(_esencjaDemonaId)) {
 						p.closeInventory();
 						return;
 					}
@@ -267,7 +266,7 @@ public class SzponBeliaraManager {
 			.title("§5§lUlepszanie Szponu Beliara")
 			.size(27)
 			.ignoredSlots(awakeningFreeSlots)
-//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.listener(SzponBeliaraEvents.getEvents().getAwakeningClickEvent())
@@ -283,7 +282,7 @@ public class SzponBeliaraManager {
 			.title("§5§lBeliar")
 			.size(27)
 			.ignoredSlots(upgradeFreeSlots)
-//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.disableUpdateTask()

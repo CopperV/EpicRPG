@@ -9,7 +9,8 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.Getter;
 import me.Vark123.EpicInventory.Other.EventCreator;
@@ -52,7 +53,7 @@ public class RubyMenuEvents {
 						|| it.getType().equals(Material.AIR))
 					break;
 				
-				NBTItem nbt = new NBTItem(it);
+				ReadWriteNBT nbt = NBT.itemStackToNBT(it);
 				if(!nbt.hasTag("soulbind")
 						|| !nbt.getString("soulbind").equalsIgnoreCase(e.getWhoClicked().getName()))
 					break;
@@ -111,7 +112,7 @@ public class RubyMenuEvents {
 						|| it.getType().equals(Material.AIR))
 					break;
 				
-				NBTItem nbt = new NBTItem(it);
+				ReadWriteNBT nbt = NBT.itemStackToNBT(it);
 				if(!nbt.hasTag("soulbind")
 						|| !nbt.getString("soulbind").equalsIgnoreCase(e.getWhoClicked().getName()))
 					break;

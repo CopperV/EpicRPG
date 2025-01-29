@@ -6,7 +6,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 
 public class RubyPlaceProtEvent implements Listener {
 	
@@ -19,7 +20,7 @@ public class RubyPlaceProtEvent implements Listener {
 		
 		if(item==null || item.getType().equals(Material.AIR))
 			return;
-		NBTItem nbti = new NBTItem(item);
+		ReadWriteNBT nbti = NBT.itemStackToNBT(item);
 		
 		if(!nbti.hasTag("RPGType") 
 				|| !nbti.getString("RPGType").contains("ruby")) 

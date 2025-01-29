@@ -12,7 +12,8 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import lombok.Getter;
 import me.Vark123.EpicInventory.Other.EventCreator;
 import me.Vark123.EpicRPG.Core.RudaSystem;
@@ -55,7 +56,7 @@ public class FishSellEvents {
 				if(it == null || it.getType().equals(Material.AIR))
 					return false;
 				
-				NBTItem nbt = new NBTItem(it);
+				ReadWriteNBT nbt = NBT.itemStackToNBT(it);
 				if(!nbt.hasTag("type") 
 						|| !nbt.getString("type").equalsIgnoreCase("fish_to_sell")) {
 					toDrop.add(it);
@@ -68,7 +69,7 @@ public class FishSellEvents {
 				return true;
 			}).forEach(i -> {
 				ItemStack it = inv.getItem(i);
-				NBTItem nbt = new NBTItem(it);
+				ReadWriteNBT nbt = NBT.itemStackToNBT(it);
 				int toAdd = Integer.parseInt(nbt.getString("price"))*it.getAmount();
 				price.add(toAdd);
 			});

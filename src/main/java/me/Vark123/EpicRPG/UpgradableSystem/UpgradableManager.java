@@ -23,11 +23,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.Getter;
 import me.Vark123.EpicRPG.Utils.Pair;
+import me.Vark123.EpicRPG.Utils.Utils;
 
 @Getter
 public final class UpgradableManager {
@@ -66,11 +67,10 @@ public final class UpgradableManager {
 		if(it.getType().equals(Material.AIR))
 			return Optional.empty();
 
-		NBTItem nbt = new NBTItem(it);
-		if(!nbt.hasTag("MYTHIC_TYPE"))
+		if(!Utils.isMythicMobItem(it))
 			return Optional.empty();
 		
-		String mythicType = nbt.getString("MYTHIC_TYPE");
+		String mythicType = Utils.getMythicMobItemType(it);
 		return getInhibitorChance(mythicType);
 	}
 	
@@ -86,11 +86,10 @@ public final class UpgradableManager {
 		if(it.getType().equals(Material.AIR))
 			return Optional.empty();
 
-		NBTItem nbt = new NBTItem(it);
-		if(!nbt.hasTag("MYTHIC_TYPE"))
+		if(!Utils.isMythicMobItem(it))
 			return Optional.empty();
 		
-		String mythicType = nbt.getString("MYTHIC_TYPE");
+		String mythicType = Utils.getMythicMobItemType(it);
 		return getFlask(mythicType);
 	}
 
@@ -119,8 +118,8 @@ public final class UpgradableManager {
 				.isEmpty())
 			return false;
 		
-		NBTItem nbt = new NBTItem(it);
-		if(!nbt.hasTag("MYTHIC_TYPE"))
+		ReadWriteNBT nbt = NBT.itemStackToNBT(it);
+		if(!Utils.isMythicMobItem(it))
 			return false;
 		
 		if(nbt.hasTag("Klejnot") 
@@ -138,11 +137,10 @@ public final class UpgradableManager {
 		if(it.getType().equals(Material.AIR))
 			return false;
 		
-		NBTItem nbt = new NBTItem(it);
-		if(!nbt.hasTag("MYTHIC_TYPE"))
+		if(!Utils.isMythicMobItem(it))
 			return false;
 		
-		String mythicType = nbt.getString("MYTHIC_TYPE");
+		String mythicType = Utils.getMythicMobItemType(it);
 		return inhibitors.containsKey(mythicType);
 	}
 	
@@ -150,8 +148,7 @@ public final class UpgradableManager {
 		if(!isItemInhibitor(inhibitor))
 			return false;
 
-		NBTItem nbt = new NBTItem(inhibitor);
-		String mythicType = nbt.getString("MYTHIC_TYPE");
+		String mythicType = Utils.getMythicMobItemType(inhibitor);
 		if(!inhibitors.containsKey(mythicType))
 			return false;
 		
@@ -165,11 +162,10 @@ public final class UpgradableManager {
 		if(it.getType().equals(Material.AIR))
 			return false;
 		
-		NBTItem nbt = new NBTItem(it);
-		if(!nbt.hasTag("MYTHIC_TYPE"))
+		if(!Utils.isMythicMobItem(it))
 			return false;
 		
-		String mythicType = nbt.getString("MYTHIC_TYPE");
+		String mythicType = Utils.getMythicMobItemType(it);
 		return flasks.containsKey(mythicType);
 	}
 	
@@ -243,7 +239,7 @@ public final class UpgradableManager {
 				lore.set(i, searchLine+(line.contains("§7+")?"§7+":"§7")+num);
 			});
 		
-		NBTItem nbt = new NBTItem(item);
+		ReadWriteNBT nbt = NBT.itemStackToNBT(item);
 		ReadWriteNBT upgradesNbt = nbt.getOrCreateCompound("epic-upgrades");
 		upgradesNbt.setInteger("level", newLevel);
 		ReadWriteNBT statsNbt = upgradesNbt.getOrCreateCompound("stats");
@@ -252,9 +248,10 @@ public final class UpgradableManager {
 		} else {
 			statsNbt.setInteger(searchLine, statValue.getValue());
 		}
-		nbt.applyNBT(item);
+//		nbt.applyNBT(item);
+		item = NBT.itemStackFromNBT(nbt);
 
-		String mmId = nbt.getString("MYTHIC_TYPE");
+		String mmId = Utils.getMythicMobItemType(item);
 		ItemStack baseItem = MythicBukkit.inst().getItemManager().getItemStack(mmId);
 		
 		im = item.getItemMeta();
@@ -335,7 +332,7 @@ public final class UpgradableManager {
 				});
 		}
 		
-		NBTItem nbt = new NBTItem(item);
+		ReadWriteNBT nbt = NBT.itemStackToNBT(item);
 		ReadWriteNBT upgradesNbt = nbt.getOrCreateCompound("epic-upgrades");
 		upgradesNbt.setInteger("level", newLevel);
 		ReadWriteNBT statsNbt = upgradesNbt.getOrCreateCompound("stats");
@@ -345,9 +342,10 @@ public final class UpgradableManager {
 			else
 				statsNbt.setInteger(stat, value);
 		});
-		nbt.applyNBT(item);
+//		nbt.applyNBT(item);
+		item = NBT.itemStackFromNBT(nbt);
 
-		String mmId = nbt.getString("MYTHIC_TYPE");
+		String mmId = Utils.getMythicMobItemType(item);
 		ItemStack baseItem = MythicBukkit.inst().getItemManager().getItemStack(mmId);
 		
 		im = item.getItemMeta();

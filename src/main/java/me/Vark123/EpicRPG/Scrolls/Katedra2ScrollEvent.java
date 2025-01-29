@@ -16,7 +16,8 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Utils.Utils;
 
@@ -38,7 +39,7 @@ public class Katedra2ScrollEvent implements Listener {
 				|| !it.getItemMeta().hasDisplayName()
 				|| !it.getItemMeta().getDisplayName().equalsIgnoreCase("§c§lwiedzminskie zlecenie - katedra"))
 			return;
-		NBTItem nbt = new NBTItem(it);
+		ReadWriteNBT nbt = NBT.itemStackToNBT(it);
 		if(!nbt.hasTag("soulbind")) {
 			p.sendMessage(Main.getInstance().getPrefix()+" §cPrzedmiot zbugowany!");
 			p.sendMessage(Main.getInstance().getPrefix()+" §cNie mozesz go uzyc!");

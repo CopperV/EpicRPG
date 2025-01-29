@@ -10,12 +10,12 @@ import me.Vark123.EpicRPG.Core.CoinsSystem;
 import me.Vark123.EpicRPG.Core.ExpSystem;
 import me.Vark123.EpicRPG.Core.MoneySystem;
 import me.Vark123.EpicRPG.Core.StygiaSystem;
+import me.Vark123.EpicRPG.FightSystem.DamageManager;
 import me.Vark123.EpicRPG.HorseSystem.HorseManager;
 import me.Vark123.EpicRPG.MenuSystem.MenuManager;
-import me.Vark123.EpicRPG.OldFightSystem.DamageManager;
-import me.Vark123.EpicRPG.OldRuneSystem.RuneManager;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Potions.PotionManager;
+import me.Vark123.EpicRPG.RuneSystem.RuneManager;
 import me.nikl.calendarevents.CalendarEvents;
 import me.nikl.calendarevents.CalendarEventsApi;
 
@@ -42,10 +42,10 @@ public class EpicRPGApi {
 	
 	private EpicRPGApi() {
 		this.chatManager = ChatManager.getInstance();
-		this.damageManager = DamageManager.getInstance();
+		this.damageManager = DamageManager.get();
 		this.playerManager = PlayerManager.getInstance();
 		this.potionManager = PotionManager.getInstance();
-		this.runeManager = RuneManager.getInstance();
+		this.runeManager = RuneManager.get();
 		this.inventoryManager = Main.getInstance().getManager();
 		this.menuManager = MenuManager.getInstance();
 		this.horseManager = HorseManager.getInstance();

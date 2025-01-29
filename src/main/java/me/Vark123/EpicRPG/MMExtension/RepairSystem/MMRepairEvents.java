@@ -12,7 +12,8 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.items.ItemExecutor;
 import lombok.Getter;
@@ -53,16 +54,15 @@ public class MMRepairEvents {
 				if(it == null 
 						|| it.getType().equals(Material.AIR))
 					return false;
-				NBTItem nbt = new NBTItem(it);
-				if(!nbt.hasTag("MYTHIC_TYPE")){
+				if(!Utils.isMythicMobItem(it)){
 					toDrop.add(it);
 					return false;
 				}
 				return true;
 			}).forEach(i -> {
 				ItemStack it = inv.getItem(i);
-				NBTItem nbt = new NBTItem(it);
-				String mmId = nbt.getString("MYTHIC_TYPE");
+				ReadWriteNBT nbt = NBT.itemStackToNBT(it);
+				String mmId = Utils.getMythicMobItemType(it);
 				ItemStack it2 = manag.getItemStack(mmId);
 				if(it2 == null 
 						|| it2.getType().equals(Material.AIR)){
@@ -71,13 +71,16 @@ public class MMRepairEvents {
 				}
 				
 				it2.setAmount(it.getAmount());
-				NBTItem nbt2 = new NBTItem(it2);
+//				ReadWriteNBT nbt2 = NBT.itemStackToNBT(it2);
 				nbt.getKeys().stream().filter(key -> {
 					return (key.contains("Random") && !key.equals("Random"));
 				}).findAny().ifPresent(s -> {
 					Random rand = new Random();
-					nbt2.setInteger("Random"+rand.nextInt(), rand.nextInt());
-					nbt2.applyNBT(it2);
+//					nbt2.applyNBT(it2);
+//					it2 = NBT.itemStackFromNBT(nbt2);
+					NBT.modify(it2, nbt2 -> {
+						nbt2.setInteger("Random"+rand.nextInt(), rand.nextInt());
+					});
 				});
 				
 				toDrop.add(it2);

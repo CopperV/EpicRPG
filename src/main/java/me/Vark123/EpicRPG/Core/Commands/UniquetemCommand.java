@@ -10,7 +10,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.items.ItemExecutor;
 import me.Vark123.EpicRPG.Main;
@@ -48,10 +49,11 @@ public class UniquetemCommand implements CommandExecutor {
 		ItemStack it = manag.getItemStack(args[1]);
 		it.setAmount(Integer.parseInt(args[2]));
 		
-		NBTItem nbtit = new NBTItem(it);
+		ReadWriteNBT nbtit = NBT.itemStackToNBT(it);
 		Random rand = new Random();
 		nbtit.setInteger("Random"+rand.nextInt(), rand.nextInt());
-		nbtit.applyNBT(it);
+//		nbtit.applyNBT(it);
+		it = NBT.itemStackFromNBT(nbtit);
 		
 
 		Utils.dropItemStack(p, it);

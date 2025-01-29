@@ -9,13 +9,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.items.ItemExecutor;
 import lombok.AccessLevel;
 import lombok.Getter;
 import me.Vark123.EpicInventory.Content.InventoryContents;
 import me.Vark123.EpicInventory.Content.InventoryProvider;
+import me.Vark123.EpicInventory.Enums.Action;
 import me.Vark123.EpicInventory.Enums.DisabledEvents;
 import me.Vark123.EpicInventory.Enums.DisabledInventoryClick;
 import me.Vark123.EpicInventory.Pagination.EpicInventory;
@@ -193,7 +195,7 @@ public class KosturMenuManager {
 			.title("§3§lRuniczny kostur")
 			.size(27)
 			.ignoredSlots(kosturFreeSlots)
-//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.disableUpdateTask()
@@ -209,7 +211,7 @@ public class KosturMenuManager {
 			.title("§3§lRuniczny kostur")
 			.size(27)
 			.ignoredSlots(runesFreeSlots)
-//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.disableUpdateTask()
@@ -225,7 +227,7 @@ public class KosturMenuManager {
 			.title("§3§lTworzenie kostura")
 			.size(36)
 			.ignoredSlots(createFreeSlots)
-//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
 			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.disableUpdateTask()
@@ -267,7 +269,7 @@ public class KosturMenuManager {
 					contents.set(i, empty);
 				}
 				
-				NBTItem nbt = new NBTItem(kostur);
+				ReadWriteNBT nbt = NBT.itemStackToNBT(kostur);
 				if(!nbt.getString("PPP").equals("-")) {
 					ItemStack it = manag.getItemStack(nbt.getString("PPP"));
 					contents.set(10, it);
