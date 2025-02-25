@@ -1,7 +1,9 @@
 package me.Vark123.EpicRPG.Utils;
 
+import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
@@ -17,6 +19,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import de.tr7zw.nbtapi.NBT;
@@ -30,6 +33,8 @@ import io.lumine.mythic.core.mobs.ActiveMob;
 
 public class Utils {
 
+	private static final String[] currencySuffixes = {"", "K", "M", "B", "T"};
+	
 	private Utils() {}
 	
 	public static void resetSetInfo(ItemStack it) {
@@ -301,6 +306,15 @@ public class Utils {
 		aEntity.setMetadata("LastDamageCause", event);
 	}
 	
+	public static void setLastDamageCalc(Entity entity, double damage) {
+		AbstractEntity aEntity = BukkitAdapter.adapt(entity);
+		if(aEntity == null) {
+			return;
+		}
+		
+		aEntity.setMetadata("EpicLastDamage", damage);
+	}
+	
 	public static EntityDamageEvent getLastDamageCause(Entity entity) {
 		AbstractEntity aEntity = BukkitAdapter.adapt(entity);
 		if(aEntity == null || !aEntity.hasMetadata("LastDamageCause")) {
@@ -316,6 +330,54 @@ public class Utils {
 	
 	public static String getMythicMobItemType(@NotNull ItemStack it) {
 		return MythicBukkit.inst().getItemManager().getMythicTypeFromItem(it);
+	}
+	
+	public static Vector transferSphericalToVector(double radius, double angle1, double angle2) {
+		double x = radius * Math.cos(angle1) * Math.cos(angle2);
+		double y = radius * Math.sin(angle1);
+		double z = radius * Math.cos(angle1) * Math.sin(angle2);
+		
+		return new Vector(x, y, z);
+	}
+	
+	public static String formatCurrency(double value) {
+		int index = 0;
+		while(value >= 1000 && index < (currencySuffixes.length - 1)) {
+			value *= 0.001;
+			++index;
+		}
+		return String.format(value % 1 == 0 ? "%.0f%s" : (value * 10 % 1 == 0 ? "%.1f%s" : "%.2f%s"), value, currencySuffixes[index]);
+	}
+	
+	public static String formatCurrencyGrouped(double value) {
+		return formatCurrencyGrouped(value, Locale.GERMANY);
+	}
+	
+	public static String formatCurrencyGrouped(double value, Locale locale) {
+		return formatCurrencyGrouped(value, 2, locale);
+	}
+	
+	public static String formatCurrencyGrouped(double value, int maxFractionDigits) {
+		return formatCurrencyGrouped(value, maxFractionDigits, Locale.GERMANY);
+	}
+	
+	public static String formatCurrencyGrouped(double value, int maxFractionDigits, Locale locale) {
+		NumberFormat formatter = NumberFormat.getInstance(locale);
+		formatter.setMaximumFractionDigits(maxFractionDigits);
+		formatter.setMinimumFractionDigits(0);
+        return formatter.format(value);
+	}
+	
+	public static String toRomeValue(int num) {
+		String[] thousands = {"", "M", "MM", "MMM"};
+        String[] hundreds = {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"};
+        String[] tens = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
+        String[] ones = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
+        
+        return thousands[num / 1000] +
+               hundreds[(num % 1000) / 100] +
+               tens[(num % 100) / 10] +
+               ones[num % 10];
 	}
 	
 }

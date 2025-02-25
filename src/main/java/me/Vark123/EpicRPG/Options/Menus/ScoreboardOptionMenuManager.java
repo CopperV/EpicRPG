@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.mutable.MutableInt;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -171,13 +170,15 @@ public final class ScoreboardOptionMenuManager {
 					if(option.getValue().isEnabled())
 						contents.set(0, IntelligentItem.of(on, e -> {
 							p.closeInventory();
-							p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+							RpgScoreboard.removeScoreboard(p);
+//							p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 							option.getValue().setEnabled(false);
 						}));
 					else 
 						contents.set(0, IntelligentItem.of(off, e -> {
 							p.closeInventory();
-							p.setScoreboard(rpg.getBoard());
+							RpgScoreboard.createScoreboard(player);
+//							p.setScoreboard(rpg.getBoard());
 							option.getValue().setEnabled(true);
 						}));
 					contents.set(1, IntelligentItem.of(reset, e -> {
@@ -287,7 +288,7 @@ public final class ScoreboardOptionMenuManager {
 							contents.set(index.getAndIncrement()+9, IntelligentItem.of(it, e -> {
 								p.closeInventory();
 								option.getValue().getLines().set(lineNum, text);
-								RpgScoreboard.updateScore(p);
+								RpgScoreboard.updateScoreboard(p);
 							}));
 						});
 					
@@ -404,7 +405,7 @@ public final class ScoreboardOptionMenuManager {
 							contents.set(index.getAndIncrement()+9, IntelligentItem.of(it, e -> {
 								p.closeInventory();
 								option.getValue().getLines().add(text);
-								RpgScoreboard.updateScore(p);
+								RpgScoreboard.updateScoreboard(p);
 							}));
 						});
 					

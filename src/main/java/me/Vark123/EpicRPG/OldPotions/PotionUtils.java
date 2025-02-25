@@ -1,4 +1,4 @@
-package me.Vark123.EpicRPG.Potions;
+package me.Vark123.EpicRPG.OldPotions;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -18,6 +18,7 @@ import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import me.Vark123.EpicRPG.Utils.Utils;
 
+@Deprecated
 public class PotionUtils {
 	
 	private PotionUtils() {}

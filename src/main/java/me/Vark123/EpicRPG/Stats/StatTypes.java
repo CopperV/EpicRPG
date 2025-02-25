@@ -1,0 +1,17 @@
+package me.Vark123.EpicRPG.Stats;
+
+public enum StatTypes {
+
+	OBRAZENIA,
+	OCHRONA,
+	SILA,
+	WYTRZYMALOSC,
+	ZRECZNOSC,
+	ZDOLNOSCI_MYSLIWSKIE,
+	INTELIGENCJA,
+	MANA,
+	ZYCIE,
+	WALKA,
+	KRAG;
+	
+}

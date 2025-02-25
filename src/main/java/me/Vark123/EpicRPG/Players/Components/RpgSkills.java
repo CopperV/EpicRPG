@@ -181,7 +181,7 @@ public class RpgSkills implements Serializable, ChatPrintable {
 				int tmp = (int)(stats.getFinalMana() * percent);
 				if(tmp == 0) tmp = 1;
 				stats.addPresentManaSmart(tmp);
-				RpgScoreboard.updateScore(rpg.getPlayer());
+				RpgScoreboard.updateScoreboard(rpg.getPlayer());
 			}
 			
 		}, 0, 10);

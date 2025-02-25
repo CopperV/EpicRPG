@@ -20,6 +20,8 @@ import me.Vark123.EpicRPG.BlackrockSystem.Events.BlackrockRemoveEvent;
 import me.Vark123.EpicRPG.BlackrockSystem.Events.BlackrockResetEvent;
 import me.Vark123.EpicRPG.BoosterSystem.Listeners.BoosterModifyListener;
 import me.Vark123.EpicRPG.Chat.ChatMsgSendEvent;
+import me.Vark123.EpicRPG.Consumables.Listeners.ConsumableUseListener;
+import me.Vark123.EpicRPG.Consumables.Listeners.LoadConsumablesOnServerLoadListener;
 import me.Vark123.EpicRPG.Core.CPS.CPSClickListener;
 import me.Vark123.EpicRPG.Core.Events.PlayerUseDisabledBlockEvent;
 import me.Vark123.EpicRPG.Core.Events.PlayerUseLeverEvent;
@@ -29,6 +31,9 @@ import me.Vark123.EpicRPG.Core.Listeners.LevelSystemControlListener;
 import me.Vark123.EpicRPG.Core.Listeners.PlayerJumpModifyListener;
 import me.Vark123.EpicRPG.Core.Listeners.VipBoostControlListener;
 import me.Vark123.EpicRPG.Dungeons.Listeners.KoszmarKrukaPotionDebuffListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Professions.HunterProfessionModifierListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Professions.MageProfessionModifierListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Professions.WarriorProfessionModifierListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.EntityDamageListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.EntityDeathListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.EntityLastDamageCauseListener;
@@ -69,10 +74,10 @@ import me.Vark123.EpicRPG.Players.BaseEvents.PlayerQuitEvent;
 import me.Vark123.EpicRPG.Players.BaseEvents.PlayerRespawnEvent;
 import me.Vark123.EpicRPG.Players.Components.Compass.Listeners.PlayerCompassUpdateEvent;
 import me.Vark123.EpicRPG.Players.SkillControllers.HungerSkillEvent;
-import me.Vark123.EpicRPG.Potions.PotionDrinkEvent;
 import me.Vark123.EpicRPG.RubySystem.RubyPlaceProtEvent;
 import me.Vark123.EpicRPG.RubySystem.RubyUseEvent;
 import me.Vark123.EpicRPG.RuneSystem.Listeners.RuneInteractListener;
+import me.Vark123.EpicRPG.RuneSystem.SummonSystem.SummonManager;
 import me.Vark123.EpicRPG.ScriptedFightsAndSkills.Loatheb.LoathebHealDebuffListener;
 import me.Vark123.EpicRPG.ScriptedFightsAndSkills.Loatheb.LoathebProjectileNeutralizeListener;
 import me.Vark123.EpicRPG.ScriptedFightsAndSkills.Loatheb.LoathebProjectileReflectListener;
@@ -104,7 +109,7 @@ public class EventListenerManager {
 
 		Bukkit.getPluginManager().registerEvents(new PlayerHealEvent(), inst);
 		
-		Bukkit.getPluginManager().registerEvents(new PotionDrinkEvent(), inst);
+//		Bukkit.getPluginManager().registerEvents(new PotionDrinkEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new RubyUseEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new RubyPlaceProtEvent(), inst);
 		Bukkit.getPluginManager().registerEvents(new KosturUseEvent(), inst);
@@ -186,7 +191,16 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new EntityDeathCmdExecuteListeners(), inst);
 		Bukkit.getPluginManager().registerEvents(new EntityDeathVaultListener(), inst);
 
+		Bukkit.getPluginManager().registerEvents(new WarriorProfessionModifierListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new HunterProfessionModifierListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new MageProfessionModifierListener(), inst);
+
 		Bukkit.getPluginManager().registerEvents(new RuneInteractListener(), inst);
+
+		Bukkit.getPluginManager().registerEvents(new ConsumableUseListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new LoadConsumablesOnServerLoadListener(), inst);
+
+		Bukkit.getPluginManager().registerEvents(SummonManager.get(), inst);
 		
 		//Calendar Events
 		if(EpicRPGApi.getApi().getCalendarManager().isRegisteredEvent("reset_blackrock")) 

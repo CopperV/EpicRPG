@@ -1,4 +1,4 @@
-package me.Vark123.EpicRPG.Potions;
+package me.Vark123.EpicRPG.OldPotions;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import lombok.Getter;
 import lombok.Setter;
 
+@Deprecated
 @Getter
 public class PotionUseEvent extends Event implements Cancellable {
 

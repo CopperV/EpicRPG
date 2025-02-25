@@ -16,7 +16,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.NBTItem;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import lombok.Getter;
 import me.Vark123.EpicInventory.Other.EventCreator;
@@ -29,15 +28,12 @@ public class BackpackEvents {
 	
 	private final EventCreator<InventoryClickEvent> clickEvent;
 	private final EventCreator<InventoryCloseEvent> closeEvent;
-	@Deprecated
-	private final EventCreator<InventoryCloseEvent> repairCloseEvent;
 	private final EventCreator<InventoryClickEvent> clickUpgradeEvent;
 	private final EventCreator<InventoryCloseEvent> closeUpgradeEvent;
 	
 	private BackpackEvents() {
 		clickEvent = clickEventCreator();
 		closeEvent = closeEventCreator();
-		repairCloseEvent = repairCloseEventCreator();
 		clickUpgradeEvent = clickUpgradeEventCreator();
 		closeUpgradeEvent = closeUpgradeEventCreator();
 	}
@@ -93,7 +89,7 @@ public class BackpackEvents {
 			switch(katedraNBT.size()) {
 				case 12:
 					katedraItems.clear();
-					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "fb give "+p.getName()+" 3");
+					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "backpack give 3 "+p.getName());
 					break;
 				case 11:
 				case 10:
@@ -109,7 +105,7 @@ public class BackpackEvents {
 						katedraNBT.stream().forEach(s -> {
 							katedraItems.remove(s);
 						});
-						Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "fb give "+p.getName()+" 2");
+						Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "backpack give 2 "+p.getName());
 						break;
 					}
 				case 7:
@@ -126,7 +122,7 @@ public class BackpackEvents {
 						katedraNBT.stream().forEach(s -> {
 							katedraItems.remove(s);
 						});
-						Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "fb give "+p.getName()+" 1");
+						Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "backpack give 1 "+p.getName());
 					}
 					break;
 			}
@@ -156,64 +152,6 @@ public class BackpackEvents {
 					continue;
 				Utils.dropItemStack(p, it);
 			}
-			inv.clear();
-		};
-		
-		EventCreator<InventoryCloseEvent> creator = new EventCreator<>(InventoryCloseEvent.class, event);
-		return creator;
-	}
-	
-	@Deprecated
-	private EventCreator<InventoryCloseEvent> repairCloseEventCreator(){
-		
-		Consumer<InventoryCloseEvent> event = e -> {
-			Inventory inv = e.getView().getTopInventory();
-			Player p = (Player) e.getPlayer();
-			ItemStack backpack = inv.getItem(BackpackManager.getInstance().getRepairFreeSlots()[0]);
-			
-			if(backpack == null
-					|| backpack.getType().equals(Material.AIR))
-				return;
-			
-			List<ItemStack> toDrop = new LinkedList<>();
-			if(BackpackUtils.isBuggedBackpack(backpack)) {
-				NBTItem nbt = new NBTItem(backpack);
-				int slotsAmount = nbt.getInteger("SlotsAmount");
-				int type = 1;
-				switch(slotsAmount) {
-					case 9:
-						type = 1;
-						break;
-					case 18:
-						type = 2;
-						break;
-					case 27:
-						type = 3;
-						break;
-					case 54:
-						type = 4;
-						break;
-					case 36:
-						type = 5;
-						break;
-				}
-				for(int i = 0; i < slotsAmount; ++i) {
-					ItemStack it = BackpackUtils.itemstackFromBase64(nbt.getString(i+""));
-					if(it == null 
-							|| it.getType().equals(Material.AIR)) {
-						continue;
-					}
-					toDrop.add(it);
-				}
-				
-				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "fb give "+p.getName()+" "+type);
-			} else {
-				toDrop.add(backpack);
-			}
-			
-			toDrop.stream().forEach(it -> {
-				Utils.dropItemStack(p, it);
-			});
 			inv.clear();
 		};
 		
@@ -265,26 +203,13 @@ public class BackpackEvents {
 			ItemStack oldBackpack = inv.getItem(slots[7]);
 			ReadWriteNBT nbt = NBT.itemStackToNBT(oldBackpack);
 			ReadWriteNBT compund = nbt.getCompound("PublicBukkitValues");
-			if(!compund.hasTag("fancybags:backpackid") || compund.getInteger("fancybags:backpackid") != 3){
+			if(!compund.hasTag("backpackplus:backpacktier") || compund.getInteger("backpackplus:backpacktier") != 3){
 				p.closeInventory();
 				return;
 			}
-
-			List<ItemStack> toDropList = new LinkedList<>();
-			for(int i = 0; i < 3*9; ++i) {
-				ItemStack toDrop = BackpackUtils.itemstackFromBase64(compund.getString("fancybags:"+i));
-				if(toDrop == null 
-						|| toDrop.getType().equals(Material.AIR)) {
-					continue;
-				}
-				toDropList.add(toDrop);
-			}
-			toDropList.stream().forEach(toDrop -> {
-				Utils.dropItemStack(p, toDrop);
-			});
 			
 			
-			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "fb give "+p.getName()+" 5");
+			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "backpack give 5 "+p.getName());
 			inv.clear();
 			e.getWhoClicked().closeInventory();
 		};

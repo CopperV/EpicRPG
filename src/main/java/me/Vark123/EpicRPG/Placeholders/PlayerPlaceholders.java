@@ -17,6 +17,7 @@ import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import me.Vark123.EpicRPG.Players.Components.RpgVault;
 import me.Vark123.EpicRPG.Utils.Pair;
+import me.Vark123.EpicRPG.Utils.Utils;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 
 public class PlayerPlaceholders extends PlaceholderExpansion {
@@ -39,9 +40,9 @@ public class PlayerPlaceholders extends PlaceholderExpansion {
 	@Override
 	public String onRequest(OfflinePlayer p, @NotNull String identifier) {
 		if(!p.isOnline())
-			return "Offline Player";
+			return "0";
 		if(!PlayerManager.getInstance().playerExists((Player) p))
-			return "Offline Player";
+			return "";
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer((Player) p);
 		RpgPlayerInfo info = rpg.getInfo();
 		RpgStats stats = rpg.getStats();
@@ -64,8 +65,12 @@ public class PlayerPlaceholders extends PlaceholderExpansion {
 				return (info.getLevel()-50)+"";
 			case "exp":
 				return info.getExp()+"";
+			case "exp_format":
+				return Utils.formatCurrency(info.getExp());
 			case "nextlevel":
 				return info.getNextLevel()+"";
+			case "nextlevel_format":
+				return Utils.formatCurrency(info.getNextLevel());
 			case "klasa":
 				return info.getProffesion()+"";
 			case "str":
@@ -96,6 +101,14 @@ public class PlayerPlaceholders extends PlaceholderExpansion {
 				return vault.getDragonCoins()+"";
 			case "ruda":
 				return vault.getBrylkiRudy()+"";
+			case "kasa_format":
+				return Utils.formatCurrency(vault.getMoney());
+			case "stygia_format":
+				return Utils.formatCurrency(vault.getStygia());
+			case "coins_format":
+				return Utils.formatCurrency(vault.getDragonCoins());
+			case "ruda_format":
+				return Utils.formatCurrency(vault.getBrylkiRudy());
 			case "damage":
 				return stats.getFinalObrazenia()+"";
 			case "defense":
@@ -131,7 +144,7 @@ public class PlayerPlaceholders extends PlaceholderExpansion {
 			case "raw_klasa":
 				return ChatColor.stripColor(info.getProffesion());
 			default:
-				return "Unmatched Placeholder";
+				return "";
 		}
 	}
 

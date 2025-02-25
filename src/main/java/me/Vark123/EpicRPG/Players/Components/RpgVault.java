@@ -14,6 +14,7 @@ import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Utils.ChatPrintable;
 import me.Vark123.EpicRPG.Utils.TableGenerator;
 import me.Vark123.EpicRPG.Utils.TableGenerator.Receiver;
+import me.Vark123.EpicRPG.Utils.Utils;
 
 @Getter
 public class RpgVault implements Serializable, ChatPrintable {
@@ -140,9 +141,9 @@ public class RpgVault implements Serializable, ChatPrintable {
 	@Override
 	public void print(CommandSender sender) {
 		TableGenerator generator = new TableGenerator(TableGenerator.Alignment.LEFT, TableGenerator.Alignment.LEFT, TableGenerator.Alignment.LEFT);
-		generator.addRow("", "§2Kasa: §e"+String.format("%.2f", getMoney())+" $", "§2Smocze monety: §4"+dragonCoins);
-		generator.addRow("", "§2Stygia: §3"+stygia, "§2Brylki rudy: §9"+brylkiRudy);
-		generator.addRow("", "§2Karnet: §c"+eventCurrency, "§2Dynki: §6"+eventCurrency2);
+		generator.addRow("", "§2Kasa: §e"+Utils.formatCurrencyGrouped(getMoney())+" ◎", "§2Smocze monety: §4"+Utils.formatCurrencyGrouped(dragonCoins));
+		generator.addRow("", "§2Stygia: §3"+Utils.formatCurrencyGrouped(stygia), "§2Brylki rudy: §9"+Utils.formatCurrencyGrouped(brylkiRudy));
+//		generator.addRow("", "§2Karnet: §c"+eventCurrency, "§2Dynki: §6"+eventCurrency2);
 		List<String> lines = generator.generate(Receiver.CLIENT, true, true);
 		
 		sender.sendMessage("§6§l========================= ");

@@ -62,6 +62,7 @@ public class ChangeStats {
 		stats.setFinalWalka(stats.getWalka()+stats.getPotionWalka());
 		stats.setFinalOchrona(stats.getOchrona() + stats.getPotionOchrona());
 		stats.setFinalObrazenia(stats.getObrazenia() + stats.getPotionObrazenia());
+		stats.setFinalSummonPoints(stats.getSummonPoints());
 		
 		boolean weaponCheck = (weapon != null);
 

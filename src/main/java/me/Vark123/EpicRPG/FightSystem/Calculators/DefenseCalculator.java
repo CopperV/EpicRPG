@@ -4,7 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import me.Vark123.EpicRPG.FightSystem.Calculators.IDamageCalculator.DamageCalculatorResult;
+import io.lumine.mythic.bukkit.MythicBukkit;
+import io.lumine.mythic.core.mobs.ActiveMob;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
@@ -25,6 +26,17 @@ public class DefenseCalculator implements IDamageCalculator {
 		}
 		
 		DamageCalculatorResult result = (DamageCalculatorResult) args[0];
+		double baseDamage = result.damage;
+		
+		if(MythicBukkit.inst().getMobManager().isMythicMob(victim)) {
+			ActiveMob aMob = MythicBukkit.inst().getMobManager().getMythicMobInstance(victim);
+			double armor = aMob.getArmor();
+			
+			result.damage = baseDamage * (1 - (armor)/(armor + baseDamage*0.5));
+			
+			return result;
+		}
+		
 		if(!(victim instanceof Player)
 				|| !PlayerManager.getInstance().playerExists((Player) victim))
 			return result;
@@ -44,7 +56,6 @@ public class DefenseCalculator implements IDamageCalculator {
 			return result;
 		}
 		
-		double baseDamage = result.damage;
 		double defense = stats.getFinalOchrona();
 		double wytrz = stats.getFinalWytrzymalosc();
 		

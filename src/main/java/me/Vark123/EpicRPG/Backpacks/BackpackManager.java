@@ -1,18 +1,12 @@
 package me.Vark123.EpicRPG.Backpacks;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
-
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -73,20 +67,20 @@ public class BackpackManager {
 			im.setDisplayName("§6§lStworz");
 			create.setItemMeta(im);
 		}
-		bigBackpackItem = new ItemStack(Material.PLAYER_HEAD, 1);{
-			SkullMeta im = (SkullMeta) bigBackpackItem.getItemMeta();
+		bigBackpackItem = new ItemStack(Material.BROWN_DYE, 1);{
+			ItemMeta im = bigBackpackItem.getItemMeta();
 			im.setDisplayName("§3§lDUZY PLECAK");
 			
-			final GameProfile profile = new GameProfile(UUID.randomUUID(), null);
-            profile.getProperties().put("textures", new Property("textures", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2U1YWJkYjczNzQ1NTNkMDU2NWNiY2IzMjk1YWVkNTE1YTg5N2ViY2U5ZTBiYzYwZjFjMWY4YWU1NGM3NDlkZiJ9fX0="));
-            Field profileField = null;
-            try {
-                profileField = im.getClass().getDeclaredField("profile");
-                profileField.setAccessible(true);
-                profileField.set(im, profile);
-            } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e1) {
-                e1.printStackTrace();
-            }
+//			final GameProfile profile = new GameProfile(UUID.randomUUID(), "test");
+//            profile.getProperties().put("textures", new Property("textures", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2U1YWJkYjczNzQ1NTNkMDU2NWNiY2IzMjk1YWVkNTE1YTg5N2ViY2U5ZTBiYzYwZjFjMWY4YWU1NGM3NDlkZiJ9fX0="));
+//            Field profileField = null;
+//            try {
+//                profileField = im.getClass().getDeclaredField("profile");
+//                profileField.setAccessible(true);
+//                profileField.set(im, profile);
+//            } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e1) {
+//                e1.printStackTrace();
+//            }
 			bigBackpackItem.setItemMeta(im);
 		}
 		
@@ -151,20 +145,21 @@ public class BackpackManager {
 			.build(Main.getInstance())
 			.open(p);
 	}
-	
+
+	@Deprecated
 	public void openBackpackRepairMenu(Player p) {
-		EpicInventory.builder()
-			.title("§3§lNaprawa plecaka")
-			.size(9)
-			.ignoredSlots(repairFreeSlots)
-			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
-			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
-			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
-			.disableUpdateTask()
-			.listener(BackpackEvents.getEvents().getRepairCloseEvent())
-			.provider(repairProvider)
-			.build(Main.getInstance())
-			.open(p);
+//		EpicInventory.builder()
+//			.title("§3§lNaprawa plecaka")
+//			.size(9)
+//			.ignoredSlots(repairFreeSlots)
+//			.enableAction(Action.MOVE_TO_OTHER_INVENTORY)
+//			.ignoreClickEvent(DisabledInventoryClick.BOTTOM)
+//			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
+//			.disableUpdateTask()
+//			.listener(BackpackEvents.getEvents().getRepairCloseEvent())
+//			.provider(repairProvider)
+//			.build(Main.getInstance())
+//			.open(p);
 	}
 	
 	public void openBackpackUpgradeMenu(Player p) {

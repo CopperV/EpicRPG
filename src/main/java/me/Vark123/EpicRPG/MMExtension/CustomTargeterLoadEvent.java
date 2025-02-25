@@ -6,11 +6,14 @@ import org.bukkit.event.Listener;
 import io.lumine.mythic.api.skills.targeters.ISkillTargeter;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.bukkit.events.MythicTargeterLoadEvent;
+import me.Vark123.EpicRPG.MMExtension.Targeters.AlliesPlayersInRadiusTargeter;
+import me.Vark123.EpicRPG.MMExtension.Targeters.AlliesPlayersNearOriginTargeter;
 import me.Vark123.EpicRPG.MMExtension.Targeters.AngleTargeter;
 import me.Vark123.EpicRPG.MMExtension.Targeters.CircleSegmentTargeter;
 import me.Vark123.EpicRPG.MMExtension.Targeters.ConditionalTarget;
 import me.Vark123.EpicRPG.MMExtension.Targeters.EMountTargeter;
 import me.Vark123.EpicRPG.MMExtension.Targeters.ForwardLevelTargeter;
+import me.Vark123.EpicRPG.MMExtension.Targeters.NotAlliesPlayersInRadiusTargeter;
 import me.Vark123.EpicRPG.MMExtension.Targeters.WorldLimitTargeter;
 
 public class CustomTargeterLoadEvent implements Listener {
@@ -42,6 +45,20 @@ public class CustomTargeterLoadEvent implements Listener {
 				break;
 			case "emount":
 				target = new EMountTargeter(MythicBukkit.inst().getSkillManager(), e.getConfig());
+				e.register(target);
+				break;
+			case "apir":
+			case "alliesplayersinradius":
+				target = new AlliesPlayersInRadiusTargeter(MythicBukkit.inst().getSkillManager(), e.getConfig());
+				e.register(target);
+				break;
+			case "napir":
+			case "notalliesplayersinradiustargeter":
+				target = new NotAlliesPlayersInRadiusTargeter(MythicBukkit.inst().getSkillManager(), e.getConfig());
+				e.register(target);
+				break;
+			case "alliesplayersnearorigin":
+				target = new AlliesPlayersNearOriginTargeter(MythicBukkit.inst().getSkillManager(), e.getConfig());
 				e.register(target);
 				break;
 		}

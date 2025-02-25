@@ -8,6 +8,9 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -24,9 +27,11 @@ import me.Vark123.EpicRPG.HealthSystem.RpgPlayerHealEvent;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Events.RpgPlayerManaRegenEvent;
 import me.Vark123.EpicRPG.Players.Events.RpgPlayerManaUseEvent;
+import me.Vark123.EpicRPG.RuneSystem.SummonSystem.SummonManager;
 import me.Vark123.EpicRPG.Utils.ChatPrintable;
 import me.Vark123.EpicRPG.Utils.TableGenerator;
 import me.Vark123.EpicRPG.Utils.TableGenerator.Receiver;
+import me.Vark123.EpicRPG.Utils.Utils;
 
 @Data
 public class RpgStats implements Serializable, ChatPrintable {
@@ -46,6 +51,10 @@ public class RpgStats implements Serializable, ChatPrintable {
 	private int mana = 7;
 	private int inteligencja = 3;
 	private int health = 100;
+	private int summonPoints = 4;
+	@Getter(value = AccessLevel.NONE)
+	@Setter(value = AccessLevel.NONE)
+	private int currentSummonPoints = 4;
 
 	@Setter(value = AccessLevel.NONE)
 	private int potionOchrona;
@@ -78,6 +87,7 @@ public class RpgStats implements Serializable, ChatPrintable {
 	private int finalMana;
 	private int finalInteligencja;
 	private int finalHealth;
+	private int finalSummonPoints;
 
 	@Setter(value = AccessLevel.NONE)
 	private int presentMana = 7;
@@ -89,6 +99,13 @@ public class RpgStats implements Serializable, ChatPrintable {
 	@Setter(value = AccessLevel.NONE)
 	@Getter(value = AccessLevel.NONE)
 	private BukkitTask regenManaTask;
+
+	@Setter(value = AccessLevel.NONE)
+	@Getter(value = AccessLevel.NONE)
+	private BossBar hpRegenBar;
+	@Setter(value = AccessLevel.NONE)
+	@Getter(value = AccessLevel.NONE)
+	private BossBar manaRegenBar;
 	
 	public RpgStats(RpgPlayer rpg) {
 		this.rpg = rpg;
@@ -129,6 +146,8 @@ public class RpgStats implements Serializable, ChatPrintable {
 			if(maxHp != health)
 				health = maxHp;
 		}
+		
+		createBossBars();
 	}
 	
 	public RpgStats(RpgPlayer rpg, YamlConfiguration fYml) {
@@ -154,17 +173,35 @@ public class RpgStats implements Serializable, ChatPrintable {
 		
 		this.presentMana = fYml.getInt("present_mana");
 		this.krag = fYml.getInt("krag");
+		
+		createBossBars();
+	}
+	
+	private void createBossBars() {
+		hpRegenBar = Bukkit.createBossBar("§c§oRegeneracja zycia §4❤", BarColor.RED, BarStyle.SOLID);
+		hpRegenBar.addPlayer(rpg.getPlayer());
+		hpRegenBar.setVisible(false);
+
+		manaRegenBar = Bukkit.createBossBar("§9§oRegeneracja many §3✺", BarColor.BLUE, BarStyle.SOLID);
+		manaRegenBar.addPlayer(rpg.getPlayer());
+		manaRegenBar.setVisible(false);
 	}
 	
 	public void createRegenHpTask(int seconds, double hp) {
 		if(regenHpTask != null && !regenHpTask.isCancelled()) {
 			regenHpTask.cancel();
 		}
+		
+		hpRegenBar.setProgress(1);
+		hpRegenBar.setVisible(true);
+		
 		regenHpTask = new BukkitRunnable() {
 			int sec = seconds;
 			@Override
 			public void run() {
 				if(sec <= 0) {
+					hpRegenBar.setVisible(false);
+					
 					Player p = rpg.getPlayer();
 					p.sendMessage(Main.getInstance().getPrefix()+" §eEfekt czasowej mikstury zycia skonczyl sie!");
 					p.spawnParticle(Particle.HEART, p.getLocation().add(0,1,0), 25, .6, .6, .6, 0.2);
@@ -172,6 +209,10 @@ public class RpgStats implements Serializable, ChatPrintable {
 					this.cancel();
 					return;
 				}
+				
+				double percent = (double) sec / (double) seconds;
+				hpRegenBar.setProgress(percent);
+				
 				--sec;
 				RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg, hp);
 				Bukkit.getPluginManager().callEvent(event);
@@ -183,11 +224,17 @@ public class RpgStats implements Serializable, ChatPrintable {
 		if(regenManaTask != null && !regenManaTask.isCancelled()) {
 			regenManaTask.cancel();
 		}
+		
+		manaRegenBar.setProgress(1);
+		manaRegenBar.setVisible(true);
+		
 		regenManaTask = new BukkitRunnable() {
 			int sec = seconds;
 			@Override
 			public void run() {
 				if(sec <= 0) {
+					manaRegenBar.setVisible(false);
+					
 					Player p = rpg.getPlayer();
 					p.sendMessage(Main.getInstance().getPrefix()+" §eEfekt czasowej mikstury many skonczyl sie!");
 					p.spawnParticle(Particle.NAUTILUS, p.getLocation().add(0,1,0), 25, .6, .6, .6, 0.2);
@@ -195,6 +242,10 @@ public class RpgStats implements Serializable, ChatPrintable {
 					this.cancel();
 					return;
 				}
+				
+				double percent = (double) sec / (double) seconds;
+				manaRegenBar.setProgress(percent);
+				
 				--sec;
 				addPresentManaSmart(mana);
 			}
@@ -312,6 +363,10 @@ public class RpgStats implements Serializable, ChatPrintable {
 	public void addKrag(int krag) {
 		this.krag += krag;
 	}
+	
+	public int getCurrentSummonPoints() {
+		return finalSummonPoints - SummonManager.get().getSummonPoints(rpg.getPlayer());
+	}
 
 	public void reset() {
 		this.sila = 3;
@@ -323,6 +378,7 @@ public class RpgStats implements Serializable, ChatPrintable {
 		this.presentMana = 7;
 		this.inteligencja = 3;
 		this.krag = 0;
+		this.summonPoints = 4;
 	}
 	
 	@Override
@@ -347,8 +403,8 @@ public class RpgStats implements Serializable, ChatPrintable {
 				"§2Mana: §a"+presentMana+" §7/ §7(§a"+mana+"§7/§a"+potionMana+"§7/§a"+finalMana+"§7)");
 		generator.addRow("", "§2Walka: §a"+walka+"§7/§a"+potionWalka+"§7/§a"+finalWalka, 
 				"§2Zycie: §a"+health+"§7/§a"+potionHealth+"§7/§a"+finalHealth);
-		generator.addRow("", "§2Krytyk §7[§2PVE§7]: §a"+String.format("%.1f",percent1)+"%",
-				"§2Krytyk §7[§2PVP§7]: §a"+String.format("%.1f",percent2)+"%");
+		generator.addRow("", "§2Krytyk §7[§2PVE§7]: §a"+Utils.formatCurrency(percent1)+"%",
+				"§2Krytyk §7[§2PVP§7]: §a"+Utils.formatCurrency(percent2)+"%");
 		generator.addRow("", "§2Krag: §a"+krag);
 		List<String> lines = generator.generate(Receiver.CLIENT, true, true);
 		

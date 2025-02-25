@@ -1,4 +1,4 @@
-package me.Vark123.EpicRPG.Potions;
+package me.Vark123.EpicRPG.OldPotions;
 
 import java.util.Map;
 import java.util.UUID;
@@ -19,6 +19,7 @@ import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 
+@Deprecated
 public class PotionManager {
 
 	private static final PotionManager instance = new PotionManager();

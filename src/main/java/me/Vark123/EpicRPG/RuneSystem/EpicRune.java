@@ -12,9 +12,8 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadableNBT;
 import lombok.Getter;
+import me.Vark123.EpicRPG.Utils.Utils;
 
 @Getter
 public class EpicRune {
@@ -37,11 +36,14 @@ public class EpicRune {
 	private String klasa;
 	
 	private int pvp;
+	
+	//SUMMON FIELDS
+	private int priceOverTime;
+	private int minIntToControl;
+	private int summonPoints;
 
 	public EpicRune(ItemStack it) {
-		ReadableNBT nbt = NBT.readNbt(it);
-		nbt = nbt.getCompound("PublicBukkitValues");
-		this.mythicType = nbt.getString("mythicmobs:type");
+		this.mythicType = Utils.getMythicMobItemType(it);
 		
 		ItemMeta im = it.getItemMeta();
 		this.name = im.getDisplayName();
@@ -57,34 +59,47 @@ public class EpicRune {
 				}
 				if(s.contains("Krag: ")) {
 					this.krag = Integer.parseInt(ChatColor.stripColor(s).split(": ")[1]);
+					return;
 				}
 				if(s.contains("Klasa: ")) {
 					this.klasa = ChatColor.stripColor(s).split(": ")[1];
+					return;
 				}
 				if(s.contains("Koszt ")) {
+					if(s.contains("utrzymania")){
+						this.priceOverTime = Integer.parseInt(
+								ChatColor.stripColor(s).split(": ")[1]);
+						return;
+					}
 					if(s.contains("zycia"))
 						this.hpInsteadMana = true;
 					this.price = Integer.parseInt(
 							ChatColor.stripColor(s).split(": ")[1]);
+					return;
 				}
 				if(s.contains("Obszar: ")) {
 					obszar = Double.parseDouble(
 							ChatColor.stripColor(s).split(": ")[1]);
+					return;
 				}
 				if(s.contains("Czas trwania: ")) {
 					this.durationTime = Integer.parseInt(
 							ChatColor.stripColor(s).split(": ")[1].split(" ")[0]);
+					return;
 				}
 				if(s.contains("Czas regeneracji: ")) {
 					this.regenTime = Integer.parseInt(
 							ChatColor.stripColor(s).split(": ")[1].split(" ")[0]);
+					return;
 				}
 				if(s.contains("Wplyw umyslu: ")) {
 					this.wplyw = Double.parseDouble(
 							ChatColor.stripColor(s).split(": ")[1]);
+					return;
 				}
 				if(s.contains("Typ magii")) {
 					this.magicType = ChatColor.stripColor(s).split(": ")[1];
+					return;
 				}
 				if(s.contains("PVP")) {
 					String tmp = ChatColor.stripColor(s).split(": ")[1].toLowerCase();
@@ -96,7 +111,19 @@ public class EpicRune {
 							this.pvp = 2;
 							break;
 					}
+					return;
 				}
+				if(s.contains("Sila umyslu")) {
+					this.minIntToControl = Integer.parseInt(
+							ChatColor.stripColor(s).split(": ")[1].split(" ")[0]);
+					return;
+				}
+				if(s.contains("Punkty przywolan")) {
+					this.summonPoints = Integer.parseInt(
+							ChatColor.stripColor(s).split(": ")[1].split(" ")[0]);
+					return;
+				}
+				
 			});
 	}
 	

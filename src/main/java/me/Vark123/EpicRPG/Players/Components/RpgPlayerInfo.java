@@ -19,6 +19,7 @@ import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Utils.ChatPrintable;
 import me.Vark123.EpicRPG.Utils.TableGenerator;
 import me.Vark123.EpicRPG.Utils.TableGenerator.Receiver;
+import me.Vark123.EpicRPG.Utils.Utils;
 
 @Getter
 public class RpgPlayerInfo implements Serializable, ChatPrintable{
@@ -129,9 +130,9 @@ public class RpgPlayerInfo implements Serializable, ChatPrintable{
 	public void print(CommandSender sender) {
 		TableGenerator generator = new TableGenerator(TableGenerator.Alignment.LEFT, TableGenerator.Alignment.LEFT, TableGenerator.Alignment.LEFT);
 		generator.addRow("", "§2Nick: §a"+rpg.getPlayer().getName(), "§2Klasa: §a"+proffesion);
-		generator.addRow("", "§2Poziom: §a"+level, "§2Punkty nauki: §a"+pn);
-		generator.addRow("", "§2Doswiadczenie:", "§a"+exp+"§7/§a"+nextLevel
-				+" §7(§a"+String.format("%.2f", (((double)(exp - ExpSystem.getInstance().getNextLevelExp(level - 1)))
+		generator.addRow("", "§2Poziom: §a"+level, "§2Punkty nauki: §a"+Utils.formatCurrencyGrouped(pn));
+		generator.addRow("", "§2Doswiadczenie:", "§a"+Utils.formatCurrency(exp)+"§7/§a"+Utils.formatCurrency(nextLevel)
+				+" §7(§a"+ Utils.formatCurrency((((double)(exp - ExpSystem.getInstance().getNextLevelExp(level - 1)))
 						/ ((double)(nextLevel - ExpSystem.getInstance().getNextLevelExp(level - 1)))
 						* 100.0)) + "%§7)");
 		List<String> lines = generator.generate(Receiver.CLIENT, true, true);

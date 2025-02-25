@@ -24,6 +24,7 @@ import me.Vark123.EpicRPG.RuneSystem.Events.RuneCastGlobalCdCalcEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.RuneCastRuneCdCalcEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.RuneUseEvent;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.OgnistaStrzala;
+import me.Vark123.EpicRPG.RuneSystem.Runes._InProgress.PrzyzwanieWilka;
 
 @Getter
 public final class RuneManager {
@@ -68,6 +69,11 @@ public final class RuneManager {
 		}
 		
 		if(!isRegenTimePassed(p, rune)) {
+			return false;
+		}
+		
+		if(rune.getSummonPoints() > rpg.getStats().getCurrentSummonPoints()) {
+			p.sendMessage(Main.getInstance().getPrefix()+" §cMusisz miec przynajmnie §7§o"+rune.getSummonPoints()+" §cwolne Punkty Przywolan, by uzyc "+rune.getName());
 			return false;
 		}
 		
@@ -278,7 +284,7 @@ public final class RuneManager {
 				break;
 			case MUSIC_DISC_CREATOR:
 				switch(rune.getMythicType()) {
-				
+					case "PrzyzwanieWilka":			return new PrzyzwanieWilka(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_CREATOR_MUSIC_BOX:

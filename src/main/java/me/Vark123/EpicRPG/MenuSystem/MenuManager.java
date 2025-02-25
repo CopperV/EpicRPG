@@ -76,8 +76,7 @@ public class MenuManager {
 				JewelryMenuManager.getInstance().openMenu(p);
 				return true;
 			case 16:
-				BackpackManager.getInstance().openBackpackRepairMenu(p);
-				return true;
+				return false;
 			case 17:
 				KamiennyObserwator.openRyseMenu(p);
 				return true;

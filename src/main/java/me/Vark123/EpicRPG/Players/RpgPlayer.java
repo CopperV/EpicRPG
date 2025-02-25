@@ -10,15 +10,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.scoreboard.Scoreboard;
 
 import lombok.Getter;
 import lombok.Setter;
 import me.Vark123.EpicRPG.Config;
-import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.RpgScoreboard;
 import me.Vark123.EpicRPG.Core.ExpSystem;
 import me.Vark123.EpicRPG.Core.Events.PlayerKlasaResetEvent;
@@ -38,8 +34,6 @@ import me.Vark123.EpicRPG.Players.Components.Scoreboard.EpicScoreboard;
 import me.Vark123.EpicRPG.Stats.ChangeStats;
 import me.Vark123.EpicRPG.Utils.ChatPrintable;
 import me.Vark123.EpicRPG.Utils.Utils;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 
 @Getter
 public class RpgPlayer implements Serializable, ChatPrintable {
@@ -48,6 +42,7 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 
 	private Player player;
 	
+	@Deprecated
 	private BukkitTask display;
 	private BukkitTask score;
 	
@@ -63,7 +58,6 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 	@Setter
 	private ItemStack backItem;
 	
-	private Scoreboard board;
 	private EpicCompass compass;
 	private EpicScoreboard scoreboard;
 	private EpicMarker marker;
@@ -83,10 +77,9 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 		this.compass = new EpicCompass(this);
 		this.scoreboard = new EpicScoreboard(this);
 		this.marker = new EpicMarker(this);
-		
-		createDisplay();
-		updateBarExp();
-		updateBarLevel();
+//		createDisplay();
+//		updateBarExp();
+//		updateBarLevel();
 	}
 	
 	public RpgPlayer(Player p, ResultSet set) {
@@ -110,10 +103,9 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 		this.compass = new EpicCompass(this);
 		this.scoreboard = new EpicScoreboard(this);
 		this.marker = new EpicMarker(this);
-		
-		createDisplay();
-		updateBarExp();
-		updateBarLevel();
+//		createDisplay();
+//		updateBarExp();
+//		updateBarLevel();
 	}
 	
 	public RpgPlayer(Player p, YamlConfiguration fYml) {
@@ -131,84 +123,94 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 		this.compass = new EpicCompass(this);
 		this.scoreboard = new EpicScoreboard(this);
 		this.marker = new EpicMarker(this);
-		
-		createDisplay();
-		updateBarExp();
-		updateBarLevel();
+//		createDisplay();
+//		updateBarExp();
+//		updateBarLevel();
 	}
 	
 	public void createScoreboard() {
-		if(score != null && !score.isCancelled())
-			return;
-		this.board = Bukkit.getScoreboardManager().getNewScoreboard();
-		RpgScoreboard.createScore(player);
-		this.score = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.getInstance(), ()->{
-			RpgScoreboard.updateScore(player);
-		}, 0, 60);
+		RpgScoreboard.createScoreboard(player);
+//		if(score != null && !score.isCancelled())
+//			return;
+//		this.board = Bukkit.getScoreboardManager().getNewScoreboard();
+//		RpgScoreboard.createScore(player);
+//		this.score = Bukkit.getScheduler().runTaskTimerAsynchronously(Main.getInstance(), ()->{
+//			RpgScoreboard.updateScore(player);
+//		}, 0, 60);
 	}
 	
+	public void removeScoreboard() {
+		RpgScoreboard.removeScoreboard(player);
+	}
+
+	@SuppressWarnings("unused")
+	@Deprecated
 	private void createDisplay() {
-		this.display = new BukkitRunnable() {
-			
-			@Override
-			public void run() {
-				displayUpdate();
-			}
-		}.runTaskTimer(Main.getInstance(), 0, 20*2);
+//		this.display = new BukkitRunnable() {
+//			
+//			@Override
+//			public void run() {
+//				displayUpdate();
+//			}
+//		}.runTaskTimer(Main.getInstance(), 0, 20*2);
 	}
 	
+	@Deprecated
 	public void displayUpdate() {
-		StringBuilder actionMessage = new StringBuilder();
-		actionMessage.append("§4🗡 "+stats.getFinalObrazenia());
-		if(player.hasPotionEffect(PotionEffectType.WITHER)) {
-			actionMessage.append("  §8☠ ");
-			int lenght = String.valueOf((int) player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()).length();
-			for(int i = 0; i < lenght; ++i)
-				actionMessage.append("✘");
-			actionMessage.append("/");
-			for(int i = 0; i < lenght; ++i)
-				actionMessage.append("✘");
-		} else {
-			actionMessage.append("  §c❤ " + ((int) player.getHealth()) + "/"
-					+ ((int) player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
-			if(player.getAbsorptionAmount() >= 1)
-				actionMessage.append("  §6§l♰ §6"+((int)player.getAbsorptionAmount()));
-		}
-		actionMessage.append(getGamemodeInfo());
-		actionMessage.append("  §b✺ "+stats.getPresentMana()+"/"+stats.getFinalMana());
-		actionMessage.append("  §2§l🛡 §2"+stats.getFinalOchrona());
-		
-		player.spigot().sendMessage(ChatMessageType.ACTION_BAR, 
-				TextComponent.fromLegacyText(actionMessage.toString()));
+//		StringBuilder actionMessage = new StringBuilder();
+//		actionMessage.append("§4🗡 "+stats.getFinalObrazenia());
+//		if(player.hasPotionEffect(PotionEffectType.WITHER)) {
+//			actionMessage.append("  §8☠ ");
+//			int lenght = String.valueOf((int) player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()).length();
+//			for(int i = 0; i < lenght; ++i)
+//				actionMessage.append("✘");
+//			actionMessage.append("/");
+//			for(int i = 0; i < lenght; ++i)
+//				actionMessage.append("✘");
+//		} else {
+//			actionMessage.append("  §c❤ " + ((int) player.getHealth()) + "/"
+//					+ ((int) player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
+//			if(player.getAbsorptionAmount() >= 1)
+//				actionMessage.append("  §6§l♰ §6"+((int)player.getAbsorptionAmount()));
+//		}
+//		actionMessage.append(getGamemodeInfo());
+//		actionMessage.append("  §b✺ "+stats.getPresentMana()+"/"+stats.getFinalMana());
+//		actionMessage.append("  §2§l🛡 §2"+stats.getFinalOchrona());
+//		
+//		player.spigot().sendMessage(ChatMessageType.ACTION_BAR, 
+//				TextComponent.fromLegacyText(actionMessage.toString()));
 	}
 	
+	@SuppressWarnings("unused")
+	@Deprecated
 	private String getGamemodeInfo() {
-		if(!player.hasPermission("group.builder"))
-			return "";
-		
-		int gm;
-		switch(player.getGameMode()) {
-			case ADVENTURE:
-				gm = 2;
-				break;
-			case CREATIVE:
-				gm = 1;
-				break;
-			case SPECTATOR:
-				gm = 3;
-				break;
-			case SURVIVAL:
-				gm = 0;
-				break;
-			default:
-				return "";
-		}
-		
-		return "  §e☤ "+gm;
+//		if(!player.hasPermission("group.builder"))
+//			return "";
+//		
+//		int gm;
+//		switch(player.getGameMode()) {
+//			case ADVENTURE:
+//				gm = 2;
+//				break;
+//			case CREATIVE:
+//				gm = 1;
+//				break;
+//			case SPECTATOR:
+//				gm = 3;
+//				break;
+//			case SURVIVAL:
+//				gm = 0;
+//				break;
+//			default:
+//				return "";
+//		}
+//		
+//		return "  §e☤ "+gm;
+		return "";
 	}
 	
 	public void endTasks() {
-		score.cancel();
+//		score.cancel();
 		skills.endTasks();
 		
 		compass.getCompass().removeAll();
@@ -246,10 +248,12 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 		return true;
 	}
 	
+	@Deprecated
 	public void updateBarLevel() {
 		player.setLevel(info.getLevel());
 	}
 	
+	@Deprecated
 	public void updateBarExp() {
 		float prevLvlExp = ExpSystem.getInstance().getNextLevelExp(info.getLevel() - 1);
 		float presLvlExp = info.getNextLevel();

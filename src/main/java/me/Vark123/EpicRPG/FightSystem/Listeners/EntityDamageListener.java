@@ -12,6 +12,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
+import io.lumine.mythic.api.adapters.AbstractEntity;
+import io.lumine.mythic.bukkit.BukkitAdapter;
 import me.Vark123.EpicRPG.FightSystem.DamageManager;
 import me.Vark123.EpicRPG.FightSystem.DamageType;
 import me.Vark123.EpicRPG.FightSystem.Calculators.IDamageCalculator.DamageCalculatorResult;
@@ -34,13 +36,17 @@ public class EntityDamageListener implements Listener {
 		if(e instanceof EntityDamageByEntityEvent)
 			return;
 		
+//		Entity _victim = e.getEntity();
+//		if(!(_victim instanceof Player))
+//			return;
 		Entity _victim = e.getEntity();
-		if(!(_victim instanceof Player))
+		if(!(_victim instanceof LivingEntity))
 			return;
+		
+		LivingEntity victim = (LivingEntity) _victim;
 		
 		DamageSource source = e.getDamageSource();
 		DamageType damageType = DamageType.CUSTOM;
-		Player victim = (Player) _victim;
 		
 		DamageCause cause = e.getCause();
 		if(cause.equals(DamageCause.FALL)
@@ -66,9 +72,16 @@ public class EntityDamageListener implements Listener {
 		
 		damageInfo.damage = defenseEvent.getFinalDamage();
 		
-		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer((Player) victim);
-		int level = rpg.getInfo().getLevel();
-		double minimalBaseDamage = (level * 0.1) + 2;
+		double minimalBaseDamage;
+		
+		if(victim instanceof Player) {
+			RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer((Player) victim);
+			int level = rpg.getInfo().getLevel();
+			minimalBaseDamage = (level * 0.1) + 2;
+		} else {
+			minimalBaseDamage = 1;
+		}
+		
 		if(minimalBaseDamage > damageInfo.damage) {
 			damageInfo.damage = minimalBaseDamage;
 			
@@ -188,51 +201,55 @@ public class EntityDamageListener implements Listener {
 		}
 		
 		//DEFENSE STATEMENT
+		damageInfo = DamageManager.get()
+				.getDefenseCalculator().calc(damager, victim, damage, damageInfo);
+		
+		EpicDefenseEvent defenseEvent = new EpicDefenseEvent(
+				damager, 
+				victim, 
+				source, 
+				damageType, 
+				damageInfo.damage,
+				damageInfo);
+		Bukkit.getPluginManager().callEvent(defenseEvent);
+		if(defenseEvent.isCancelled()) {
+			e.setCancelled(true);
+			return;
+		}
+		
+		damageInfo.damage = defenseEvent.getFinalDamage();
+		double minimalBaseDamage;
+		
 		if(victim instanceof Player) {
-			damageInfo = DamageManager.get()
-					.getDefenseCalculator().calc(damager, victim, damage, damageInfo);
-			
-			EpicDefenseEvent defenseEvent = new EpicDefenseEvent(
-					damager, 
-					victim, 
-					source, 
-					damageType, 
-					damageInfo.damage,
-					damageInfo);
-			Bukkit.getPluginManager().callEvent(defenseEvent);
-			if(defenseEvent.isCancelled()) {
-				e.setCancelled(true);
-				return;
-			}
-			
-			damageInfo.damage = defenseEvent.getFinalDamage();
 			
 			RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer((Player) victim);
 			int level = rpg.getInfo().getLevel();
-			double minimalBaseDamage = (level * 0.1) + 2;
-			if(minimalBaseDamage > damageInfo.damage) {
-				damageInfo.damage = minimalBaseDamage;
-				
-				EpicDefenseMinimalDamageEvent minimalDamageEvent = new EpicDefenseMinimalDamageEvent(
-						damager, 
-						victim, 
-						source, 
-						damageType, 
-						damageInfo.damage,
-						damageInfo);
-				Bukkit.getPluginManager().callEvent(minimalDamageEvent);
-				if(minimalDamageEvent.isCancelled()) {
-					e.setCancelled(true);
-					return;
-				}
-				
-				damageInfo.damage = minimalDamageEvent.getFinalDamage();
-			}
-			
-			if(damageInfo.damage <= 0) {
+			minimalBaseDamage = (level * 0.1) + 2;
+		} else {
+			minimalBaseDamage = 1;
+		}
+		if (minimalBaseDamage > damageInfo.damage) {
+			damageInfo.damage = minimalBaseDamage;
+
+			EpicDefenseMinimalDamageEvent minimalDamageEvent = new EpicDefenseMinimalDamageEvent(
+					damager,
+					victim,
+					source, 
+					damageType, 
+					damageInfo.damage, 
+					damageInfo);
+			Bukkit.getPluginManager().callEvent(minimalDamageEvent);
+			if (minimalDamageEvent.isCancelled()) {
 				e.setCancelled(true);
 				return;
 			}
+
+			damageInfo.damage = minimalDamageEvent.getFinalDamage();
+		}
+
+		if (damageInfo.damage <= 0) {
+			e.setCancelled(true);
+			return;
 		}
 		
 		EpicDamageEffectEvent effectEvent = new EpicDamageEffectEvent(
@@ -255,7 +272,22 @@ public class EntityDamageListener implements Listener {
 		}
 		
 		e.setDamage(damageInfo.damage);
+		Utils.setLastDamageCalc(victim, damageInfo.damage);
+	}
+	
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void overrideMythicMobsDamage(EntityDamageEvent e) {
+		if(e.isCancelled())
+			return;
 		
+		AbstractEntity aEntity = BukkitAdapter.adapt(e.getEntity());
+		if(aEntity == null || !aEntity.hasMetadata("EpicLastDamage")) {
+			return;
+		}
+		
+		double damage = (double) aEntity.getMetadata("EpicLastDamage").get();
+		e.setDamage(damage);
+		aEntity.removeMetadata("EpicLastDamage");
 	}
 	
 }

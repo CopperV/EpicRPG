@@ -1,4 +1,4 @@
-package me.Vark123.EpicRPG.Potions;
+package me.Vark123.EpicRPG.OldPotions;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 
 import me.Vark123.EpicRPG.Utils.Utils;
 
+@Deprecated
 public class PotionDrinkEvent implements Listener {
 
 	@EventHandler

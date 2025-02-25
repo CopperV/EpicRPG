@@ -26,26 +26,28 @@ import me.Vark123.EpicRPG.Players.Components.RpgSkills;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import me.Vark123.EpicRPG.Stats.ChangeStats;
 import me.Vark123.EpicRPG.Stats.CheckStats;
+import me.Vark123.EpicRPG.Stats.ComparableStat;
+import me.Vark123.EpicRPG.Stats.StatTypes;
 import me.Vark123.EpicRPG.Utils.Utils;
 
 public class MeleeCalculator implements IDamageCalculator {
 	
-	private static Map<String, Integer> normalStatsPriority = new LinkedHashMap<>();
-	private static Map<String, Integer> critStatsPriority = new LinkedHashMap<>();
+	private static Map<StatTypes, Integer> normalStatsPriority = new LinkedHashMap<>();
+	private static Map<StatTypes, Integer> critStatsPriority = new LinkedHashMap<>();
 	static {
-		normalStatsPriority.put("str", 0);
-		normalStatsPriority.put("zd", 1);
-		normalStatsPriority.put("zr", 2);
-		normalStatsPriority.put("wytrz", 3);
-		normalStatsPriority.put("int", 4);
-		normalStatsPriority.put("mana", 5);
+		normalStatsPriority.put(StatTypes.SILA, 0);
+		normalStatsPriority.put(StatTypes.ZDOLNOSCI_MYSLIWSKIE, 1);
+		normalStatsPriority.put(StatTypes.ZRECZNOSC, 2);
+		normalStatsPriority.put(StatTypes.WYTRZYMALOSC, 3);
+		normalStatsPriority.put(StatTypes.INTELIGENCJA, 4);
+		normalStatsPriority.put(StatTypes.MANA, 5);
 
-		critStatsPriority.put("zr", 0);
-		critStatsPriority.put("str", 1);
-		critStatsPriority.put("zd", 2);
-		critStatsPriority.put("int", 3);
-		critStatsPriority.put("wytrz", 4);
-		critStatsPriority.put("mana", 5);
+		critStatsPriority.put(StatTypes.ZRECZNOSC, 0);
+		critStatsPriority.put(StatTypes.SILA, 1);
+		critStatsPriority.put(StatTypes.ZDOLNOSCI_MYSLIWSKIE, 2);
+		critStatsPriority.put(StatTypes.INTELIGENCJA, 3);
+		critStatsPriority.put(StatTypes.WYTRZYMALOSC, 4);
+		critStatsPriority.put(StatTypes.MANA, 5);
 	}
 
 	@Override
@@ -62,8 +64,9 @@ public class MeleeCalculator implements IDamageCalculator {
 		
 		Player p = (Player) damager;
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
-		
-		if(Utils.hasWeapon(p)) {
+
+		boolean hasWeapon = Utils.hasWeapon(p);
+		if(hasWeapon) {
 			if(p.getInventory().getItemInMainHand().getType().equals(Material.BOW) ||
 					p.getInventory().getItemInMainHand().getType().equals(Material.CROSSBOW)) {
 				p.sendMessage(Main.getInstance().getPrefix()+" §cNie mozna bic bronia dystansowa!");
@@ -79,7 +82,7 @@ public class MeleeCalculator implements IDamageCalculator {
 				return result;
 			}
 		} else {
-			
+			ChangeStats.change(rpg);
 		}
 		
 		RpgStats stats = rpg.getStats();
@@ -91,14 +94,19 @@ public class MeleeCalculator implements IDamageCalculator {
 			crit = true;
 		result.isCrit = crit;
 		
-		if(!Utils.hasWeapon(p)) {
-			if(skills.hasPolnocnyBarbarzynca()) {
-				stats.setFinalObrazenia((int) (stats.getFinalObrazenia() + stats.getFinalSila()*0.8));
-				stats.setFinalObrazenia((int) (stats.getFinalObrazenia() + stats.getFinalWytrzymalosc()*0.65));
-			} else {
-				stats.setFinalObrazenia((int) (stats.getFinalObrazenia() * 0.1));
-			}
+		if(!hasWeapon && skills.hasPolnocnyBarbarzynca()) {
+			stats.setFinalObrazenia((int) (stats.getFinalObrazenia() + stats.getFinalSila()*0.8));
+			stats.setFinalObrazenia((int) (stats.getFinalObrazenia() + stats.getFinalWytrzymalosc()*0.65));
 		}
+		
+//		if(!Utils.hasWeapon(p)) {
+//			if(skills.hasPolnocnyBarbarzynca()) {
+//				stats.setFinalObrazenia((int) (stats.getFinalObrazenia() + stats.getFinalSila()*0.8));
+//				stats.setFinalObrazenia((int) (stats.getFinalObrazenia() + stats.getFinalWytrzymalosc()*0.65));
+//			} else {
+//				stats.setFinalObrazenia((int) (stats.getFinalObrazenia() * 0.1));
+//			}
+//		}
 		
 		if(victim instanceof Player) {
 			damage = stats.getFinalObrazenia();
@@ -116,18 +124,21 @@ public class MeleeCalculator implements IDamageCalculator {
 		int level = rpg.getInfo().getLevel();
 		MutableDouble presentDamage = new MutableDouble(damage);
 		MutableDouble totalDamage = new MutableDouble(damage);
-		Collection<StatInfo> statInfos = getMostSignificantStats(stats, crit);
+		Collection<ComparableStat> statInfos = getMostSignificantStats(stats, crit);
 		statInfos.stream()
 			.map(statInfo -> {
-				double max = level * Config.get().getMaxLearnedStatPerLevel() * statInfo.learnFactor * Config.get().getLearnBreakFactor();
-				if(statInfo.getValue() < max) {
-					return statInfo.getFactor() * statInfo.getValue() * statInfo.getStatFactor();
+				double max = level * Config.get().getMaxLearnedStatPerLevel() * (1/statInfo.getComparableFactor()) * Config.get().getLearnBreakFactor();
+				if(statInfo.getValue() <= max) {
+					double s1 = statInfo.getPercentSystemFactor() * statInfo.getValue();
+					double s2 = statInfo.getAdditiveSystemFactor() * statInfo.getValue();
+					return s1 * presentDamage.doubleValue() + s2;
 				}
 				
-				double tmp = max + Config.get().getStatBreakFactor() * (statInfo.getValue() - max);
-				return statInfo.getFactor() * tmp * statInfo.getStatFactor();
+				double statValue = max + Config.get().getStatBreakFactor() * (statInfo.getValue() - max);
+				double s1 = statInfo.getPercentSystemFactor() * statValue;
+				double s2 = statInfo.getAdditiveSystemFactor() * statValue;
+				return s1 * presentDamage.doubleValue() + s2;
 			})
-			.map(_damage -> _damage * presentDamage.doubleValue())
 			.forEach(totalDamage::add);
 		
 		damage = totalDamage.doubleValue();
@@ -135,41 +146,47 @@ public class MeleeCalculator implements IDamageCalculator {
 		if(victim instanceof LivingEntity)
 			damage = DamageUtils.randomizeEntityHpDamage(damage, rpg, victim);
 		
+
+		if(!hasWeapon && !skills.hasPolnocnyBarbarzynca()) {
+			damage *= 0.1;
+		}
+		
 		result.damage = damage;
 		return result;
 	}
 	
-	private Collection<StatInfo> getMostSignificantStats(RpgStats stats, boolean isCrit) {
+	private Collection<ComparableStat> getMostSignificantStats(RpgStats stats, boolean isCrit) {
 		//INIT
-		List<StatInfo> startList = new ArrayList<>(6);
-		startList.add(new StatInfo("str", stats.getFinalSila(), stats.getFinalSila(), 1, 1, isCrit ? 0.004 : 0.004));
-		startList.add(new StatInfo("wytrz", stats.getFinalWytrzymalosc(), stats.getFinalWytrzymalosc(), 1, 1, isCrit ? 0.002 : 0.0017));
-		startList.add(new StatInfo("zr", stats.getFinalZrecznosc(), stats.getFinalZrecznosc(), 1, 1, isCrit ? 0.0052 : 0.0024));
-		startList.add(new StatInfo("zd", stats.getFinalZdolnosciMysliwskie(), stats.getFinalZdolnosciMysliwskie(), 1, 1, isCrit ? 0.0028 : 0.0026));
-		startList.add(new StatInfo("int", stats.getFinalInteligencja(), stats.getFinalInteligencja(), 1, 1, isCrit ? 0.0023 : 0.002));
-		startList.add(new StatInfo("mana", stats.getFinalMana(), stats.getFinalMana() * 0.5, 1, 2, isCrit ? 0.001 : 0.0008));
+		List<ComparableStat> startList = new ArrayList<>(6);
+		startList.add(new ComparableStat(StatTypes.SILA, stats.getFinalSila(), 1, isCrit ? 0.004 : 0.004, isCrit ? 0.2 : 0.2));
+		startList.add(new ComparableStat(StatTypes.WYTRZYMALOSC, stats.getFinalWytrzymalosc(), 1, isCrit ? 0.002 : 0.0017, isCrit ? 0.1 : 0.085));
+		startList.add(new ComparableStat(StatTypes.ZRECZNOSC, stats.getFinalZrecznosc(), 1, isCrit ? 0.0052 : 0.0024, isCrit ? 0.26 : 0.12));
+		startList.add(new ComparableStat(StatTypes.ZDOLNOSCI_MYSLIWSKIE, stats.getFinalZdolnosciMysliwskie(), 1, isCrit ? 0.0028 : 0.0026, isCrit ? 0.14 : 0.13));
+		startList.add(new ComparableStat(StatTypes.INTELIGENCJA, stats.getFinalInteligencja(), 1, isCrit ? 0.0023 : 0.002, isCrit ? 0.115 : 0.1));
+		startList.add(new ComparableStat(StatTypes.MANA, stats.getFinalMana(), 0.5, isCrit ? 0.001 : 0.0008, isCrit ? 0.05 : 0.04));
 		
 		//SORT
-		List<StatInfo> sortedList = startList.stream()
-				.filter(stat -> stat.getComparableValue() > 0)
+		List<ComparableStat> sortedList = startList.stream()
+				.filter(stat -> stat.getComparableFactor() > 0)
 				.sorted((stat1, stat2) -> {
-					int compare = Double.compare(stat1.comparableValue, stat2.comparableValue);
+					int compare = Double.compare(stat1.getComparableFactor() * stat1.getValue(), stat2.getComparableFactor() * stat2.getValue());
 					if(compare != 0)
 						return Math.negateExact(compare);
-					return isCrit ? 
-							Integer.compare(critStatsPriority.getOrDefault(stat1.getId(), 6), critStatsPriority.getOrDefault(stat2.getId(), 6)) :
-							Integer.compare(normalStatsPriority.getOrDefault(stat1.getId(), 6), normalStatsPriority.getOrDefault(stat2.getId(), 6));
+					Map<StatTypes, Integer> priorityMap = isCrit ? critStatsPriority : normalStatsPriority;
+					return Integer.compare(priorityMap.get(stat1.getType()), priorityMap.get(stat2.getType()));
 				})
 				.collect(Collectors.toList());
 		
-		//PICK
-		List<StatInfo> pickedList = new LinkedList<>();
+		List<ComparableStat> pickedList = new LinkedList<>();
 		if(sortedList.size() > 0)
 			pickedList.add(sortedList.get(0));
 		if(sortedList.size() > 1) {
-			StatInfo statInfo = sortedList.get(1);
-			pickedList.add(new StatInfo(statInfo.getId(), statInfo.getValue(), statInfo.getComparableValue(), 0.5, statInfo.getLearnFactor(), statInfo.getFactor()));
+			ComparableStat stat = sortedList.get(1);
+			stat.setPercentSystemFactor(stat.getPercentSystemFactor() * 0.5);
+			stat.setAdditiveSystemFactor(stat.getAdditiveSystemFactor() * 0.5);
+			pickedList.add(stat);
 		}
+		
 		return pickedList;
 	}
 	

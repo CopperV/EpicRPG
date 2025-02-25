@@ -1,5 +1,6 @@
-package me.Vark123.EpicRPG.Potions;
+package me.Vark123.EpicRPG.OldPotions;
 
+@Deprecated
 public enum RpgPotionType {
 
 	MANA,

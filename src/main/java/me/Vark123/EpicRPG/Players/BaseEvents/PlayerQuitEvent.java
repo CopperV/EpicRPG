@@ -16,29 +16,15 @@ public class PlayerQuitEvent implements Listener {
 
 	@EventHandler
 	public void onQuit(org.bukkit.event.player.PlayerQuitEvent e) {
-		Player p = e.getPlayer();
-		if(!PlayerManager.getInstance().playerExists(p))
-			return;
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
-				rpg.endTasks();
-				DBOperations.savePlayer(rpg);
-				FileOperations.savePlayerJewerly(rpg);
-				FileOperations.savePlayerBackItem(rpg);
-				PlayerManager.getInstance().removePlayer(p);
-			}
-		}.runTaskAsynchronously(Main.getInstance());
-
-		if(p.isInsideVehicle()) {
-			p.leaveVehicle();
-		}
+		handlePlayerLeave(e.getPlayer());
 	}
 	
 	@EventHandler
 	public void onKick(PlayerKickEvent e) {
-		Player p = e.getPlayer();
+		handlePlayerLeave(e.getPlayer());
+	}
+	
+	private void handlePlayerLeave(Player p) {
 		if(!PlayerManager.getInstance().playerExists(p))
 			return;
 		new BukkitRunnable() {
@@ -46,6 +32,7 @@ public class PlayerQuitEvent implements Listener {
 			public void run() {
 				RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 				rpg.endTasks();
+				rpg.removeScoreboard();
 				DBOperations.savePlayer(rpg);
 				FileOperations.savePlayerJewerly(rpg);
 				FileOperations.savePlayerBackItem(rpg);

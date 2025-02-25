@@ -5,9 +5,25 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import me.Vark123.EpicOptions.Main;
+import me.Vark123.EpicRPG.Consumables.Impl.WywarPotionConsumable.IWywarSetter;
 import me.Vark123.EpicRPG.OldRuneSystem.RuneManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.RuneSystem.ACastableRune.RuneLockerTypes;
+import me.Vark123.EpicRPG.Utils.Utils;
 
 public class RpgModifiers implements Serializable {
 
@@ -123,11 +139,73 @@ public class RpgModifiers implements Serializable {
 	private int potionInteligencja;
 	private int potionWalka;
 	
+	@Setter(value = AccessLevel.NONE)
+	@Getter(value = AccessLevel.NONE)
+	private BossBar wywarSilaBar;
+	@Setter(value = AccessLevel.NONE)
+	@Getter(value = AccessLevel.NONE)
+	private BossBar wywarWytrzymaloscBar;
+	@Setter(value = AccessLevel.NONE)
+	@Getter(value = AccessLevel.NONE)
+	private BossBar wywarZrecznoscBar;
+	@Setter(value = AccessLevel.NONE)
+	@Getter(value = AccessLevel.NONE)
+	private BossBar wywarZdolnosciBar;
+	@Setter(value = AccessLevel.NONE)
+	@Getter(value = AccessLevel.NONE)
+	private BossBar wywarInteligencjaBar;
+	@Setter(value = AccessLevel.NONE)
+	@Getter(value = AccessLevel.NONE)
+	private BossBar wywarWalkaBar;
+
+	@Setter(value = AccessLevel.NONE)
+	@Getter(value = AccessLevel.NONE)
+	private BukkitTask wywarSilaTask;
+	@Setter(value = AccessLevel.NONE)
+	@Getter(value = AccessLevel.NONE)
+	private BukkitTask wywarWytrzymaloscTask;
+	@Setter(value = AccessLevel.NONE)
+	@Getter(value = AccessLevel.NONE)
+	private BukkitTask wywarZrecznoscTask;
+	@Setter(value = AccessLevel.NONE)
+	@Getter(value = AccessLevel.NONE)
+	private BukkitTask wywarZdolnosciTask;
+	@Setter(value = AccessLevel.NONE)
+	@Getter(value = AccessLevel.NONE)
+	private BukkitTask wywarInteligencjaTask;
+	@Setter(value = AccessLevel.NONE)
+	@Getter(value = AccessLevel.NONE)
+	private BukkitTask wywarWalkaTask;
+	
 	private Collection<RuneLockerTypes> activeLockers = new HashSet<>();
 	private Collection<EpicModifierTypes> activeModifiers = new HashSet<>();
 	
 	public RpgModifiers(RpgPlayer rpg) {
 		this.rpg = rpg;
+
+		wywarSilaBar = Bukkit.createBossBar("§7§oWywar Sily I", BarColor.WHITE, BarStyle.SOLID);
+		wywarSilaBar.addPlayer(rpg.getPlayer());
+		wywarSilaBar.setVisible(false);
+
+		wywarWytrzymaloscBar = Bukkit.createBossBar("§7§oWywar Wytrzymalosci I", BarColor.WHITE, BarStyle.SOLID);
+		wywarWytrzymaloscBar.addPlayer(rpg.getPlayer());
+		wywarWytrzymaloscBar.setVisible(false);
+
+		wywarZrecznoscBar = Bukkit.createBossBar("§7§oWywar Zrecznosci I", BarColor.WHITE, BarStyle.SOLID);
+		wywarZrecznoscBar.addPlayer(rpg.getPlayer());
+		wywarZrecznoscBar.setVisible(false);
+
+		wywarZdolnosciBar = Bukkit.createBossBar("§7§oWywar Zdolnosci I", BarColor.WHITE, BarStyle.SOLID);
+		wywarZdolnosciBar.addPlayer(rpg.getPlayer());
+		wywarZdolnosciBar.setVisible(false);
+
+		wywarInteligencjaBar = Bukkit.createBossBar("§7§oWywar Inteligencji I", BarColor.WHITE, BarStyle.SOLID);
+		wywarInteligencjaBar.addPlayer(rpg.getPlayer());
+		wywarInteligencjaBar.setVisible(false);
+
+		wywarWalkaBar = Bukkit.createBossBar("§7§oWywar Walki I", BarColor.WHITE, BarStyle.SOLID);
+		wywarWalkaBar.addPlayer(rpg.getPlayer());
+		wywarWalkaBar.setVisible(false);
 	}
 
 	public RpgPlayer getRpg() {
@@ -245,6 +323,104 @@ public class RpgModifiers implements Serializable {
 		LODOWA_TARCZA_M
 	}
 
+	public void createWywarSilaTask(int seconds, int level) {
+		if(wywarSilaTask != null && !wywarSilaTask.isCancelled()) {
+			wywarSilaTask.cancel();
+		}
+		
+		wywarSilaBar.setProgress(1);
+		wywarSilaBar.setTitle("§7§oWywar Sily "+Utils.toRomeValue(level));
+		wywarSilaBar.setVisible(true);
+		
+		wywarSilaTask = createWywarTask(wywarSilaBar, seconds, (rpg, val) -> setPotionSila(val), level);
+	}
+
+	public void createWywarWytrzymaloscTask(int seconds, int level) {
+		if(wywarWytrzymaloscTask != null && !wywarWytrzymaloscTask.isCancelled()) {
+			wywarWytrzymaloscTask.cancel();
+		}
+		
+		wywarWytrzymaloscBar.setProgress(1);
+		wywarWytrzymaloscBar.setTitle("§7§oWywar Wytrzymalosci "+Utils.toRomeValue(level));
+		wywarWytrzymaloscBar.setVisible(true);
+		
+		wywarWytrzymaloscTask = createWywarTask(wywarWytrzymaloscBar, seconds, (rpg, val) -> setPotionWytrzymalosc(val), level);
+	}
+
+	public void createWywarZrecznoscTask(int seconds, int level) {
+		if(wywarZrecznoscTask != null && !wywarZrecznoscTask.isCancelled()) {
+			wywarZrecznoscTask.cancel();
+		}
+		
+		wywarZrecznoscBar.setProgress(1);
+		wywarZrecznoscBar.setTitle("§7§oWywar Zrecznosci "+Utils.toRomeValue(level));
+		wywarZrecznoscBar.setVisible(true);
+		
+		wywarZrecznoscTask = createWywarTask(wywarZrecznoscBar, seconds, (rpg, val) -> setPotionZrecznosc(val), level);
+	}
+
+	public void createWywarZdolnosciTask(int seconds, int level) {
+		if(wywarZdolnosciTask != null && !wywarZdolnosciTask.isCancelled()) {
+			wywarZdolnosciTask.cancel();
+		}
+		
+		wywarZdolnosciBar.setProgress(1);
+		wywarZdolnosciBar.setTitle("§7§oWywar Zdolnosci "+Utils.toRomeValue(level));
+		wywarZdolnosciBar.setVisible(true);
+		
+		wywarZdolnosciTask = createWywarTask(wywarZdolnosciBar, seconds, (rpg, val) -> setPotionZdolnosci(val), level);
+	}
+
+	public void createWywarInteligencjaTask(int seconds, int level) {
+		if(wywarInteligencjaTask != null && !wywarInteligencjaTask.isCancelled()) {
+			wywarInteligencjaTask.cancel();
+		}
+		
+		wywarInteligencjaBar.setProgress(1);
+		wywarInteligencjaBar.setTitle("§7§oWywar Inteligencji "+Utils.toRomeValue(level));
+		wywarInteligencjaBar.setVisible(true);
+		
+		wywarInteligencjaTask = createWywarTask(wywarInteligencjaBar, seconds, (rpg, val) -> setPotionInteligencja(val), level);
+	}
+
+	public void createWywarWalkaTask(int seconds, int level) {
+		if(wywarWalkaTask != null && !wywarWalkaTask.isCancelled()) {
+			wywarWalkaTask.cancel();
+		}
+		
+		wywarWalkaBar.setProgress(1);
+		wywarWalkaBar.setTitle("§7§oWywar Walki "+Utils.toRomeValue(level));
+		wywarWalkaBar.setVisible(true);
+		
+		wywarWalkaTask = createWywarTask(wywarWalkaBar, seconds, (rpg, val) -> setPotionWalka(val), level);
+	}
+	
+	private BukkitTask createWywarTask(BossBar bar, int seconds, IWywarSetter setter, int level) {
+		setter.setWywarLevel(rpg, level);
+		return new BukkitRunnable() {
+			int sec = seconds;
+			@Override
+			public void run() {
+				if(sec <= 0) {
+					bar.setVisible(false);
+					setter.setWywarLevel(rpg, 0);
+					
+					Player p = rpg.getPlayer();
+					p.sendMessage(me.Vark123.EpicRPG.Main.getInstance().getPrefix()+" §eEfekt wywaru skonczyl sie!");
+					p.spawnParticle(Particle.SMOKE, p.getLocation().add(0,1,0), 25, .6, .6, .6, 0);
+					p.playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1.8f);
+					this.cancel();
+					return;
+				}
+				
+				double percent = (double) sec / (double) seconds;
+				bar.setProgress(percent);
+				
+				--sec;
+			}
+		}.runTaskTimer(Main.getInst(), 0, 20);
+	}
+	
 	public void setPotionSila(int potionSila) {
 		this.potionSila = potionSila;
 	}

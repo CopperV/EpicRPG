@@ -117,7 +117,7 @@ public class ExpSystem {
 			return;
 		if(info.getExp() >= info.getNextLevel())
 			updateLvl(info);
-		info.getRpg().updateBarExp();
+//		info.getRpg().updateBarExp();
 	}
 	
 	private void updateLvl(RpgPlayerInfo info) {
@@ -137,7 +137,7 @@ public class ExpSystem {
 		info.addLevel(1);
 		info.setNextLevel(getNextLevelExp(info.getLevel()));
 
-		info.getRpg().updateBarLevel();
+//		info.getRpg().updateBarLevel();
 		
 		p.sendTitle("§6§lGRATULACJE!", "§aAwansowales na §6"+(info.getLevel())+" §apoziom", 5, 10, 15);
 		Bukkit.broadcastMessage("§6§lGracz " + p.getName() + " awansowal na " + (info.getLevel()) + " poziom!!!");
