@@ -30,9 +30,11 @@ public class DefenseCalculator implements IDamageCalculator {
 		
 		if(MythicBukkit.inst().getMobManager().isMythicMob(victim)) {
 			ActiveMob aMob = MythicBukkit.inst().getMobManager().getMythicMobInstance(victim);
-			double armor = aMob.getArmor();
+			double armor = Math.max(aMob.getArmor(), 1);
 			
-			result.damage = baseDamage * (1 - (armor)/(armor + baseDamage*0.5));
+			double damageModifier = Math.log1p((baseDamage)/(armor*0.5)) * 0.5;
+			
+			result.damage = baseDamage * (1 - (armor)/(armor + baseDamage*damageModifier));
 			
 			return result;
 		}
@@ -58,8 +60,11 @@ public class DefenseCalculator implements IDamageCalculator {
 		
 		double defense = stats.getFinalOchrona();
 		double wytrz = stats.getFinalWytrzymalosc();
+
+		double defenseModifier = Math.max(defense + wytrz, 1);
+		double damageModifier = Math.log1p((baseDamage)/(defenseModifier * 0.5)) * 0.5;
 		
-		result.damage = baseDamage * (1 - (defense + wytrz)/(defense + wytrz + baseDamage*0.5));
+		result.damage = baseDamage * (1 - (defenseModifier)/(defenseModifier + baseDamage*damageModifier));
 		
 		return result;
 	}

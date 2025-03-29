@@ -13,8 +13,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
+import io.lumine.mythic.bukkit.MythicBukkit;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicRPG.HorseSystem.AEpicHorse;
 import net.minecraft.world.entity.EntityLiving;
 
@@ -60,10 +60,10 @@ public class SpringSteed extends AEpicHorse {
 				"§4★ §8Predkosc: §7"+String.format("%.2f", speed*100)+"%"));
 		it.setItemMeta(im);
 		
-		ReadWriteNBT nbt = NBT.itemStackToNBT(it);
-		nbt.setString("MountSummonClass", getClass().getName());
-//		nbt.applyNBT(it);
-		it = NBT.itemStackFromNBT(nbt);
+		EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
+		comp.setString("mount_summon_class", getClass().getName());
+		comp.applyTo(it);
+//		it = NBT.itemStackFromNBT(comp);
 		
 		return it;
 	}

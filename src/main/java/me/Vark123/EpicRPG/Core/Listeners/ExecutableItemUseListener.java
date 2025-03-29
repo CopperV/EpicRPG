@@ -17,8 +17,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
+import io.lumine.mythic.bukkit.MythicBukkit;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicRPG.Main;
 import me.clip.placeholderapi.PlaceholderAPI;
 
@@ -41,25 +41,26 @@ public class ExecutableItemUseListener implements Listener {
 		if(item == null || item.getType().equals(Material.AIR))
 			return;
 
-		ReadWriteNBT nbtit = NBT.itemStackToNBT(item);
-		if(!nbtit.hasTag("epic_command") && !nbtit.hasTag("epic_commands"))
+		EpicComponent itComp = new EpicComponent(item, MythicBukkit.inst());
+		
+		if(!itComp.hasKey("epic_command") && !itComp.hasKey("epic_commands"))
 			return;
 		
 		if(cooldowns.contains(p.getUniqueId()))
 			return;
 		
 		List<String> commands = new LinkedList<>();
-		if(nbtit.hasTag("epic_command")) {
-			String command = nbtit.getString("epic_command");
+		if(itComp.hasKey("epic_command")) {
+			String command = itComp.getString("epic_command");
 			command = PlaceholderAPI.setPlaceholders(p, command);
 			commands.add(command);
 		}
-		if(nbtit.hasTag("epic_commands")) {
+		if(itComp.hasKey("epic_commands")) {
 			if(cooldowns.contains(p.getUniqueId()))
 				return;
-			ReadWriteNBT cmdsNBT = nbtit.getCompound("epic_commands");
-			commands.addAll(cmdsNBT.getKeys().stream()
-				.map(key -> cmdsNBT.getString(key))
+			EpicComponent cmdsComp = itComp.getComponent("epic_commands");
+			commands.addAll(cmdsComp.getKeys().stream()
+				.map(key -> cmdsComp.getString(key))
 				.map(cmd -> PlaceholderAPI.setPlaceholders(p, cmd))
 				.collect(Collectors.toList()));
 		}

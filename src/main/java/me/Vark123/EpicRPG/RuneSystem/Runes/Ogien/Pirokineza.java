@@ -13,16 +13,17 @@ import me.Vark123.EpicRPG.RuneSystem.Effects.DamageBurnEffect;
 import me.Vark123.EpicRPG.RuneSystem.Functional.IRuneHitCondition;
 import me.Vark123.EpicRPG.RuneSystem.Functional.IRunePostDamageEffect;
 import me.Vark123.EpicRPG.RuneSystem.Templates.CastSpells.ProjectileRuneTemplate;
+import me.Vark123.EpicRPG.RuneSystem.Templates.CastSpells.StunRuneTemplate;
 import me.Vark123.EpicRPG.RuneSystem.Templates.EntityHits.NonPvPRuneHitCondition;
 import me.Vark123.EpicRPG.RuneSystem.Templates.EntityHits.PvPRuneHitCondition;
 
-public class OgnistaStrzala extends ACastableRune {
+public class Pirokineza extends ACastableRune {
+
 
 	private IRuneHitCondition hitCondition;
 	private BoundingBox boundingBox;
 	private IRunePostDamageEffect hitEffect;
-	
-	public OgnistaStrzala(RpgPlayer rpgPlayer, EpicRune rune) {
+	public Pirokineza(RpgPlayer rpgPlayer, EpicRune rune) {
 		super(rpgPlayer, rune);
 		
 		hitCondition = rune.getPvp() == 1 ? 
@@ -30,7 +31,8 @@ public class OgnistaStrzala extends ACastableRune {
 		boundingBox = new BoundingBox(
 				0.5, 0.5, 0.5, 
 				0.5, 0.5, 0.5);
-		hitEffect = new DamageBurnEffect(3, rune.getDamage() * 0.1, this);
+		
+		hitEffect = new DamageBurnEffect(rune.getDurationTime(), rune.getDamage(), this);
 	}
 
 	@Override
@@ -41,23 +43,24 @@ public class OgnistaStrzala extends ACastableRune {
 				this, 
 				startLoc, 
 				startLoc.getDirection().normalize(),
-				0.33, 
-				3,
+				0.3, 
+				2,
 				1,
 				30, 
 				boundingBox,
 				loc -> {
-					loc.getWorld().playSound(loc, Sound.ENTITY_GHAST_SHOOT, 1, 1.2f);
+					loc.getWorld().playSound(loc, Sound.BLOCK_FIRE_EXTINGUISH, 1, 0.95f);
 				}, 
 				loc -> {
-					loc.getWorld().spawnParticle(Particle.SMALL_FLAME, loc, 8, 
-							0.05f, 0.05f, 0.05f, 0.01f);
+					loc.getWorld().spawnParticle(Particle.TRIAL_SPAWNER_DETECTION, loc, 6, 
+							0.2f, 0.2f, 0.2f, 0.03f);
 				}, 
 				hitCondition, 
 				(loc, e) -> {
-					RuneUtils.damage(player, e, rune, hitEffect);
+					e.getWorld().playSound(loc, Sound.BLOCK_FIRE_EXTINGUISH, 1, 1.1f);
 					
-					e.getWorld().playSound(loc, Sound.BLOCK_FIRE_EXTINGUISH, 1, 1.2f);
+					RuneUtils.damage(player, e, rune, hitEffect);
+					StunRuneTemplate.castEffect(this, e);
 				}, 
 				loc -> { });
 	}

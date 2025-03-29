@@ -6,9 +6,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
+import com.github.retrooper.packetevents.PacketEvents;
 
+import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import lombok.Getter;
 import me.Vark123.EpicInventory.Pagination.InventoryManager;
 import me.Vark123.EpicRPG.Files.FileOperations;
@@ -36,19 +36,24 @@ public class Main extends JavaPlugin {
 	
 	@Getter
 	private InventoryManager manager;
-	@Getter
-	private ProtocolManager protocolManager;
 	
 	@Getter
 	private BukkitTask saveTask;
+
+	@Override
+	public void onLoad() {
+		PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
+		PacketEvents.getAPI().load();
+	}
 	
 	@Override
 	public void onEnable() {
 		instance = this;
 		
+		PacketEvents.getAPI().init();
+		
 		manager = new InventoryManager(instance);
 		manager.invoke();
-		protocolManager = ProtocolLibrary.getProtocolManager();
 		
 		FileOperations.checkFiles();
 		Config.get().init();
@@ -67,6 +72,8 @@ public class Main extends JavaPlugin {
 		EventListenerManager.registerEvents();
 		CommandExecutorManager.setExecutors();
 		
+		RpgScoreboard.startAutoUpdate(instance);
+		
 		createSaveTask();
 		
 		super.onEnable();
@@ -74,6 +81,8 @@ public class Main extends JavaPlugin {
 	
 	@Override
 	public void onDisable() {
+		PacketEvents.getAPI().terminate();
+		
 		if(saveTask != null && !saveTask.isCancelled())
 			saveTask.cancel();
 		

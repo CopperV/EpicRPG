@@ -14,10 +14,11 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
+import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.Getter;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicInventory.Other.EventCreator;
 import me.Vark123.EpicRPG.Utils.Utils;
 
@@ -67,25 +68,26 @@ public class BackpackEvents {
 						|| it.getType().equals(Material.AIR))
 					continue;
 				
-				ReadWriteNBT nbtIt = NBT.itemStackToNBT(it);
-				if(!nbtIt.hasTag("soulbind")
-						|| !nbtIt.getString("soulbind").equalsIgnoreCase(e.getWhoClicked().getName())) {
-					toReturn.add(it);
-					continue;
-				}
-				if(!nbtIt.hasTag("Katedra")
-						|| !BackpackManager.getInstance().getBigBackpack()
-							.contains(nbtIt.getString("Katedra"))
-						|| katedraNBT.contains(nbtIt.getString("Katedra"))) {
-					toReturn.add(it);
-					continue;
-				}
+				EpicComponent itComp = new EpicComponent(it, MythicBukkit.inst());
 				
-				String katedraId = nbtIt.getString("Katedra");
+				if(!itComp.hasKey("soulbind")
+						|| !itComp.getString("soulbind").equalsIgnoreCase(e.getWhoClicked().getName())) {
+					toReturn.add(it);
+					continue;
+				}
+				if(!itComp.hasKey("katedra")
+						|| !BackpackManager.getInstance().getBigBackpack()
+							.contains(itComp.getString("katedra"))
+						|| katedraNBT.contains(itComp.getString("katedra"))) {
+					toReturn.add(it);
+					continue;
+				}
+
+				String katedraId = itComp.getString("katedra");
 				katedraNBT.add(katedraId);
 				katedraItems.put(katedraId, it);
 			}
-			
+
 			switch(katedraNBT.size()) {
 				case 12:
 					katedraItems.clear();
@@ -183,27 +185,26 @@ public class BackpackEvents {
 					return;
 				}
 				
-				ReadWriteNBT nbtIt = NBT.itemStackToNBT(katedraIt);
-				if(!nbtIt.hasTag("soulbind")
-						|| !nbtIt.getString("soulbind").equalsIgnoreCase(p.getName())) {
+				EpicComponent itComp = new EpicComponent(katedraIt, MythicBukkit.inst());
+				if(!itComp.hasKey("soulbind")
+						|| !itComp.getString("soulbind").equalsIgnoreCase(p.getName())) {
 					p.closeInventory();
 					return;
 				}
-				if(!nbtIt.hasTag("Katedra")
+				if(!itComp.hasKey("katedra")
 						|| !BackpackManager.getInstance().getGiantBackpack()
-							.contains(nbtIt.getString("Katedra"))
-						|| katedraNBT.contains(nbtIt.getString("Katedra"))) {
+							.contains(itComp.getString("katedra"))
+						|| katedraNBT.contains(itComp.getString("katedra"))) {
 					p.closeInventory();
 					return;
 				}
 
-				katedraNBT.add(nbtIt.getString("Katedra"));
+				katedraNBT.add(itComp.getString("katedra"));
 			}
 
 			ItemStack oldBackpack = inv.getItem(slots[7]);
-			ReadWriteNBT nbt = NBT.itemStackToNBT(oldBackpack);
-			ReadWriteNBT compund = nbt.getCompound("PublicBukkitValues");
-			if(!compund.hasTag("backpackplus:backpacktier") || compund.getInteger("backpackplus:backpacktier") != 3){
+			EpicComponent comp = new EpicComponent(oldBackpack, (JavaPlugin) Bukkit.getPluginManager().getPlugin("BackpackPlus"));
+			if(!comp.hasKey("backpacktier") || comp.getInteger("backpacktier") != 3){
 				p.closeInventory();
 				return;
 			}

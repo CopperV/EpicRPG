@@ -9,10 +9,9 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.Getter;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicInventory.Other.EventCreator;
 import me.Vark123.EpicRPG.Utils.Utils;
 
@@ -53,15 +52,15 @@ public class RubyMenuEvents {
 						|| it.getType().equals(Material.AIR))
 					break;
 				
-				ReadWriteNBT nbt = NBT.itemStackToNBT(it);
-				if(!nbt.hasTag("soulbind")
-						|| !nbt.getString("soulbind").equalsIgnoreCase(e.getWhoClicked().getName()))
+				EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
+				if(!comp.hasKey("soulbind")
+						|| !comp.getString("soulbind").equalsIgnoreCase(e.getWhoClicked().getName()))
 					break;
 				
 				int rubyCraftLevel = i/2 + 1;
 				
-				if(!nbt.hasTag("RPGType")
-						|| !nbt.getString("RPGType").equalsIgnoreCase("hpcrafting_ruby"+rubyCraftLevel))
+				if(!comp.hasKey("rpgtype")
+						|| !comp.getString("rpgtype").equalsIgnoreCase("hpcrafting_ruby"+rubyCraftLevel))
 					break;
 				++correct;
 			}
@@ -112,15 +111,15 @@ public class RubyMenuEvents {
 						|| it.getType().equals(Material.AIR))
 					break;
 				
-				ReadWriteNBT nbt = NBT.itemStackToNBT(it);
-				if(!nbt.hasTag("soulbind")
-						|| !nbt.getString("soulbind").equalsIgnoreCase(e.getWhoClicked().getName()))
+				EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
+				if(!comp.hasKey("soulbind")
+						|| !comp.getString("soulbind").equalsIgnoreCase(e.getWhoClicked().getName()))
 					break;
 				
 				int rubyCraftLevel = i/2 + 1;
 				
-				if(!nbt.hasTag("RPGType")
-						|| !nbt.getString("RPGType").equalsIgnoreCase("manacrafting_ruby"+rubyCraftLevel))
+				if(!comp.hasKey("rpgtype")
+						|| !comp.getString("rpgtype").equalsIgnoreCase("manacrafting_ruby"+rubyCraftLevel))
 					break;
 				++correct;
 			}

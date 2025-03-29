@@ -9,12 +9,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.items.ItemExecutor;
 import lombok.AccessLevel;
 import lombok.Getter;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicInventory.Content.InventoryContents;
 import me.Vark123.EpicInventory.Content.InventoryProvider;
 import me.Vark123.EpicInventory.Enums.Action;
@@ -269,21 +268,21 @@ public class KosturMenuManager {
 					contents.set(i, empty);
 				}
 				
-				ReadWriteNBT nbt = NBT.itemStackToNBT(kostur);
-				if(!nbt.getString("PPP").equals("-")) {
-					ItemStack it = manag.getItemStack(nbt.getString("PPP"));
+				EpicComponent comp = new EpicComponent(kostur, MythicBukkit.inst());
+				if(!comp.getString("ppp").equals("-")) {
+					ItemStack it = manag.getItemStack(comp.getString("ppp"));
 					contents.set(10, it);
 				}
-				if(!nbt.getString("PPL").equals("-")) {
-					ItemStack it = manag.getItemStack(nbt.getString("PPL"));
+				if(!comp.getString("ppl").equals("-")) {
+					ItemStack it = manag.getItemStack(comp.getString("ppl"));
 					contents.set(12, it);
 				}
-				if(!nbt.getString("PLP").equals("-")) {
-					ItemStack it = manag.getItemStack(nbt.getString("PLP"));
+				if(!comp.getString("plp").equals("-")) {
+					ItemStack it = manag.getItemStack(comp.getString("plp"));
 					contents.set(14, it);
 				}
-				if(!nbt.getString("PLL").equals("-")) {
-					ItemStack it = manag.getItemStack(nbt.getString("PLL"));
+				if(!comp.getString("pll").equals("-")) {
+					ItemStack it = manag.getItemStack(comp.getString("pll"));
 					contents.set(16, it);
 				}
 			}

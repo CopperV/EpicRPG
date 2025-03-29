@@ -1,24 +1,23 @@
 package me.Vark123.EpicRPG.Gems;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBTCompoundList;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.items.ItemExecutor;
 import lombok.AccessLevel;
 import lombok.Getter;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicInventory.Content.InventoryContents;
 import me.Vark123.EpicInventory.Content.InventoryProvider;
 import me.Vark123.EpicInventory.Enums.Action;
@@ -26,6 +25,7 @@ import me.Vark123.EpicInventory.Enums.DisabledEvents;
 import me.Vark123.EpicInventory.Enums.DisabledInventoryClick;
 import me.Vark123.EpicInventory.Pagination.EpicInventory;
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Utils.MergableAttribute;
 import me.Vark123.EpicRPG.Utils.Utils;
 
 @Getter
@@ -187,9 +187,6 @@ public class GemManager {
 	}
 	
 	public ItemStack getAnnihilus(ItemStack it1, ItemStack it2) {
-		ReadWriteNBT nbtit1 = NBT.itemStackToNBT(it1);
-		ReadWriteNBT nbtit2 = NBT.itemStackToNBT(it2);
-		
 		ItemExecutor manag = MythicBukkit.inst().getItemManager();
 		ItemStack it = manag.getItemStack("Gem_Annihilus");
 		if(Utils.isMythicMobItem(it1)
@@ -197,9 +194,11 @@ public class GemManager {
 			it = manag.getItemStack("Gem_Annihilus_I");
 		
 		Map<String, Integer> staty = new ConcurrentHashMap<>();
-		double hp = 0;
-		double speed = 0;
-		double knock = 0;
+//		double hp = 0;
+//		double speed = 0;
+//		double knock = 0;
+//		Map<Attribute, List<AttributeModifier>> attributes = new LinkedHashMap<>();
+		List<MergableAttribute> attributes = new ArrayList<>();
 		
 		List<String> lore = new LinkedList<>();
 		if(it1.hasItemMeta() && it1.getItemMeta().hasLore())
@@ -217,38 +216,34 @@ public class GemManager {
 			int present = staty.getOrDefault(tmpArr[0], 0);
 			staty.put(tmpArr[0], present+value);
 		});
+
+		if(it1.getItemMeta().getAttributeModifiers() != null)
+			it1.getItemMeta().getAttributeModifiers().entries()
+				.stream()
+				.filter(attribute -> attribute.getValue().getSlotGroup().equals(EquipmentSlotGroup.OFFHAND))
+				.forEach(entry -> {
+					MergableAttribute ma = new MergableAttribute(entry.getKey(), entry.getValue());
+					attributes.stream()
+						.filter(ma::isSimiliar)
+						.findFirst()
+						.ifPresentOrElse(
+								attr -> attr.merge(ma),
+								() -> attributes.add(ma));
+				});
 		
-		ReadWriteNBTCompoundList listTmp = nbtit1.getCompoundList("AttributeModifiers");
-		for(int i = 0; i < listTmp.size(); ++i) {
-			ReadWriteNBT lc = listTmp.get(i);
-			switch(lc.getString("Name").toLowerCase().replace("generic.", "")) {
-				case "max_health":
-					hp += lc.getDouble("Amount");
-					break;
-				case "knockback_resistance":
-					knock += lc.getDouble("Amount");
-					break;
-				case "movement_speed":
-					speed += lc.getDouble("Amount");
-					break;
-			}
-		}
-		
-		listTmp = nbtit2.getCompoundList("AttributeModifiers");
-		for(int i = 0; i < listTmp.size(); ++i) {
-			ReadWriteNBT lc = listTmp.get(i);
-			switch(lc.getString("Name").toLowerCase().replace("generic.", "")) {
-				case "max_health":
-					hp += lc.getDouble("Amount");
-					break;
-				case "knockback_resistance":
-					knock += lc.getDouble("Amount");
-					break;
-				case "movement_speed":
-					speed += lc.getDouble("Amount");
-					break;
-			}
-		}
+		if(it2.getItemMeta().getAttributeModifiers() != null)
+			it2.getItemMeta().getAttributeModifiers().entries()
+				.stream()
+				.filter(attribute -> attribute.getValue().getSlotGroup().equals(EquipmentSlotGroup.OFFHAND))
+				.forEach(entry -> {
+					MergableAttribute ma = new MergableAttribute(entry.getKey(), entry.getValue());
+					attributes.stream()
+						.filter(ma::isSimiliar)
+						.findFirst()
+						.ifPresentOrElse(
+								attr -> attr.merge(ma),
+								() -> attributes.add(ma));
+				});
 		
 		if(!staty.isEmpty()) {
 			List<String> newLore = new LinkedList<>();
@@ -265,51 +260,20 @@ public class GemManager {
 			im.setLore(newLore);
 			it.setItemMeta(im);
 		}
-		ReadWriteNBT nbtit = NBT.itemStackToNBT(it);
-		ReadWriteNBTCompoundList attribute = nbtit.getCompoundList("AttributeModifiers");
 		
-		if(hp != 0) {
-			UUID uuid = UUID.randomUUID();
-			ReadWriteNBT hpTag = attribute.addCompound();
-			hpTag.setString("AttributeName", "generic.max_health");
-			hpTag.setString("Name", "generic.max_health");
-			hpTag.setDouble("Amount", hp);
-			hpTag.setInteger("Operation", 0);
-			hpTag.setLong("UUIDLeast", uuid.getLeastSignificantBits());
-			hpTag.setLong("UUIDMost", uuid.getMostSignificantBits());
-			hpTag.setString("Slot", "offhand");			
-		}
-		
-		if(knock != 0) {
-			UUID uuid = UUID.randomUUID();
-			ReadWriteNBT knockTag = attribute.addCompound();
-			knockTag.setString("AttributeName", "generic.knockback_resistance");
-			knockTag.setString("Name", "generic.knockback_resistance");
-			knockTag.setDouble("Amount", knock);
-			knockTag.setInteger("Operation", 0);
-			knockTag.setLong("UUIDLeast", uuid.getLeastSignificantBits());
-			knockTag.setLong("UUIDMost", uuid.getMostSignificantBits());
-			knockTag.setString("Slot", "offhand");
-		}
-		
-		if(speed != 0) {
-			UUID uuid = UUID.randomUUID();
-			ReadWriteNBT speedTag = attribute.addCompound();
-			speedTag.setString("AttributeName", "generic.movement_speed");
-			speedTag.setString("Name", "generic.movement_speed");
-			speedTag.setDouble("Amount", speed);
-			speedTag.setInteger("Operation", 1);
-			speedTag.setLong("UUIDLeast", uuid.getLeastSignificantBits());
-			speedTag.setLong("UUIDMost", uuid.getMostSignificantBits());
-			speedTag.setString("Slot", "offhand");
-		}
+		ItemMeta im = it.getItemMeta();
+		attributes.forEach(ma -> {
+			im.addAttributeModifier(ma.getAttribute(), ma.getAttributeModifier());
+		});
+		it.setItemMeta(im);
 
 		int level = 0;
-		if(nbtit.hasTag("annihilus"))
-			level = nbtit.getInteger("annihilus");
-		nbtit.setInteger("annihilus", level + 1);
-//		nbtit.applyNBT(it);
-		it = NBT.itemStackFromNBT(nbtit);
+		
+		EpicComponent itComp = new EpicComponent(it, MythicBukkit.inst());
+		if(itComp.hasKey("annihilus"))
+			level = itComp.getInteger("annihilus");
+		itComp.setInteger("annihilus", level + 1);
+		itComp.applyTo(it);
 		
 		return it;
 	}

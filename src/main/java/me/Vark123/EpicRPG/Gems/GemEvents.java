@@ -12,10 +12,9 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.Getter;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicInventory.Other.EventCreator;
 import me.Vark123.EpicRPG.Utils.Utils;
 
@@ -74,9 +73,9 @@ public class GemEvents {
 				return;
 			}
 			
-			ReadWriteNBT gemNBT = NBT.itemStackToNBT(gem);
-			if(!gemNBT.hasTag("RPGType")
-					|| !gemNBT.getString("RPGType").equalsIgnoreCase("gem")
+			EpicComponent gemNBT = new EpicComponent(gem, MythicBukkit.inst());
+			if(!gemNBT.hasKey("rpgtype")
+					|| !gemNBT.getString("rpgtype").equalsIgnoreCase("gem")
 					|| !Utils.isMythicMobItem(gem)) {
 				p.closeInventory();
 				return;
@@ -100,21 +99,21 @@ public class GemEvents {
 					return;
 				}
 				
-				ReadWriteNBT nbtIt = NBT.itemStackToNBT(it);
-				if(!nbtIt.hasTag("soulbind")
-						|| !nbtIt.getString("soulbind").equalsIgnoreCase(e.getWhoClicked().getName())) {
+				EpicComponent itComp = new EpicComponent(it, MythicBukkit.inst());
+				if(!itComp.hasKey("soulbind")
+						|| !itComp.getString("soulbind").equalsIgnoreCase(e.getWhoClicked().getName())) {
 					p.closeInventory();
 					return;
 				}
-				if(!nbtIt.hasTag("Katedra")
+				if(!itComp.hasKey("katedra")
 						|| !GemManager.getInstance().getPowerfulGemKatedra()
-							.contains(nbtIt.getString("Katedra"))
-						|| katedraNBT.contains(nbtIt.getString("Katedra"))) {
+							.contains(itComp.getString("katedra"))
+						|| katedraNBT.contains(itComp.getString("katedra"))) {
 					p.closeInventory();
 					return;
 				}
 				
-				katedraNBT.add(nbtIt.getString("Katedra"));
+				katedraNBT.add(itComp.getString("katedra"));
 			}
 			
 			StringBuilder sb = new StringBuilder(mmId);
@@ -182,14 +181,14 @@ public class GemEvents {
 				return;
 			}
 			
-			ReadWriteNBT nbtGem1 = NBT.itemStackToNBT(gem1);
-			ReadWriteNBT nbtGem2 = NBT.itemStackToNBT(gem2);
-			if(!nbtGem1.hasTag("RPGType")
-					|| !nbtGem1.getString("RPGType").equalsIgnoreCase("gem")
-					|| (nbtGem1.hasTag("annihilus") && nbtGem1.getInteger("annihilus") == 1)
-					|| !nbtGem2.hasTag("RPGType")
-					|| !nbtGem2.getString("RPGType").equalsIgnoreCase("gem")
-					|| (nbtGem2.hasTag("annihilus") && nbtGem2.getInteger("annihilus") == 1)) {
+			EpicComponent compGem1 = new EpicComponent(gem1, MythicBukkit.inst());
+			EpicComponent compGem2 = new EpicComponent(gem2, MythicBukkit.inst());
+			if(!compGem1.hasKey("rpgtype")
+					|| !compGem1.getString("rpgtype").equalsIgnoreCase("gem")
+					|| (compGem1.hasKey("annihilus") && compGem1.getInteger("annihilus") == 1)
+					|| !compGem2.hasKey("rpgtype")
+					|| !compGem2.getString("rpgtype").equalsIgnoreCase("gem")
+					|| (compGem2.hasKey("annihilus") && compGem2.getInteger("annihilus") == 1)) {
 				p.closeInventory();
 				return;
 			}
@@ -204,21 +203,21 @@ public class GemEvents {
 					return;
 				}
 				
-				ReadWriteNBT nbtIt = NBT.itemStackToNBT(it);
-				if(!nbtIt.hasTag("soulbind")
-						|| !nbtIt.getString("soulbind").equalsIgnoreCase(e.getWhoClicked().getName())) {
+				EpicComponent itComp = new EpicComponent(it, MythicBukkit.inst());
+				if(!itComp.hasKey("soulbind")
+						|| !itComp.getString("soulbind").equalsIgnoreCase(e.getWhoClicked().getName())) {
 					p.closeInventory();
 					return;
 				}
-				if(!nbtIt.hasTag("Katedra")
+				if(!itComp.hasKey("katedra")
 						|| !GemManager.getInstance().getAnnihilusGemKatedra()
-							.contains(nbtIt.getString("Katedra"))
-						|| katedraNBT.contains(nbtIt.getString("Katedra"))) {
+							.contains(itComp.getString("katedra"))
+						|| katedraNBT.contains(itComp.getString("katedra"))) {
 					p.closeInventory();
 					return;
 				}
 				
-				katedraNBT.add(nbtIt.getString("Katedra"));
+				katedraNBT.add(itComp.getString("katedra"));
 			}
 			
 			inv.clear();
@@ -275,14 +274,14 @@ public class GemEvents {
 				return;
 			}
 			
-			ReadWriteNBT nbtAnnihilus = NBT.itemStackToNBT(annihilus);
-			ReadWriteNBT nbtGem = NBT.itemStackToNBT(gem);
-			if(!nbtAnnihilus.hasTag("RPGType")
-					|| !nbtAnnihilus.getString("RPGType").equalsIgnoreCase("gem")
-					|| !(nbtAnnihilus.hasTag("annihilus") && nbtAnnihilus.getInteger("annihilus") == 1)
-					|| !nbtGem.hasTag("RPGType")
-					|| !nbtGem.getString("RPGType").equalsIgnoreCase("gem")
-					|| (nbtGem.hasTag("annihilus") && nbtGem.getInteger("annihilus") == 1)) {
+			EpicComponent compAnnihilus = new EpicComponent(annihilus, MythicBukkit.inst());
+			EpicComponent compGem = new EpicComponent(gem, MythicBukkit.inst());
+			if(!compAnnihilus.hasKey("rpgtype")
+					|| !compAnnihilus.getString("rpgtype").equalsIgnoreCase("gem")
+					|| !(compAnnihilus.hasKey("annihilus") && compAnnihilus.getInteger("annihilus") == 1)
+					|| !compGem.hasKey("rpgtype")
+					|| !compGem.getString("rpgtype").equalsIgnoreCase("gem")
+					|| (compGem.hasKey("annihilus") && compGem.getInteger("annihilus") == 1)) {
 				p.closeInventory();
 				return;
 			}
@@ -297,21 +296,21 @@ public class GemEvents {
 					return;
 				}
 				
-				ReadWriteNBT nbtTrophy = NBT.itemStackToNBT(trophy);
-				if(!nbtTrophy.hasTag("soulbind")
-						|| !nbtTrophy.getString("soulbind").equalsIgnoreCase(e.getWhoClicked().getName())) {
+				EpicComponent compTrophy = new EpicComponent(trophy, MythicBukkit.inst());
+				if(!compTrophy.hasKey("soulbind")
+						|| !compTrophy.getString("soulbind").equalsIgnoreCase(e.getWhoClicked().getName())) {
 					p.closeInventory();
 					return;
 				}
-				if(!nbtTrophy.hasTag("Katedra")
+				if(!compTrophy.hasKey("katedra")
 						|| !GemManager.getInstance().getAnnihilusUpgradeGemKatedra()
-							.contains(nbtTrophy.getString("Katedra"))
-						|| katedraNBT.contains(nbtTrophy.getString("Katedra"))) {
+							.contains(compTrophy.getString("katedra"))
+						|| katedraNBT.contains(compTrophy.getString("katedra"))) {
 					p.closeInventory();
 					return;
 				}
 				
-				katedraNBT.add(nbtTrophy.getString("Katedra"));
+				katedraNBT.add(compTrophy.getString("katedra"));
 			}
 			
 			inv.clear();

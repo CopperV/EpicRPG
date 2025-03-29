@@ -10,11 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.NBTItem;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
-import net.minecraft.nbt.NBTTagCompound;
-
 public class BackpackUtils {
 
 	private BackpackUtils() {}
@@ -54,19 +49,22 @@ public class BackpackUtils {
 
 	@Deprecated
 	public static String getStringData(ItemStack item, String tag) {
-		NBTTagCompound itemCompound = new NBTTagCompound();
-		return itemCompound != null ? itemCompound.l(tag) : null;
+//		NBTTagCompound itemCompound = new NBTTagCompound();
+//		return itemCompound != null ? itemCompound.l(tag) : null;
+		return "";
 	}
 
 	@Deprecated
 	public int getIntData(ItemStack item, String tag) {
-		NBTTagCompound itemCompound = new NBTTagCompound();
-		return itemCompound != null ? itemCompound.h(tag) : -9304294;
+//		NBTTagCompound itemCompound = new NBTTagCompound();
+//		return itemCompound != null ? itemCompound.h(tag) : -9304294;
+		return 0;
 	}
 	
 	public static boolean isBuggedBackpack(ItemStack it) {
-		ReadWriteNBT nbt = NBT.itemStackToNBT(it);
-		return nbt.hasTag("BackpackID");
+//		EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
+//		return comp.hasKey("BackpackID");
+		return true;
 	}
 	
 }

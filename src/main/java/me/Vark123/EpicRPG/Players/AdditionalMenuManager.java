@@ -5,8 +5,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
+import io.lumine.mythic.bukkit.MythicBukkit;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicInventory.Content.IntelligentItem;
 import me.Vark123.EpicInventory.Content.InventoryContents;
 import me.Vark123.EpicInventory.Content.InventoryProvider;
@@ -114,10 +114,10 @@ public final class AdditionalMenuManager {
 						return;
 					}
 					
-					ReadWriteNBT nbt = NBT.itemStackToNBT(it);
-					if(!Utils.isMythicMobItem(it) || nbt.hasTag("Klejnot")
-							|| (nbt.hasTag("RPGType") && nbt.getString("RPGType").equals("gem"))
-							|| nbt.hasTag("JewerlyType")) {
+					EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
+					if(!Utils.isMythicMobItem(it) || comp.hasKey("Klejnot")
+							|| (comp.hasKey("rpgtype") && comp.getString("rpgtype").equals("gem"))
+							|| comp.hasKey("jewerly_type")) {
 						p.sendMessage(it.getItemMeta().getDisplayName()+"§cnie moze zostac zalozony na plecy!");
 						rpg.setBackItem(null);
 						ChangeStats.change(rpg);

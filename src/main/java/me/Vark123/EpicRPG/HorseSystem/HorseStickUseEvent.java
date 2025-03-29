@@ -15,8 +15,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Files.FileOperations;
 import me.Vark123.EpicRPG.HorseSystem.Horses.BaseHorse;

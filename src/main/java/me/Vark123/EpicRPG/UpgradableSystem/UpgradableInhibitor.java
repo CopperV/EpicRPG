@@ -18,13 +18,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicRPG.Core.MoneySystem;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Utils.Utils;
@@ -51,10 +50,10 @@ public class UpgradableInhibitor {
 		item = MythicBukkit.inst().getItemManager().getItemStack(mmId);
 		
 		Random rand = new Random();
-		ReadWriteNBT nbt = NBT.itemStackToNBT(item);
-		nbt.setInteger("rand-"+rand.nextInt(), rand.nextInt());
-//		nbt.applyNBT(item);
-		item = NBT.itemStackFromNBT(nbt);
+		EpicComponent comp = new EpicComponent(item, MythicBukkit.inst());
+		comp.setInteger("rand-"+rand.nextInt(), rand.nextInt());
+		comp.applyTo(item);
+//		item = NBT.itemStackFromNBT(comp);
 		
 		return item;
 	}
@@ -82,10 +81,10 @@ public class UpgradableInhibitor {
 			Random rand = new Random();
 			ItemStack it = MythicBukkit.inst().getItemManager().getItemStack(mmId, mmIdCosts.get(mmId));
 			
-			ReadWriteNBT nbt = NBT.itemStackToNBT(it);
-			nbt.setInteger("rand-"+rand.nextInt(), rand.nextInt());
-//			nbt.applyNBT(it);
-			it = NBT.itemStackFromNBT(nbt);
+			EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
+			comp.setInteger("rand-"+rand.nextInt(), rand.nextInt());
+			comp.applyTo(it);
+//			it = NBT.itemStackFromNBT(comp);
 			
 			mmItemCosts.put(mmId, it);
 			return it;

@@ -57,7 +57,7 @@ public final class Config {
 		this.maxWalkaCrit = fYml.getInt("gameplay.max-walka-crit", 500);
 		this.learnBreakFactor = fYml.getDouble("gameplay.learn-break-factor", 2);
 		this.statBreakFactor = fYml.getDouble("gameplay.stat-break-factor", 0.33);
-		this.learnBreakFactor = fYml.getDouble("gameplay.max-learned-stat-per-level", 5);
+		this.maxLearnedStatPerLevel = fYml.getDouble("gameplay.max-learned-stat-per-level", 5);
 		this.pnPerLevel = fYml.getInt("pn-per-level", 10);
 		
 		if(fYml.contains("level-exp-tresholds") && fYml.isConfigurationSection("level-exp-tresholds")) {

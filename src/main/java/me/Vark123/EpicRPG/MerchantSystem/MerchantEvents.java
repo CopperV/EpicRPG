@@ -13,9 +13,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
+import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.Getter;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicInventory.Other.EventCreator;
 import me.Vark123.EpicRPG.Core.MoneySystem;
 import me.Vark123.EpicRPG.Players.PlayerManager;
@@ -58,9 +58,9 @@ public class MerchantEvents {
 							|| it.getType().equals(Material.AIR))
 						continue;
 					
-					ReadWriteNBT nbt = NBT.itemStackToNBT(it);
-					if(nbt.hasTag("rpg_cost")) {
-						totalValue += it.getAmount()*Integer.valueOf(nbt.getString("rpg_cost"));
+					EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
+					if(comp.hasKey("rpg_cost")) {
+						totalValue += it.getAmount()*Integer.valueOf(comp.getString("rpg_cost"));
 					} else {
 						if(!it.hasItemMeta() 
 								|| !it.getItemMeta().hasLore() 
@@ -104,10 +104,10 @@ public class MerchantEvents {
 				
 				sellPrice.setItemMeta(im);
 				
-				ReadWriteNBT sellNBT = NBT.itemStackToNBT(sellPrice);
+				EpicComponent sellNBT = new EpicComponent(sellPrice, MythicBukkit.inst());
 				sellNBT.setInteger("sell_info", totalValue);
-				sellPrice = NBT.itemStackFromNBT(sellNBT);
-//				sellNBT.applyNBT(sellPrice);
+//				sellPrice = NBT.itemStackFromNBT(sellNBT);
+				sellNBT.applyTo(sellPrice);
 				inv.setItem(49, sellPrice);
 				
 				InventoryUtils.openConfirmationMenu((Player) e.getWhoClicked(), 
@@ -134,7 +134,7 @@ public class MerchantEvents {
 			if(slot == 46) {
 				if(!inv.getItem(slot).equals(MerchantManager.getInstance().getAccept()))
 					return;
-				int value = NBT.itemStackToNBT(e.getInventory().getItem(49)).getInteger("sell_info");
+				int value = new EpicComponent(e.getInventory().getItem(49), MythicBukkit.inst()).getInteger("sell_info");
 				e.getInventory().clear();
 				RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer((Player) e.getWhoClicked());
 				MoneySystem.getInstance().addMoney(rpg, value, "merchant");

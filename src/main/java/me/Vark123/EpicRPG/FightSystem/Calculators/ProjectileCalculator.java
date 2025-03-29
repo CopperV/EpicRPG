@@ -145,22 +145,22 @@ public class ProjectileCalculator implements IDamageCalculator {
 		List<ComparableStat> startList = new ArrayList<>(6);
 		switch(bow) {
 			case CROSSBOW:
-				startList.add(new ComparableStat(StatTypes.SILA, stats.getFinalSila(), 1, isCrit ? 0.0042 : 0.0042, isCrit ? 0.21 : 0.21));
-				startList.add(new ComparableStat(StatTypes.WYTRZYMALOSC, stats.getFinalWytrzymalosc(), 1, isCrit ? 0.0076 : 0.0075, isCrit ? 0.38 : 0.375));
-				startList.add(new ComparableStat(StatTypes.ZRECZNOSC, stats.getFinalZrecznosc(), 1, isCrit ? 0.0056 : 0.0032, isCrit ? 0.28 : 0.26));
-				startList.add(new ComparableStat(StatTypes.ZDOLNOSCI_MYSLIWSKIE, stats.getFinalZdolnosciMysliwskie(), 1, isCrit ? 0.0096 : 0.0072, isCrit ? 0.48 : 0.36));
-				startList.add(new ComparableStat(StatTypes.INTELIGENCJA, stats.getFinalInteligencja(), 1, isCrit ? 0.0034 : 0.003, isCrit ? 0.17 : 0.15));
-				startList.add(new ComparableStat(StatTypes.MANA, stats.getFinalMana(), 0.5, isCrit ? 0.0013 : 0.0011, isCrit ? 0.065 : 0.055));
+				startList.add(new ComparableStat(StatTypes.SILA, stats.getFinalSila(), 1, isCrit ? 0.0024 : 0.0024, isCrit ? 0.37 : 0.37));
+				startList.add(new ComparableStat(StatTypes.WYTRZYMALOSC, stats.getFinalWytrzymalosc(), 1, isCrit ? 0.0045 : 0.0044, isCrit ? 0.67 : 0.66));
+				startList.add(new ComparableStat(StatTypes.ZRECZNOSC, stats.getFinalZrecznosc(), 1, isCrit ? 0.0032 : 0.0019, isCrit ? 0.5 : 0.46));
+				startList.add(new ComparableStat(StatTypes.ZDOLNOSCI_MYSLIWSKIE, stats.getFinalZdolnosciMysliwskie(), 1, isCrit ? 0.0056 : 0.0042, isCrit ? 0.85 : 0.63));
+				startList.add(new ComparableStat(StatTypes.INTELIGENCJA, stats.getFinalInteligencja(), 1, isCrit ? 0.002 : 0.0018, isCrit ? 0.3 : 0.26));
+				startList.add(new ComparableStat(StatTypes.MANA, stats.getFinalMana(), 0.5, isCrit ? 0.0007 : 0.0006, isCrit ? 0.11 : 0.09));
 				
 				priorityMap = crossbowStatsPriority;
 				break;
 			case BOW:
-				startList.add(new ComparableStat(StatTypes.SILA, stats.getFinalSila(), 1, isCrit ? 0.004 : 0.004, isCrit ? 0.2 : 0.2));
-				startList.add(new ComparableStat(StatTypes.WYTRZYMALOSC, stats.getFinalWytrzymalosc(), 1, isCrit ? 0.0044 : 0.0042, isCrit ? 0.22 : 0.21));
-				startList.add(new ComparableStat(StatTypes.ZRECZNOSC, stats.getFinalZrecznosc(), 1, isCrit ? 0.0056 : 0.0048, isCrit ? 0.28 : 0.24));
-				startList.add(new ComparableStat(StatTypes.ZDOLNOSCI_MYSLIWSKIE, stats.getFinalZdolnosciMysliwskie(), 1, isCrit ? 0.008 : 0.0068, isCrit ? 0.4 : 0.34));
-				startList.add(new ComparableStat(StatTypes.INTELIGENCJA, stats.getFinalInteligencja(), 1, isCrit ? 0.0031 : 0.0028, isCrit ? 0.155 : 0.14));
-				startList.add(new ComparableStat(StatTypes.MANA, stats.getFinalMana(), 0.5, isCrit ? 0.0012 : 0.001, isCrit ? 0.06 : 0.05));
+				startList.add(new ComparableStat(StatTypes.SILA, stats.getFinalSila(), 1, isCrit ? 0.0023 : 0.0023, isCrit ? 0.35 : 0.35));
+				startList.add(new ComparableStat(StatTypes.WYTRZYMALOSC, stats.getFinalWytrzymalosc(), 1, isCrit ? 0.0026 : 0.0024, isCrit ? 0.39 : 0.37));
+				startList.add(new ComparableStat(StatTypes.ZRECZNOSC, stats.getFinalZrecznosc(), 1, isCrit ? 0.0032 : 0.0028, isCrit ? 0.5 : 0.42));
+				startList.add(new ComparableStat(StatTypes.ZDOLNOSCI_MYSLIWSKIE, stats.getFinalZdolnosciMysliwskie(), 1, isCrit ? 0.0047 : 0.004, isCrit ? 0.7 : 0.59));
+				startList.add(new ComparableStat(StatTypes.INTELIGENCJA, stats.getFinalInteligencja(), 1, isCrit ? 0.0018 : 0.0016, isCrit ? 0.27 : 0.24));
+				startList.add(new ComparableStat(StatTypes.MANA, stats.getFinalMana(), 0.5, isCrit ? 0.0007 : 0.0006, isCrit ? 0.11 : 0.09));
 				
 				priorityMap = bowStatsPriority;
 				break;

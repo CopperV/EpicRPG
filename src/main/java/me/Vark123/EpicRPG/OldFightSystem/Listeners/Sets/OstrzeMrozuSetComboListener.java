@@ -18,7 +18,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import de.tr7zw.nbtapi.NBTItem;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicOptions.Main;
 import me.Vark123.EpicRPG.OldFightSystem.EpicDamageType;
 import me.Vark123.EpicRPG.OldFightSystem.Events.EpicAttackEvent;
@@ -50,8 +50,8 @@ public class OstrzeMrozuSetComboListener implements Listener {
 		if(weapon == null || weapon.getType().equals(Material.AIR))
 			return;
 		
-		NBTItem nbt = new NBTItem(weapon);
-		if(!nbt.hasTag("MYTHIC_TYPE") || !nbt.getString("MYTHIC_TYPE").equals("Raid_1_Unikat"))
+		EpicComponent comp = new EpicComponent(weapon);
+		if(!comp.hasKey("MYTHIC_TYPE") || !comp.getString("MYTHIC_TYPE").equals("Raid_1_Unikat"))
 			return;
 		
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
@@ -104,8 +104,8 @@ public class OstrzeMrozuSetComboListener implements Listener {
 		if(weapon == null || weapon.getType().equals(Material.AIR))
 			return;
 		
-		NBTItem nbt = new NBTItem(weapon);
-		if(!nbt.hasTag("MYTHIC_TYPE") || !nbt.getString("MYTHIC_TYPE").equals("Raid_1_Unikat"))
+		EpicComponent comp = new EpicComponent(weapon);
+		if(!comp.hasKey("MYTHIC_TYPE") || !comp.getString("MYTHIC_TYPE").equals("Raid_1_Unikat"))
 			return;
 		
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
@@ -152,8 +152,8 @@ public class OstrzeMrozuSetComboListener implements Listener {
 		if(weapon == null || weapon.getType().equals(Material.AIR))
 			return;
 		
-		NBTItem nbt = new NBTItem(weapon);
-		if(!nbt.hasTag("MYTHIC_TYPE") || !nbt.getString("MYTHIC_TYPE").equals("Raid_1_Unikat"))
+		EpicComponent comp = new EpicComponent(weapon);
+		if(!comp.hasKey("MYTHIC_TYPE") || !comp.getString("MYTHIC_TYPE").equals("Raid_1_Unikat"))
 			return;
 		
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
@@ -215,8 +215,8 @@ public class OstrzeMrozuSetComboListener implements Listener {
 		if(weapon == null || weapon.getType().equals(Material.AIR))
 			return;
 		
-		NBTItem nbt = new NBTItem(weapon);
-		if(!nbt.hasTag("MYTHIC_TYPE") || !nbt.getString("MYTHIC_TYPE").equals("Raid_1_Unikat"))
+		EpicComponent comp = new EpicComponent(weapon);
+		if(!comp.hasKey("MYTHIC_TYPE") || !comp.getString("MYTHIC_TYPE").equals("Raid_1_Unikat"))
 			return;
 		
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
@@ -268,8 +268,8 @@ public class OstrzeMrozuSetComboListener implements Listener {
 		if(weapon == null || weapon.getType().equals(Material.AIR))
 			return;
 		
-		NBTItem nbt = new NBTItem(weapon);
-		if(!nbt.hasTag("MYTHIC_TYPE") || !nbt.getString("MYTHIC_TYPE").equals("Raid_1_Unikat"))
+		EpicComponent comp = new EpicComponent(weapon);
+		if(!comp.hasKey("MYTHIC_TYPE") || !comp.getString("MYTHIC_TYPE").equals("Raid_1_Unikat"))
 			return;
 		
 		double modifier = 0;

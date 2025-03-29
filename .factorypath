@@ -99,7 +99,7 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/org/enginehub/lin-bus/lin-bus-tree/0.1.0-SNAPSHOT/lin-bus-tree-0.1.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/enginehub/lin-bus/lin-bus-common/0.1.0-SNAPSHOT/lin-bus-common-0.1.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/enginehub/lin-bus/lin-bus-stream/0.1.0-SNAPSHOT/lin-bus-stream-0.1.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/enginehub/lin-bus/format/lin-bus-format-snbt/0.1.0-SNAPSHOT/lin-bus-format-snbt-0.1.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/enginehub/lin-bus/format/lin-bus-format-scomp/0.1.0-SNAPSHOT/lin-bus-format-scomp-0.1.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/antlr/antlr4/4.9.1/antlr4-4.9.1.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/antlr/antlr-runtime/3.5.2/antlr-runtime-3.5.2.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/antlr/ST4/4.3/ST4-4.3.jar" enabled="true" runInBatchMode="false"/>
@@ -122,12 +122,12 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/net/kyori/adventure-platform-bukkit/4.3.2/adventure-platform-bukkit-4.3.2.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/net/kyori/adventure-platform-api/4.3.2/adventure-platform-api-4.3.2.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/net/kyori/adventure-text-serializer-bungeecord/4.3.2/adventure-text-serializer-bungeecord-4.3.2.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/net/kyori/adventure-nbt/4.13.1/adventure-nbt-4.13.1.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/net/kyori/adventure-comp/4.13.1/adventure-comp-4.13.1.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/net/kyori/adventure-text-serializer-gson-legacy-impl/4.13.1/adventure-text-serializer-gson-legacy-impl-4.13.1.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/net/kyori/adventure-platform-facet/4.3.2/adventure-platform-facet-4.3.2.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/net/kyori/adventure-platform-viaversion/4.3.2/adventure-platform-viaversion-4.3.2.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/projectlombok/lombok/1.18.26/lombok-1.18.26.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/de/tr7zw/item-nbt-api-plugin/2.12.2/item-nbt-api-plugin-2.12.2.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/de/tr7zw/item-comp-api-plugin/2.12.2/item-comp-api-plugin-2.12.2.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/LibsDisguises/LibsDisguises/10.0.44/LibsDisguises-10.0.44.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/mockito/mockito-core/5.12.0/mockito-core-5.12.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/net/bytebuddy/byte-buddy-agent/1.14.15/byte-buddy-agent-1.14.15.jar" enabled="true" runInBatchMode="false"/>

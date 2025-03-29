@@ -11,9 +11,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
+import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.Getter;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicInventory.Other.EventCreator;
 import me.Vark123.EpicRPG.Main;
 
@@ -38,11 +38,11 @@ public class HorseMenuEvents {
 			if(it == null || it.getType().equals(Material.AIR))
 				return;
 			
-			ReadWriteNBT nbt = NBT.itemStackToNBT(it);
-			if(!nbt.hasTag("MountSummonClass"))
+			EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
+			if(!comp.hasKey("mount_summon_class"))
 				return;
 			
-			String strClass = nbt.getString("MountSummonClass");
+			String strClass = comp.getString("mount_summon_class");
 			Class<?> _class;
 			Constructor<?> constructor;
 			Object obj;

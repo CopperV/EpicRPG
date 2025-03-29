@@ -14,10 +14,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.Getter;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicInventory.Content.IntelligentItem;
 import me.Vark123.EpicInventory.Content.InventoryContents;
 import me.Vark123.EpicInventory.Content.InventoryProvider;
@@ -133,10 +132,10 @@ public final class UpgradableMenuManager {
 						return;
 					}
 					
-					ReadWriteNBT upgradableItemNbt = NBT.itemStackToNBT(upgradableItem);
-					ReadWriteNBT upgradableNbt = upgradableItemNbt.getOrCreateCompound("epic-upgrades");
+					EpicComponent upgradableItemNbt = new EpicComponent(upgradableItem, MythicBukkit.inst());
+					EpicComponent upgradableNbt = upgradableItemNbt.getComponent("epic-upgrades");
 					int level = 0;
-					if(upgradableNbt.hasTag("level"))
+					if(upgradableNbt.hasKey("level"))
 						level = upgradableNbt.getInteger("level");
 					
 					UpgradableManager.get().getUpgradableLevel(level+1).ifPresentOrElse(upgradableLevel -> {
@@ -261,11 +260,11 @@ public final class UpgradableMenuManager {
 					return;
 				}
 				
-				ReadWriteNBT upgradableItemNbt = NBT.itemStackToNBT(upgradableItem);
+				EpicComponent upgradableItemNbt = new EpicComponent(upgradableItem, MythicBukkit.inst());
 				int level = 0;
-				if(upgradableItemNbt.hasTag("epic-upgrades")
-						&& upgradableItemNbt.getCompound("epic-upgrades").hasTag("level"))
-					level = upgradableItemNbt.getCompound("epic-upgrades").getInteger("level");
+				if(upgradableItemNbt.hasKey("epic-upgrades")
+						&& upgradableItemNbt.getComponent("epic-upgrades").hasKey("level"))
+					level = upgradableItemNbt.getComponent("epic-upgrades").getInteger("level");
 				
 				UpgradableManager.get().getUpgradableLevel(level+1).ifPresentOrElse(upgradableLevel -> {
 					inv.setItem(11, green);

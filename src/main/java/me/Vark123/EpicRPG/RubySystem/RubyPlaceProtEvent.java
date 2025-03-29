@@ -6,8 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 
 public class RubyPlaceProtEvent implements Listener {
 	
@@ -20,10 +19,10 @@ public class RubyPlaceProtEvent implements Listener {
 		
 		if(item==null || item.getType().equals(Material.AIR))
 			return;
-		ReadWriteNBT nbti = NBT.itemStackToNBT(item);
+		EpicComponent compi = new EpicComponent(item);
 		
-		if(!nbti.hasTag("RPGType") 
-				|| !nbti.getString("RPGType").contains("ruby")) 
+		if(!compi.hasKey("rpgtype") 
+				|| !compi.getString("rpgtype").contains("ruby")) 
 			return;
 		
 		if(e.getPlayer().isOp()) 

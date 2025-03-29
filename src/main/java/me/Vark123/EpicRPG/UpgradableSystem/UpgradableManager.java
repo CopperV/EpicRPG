@@ -23,10 +23,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.Getter;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicRPG.Utils.Pair;
 import me.Vark123.EpicRPG.Utils.Utils;
 
@@ -118,16 +117,16 @@ public final class UpgradableManager {
 				.isEmpty())
 			return false;
 		
-		ReadWriteNBT nbt = NBT.itemStackToNBT(it);
+		EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
 		if(!Utils.isMythicMobItem(it))
 			return false;
 		
-		if(nbt.hasTag("Klejnot") 
-				|| (nbt.hasTag("RPGType") && nbt.getString("RPGType").equals("gem")))
+		if(comp.hasKey("klejnot") 
+				|| (comp.hasKey("rpgtype") && comp.getString("rpgtype").equals("gem")))
 			return false;
 		
-		ReadWriteNBT upgradesNbt = nbt.getOrCreateCompound("epic-upgrades");
-		if(upgradesNbt.hasTag("level") && upgradesNbt.getInteger("level") >= getMaxLevel())
+		EpicComponent upgradesNbt = comp.getComponent("epic-upgrades");
+		if(upgradesNbt.hasKey("level") && upgradesNbt.getInteger("level") >= getMaxLevel())
 			return false;
 		
 		return true;
@@ -239,17 +238,20 @@ public final class UpgradableManager {
 				lore.set(i, searchLine+(line.contains("§7+")?"§7+":"§7")+num);
 			});
 		
-		ReadWriteNBT nbt = NBT.itemStackToNBT(item);
-		ReadWriteNBT upgradesNbt = nbt.getOrCreateCompound("epic-upgrades");
+		EpicComponent comp = new EpicComponent(item, MythicBukkit.inst());
+		EpicComponent upgradesNbt = comp.getComponent("epic-upgrades");
 		upgradesNbt.setInteger("level", newLevel);
-		ReadWriteNBT statsNbt = upgradesNbt.getOrCreateCompound("stats");
-		if(statsNbt.hasTag(searchLine)) {
-			statsNbt.setInteger(searchLine, statsNbt.getInteger(searchLine)+statValue.getValue());
+		EpicComponent statsNbt = upgradesNbt.getComponent("stats");
+		String statKey = convertStatToComponentKey(searchLine);
+		if(statsNbt.hasKey(statKey)) {
+			statsNbt.setInteger(statKey, statsNbt.getInteger(statKey)+statValue.getValue());
 		} else {
-			statsNbt.setInteger(searchLine, statValue.getValue());
+			statsNbt.setInteger(statKey, statValue.getValue());
 		}
-//		nbt.applyNBT(item);
-		item = NBT.itemStackFromNBT(nbt);
+		upgradesNbt.setComponent("stats", statsNbt);
+		comp.setComponent("epic-upgrades", upgradesNbt);
+		comp.applyTo(item);
+//		item = NBT.itemStackFromNBT(comp);
 
 		String mmId = Utils.getMythicMobItemType(item);
 		ItemStack baseItem = MythicBukkit.inst().getItemManager().getItemStack(mmId);
@@ -289,7 +291,7 @@ public final class UpgradableManager {
 			.filter(s -> !s[1].contains("."))
 			.map(s -> new Pair<>(s[0], Integer.parseInt(s[1])))
 			.filter(pair -> Math.round(pair.getValue()*UPGRADE_PERCENT) > 0)
-			.forEach(pair -> stats.put(pair.getKey(), pair.getValue()));
+			.forEach(pair -> stats.put(convertStatToComponentKey(pair.getKey()), pair.getValue()));
 		Object[] keys = stats.keySet().toArray();
 //		Object[] keys = stats.entrySet().stream()
 //				.map(entry -> Map.entry(entry.getKey(), 
@@ -323,27 +325,29 @@ public final class UpgradableManager {
 			if(line.contains(": §c"))
 				continue;
 			pickedStats.keySet().stream()
-				.filter(_line -> line.startsWith(_line))
+				.filter(_line -> line.startsWith(convertComponentKeyToStat(_line)))
 				.findFirst()
 				.ifPresent(_line -> {
 					lore.set(loreCopy.indexOf(line),
-							(_line+(line.contains("§7+")?"§7+":"§7")
+							(convertComponentKeyToStat(_line)+(line.contains("§7+")?"§7+":"§7")
 									+(stats.get(_line)+pickedStats.get(_line))));
 				});
 		}
 		
-		ReadWriteNBT nbt = NBT.itemStackToNBT(item);
-		ReadWriteNBT upgradesNbt = nbt.getOrCreateCompound("epic-upgrades");
+		EpicComponent comp = new EpicComponent(item, MythicBukkit.inst());
+		EpicComponent upgradesNbt = comp.getComponent("epic-upgrades");
 		upgradesNbt.setInteger("level", newLevel);
-		ReadWriteNBT statsNbt = upgradesNbt.getOrCreateCompound("stats");
+		EpicComponent statsNbt = upgradesNbt.getComponent("stats");
 		pickedStats.forEach((stat, value) -> {
-			if(statsNbt.hasTag(stat))
+			if(statsNbt.hasKey(stat))  //java.lang.IllegalArgumentException: Invalid key. Must be [a-z0-9/._-]: §4- §8obrazenia: 
 				statsNbt.setInteger(stat, statsNbt.getInteger(stat)+value);
 			else
 				statsNbt.setInteger(stat, value);
 		});
-//		nbt.applyNBT(item);
-		item = NBT.itemStackFromNBT(nbt);
+		upgradesNbt.setComponent("stats", statsNbt);
+		comp.setComponent("epic-upgrades", upgradesNbt);
+		comp.applyTo(item);
+//		item = NBT.itemStackFromNBT(comp);
 
 		String mmId = Utils.getMythicMobItemType(item);
 		ItemStack baseItem = MythicBukkit.inst().getItemManager().getItemStack(mmId);
@@ -358,4 +362,54 @@ public final class UpgradableManager {
 		p.playSound(p, Sound.BLOCK_ANVIL_USE, 1, 1);
 	}
 
+	private String convertStatToComponentKey(String stat) {
+		switch(stat) {
+			case "§4- §8Obrazenia: ":
+				return "obrazenia";
+			case "§4- §8Ochrona: ":
+				return "ochrona";
+			case "§4- §8Sila: ":
+				return "sila";
+			case "§4- §8Wytrzymalosc: ":
+				return "wytrzymalosc";
+			case "§4- §8Zdolnosci mysliwskie: ":
+				return "zdolnosci mysliwskie";
+			case "§4- §8Zrecznosc: ":
+				return "zrecznosc";
+			case "§4- §8Inteligencja: ":
+				return "inteligencja";
+			case "§4- §8Mana: ":
+				return "Mana";
+			case "§4- §8Walka: ":
+				return "walka";
+			default:
+				return "unknown";
+		}
+	}
+	
+	private String convertComponentKeyToStat(String key) {
+		switch(key) {
+	        case "obrazenia":
+	            return "§4- §8Obrazenia: ";
+	        case "ochrona":
+	            return "§4- §8Ochrona: ";
+	        case "sila":
+	            return "§4- §8Sila: ";
+	        case "wytrzymalosc":
+	            return "§4- §8Wytrzymalosc: ";
+	        case "zdolnosci mysliwskie":
+	            return "§4- §8Zdolnosci mysliwskie: ";
+	        case "zrecznosc":
+	            return "§4- §8Zrecznosc: ";
+	        case "inteligencja":
+	            return "§4- §8Inteligencja: ";
+	        case "Mana":
+	            return "§4- §8Mana: ";
+	        case "walka":
+	            return "§4- §8Walka: ";
+	        default:
+	            return "UNKNOWN";
+	    }
+	}
+	
 }

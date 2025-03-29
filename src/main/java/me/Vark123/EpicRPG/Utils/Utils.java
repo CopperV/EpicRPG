@@ -22,14 +22,13 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.adapters.AbstractLocation;
 import io.lumine.mythic.api.adapters.AbstractVector;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.mobs.ActiveMob;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 
 public class Utils {
 
@@ -40,8 +39,8 @@ public class Utils {
 	public static void resetSetInfo(ItemStack it) {
 		if(it == null || it.getType().equals(Material.AIR))
 			return;
-		ReadWriteNBT nbt = NBT.itemStackToNBT(it);
-		if(!nbt.hasTag("EpicSet"))
+		EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
+		if(!comp.hasKey("epic_set"))
 			return;
 		
 		ItemMeta im = it.getItemMeta();
@@ -71,8 +70,8 @@ public class Utils {
 	public static void setItemSetInfo(ItemStack it, int level) {
 		if(it == null || it.getType().equals(Material.AIR))
 			return;
-		ReadWriteNBT nbt = NBT.itemStackToNBT(it);
-		if(!nbt.hasTag("EpicSet"))
+		EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
+		if(!comp.hasKey("epic_set"))
 			return;
 
 		ItemMeta im = it.getItemMeta();
@@ -232,11 +231,38 @@ public class Utils {
 	}
 	
 	public static void takeItems(Player p, EquipmentSlot slot, int amount) {
-		if(slot.equals(EquipmentSlot.HAND)) {
-			takeItems(p, p.getInventory().getHeldItemSlot(), amount);
-			return;
+		int numSlot;
+		switch(slot) {
+			case BODY:
+				numSlot = 38;
+				break;
+			case HEAD:
+				numSlot = 39;
+				break;
+			case CHEST:
+				numSlot = 38;
+				break;
+			case LEGS:
+				numSlot = 37;
+				break;
+			case FEET:
+				numSlot = 36;
+				break;
+			case HAND:
+				numSlot = p.getInventory().getHeldItemSlot();
+				break;
+			case OFF_HAND:
+				numSlot = 40;
+				break;
+			default:
+				numSlot = -1;
+				break;
 		}
-		takeItems(p, slot.ordinal(), amount);
+		
+		if(numSlot < 0)
+			return;
+		
+		takeItems(p, numSlot, amount);
 	}
 	
 	public static List<Integer> intArrayToList(int[] arr){
@@ -346,7 +372,7 @@ public class Utils {
 			value *= 0.001;
 			++index;
 		}
-		return String.format(value % 1 == 0 ? "%.0f%s" : (value * 10 % 1 == 0 ? "%.1f%s" : "%.2f%s"), value, currencySuffixes[index]);
+		return String.format(value % 1 == 0 ? "%.0f%s" : "%.1f%s", value, currencySuffixes[index]);
 	}
 	
 	public static String formatCurrencyGrouped(double value) {

@@ -2,7 +2,7 @@ name: EpicRPG
 version: 2.0.3
 main: me.Vark123.EpicRPG.Main
 author: Vark123
-depend: [EpicCalendarEvents,MythicMobs,NBTAPI,ProtocolLib,EpicOptions,LibsDisguises,EpicInventory]
+depend: [EpicCalendarEvents,MythicMobs,NBTAPI,EpicOptions,LibsDisguises,EpicInventory]
 api-version: 1.21
 
 commands:

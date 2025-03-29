@@ -13,7 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import de.tr7zw.nbtapi.NBTItem;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicRPG.OldFightSystem.EpicDamageType;
 import me.Vark123.EpicRPG.OldFightSystem.Events.EpicAttackEvent;
 import me.Vark123.EpicRPG.OldRuneSystem.Runes.BlogoslawienstwoPrzedwiecznych;
@@ -98,8 +98,8 @@ public class RuneMeleeModifierListener implements Listener {
 		
 		ItemStack item = p.getInventory().getItemInMainHand();
 		if(item != null && !item.getType().equals(Material.AIR)) {
-			NBTItem nbti = new NBTItem(item);
-			if(nbti.hasTag("SzponBeliara") && modifiers.hasWybraniecBeliara())
+			EpicComponent compi = new EpicComponent(item);
+			if(compi.hasKey("SzponBeliara") && modifiers.hasWybraniecBeliara())
 				modifier += 0.3;
 		}
 		

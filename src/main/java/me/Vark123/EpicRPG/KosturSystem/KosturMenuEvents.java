@@ -13,11 +13,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.items.ItemExecutor;
 import lombok.Getter;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicInventory.Other.EventCreator;
 import me.Vark123.EpicRPG.Utils.Utils;
 
@@ -60,8 +59,8 @@ public class KosturMenuEvents {
 				return;
 			}
 
-			ReadWriteNBT nbt = NBT.itemStackToNBT(kostur);
-			if(!nbt.hasTag("Rozdzka")) {
+			EpicComponent comp = new EpicComponent(kostur, MythicBukkit.inst());
+			if(!comp.hasKey("rozdzka")) {
 				p.closeInventory();
 				return;
 			}
@@ -111,11 +110,11 @@ public class KosturMenuEvents {
 		Consumer<InventoryCloseEvent> event = e -> {
 			ItemExecutor manag = MythicBukkit.inst().getItemManager();
 			ItemStack kostur = manag.getItemStack("Runiczny_Kostur");
-			ReadWriteNBT kosturNBT = NBT.itemStackToNBT(kostur);
+			EpicComponent kosturNBT = new EpicComponent(kostur, MythicBukkit.inst());
 			ItemMeta im = kostur.getItemMeta();
 			List<String> lore = im.getLore();
 			List<ItemStack> toReturn = new LinkedList<>();
-			ReadWriteNBT nbt;
+			EpicComponent comp;
 			
 			Inventory inv = e.getView().getTopInventory();
 			Player p = (Player) e.getPlayer();
@@ -142,8 +141,8 @@ public class KosturMenuEvents {
 				kosturNBT.setString(strSlots[i], mmId);
 			}
 			
-			kostur = NBT.itemStackFromNBT(kosturNBT);
-//			kosturNBT.applyNBT(kostur);
+//			kostur = NBT.itemStackFromNBT(kosturNBT);
+			kosturNBT.applyTo(kostur);
 			im = kostur.getItemMeta();
 			im.setLore(lore);
 			kostur.setItemMeta(im);
@@ -178,16 +177,16 @@ public class KosturMenuEvents {
 					return;
 				}
 				
-				ReadWriteNBT nbt = NBT.itemStackToNBT(it);
-				if(!nbt.hasTag("soulbind")
-						|| !nbt.getString("soulbind").equalsIgnoreCase(p.getName())) {
+				EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
+				if(!comp.hasKey("soulbind")
+						|| !comp.getString("soulbind").equalsIgnoreCase(p.getName())) {
 					p.closeInventory();
 					return;
 				}
 				
 				int kosturPart = i/2 + 1;
-				if(!nbt.hasTag("RozdzkaPart")
-						|| !nbt.getString("RozdzkaPart").equalsIgnoreCase(kosturPart+"")) {
+				if(!comp.hasKey("rozdzka_part")
+						|| !comp.getString("rozdzka_part").equalsIgnoreCase(kosturPart+"")) {
 					p.closeInventory();
 					return;
 				}
@@ -203,14 +202,14 @@ public class KosturMenuEvents {
 					return;
 				}
 				
-				ReadWriteNBT nbt = NBT.itemStackToNBT(it);
-				if(!nbt.hasTag("cave")
-						|| nbt.getString("cave").equalsIgnoreCase("crimson")) {
+				EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
+				if(!comp.hasKey("cave")
+						|| comp.getString("cave").equalsIgnoreCase("crimson")) {
 					p.closeInventory();
 					return;
 				}
 				
-				String klejnot = nbt.getString("cave");
+				String klejnot = comp.getString("cave");
 				if(klejnoty.contains(klejnot)) {
 					p.closeInventory();
 					return;

@@ -1,13 +1,9 @@
 package me.Vark123.EpicRPG;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Particle;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.ListenerPriority;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.events.PacketEvent;
+import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.event.PacketListenerPriority;
 
 import me.Vark123.EpicRPG.API.EpicRPGApi;
 import me.Vark123.EpicRPG.AdvancedBuySystem.AdvancedBuyListener;
@@ -77,6 +73,7 @@ import me.Vark123.EpicRPG.Players.SkillControllers.HungerSkillEvent;
 import me.Vark123.EpicRPG.RubySystem.RubyPlaceProtEvent;
 import me.Vark123.EpicRPG.RubySystem.RubyUseEvent;
 import me.Vark123.EpicRPG.RuneSystem.Listeners.RuneInteractListener;
+import me.Vark123.EpicRPG.RuneSystem.Listeners.RuneStunEffectListener;
 import me.Vark123.EpicRPG.RuneSystem.SummonSystem.SummonManager;
 import me.Vark123.EpicRPG.ScriptedFightsAndSkills.Loatheb.LoathebHealDebuffListener;
 import me.Vark123.EpicRPG.ScriptedFightsAndSkills.Loatheb.LoathebProjectileNeutralizeListener;
@@ -196,6 +193,7 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new MageProfessionModifierListener(), inst);
 
 		Bukkit.getPluginManager().registerEvents(new RuneInteractListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new RuneStunEffectListener(), inst);
 
 		Bukkit.getPluginManager().registerEvents(new ConsumableUseListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new LoadConsumablesOnServerLoadListener(), inst);
@@ -220,22 +218,7 @@ public class EventListenerManager {
 			EpicRPGApi.getApi().getCalendarManager().removeEvent("halloween_event");
 		EpicRPGApi.getApi().getCalendarManager().addEvent("halloween_event", "31.10", "xx:00,xx:15,xx:30,xx:45");
 		
-		addDisableDamageParticlesPacketListener();
-	}
-	
-	private static void addDisableDamageParticlesPacketListener() {
-		Main.getInstance().getProtocolManager().addPacketListener(new PacketAdapter(Main.getInstance(), ListenerPriority.HIGH, PacketType.Play.Server.WORLD_PARTICLES) {
-			@Override
-			public void onPacketSending(PacketEvent event) {
-				PacketContainer packet = event.getPacket();
-				if(event.getPacketType().equals(PacketType.Play.Server.WORLD_PARTICLES)) {
-					if(packet.getNewParticles().read(0).getParticle().equals(Particle.DAMAGE_INDICATOR)) {
-						packet.getIntegers().write(0, 0);
-						event.setCancelled(true);
-					}
-				}
-			}
-		});
+		PacketEvents.getAPI().getEventManager().registerListener(new DamageParticleListener(), PacketListenerPriority.NORMAL);
 	}
 	
 }

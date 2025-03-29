@@ -9,10 +9,9 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.Getter;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicInventory.Other.EventCreator;
 import me.Vark123.EpicRPG.Utils.Utils;
 
@@ -52,18 +51,18 @@ public class SzponBeliaraEvents {
 				return;
 			}
 
-			ReadWriteNBT nbtSzpon = NBT.itemStackToNBT(szpon);
-			ReadWriteNBT nbtPakt = NBT.itemStackToNBT(pakt);
-			ReadWriteNBT nbtKamien = NBT.itemStackToNBT(kamien);
-			if(!(nbtSzpon.hasTag("SzponBeliara") && !nbtSzpon.hasTag("FreeSlots"))
-					|| !nbtPakt.hasTag("SzponUpgrade")
-					|| !nbtKamien.hasTag("cave")) {
+			EpicComponent compSzpon = new EpicComponent(szpon, MythicBukkit.inst());
+			EpicComponent compPakt = new EpicComponent(pakt, MythicBukkit.inst());
+			EpicComponent compKamien = new EpicComponent(kamien, MythicBukkit.inst());
+			if(!(compSzpon.hasKey("szpon_beliara") && !compSzpon.hasKey("free_slots"))
+					|| !compPakt.hasKey("szpon_upgrade")
+					|| !compKamien.hasKey("cave")) {
 				p.closeInventory();
 				return;
 			}
 
 			ItemStack toDrop = null;
-			switch(nbtKamien.getString("cave").toLowerCase()) {
+			switch(compKamien.getString("cave").toLowerCase()) {
 				case "topaz":
 					toDrop = MythicBukkit.inst().getItemManager().getItemStack("Szpon_Beliara_Str");
 					break;

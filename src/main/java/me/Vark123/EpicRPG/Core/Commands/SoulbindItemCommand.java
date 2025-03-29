@@ -13,10 +13,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.items.ItemExecutor;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Utils.Utils;
 
@@ -52,21 +51,18 @@ public class SoulbindItemCommand implements CommandExecutor {
 		it.setAmount(Integer.parseInt(args[2]));
 		
 		ItemMeta im = it.getItemMeta();
-		List<String> lore;
-		if(im.hasLore()) lore = im.getLore();
-		else lore = new ArrayList<>();
+		List<String> lore = im.hasLore() ? im.getLore() : new ArrayList<>();
 		lore.add(" ");
 		lore.add("§aPrzypisanie: §e§o"+args[0]);
 		lore.add(" ");
 		im.setLore(lore);
 		it.setItemMeta(im);
 		
-		ReadWriteNBT nbtit = NBT.itemStackToNBT(it);
-		nbtit.setString("soulbind", args[0]);
+		EpicComponent itComp = new EpicComponent(it, MythicBukkit.inst());
+		itComp.setString("soulbind", args[0]);
 		Random rand = new Random();
-		nbtit.setInteger("Random"+rand.nextInt(), rand.nextInt());
-//		nbtit.applyNBT(it);
-		it = NBT.itemStackFromNBT(nbtit);
+		itComp.setInteger("random"+rand.nextInt(), rand.nextInt());
+		itComp.applyTo(it);
 		
 		Player p = Bukkit.getPlayer(args[0]);
 		Utils.dropItemStack(p, it);

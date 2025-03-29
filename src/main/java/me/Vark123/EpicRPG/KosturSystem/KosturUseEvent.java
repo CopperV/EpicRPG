@@ -9,13 +9,13 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.items.ItemExecutor;
-import me.Vark123.EpicRPG.OldRuneSystem.RuneManager;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
+import me.Vark123.EpicRPG.RuneSystem.EpicRune;
+import me.Vark123.EpicRPG.RuneSystem.RuneManager;
 import me.Vark123.EpicRPG.Utils.Utils;
 
 public class KosturUseEvent implements Listener {
@@ -26,8 +26,8 @@ public class KosturUseEvent implements Listener {
 		if (kostur == null || kostur.getType().equals(Material.AIR))
 			return;
 
-		ReadWriteNBT nbt = NBT.itemStackToNBT(kostur);
-		if (!nbt.hasTag("Rozdzka") || !Utils.isMythicMobItem(kostur))
+		EpicComponent comp = new EpicComponent(kostur, MythicBukkit.inst());
+		if (!comp.hasKey("rozdzka") || !Utils.isMythicMobItem(kostur))
 			return;
 
 		Player p = e.getPlayer();
@@ -55,9 +55,9 @@ public class KosturUseEvent implements Listener {
 			return;
 		
 		String key = manager.finishCombo(p, kostur);
-		if(!nbt.hasTag(key))
+		if(!comp.hasKey(key))
 			return;
-		String mm = nbt.getString(key);
+		String mm = comp.getString(key);
 		if(mm.equalsIgnoreCase("-")) {
 			p.getWorld().spawnParticle(Particle.DRAGON_BREATH, p.getEyeLocation(), 5, 0.25, 0.25, 0.25, 0.1);
 			return;
@@ -68,11 +68,11 @@ public class KosturUseEvent implements Listener {
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		
 		if(!p.isSneaking()) {
-			if(!RuneManager.getInstance().castRune(rpg, rune)) {
+			if(!RuneManager.get().tryCastRune(rpg, rune)) {
 				p.getWorld().spawnParticle(Particle.SMOKE, p.getEyeLocation(), 15, 0.25, 0.25, 0.25, 0.1);
 			}
 		} else {
-			RuneManager.getInstance().regenTimePass(p, rune);
+			RuneManager.get().isRegenTimePassed(p, new EpicRune(rune));
 		}
 		
 	}

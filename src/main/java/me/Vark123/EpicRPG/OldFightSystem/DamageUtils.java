@@ -14,7 +14,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import de.tr7zw.nbtapi.NBTItem;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicRPG.OldFightSystem.Events.CritCalculateEvent;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
@@ -85,8 +85,8 @@ public final class DamageUtils {
 
 		ItemStack weapon = rpg.getPlayer().getInventory().getItemInMainHand();
 		if(weapon != null && !weapon.getType().equals(Material.AIR)) {
-			NBTItem nbt = new NBTItem(weapon);
-			switch(nbt.getString("MYTHIC_TYPE")) {
+			EpicComponent comp = new EpicComponent(weapon);
+			switch(comp.getString("MYTHIC_TYPE")) {
 				case "Raid_1_Unikat":
 					switch(wiecznyWedrowiecAmount) {
 						case 4:

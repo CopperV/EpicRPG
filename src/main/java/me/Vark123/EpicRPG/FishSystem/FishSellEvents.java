@@ -12,9 +12,9 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
+import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.Getter;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicInventory.Other.EventCreator;
 import me.Vark123.EpicRPG.Core.RudaSystem;
 import me.Vark123.EpicRPG.Players.PlayerManager;
@@ -55,30 +55,28 @@ public class FishSellEvents {
 				ItemStack it = inv.getItem(i);
 				if(it == null || it.getType().equals(Material.AIR))
 					return false;
-				
-				ReadWriteNBT nbt = NBT.itemStackToNBT(it);
-				if(!nbt.hasTag("type") 
-						|| !nbt.getString("type").equalsIgnoreCase("fish_to_sell")) {
+
+				EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
+				if(!comp.hasKey("rpgtype") 
+						|| !comp.getString("rpgtype").equalsIgnoreCase("fish_to_sell")) {
 					toDrop.add(it);
 					return false;
 				}
-				if(!nbt.hasTag("price")) {
+				if(!comp.hasKey("price")) {
 					toDrop.add(it);
 					return false;
 				}
 				return true;
 			}).forEach(i -> {
 				ItemStack it = inv.getItem(i);
-				ReadWriteNBT nbt = NBT.itemStackToNBT(it);
-				int toAdd = Integer.parseInt(nbt.getString("price"))*it.getAmount();
+				EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
+				int toAdd = Integer.parseInt(comp.getString("price"))*it.getAmount();
 				price.add(toAdd);
 			});
 			
 			int value = price.getValue();
 			RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 			RudaSystem.getInstance().addRuda(rpg, value, "fish");
-//			rpg.getVault().addBrylkiRudy(value);
-//			p.sendMessage(Main.getInstance().getPrefix()+" §aOtrzymales §9§o"+value+" §abrylek rudy");
 			
 			toDrop.forEach(it -> {
 				Utils.dropItemStack(p, it);

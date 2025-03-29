@@ -23,7 +23,9 @@ import me.Vark123.EpicRPG.RuneSystem.Events.RuneCastCostCalcEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.RuneCastGlobalCdCalcEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.RuneCastRuneCdCalcEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.RuneUseEvent;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.MalaBurzaOgnista;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.OgnistaStrzala;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.Pirokineza;
 import me.Vark123.EpicRPG.RuneSystem.Runes._InProgress.PrzyzwanieWilka;
 
 @Getter
@@ -117,7 +119,7 @@ public final class RuneManager {
 		RuneUseEvent useEvent = new RuneUseEvent(rpg, rune);
 		Bukkit.getPluginManager().callEvent(useEvent);
 		
-		rpg.displayUpdate();
+//		rpg.displayUpdate();
 		castableRune.castSpell();
 
 		//TODO
@@ -304,7 +306,9 @@ public final class RuneManager {
 				break;
 			case MUSIC_DISC_MELLOHI:
 				switch(rune.getMythicType()) {
-					case "OgnistaStrzala":			return new OgnistaStrzala(rpgPlayer, rune);
+					case "OgnistaStrzala":				return new OgnistaStrzala(rpgPlayer, rune);
+					case "MalaBurzaOgnista":			return new MalaBurzaOgnista(rpgPlayer, rune);
+					case "Pirokineza":					return new Pirokineza(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_OTHERSIDE:

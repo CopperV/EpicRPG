@@ -13,7 +13,8 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.tr7zw.nbtapi.NBTItem;
+import io.lumine.mythic.bukkit.MythicBukkit;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicInventory.Content.InventoryContents;
 import me.Vark123.EpicInventory.Content.InventoryProvider;
 import me.Vark123.EpicInventory.Enums.DisabledEvents;
@@ -42,9 +43,9 @@ public class KamiennyObserwator extends ARune {
 					int hour = i + 1;
 					newClock.setAmount(hour);
 					int time = hour < 6 ? 24_000 + (hour - 6)*1000 : (hour - 6)*1000;
-					NBTItem nbt = new NBTItem(newClock);
-					nbt.setInteger("clock_time", time);
-					nbt.applyNBT(newClock);
+					EpicComponent comp = new EpicComponent(newClock);
+					comp.setInteger("clock_time", time);
+					comp.applyTo(newClock);
 					
 					ItemMeta im = newClock.getItemMeta();
 					im.setDisplayName("§a§lGODZINA: §e§l"+getTime(hour));
@@ -91,9 +92,9 @@ public class KamiennyObserwator extends ARune {
 				clock.setAmount(hour);
 				
 				int time = hour < 6 ? 24_000 + (hour - 6)*1000 : (hour - 6)*1000;
-				NBTItem nbt = new NBTItem(it);
-				nbt.setInteger("clock_time", time);
-				nbt.applyNBT(clock);
+				EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
+				comp.setInteger("clock_time", time);
+				comp.applyTo(clock);
 				
 				ItemMeta im = clock.getItemMeta();
 				im.setDisplayName("§a§lGODZINA: §e§l"+getTime(hour));

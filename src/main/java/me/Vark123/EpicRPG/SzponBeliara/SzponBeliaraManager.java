@@ -10,11 +10,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.AccessLevel;
 import lombok.Getter;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicInventory.Content.IntelligentItem;
 import me.Vark123.EpicInventory.Content.InventoryContents;
 import me.Vark123.EpicInventory.Content.InventoryProvider;
@@ -154,7 +153,7 @@ public class SzponBeliaraManager {
 						return;
 					}
 
-					ReadWriteNBT _szponNBT = NBT.itemStackToNBT(_szpon);
+					EpicComponent _szponNBT = new EpicComponent(_szpon, MythicBukkit.inst());
 					
 					if(!Utils.isMythicMobItem(_esencjaSzpona)
 							|| !Utils.getMythicMobItemType(_esencjaSzpona).equals("Esencja_Szpona")
@@ -163,7 +162,7 @@ public class SzponBeliaraManager {
 						p.closeInventory();
 						return;
 					}
-					if(!_szponNBT.hasTag("SzponBeliara")) {
+					if(!_szponNBT.hasKey("szpon_beliara")) {
 						p.closeInventory();
 						return;
 					}

@@ -14,7 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
-import de.tr7zw.nbtapi.NBTItem;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicRPG.OldFightSystem.EpicDamageType;
 import me.Vark123.EpicRPG.OldFightSystem.Events.EpicAttackEvent;
 import me.Vark123.EpicRPG.Players.PlayerManager;
@@ -45,8 +45,8 @@ public class SlugaBeliaraModifierListener implements Listener {
 		if(item == null || item.getType().equals(Material.AIR))
 			return;
 
-		NBTItem nbti = new NBTItem(item);
-		if(!nbti.hasTag("SzponBeliara")) 
+		EpicComponent compi = new EpicComponent(item);
+		if(!compi.hasKey("SzponBeliara")) 
 			return;
 		
 		double chance = p.getHealth() / 75.;

@@ -17,6 +17,8 @@ public class EntityDeathListener implements Listener {
 	public void onMobDeath(MythicMobDeathEvent e) {
 		Entity victim = e.getEntity();
 		LivingEntity killer = e.getKiller();
+		if(!(victim instanceof LivingEntity))
+			return;
 		
 		EpicDeathEvent event = new EpicDeathEvent(killer, (LivingEntity) victim);
 		Bukkit.getPluginManager().callEvent(event);
@@ -25,9 +27,11 @@ public class EntityDeathListener implements Listener {
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent e) {
 		Player victim = e.getEntity();
-		Player killer = victim.getKiller();
+		Entity killer = victim.getKiller();
+		if(!(killer instanceof LivingEntity))
+			return;
 		
-		EpicDeathEvent event = new EpicDeathEvent(killer, victim);
+		EpicDeathEvent event = new EpicDeathEvent((LivingEntity) killer, victim);
 		Bukkit.getPluginManager().callEvent(event);
 	}
 	

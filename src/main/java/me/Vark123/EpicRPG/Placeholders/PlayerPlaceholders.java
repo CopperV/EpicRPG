@@ -141,6 +141,10 @@ public class PlayerPlaceholders extends PlaceholderExpansion {
 				return String.format("%.2f", (((double)(info.getExp() - ExpSystem.getInstance().getNextLevelExp(info.getLevel() - 1)))
 						/ ((double)(info.getNextLevel() - ExpSystem.getInstance().getNextLevelExp(info.getLevel() - 1)))
 						* 100.0));
+			case "level_exp":
+				return (info.getExp() - ExpSystem.getInstance().getNextLevelExp(info.getLevel() - 1))+"";
+			case "nextlevel_exp":
+				return (info.getNextLevel() - ExpSystem.getInstance().getNextLevelExp(info.getLevel() - 1))+"";
 			case "raw_klasa":
 				return ChatColor.stripColor(info.getProffesion());
 			default:

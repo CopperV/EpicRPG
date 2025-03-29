@@ -9,9 +9,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
+import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.Getter;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicInventory.Content.InventoryContents;
 import me.Vark123.EpicInventory.Content.InventoryProvider;
 import me.Vark123.EpicInventory.Enums.Action;
@@ -209,13 +209,13 @@ public class JewelryMenuManager {
 	}
 	
 	public boolean isJewelryItem(ItemStack it) {
-		ReadWriteNBT nbt = NBT.itemStackToNBT(it);
-		return nbt.hasTag("JewerlyType");
+		EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
+		return comp.hasKey("jewerly_type");
 	}
 	
 	public boolean isCorrectJewelrySlotType(ItemStack it, JewelryItem jewelry) {
-		ReadWriteNBT nbt = NBT.itemStackToNBT(it);
-		String type = nbt.getString("JewerlyType").toUpperCase();
+		EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
+		String type = comp.getString("jewerly_type").toUpperCase();
 		return jewelry.getType().equals(JewelryType.valueOf(type));
 	}
 	

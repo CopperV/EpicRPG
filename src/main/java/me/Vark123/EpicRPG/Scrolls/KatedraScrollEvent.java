@@ -16,8 +16,8 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
+import io.lumine.mythic.bukkit.MythicBukkit;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Utils.Utils;
 
@@ -39,13 +39,13 @@ public class KatedraScrollEvent implements Listener {
 				|| !it.getItemMeta().hasDisplayName()
 				|| !it.getItemMeta().getDisplayName().equalsIgnoreCase("§e§lprzepustka - katedra"))
 			return;
-		ReadWriteNBT nbt = NBT.itemStackToNBT(it);
-		if(!nbt.hasTag("soulbind")) {
+		EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
+		if(!comp.hasKey("soulbind")) {
 			p.sendMessage(Main.getInstance().getPrefix()+" §cPrzedmiot zbugowany!");
 			p.sendMessage(Main.getInstance().getPrefix()+" §cNie mozesz go uzyc!");
 			return;
 		}
-		if(!nbt.getString("soulbind").equalsIgnoreCase(p.getName())) {
+		if(!comp.getString("soulbind").equalsIgnoreCase(p.getName())) {
 			p.sendMessage(Main.getInstance().getPrefix()+" §cZwoj jest przypisany do kogos innego!");
 			p.sendMessage(Main.getInstance().getPrefix()+" §cNie mozesz go uzyc!");
 			return;

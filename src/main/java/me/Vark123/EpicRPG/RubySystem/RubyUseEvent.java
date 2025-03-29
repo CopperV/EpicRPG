@@ -23,8 +23,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.tr7zw.nbtapi.NBT;
-import de.tr7zw.nbtapi.iface.ReadWriteNBT;
+import io.lumine.mythic.bukkit.MythicBukkit;
+import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicRPG.HealthSystem.RpgPlayerHealEvent;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
@@ -44,11 +44,11 @@ public class RubyUseEvent implements Listener {
 				|| ruby.getType().equals(Material.AIR))
 			return;
 		
-		ReadWriteNBT nbt = NBT.itemStackToNBT(ruby);
-		if(!(nbt.hasTag("RPGType")))
+		EpicComponent comp = new EpicComponent(ruby, MythicBukkit.inst());
+		if(!(comp.hasKey("rpgtype")))
 			return;
 		
-		String type = nbt.getString("RPGType");
+		String type = comp.getString("rpgtype");
 		if(!(type.equalsIgnoreCase("hp_ruby") 
 				|| type.equalsIgnoreCase("mana_ruby")))
 			return;
@@ -68,7 +68,7 @@ public class RubyUseEvent implements Listener {
 		Sound sound;
 		List<String> lore = new LinkedList<>();
 		if(use) {
-			int present = Integer.parseInt(nbt.getString("PresentValue"));
+			int present = Integer.parseInt(comp.getString("present_value"));
 			int toUse = present;
 			if(present == 0)
 				return;
@@ -87,7 +87,7 @@ public class RubyUseEvent implements Listener {
 				dust = new DustOptions(Color.RED, 1f);
 				volume = 0.8f;
 				sound = Sound.BLOCK_END_PORTAL_SPAWN;
-				lore.add("§cZycie: §7"+present+"/"+nbt.getString("MaxValue"));
+				lore.add("§cZycie: §7"+present+"/"+comp.getString("max_value"));
 			} else {
 				int toRegen = rpg.getStats().getFinalMana() - rpg.getStats().getPresentMana();
 				if(toRegen < 0)
@@ -101,13 +101,13 @@ public class RubyUseEvent implements Listener {
 				dust = new DustOptions(Color.BLUE, 1f);
 				volume = 1.3f;
 				sound = Sound.BLOCK_END_PORTAL_SPAWN;
-				lore.add("§9Mana: §7"+present+"/"+nbt.getString("MaxValue"));
+				lore.add("§9Mana: §7"+present+"/"+comp.getString("max_value"));
 			}
 			
-			nbt.setString("PresentValue", present+"");
+			comp.setString("present_value", present+"");
 		} else {
-			int max = Integer.parseInt(nbt.getString("MaxValue"));
-			int present = Integer.parseInt(nbt.getString("PresentValue"));
+			int max = Integer.parseInt(comp.getString("max_value"));
+			int present = Integer.parseInt(comp.getString("present_value"));
 			if(present == max) 
 				return;
 			
@@ -170,14 +170,14 @@ public class RubyUseEvent implements Listener {
 					toAdd = max - present;
 				lore.add("§9Mana: §7"+(present+toAdd)+"/"+max);
 			}
-			nbt.setString("PresentValue", (present+toAdd)+"");
+			comp.setString("present_value", (present+toAdd)+"");
 		}
 
 		p.playSound(p.getLocation(), sound, 1f, volume);
 		p.spawnParticle(Particle.DUST, p.getLocation().add(0, 1, 0), 30, 1f, 1f, 1f, 1f, dust);
 		
-//		nbt.applyNBT(ruby);
-		ruby = NBT.itemStackFromNBT(nbt);
+		comp.applyTo(ruby);
+//		ruby = NBT.itemStackFromNBT(comp);
 		ItemMeta im = ruby.getItemMeta();
 		im.setLore(lore);
 		ruby.setItemMeta(im);
