@@ -17,7 +17,7 @@ import me.Vark123.EpicRPG.Players.RpgPlayer;
 public class EntityDeathVaultListener implements Listener {
 
 	@EventHandler
-	private void OnDeath(EpicDeathEvent e) {
+	private void onDeath(EpicDeathEvent e) {
 		Player killer = e.getPlayerKiller();
 		if(killer == null)
 			return;

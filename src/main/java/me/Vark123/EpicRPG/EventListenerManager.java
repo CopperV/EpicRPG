@@ -27,9 +27,24 @@ import me.Vark123.EpicRPG.Core.Listeners.LevelSystemControlListener;
 import me.Vark123.EpicRPG.Core.Listeners.PlayerJumpModifyListener;
 import me.Vark123.EpicRPG.Core.Listeners.VipBoostControlListener;
 import me.Vark123.EpicRPG.Dungeons.Listeners.KoszmarKrukaPotionDebuffListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Misc.CrossbowEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Misc.DodgeEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Misc.EnvironmentDebuffListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Misc.ShulkerEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Misc.SlugaBeliaraEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Misc.VanillaPotionEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Misc.WywarEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.PostMisc.CritInfoEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.PostMisc.DollInfoEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.PostMisc.HpDisplayEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Professions.HunterProfessionModifierListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Professions.MageProfessionModifierListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Professions.WarriorProfessionModifierListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.AuraRozproszeniaEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.InkantacjaEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.OgnistaSferaEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.OgnistaStrzalaEffectListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.DragonMeleeAttackListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.EntityDamageListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.EntityDeathListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.EntityLastDamageCauseListener;
@@ -37,11 +52,20 @@ import me.Vark123.EpicRPG.FightSystem.Listeners.EntityPostDamageListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.FallDamageListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.FireworkDamageListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.LavaDamageListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.MagicEntityDamageListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.ProjectileLaunchListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.SelfShootProtectionListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.VoidDamageListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.WeaknessMeleeAttackListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Crits.CiosKrytycznyCritCalcListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Crits.PotionCritCalcListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Crits.ProfCritCalcListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Crits.StatsCritCalcListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Death.EntityDeathCmdExecuteListeners;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Death.EntityDeathRozprucieSkillListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Death.EntityDeathVaultListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Dodge.RuneDodgeCalcListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Dodge.StatsDodgeCalcListener;
 import me.Vark123.EpicRPG.Gems.GemPlaceProtEvent;
 import me.Vark123.EpicRPG.HealthSystem.PlayerHealEvent;
 import me.Vark123.EpicRPG.HorseSystem.HorseDismountEvent;
@@ -72,6 +96,8 @@ import me.Vark123.EpicRPG.Players.Components.Compass.Listeners.PlayerCompassUpda
 import me.Vark123.EpicRPG.Players.SkillControllers.HungerSkillEvent;
 import me.Vark123.EpicRPG.RubySystem.RubyPlaceProtEvent;
 import me.Vark123.EpicRPG.RubySystem.RubyUseEvent;
+import me.Vark123.EpicRPG.RuneSystem.Listeners.RuneCooldownManaReduceListener;
+import me.Vark123.EpicRPG.RuneSystem.Listeners.RuneGlobalCooldownInteligencjaReduceListener;
 import me.Vark123.EpicRPG.RuneSystem.Listeners.RuneInteractListener;
 import me.Vark123.EpicRPG.RuneSystem.Listeners.RuneStunEffectListener;
 import me.Vark123.EpicRPG.RuneSystem.SummonSystem.SummonManager;
@@ -174,6 +200,7 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new WHEListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new HalloweenBossSpawnListener(), inst);
 
+		Bukkit.getPluginManager().registerEvents(new MagicEntityDamageListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new EntityDamageListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new EntityDeathListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new EntityPostDamageListener(), inst);
@@ -184,16 +211,46 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new LavaDamageListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new VoidDamageListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new SelfShootProtectionListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new DragonMeleeAttackListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new WeaknessMeleeAttackListener(), inst);
 
 		Bukkit.getPluginManager().registerEvents(new EntityDeathCmdExecuteListeners(), inst);
 		Bukkit.getPluginManager().registerEvents(new EntityDeathVaultListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new EntityDeathRozprucieSkillListener(), inst);
 
 		Bukkit.getPluginManager().registerEvents(new WarriorProfessionModifierListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new HunterProfessionModifierListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new MageProfessionModifierListener(), inst);
 
+		Bukkit.getPluginManager().registerEvents(new WywarEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new CrossbowEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new SlugaBeliaraEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new VanillaPotionEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new ShulkerEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new EnvironmentDebuffListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new DodgeEffectListener(), inst);
+		
+		Bukkit.getPluginManager().registerEvents(new CiosKrytycznyCritCalcListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new PotionCritCalcListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new ProfCritCalcListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new StatsCritCalcListener(), inst);
+		
+		Bukkit.getPluginManager().registerEvents(new RuneDodgeCalcListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new StatsDodgeCalcListener(), inst);
+
+		Bukkit.getPluginManager().registerEvents(new AuraRozproszeniaEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new OgnistaSferaEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new InkantacjaEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new OgnistaStrzalaEffectListener(), inst);
+
+		Bukkit.getPluginManager().registerEvents(new DollInfoEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new HpDisplayEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new CritInfoEffectListener(), inst);
+
 		Bukkit.getPluginManager().registerEvents(new RuneInteractListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new RuneStunEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new RuneCooldownManaReduceListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new RuneGlobalCooldownInteligencjaReduceListener(), inst);
 
 		Bukkit.getPluginManager().registerEvents(new ConsumableUseListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new LoadConsumablesOnServerLoadListener(), inst);

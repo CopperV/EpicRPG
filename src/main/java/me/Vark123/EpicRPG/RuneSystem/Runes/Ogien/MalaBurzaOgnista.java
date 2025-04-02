@@ -29,8 +29,8 @@ public class MalaBurzaOgnista extends ACastableRune {
 		hitCondition = rune.getPvp() == 1 ? 
 				new PvPRuneHitCondition() : new NonPvPRuneHitCondition();
 		boundingBox = new BoundingBox(
-				0.5, 0.5, 0.5, 
-				0.5, 0.5, 0.5);
+				0.7, 0.7, 0.7, 
+				0.7, 0.7, 0.7);
 		hitEffect = new DamageBurnEffect(4, rune.getDamage() * 0.1, this);
 	}
 
@@ -53,8 +53,8 @@ public class MalaBurzaOgnista extends ACastableRune {
 				loc -> {
 					loc.getWorld().spawnParticle(Particle.FLAME, loc, 7, 
 							0.5f, 0.5f, 0.5f, 0.01f);
-					loc.getWorld().spawnParticle(Particle.TRIAL_SPAWNER_DETECTION, loc, 1, 
-							0.1f, 0.1f, 0.1f, 0.02f);
+					loc.getWorld().spawnParticle(Particle.TRIAL_SPAWNER_DETECTION, loc, 2, 
+							0.1f, 0.1f, 0.1f, 0.03f);
 				},
 				hitCondition, 
 				(loc, e) -> {
@@ -65,15 +65,22 @@ public class MalaBurzaOgnista extends ACastableRune {
 							0,
 							0,
 							_loc -> {
-								_loc.getWorld().spawnParticle(Particle.FLAME, _loc, 7, 
-										0.5f, 0.5f, 0.5f, 0.01f);
-								_loc.getWorld().spawnParticle(Particle.TRIAL_SPAWNER_DETECTION, _loc, 1, 
-										0.1f, 0.1f, 0.1f, 0.02f);
+								double points = 32;
+								for(int i = 0; i < points; ++i) {
+									double angle = i * (Math.PI * 2) / points;
+									double x = Math.sin(angle);
+									double z = Math.cos(angle);
+									
+									_loc.getWorld().spawnParticle(Particle.FLAME, _loc, 0,
+											x, 0, z, 0.2f);
+									_loc.getWorld().spawnParticle(Particle.TRIAL_SPAWNER_DETECTION, _loc, 0,
+											x, 0, z, 0.1f);
+								}
 								_loc.getWorld().playSound(_loc, Sound.ENTITY_GENERIC_EXPLODE, 1, 1.2f);
 							}, 
 							hitCondition, 
 							(_loc, _e) -> {
-								RuneUtils.damage(player, e, rune, hitEffect);
+								RuneUtils.damage(player, _e, rune, hitEffect);
 							});
 				}, 
 				loc -> { });

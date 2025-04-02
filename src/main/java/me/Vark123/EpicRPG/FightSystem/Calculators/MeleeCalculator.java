@@ -143,9 +143,6 @@ public class MeleeCalculator implements IDamageCalculator {
 		
 		damage = totalDamage.doubleValue();
 		damage = DamageUtils.randomizeDamage(rpg, damage);
-		if(victim instanceof LivingEntity)
-			damage = DamageUtils.randomizeEntityHpDamage(damage, rpg, victim);
-		
 
 		if(!hasWeapon && !skills.hasPolnocnyBarbarzynca()) {
 			damage *= 0.1;

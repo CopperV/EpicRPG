@@ -19,7 +19,7 @@ public class NonPvPRuneHitCondition implements IRuneHitCondition {
 		
 		ActiveMob aMob = MythicBukkit.inst().getMobManager().getMythicMobInstance(hit);
 		if(aMob.isDead() || aMob.getType().getIsInvincible()
-				|| (aMob.hasFaction() && aMob.getFaction().equals("ALLY")))
+				|| (aMob.hasFaction() && (aMob.getFaction().equals("ALLY") || aMob.getFaction().equals("SUMMONS"))))
 			return false;
 		
 		if(!aMob.getEntity().isDamageable())

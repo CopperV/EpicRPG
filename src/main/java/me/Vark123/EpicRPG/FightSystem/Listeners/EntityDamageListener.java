@@ -145,6 +145,9 @@ public class EntityDamageListener implements Listener {
 		LivingEntity damager = (LivingEntity) _damager;
 		LivingEntity victim = (LivingEntity) _victim;
 		
+		if(e.getCause().equals(DamageCause.PROJECTILE)) {
+			Utils.neutralizeEntityNoDamageTicks(damager, victim);
+		}
 		if(Utils.hasNoDamageTicks(damager, victim)) {
 			e.setCancelled(true);
 			return;

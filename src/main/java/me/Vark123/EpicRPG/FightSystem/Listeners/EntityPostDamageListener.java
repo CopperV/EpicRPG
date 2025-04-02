@@ -16,6 +16,7 @@ import me.Vark123.EpicRPG.FightSystem.DamageType;
 import me.Vark123.EpicRPG.FightSystem.Calculators.IDamageCalculator.DamageCalculatorResult;
 import me.Vark123.EpicRPG.FightSystem.Events.EpicPostDamageEffectEvent;
 import me.Vark123.EpicRPG.FightSystem.Events.MagicEntityDamageByEntityEvent;
+import me.Vark123.EpicRPG.RuneSystem.EpicRune;
 
 public class EntityPostDamageListener implements Listener {
 
@@ -93,7 +94,7 @@ public class EntityPostDamageListener implements Listener {
 			return;
 
 		DamageSource source = e.getDamageSource();
-		Entity _damager = source.getDirectEntity();
+		Entity _damager = source.getCausingEntity();
 		Entity _victim = e.getEntity();
 		if(!(_damager instanceof LivingEntity) || !(_victim instanceof LivingEntity))
 			return;
@@ -130,6 +131,49 @@ public class EntityPostDamageListener implements Listener {
 				damageType, 
 				damageInfo.damage,
 				damageInfo);
+		Bukkit.getPluginManager().callEvent(effectEvent);
+		if(effectEvent.isCancelled()) {
+			e.setCancelled(true);
+			return;
+		}
+		
+		damageInfo.damage = effectEvent.getFinalDamage();
+		if(damageInfo.damage <= 0) {
+			e.setCancelled(true);
+			return;
+		}
+		
+		e.setDamage(damageInfo.damage);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onDamage(MagicEntityDamageByEntityEvent e) {
+		if(e.isCancelled())
+			return;
+
+		DamageSource source = e.getDamageSource();
+		Entity _damager = source.getDirectEntity();
+		Entity _victim = e.getEntity();
+		if(!(_damager instanceof LivingEntity) || !(_victim instanceof LivingEntity))
+			return;
+		
+		LivingEntity damager = (LivingEntity) _damager;
+		LivingEntity victim = (LivingEntity) _victim;
+
+		double damage = e.getDamage();
+		DamageType damageType = DamageType.MAGIC;
+		DamageCalculatorResult damageInfo = new DamageCalculatorResult(damage, false);
+
+		EpicRune rune = e.getRune();
+		
+		EpicPostDamageEffectEvent effectEvent = new EpicPostDamageEffectEvent(
+				damager, 
+				victim, 
+				source, 
+				damageType, 
+				damageInfo.damage,
+				damageInfo,
+				rune);
 		Bukkit.getPluginManager().callEvent(effectEvent);
 		if(effectEvent.isCancelled()) {
 			e.setCancelled(true);

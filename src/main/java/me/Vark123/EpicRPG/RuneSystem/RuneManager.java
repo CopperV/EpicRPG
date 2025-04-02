@@ -23,9 +23,24 @@ import me.Vark123.EpicRPG.RuneSystem.Events.RuneCastCostCalcEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.RuneCastGlobalCdCalcEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.RuneCastRuneCdCalcEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.RuneUseEvent;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.AuraRozproszenia;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.BurzaOgnista;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.DeszczOgnia;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.DuzaBurzaOgnista;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.DuzaKulaOgnia;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.Inkantacja;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.KulaOgnia;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.MalaBurzaOgnista;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.MasowaPirokineza;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.OgnistaFala;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.OgnistaSfera;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.OgnistaStrzala;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.OgnistaStrzalaLcz;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.OgnistyWybuch;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.Pirokineza;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.Rozerwanie;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.WulkanicznyGejzer;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.LodowaStrzala;
 import me.Vark123.EpicRPG.RuneSystem.Runes._InProgress.PrzyzwanieWilka;
 
 @Getter
@@ -281,6 +296,7 @@ public final class RuneManager {
 				break;
 			case MUSIC_DISC_CHIRP:
 				switch(rune.getMythicType()) {
+					case "LodowaStrzala":			return new LodowaStrzala(rpgPlayer, rune);
 				}
 				
 				break;
@@ -301,7 +317,7 @@ public final class RuneManager {
 				break;
 			case MUSIC_DISC_MALL:
 				switch(rune.getMythicType()) {
-				
+				case "OgnistaStrzalaLcz":				return new OgnistaStrzalaLcz(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_MELLOHI:
@@ -309,6 +325,21 @@ public final class RuneManager {
 					case "OgnistaStrzala":				return new OgnistaStrzala(rpgPlayer, rune);
 					case "MalaBurzaOgnista":			return new MalaBurzaOgnista(rpgPlayer, rune);
 					case "Pirokineza":					return new Pirokineza(rpgPlayer, rune);
+					case "KulaOgnia":					return new KulaOgnia(rpgPlayer, rune);
+					case "OgnistaSfera":				return new OgnistaSfera(rpgPlayer, rune);
+					case "WulkanicznyGejzer":			return new WulkanicznyGejzer(rpgPlayer, rune);
+					case "BurzaOgnista":				return new BurzaOgnista(rpgPlayer, rune);
+					case "DuzaKulaOgnia":				return new DuzaKulaOgnia(rpgPlayer, rune);
+					case "OgnistyWybuch":				return new OgnistyWybuch(rpgPlayer, rune);
+					case "AuraRozproszenia":			return new AuraRozproszenia(rpgPlayer, rune);
+					case "MasowaPirokineza":			return new MasowaPirokineza(rpgPlayer, rune);
+					case "MasowaPirokineza_H":			return new MasowaPirokineza(rpgPlayer, rune);
+					case "MasowaPirokineza_M":			return new MasowaPirokineza(rpgPlayer, rune);
+					case "OgnistaFala":					return new OgnistaFala(rpgPlayer, rune);
+					case "Rozerwanie":					return new Rozerwanie(rpgPlayer, rune);
+					case "Inkantacja":					return new Inkantacja(rpgPlayer, rune);
+					case "DeszczOgnia":					return new DeszczOgnia(rpgPlayer, rune);
+					case "DuzaBurzaOgnista":			return new DuzaBurzaOgnista(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_OTHERSIDE:

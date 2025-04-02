@@ -22,23 +22,25 @@ public class PvPRuneHitCondition implements IRuneHitCondition {
 		if(hit.equals(caster))
 			return false;
 		
+		boolean pvpFlag = false;
+		
+		RegionQuery query = WorldGuard.getInstance()
+				.getPlatform()
+				.getRegionContainer()
+				.createQuery();
+		ApplicableRegionSet set = query.getApplicableRegions(
+				BukkitAdapter.adapt(hit.getLocation()));
+		State flag = set.queryValue(null, Flags.PVP);
+		pvpFlag = flag != null && flag.equals(State.ALLOW)
+				&& !(hit.getWorld().getName().toLowerCase().contains("dungeon") 
+						|| hit.getWorld().getName().toLowerCase().contains("raid"));
+		
 		if(hit instanceof Player) {
 			Player _hit = (Player) hit;
 			if(_hit.getGameMode().equals(GameMode.SPECTATOR)
 					|| _hit.getGameMode().equals(GameMode.CREATIVE))
 				return false;
-			RegionQuery query = WorldGuard.getInstance()
-					.getPlatform()
-					.getRegionContainer()
-					.createQuery();
-			ApplicableRegionSet set = query.getApplicableRegions(
-					BukkitAdapter.adapt(hit.getLocation()));
-			State flag = set.queryValue(null, Flags.PVP);
-			if(flag != null && flag.equals(State.ALLOW)
-					&& !(hit.getWorld().getName().toLowerCase().contains("dungeon") 
-							|| hit.getWorld().getName().toLowerCase().contains("raid")))
-				return true;
-			return false;
+			return pvpFlag;
 		}
 		
 		if(!MythicBukkit.inst().getMobManager().isMythicMob(hit))
@@ -51,6 +53,12 @@ public class PvPRuneHitCondition implements IRuneHitCondition {
 		
 		if(!aMob.getEntity().isDamageable())
 			return false;
+		
+		if(aMob.hasFaction() && aMob.getFaction().equals("SUMMONS")) {
+			if(aMob.getOwner().isPresent() && aMob.getOwner().get().equals(caster.getUniqueId()))
+				return false;
+			return pvpFlag;
+		}
 		
 		return true;
 	}

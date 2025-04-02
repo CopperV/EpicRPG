@@ -11,6 +11,7 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -29,6 +30,9 @@ import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.mobs.ActiveMob;
 import me.Vark123.EpicComponentAPI.EpicComponent;
+import me.Vark123.EpicRPG.Players.PlayerManager;
+import me.Vark123.EpicRPG.Players.RpgPlayer;
+import me.Vark123.EpicRPG.Players.Components.RpgModifiers.EpicModifierTypes;
 
 public class Utils {
 
@@ -297,6 +301,19 @@ public class Utils {
 		return Math.abs(Math.toDegrees(vec1.angle(vec2)));
 	}
 	
+	public static void setEntityNoDamageTicks(LivingEntity damager, LivingEntity entity) {
+		if(MythicBukkit.inst().getMobManager().isMythicMob(entity)) {
+			ActiveMob mob = MythicBukkit.inst().getMobManager().getMythicMobInstance(entity);
+			if(mob.hasImmunityTable()) {
+				mob.getImmunityTable().setCooldown(BukkitAdapter.adapt(damager));
+			} else {
+				mob.getEntity().setNoDamageTicks(mob.getNoDamageTicks());
+			}
+		} else {
+			entity.setNoDamageTicks(entity.getNoDamageTicks());
+		}
+	}
+	
 	public static void neutralizeEntityNoDamageTicks(LivingEntity damager, LivingEntity entity) {
 		if(MythicBukkit.inst().getMobManager().isMythicMob(entity)) {
 			ActiveMob mob = MythicBukkit.inst().getMobManager().getMythicMobInstance(entity);
@@ -404,6 +421,87 @@ public class Utils {
                hundreds[(num % 1000) / 100] +
                tens[(num % 100) / 10] +
                ones[num % 10];
+	}
+	
+	public static void drawPentagram(Particle particle, Location center, Vector axis, int points, double radius, double lineOffset, int step, double rotation) {
+		double angle = Math.PI*2 / (double) points;
+		Vector normalizedAxis = axis.clone().normalize();
+
+	    Location[] vertices = new Location[points];
+    	Vector base = getPerpendicularVectorUsingCrossProduct(axis).normalize();
+	    
+		for(int i = 0; i < points; ++i) {
+			double _angle = i*angle + rotation;
+			Vector v = base.clone().rotateAroundAxis(normalizedAxis.clone(), _angle)
+					.normalize()
+					.multiply(radius);
+			vertices[i] = center.clone().add(v);
+		}
+		
+		for(int i = 0; i < vertices.length; ++i) {
+			Location loc1 = vertices[i];
+			Location loc2 = vertices[(i+step)%vertices.length];
+			drawLine(particle, loc1, loc2, lineOffset, 0, 0, -1f, 0, 0.05f);
+		}
+	}
+	
+	public static void drawLine(Particle particle, Location start, Location end, double step, 
+			int amount, float offsetX, float offsetY, float offsetZ, float speed) {
+		Vector dir = new Vector(
+				end.getX() - start.getX(),
+				end.getY() - start.getY(),
+				end.getZ() - start.getZ()
+		).normalize().multiply(step);
+		Location loc = start.clone();
+		while(start.distanceSquared(loc) <= start.distanceSquared(end)) {
+			loc.getWorld().spawnParticle(particle, loc, amount, offsetX, offsetY, offsetZ, speed);
+			loc.add(dir);
+		}
+	}
+	
+	public static Vector getPerpendicularVectorUsingCrossProduct(Vector mainAxis) {
+	    Vector arbitraryVector = new Vector(1, 0, 0);
+
+	    if (mainAxis.getX() == 1 && mainAxis.getY() == 0 && mainAxis.getZ() == 0) {
+	        arbitraryVector = new Vector(0, 1, 0);
+	    }
+
+	    return mainAxis.clone().crossProduct(arbitraryVector).normalize();
+	}
+	
+	public static void setEntityBuff(LivingEntity entity, EpicModifierTypes modifier) {
+		if(hasEntityBuff(entity, modifier))
+			return;
+		
+		if(entity instanceof Player) {
+			RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer((Player) entity);
+			rpg.getModifiers().addActiveModifier(modifier);
+		} else {
+			AbstractEntity ae = BukkitAdapter.adapt(entity);
+			ae.setMetadata(modifier.name(), true);
+		}
+	}
+	
+	public static void unsetEntityBuff(LivingEntity entity, EpicModifierTypes modifier) {
+		if(!hasEntityBuff(entity, modifier))
+			return;
+		
+		if(entity instanceof Player) {
+			RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer((Player) entity);
+			rpg.getModifiers().removeActiveModifier(modifier);
+		} else {
+			AbstractEntity ae = BukkitAdapter.adapt(entity);
+			ae.removeMetadata(modifier.name());
+		}
+	}
+	
+	public static boolean hasEntityBuff(LivingEntity entity, EpicModifierTypes modifier) {
+		if(entity instanceof Player) {
+			return PlayerManager.getInstance().getRpgPlayer((Player) entity).getModifiers().hasActiveModifier(modifier);
+		} else {
+			AbstractEntity ae = BukkitAdapter.adapt(entity);
+			return ae.hasMetadata(modifier.name());
+		}
 	}
 	
 }

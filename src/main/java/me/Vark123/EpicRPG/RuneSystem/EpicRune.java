@@ -25,7 +25,7 @@ public class EpicRune {
 	private double obszar;
 	private double wplyw;
 	
-	private long regenTime;
+	private double regenTime;
 	private int durationTime;
 	
 	private int krag;
@@ -88,7 +88,7 @@ public class EpicRune {
 					return;
 				}
 				if(s.contains("Czas regeneracji: ")) {
-					this.regenTime = Integer.parseInt(
+					this.regenTime = Double.parseDouble(
 							ChatColor.stripColor(s).split(": ")[1].split(" ")[0]);
 					return;
 				}

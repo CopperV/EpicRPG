@@ -25,18 +25,19 @@ public class DamageBurnEffect implements IRunePostDamageEffect {
 	@Override
 	public void playeEffect(Player damager, LivingEntity victim, EpicRune rune) {
 		new BukkitRunnable() {
+			int _timer = timer;
 			@Override
 			public void run() {
 				if(isCancelled())
 					return;
-				if(timer <= 0 
+				if(_timer <= 0 
 						|| !castableRune.casterInCastWorld() 
 						|| !castableRune.entityInCastWorld(victim)
 						|| victim.isDead()) {
 					cancel();
 					return;
 				}
-				--timer;
+				--_timer;
 
 				boolean flag = RuneUtils.damage(damager, victim, rune, damage);
 				if(!flag) {

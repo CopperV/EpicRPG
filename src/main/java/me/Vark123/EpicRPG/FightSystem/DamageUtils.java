@@ -6,17 +6,25 @@ import org.apache.commons.lang.mutable.MutableDouble;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.damage.DamageSource;
+import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import io.lumine.mythic.bukkit.MythicBukkit;
-import me.Vark123.EpicRPG.Config;
+import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.FightSystem.Events.EpicCritCalculateEvent;
 import me.Vark123.EpicRPG.FightSystem.Events.EpicDamageRandomizeEvent;
+import me.Vark123.EpicRPG.FightSystem.Events.EpicDodgeCalculateEvent;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
+import me.Vark123.EpicRPG.Players.Components.RpgModifiers.EpicModifierTypes;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
+import me.Vark123.EpicRPG.RuneSystem.Functional.IRuneLocationEffect;
 import me.Vark123.EpicRPG.Utils.Utils;
 
 public final class DamageUtils {
@@ -29,13 +37,30 @@ public final class DamageUtils {
 		EpicCritCalculateEvent event = new EpicCritCalculateEvent(rpgPlayer, victim);
 		Bukkit.getPluginManager().callEvent(event);
 		
-		int max = Config.get().getMaxWalkaCrit();
-		max = victim != null && victim instanceof Player ?
-				5 * max : max;
+		double max = victim != null && victim instanceof Player ?
+				5 : 1;
 		
-		int chance = event.getChance();
-		int los = rand.nextInt(max);
+		double chance = event.getChance();
+		double los = rand.nextDouble(max);
 		
+		return los < chance;
+	}
+	
+	public static boolean tryDodge(RpgPlayer rpgPlayer) {
+		EpicDodgeCalculateEvent event = new EpicDodgeCalculateEvent(rpgPlayer);
+		Bukkit.getPluginManager().callEvent(event);
+		
+		double max = 0.3;
+		double chance = Math.min(event.getChance(), max);
+		
+		if(rpgPlayer.getInfo().getProffesion().equals("§2Mysliwy")) {
+			if(rpgPlayer.getModifiers().hasActiveModifier(EpicModifierTypes.TAJEMNY_BLASK))
+				chance += 0.2;
+			if(rpgPlayer.getModifiers().hasActiveModifier(EpicModifierTypes.TAJEMNY_BLASK_M))
+				chance += 0.35;
+		}
+		
+		double los = rand.nextDouble();
 		return los < chance;
 	}
 	
@@ -55,6 +80,7 @@ public final class DamageUtils {
 		return damage;
 	}
 	
+	@Deprecated
 	public static double randomizeEntityHpDamage(double damage, RpgPlayer rpgPlayer, LivingEntity victim) {
 		double zrFactor = Math.min(rpgPlayer.getStats().getFinalZrecznosc() * (0.01*0.02), 0.3);
 		double minFactor = 1 - zrFactor;
@@ -62,6 +88,18 @@ public final class DamageUtils {
 		double hpPercent = Utils.limitValue(0, 1, victim.getHealth() / victim.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 		double percent = Utils.scaleValue(0, 1, maxFactor, minFactor, hpPercent);
 		return damage*percent;
+	}
+	
+	public static boolean checkArmorPierce(RpgPlayer damager, LivingEntity victim, double armor) {
+		double zr = damager.getStats().getFinalZrecznosc();
+		double maxChance = 0.6;
+		double maxZr = 1500;
+		
+		zr = Utils.limitValue(0, maxZr, zr);
+		
+		double chance = Utils.scaleValue(0, maxZr, 0, maxChance, zr);
+		double random = rand.nextDouble();
+		return random < chance;
 	}
 	
 	public static double getProjectileDamage(Entity shooter, ItemStack bow) {
@@ -83,6 +121,53 @@ public final class DamageUtils {
 		});
 		
 		return dmg.doubleValue();
+	}
+	
+	public static void applyTimingDirectDamageEffect(LivingEntity damager, LivingEntity victim, double damage,
+			DamageType type, DamageCause cause, IRuneLocationEffect onTickEffect, int delay, int interval, int duration) {
+		new BukkitRunnable() {
+			double timer = duration;
+			@Override
+			public void run() {
+				if(isCancelled())
+					return;
+				if(timer <= 0 || victim.isDead()) {
+					cancel();
+					return;
+				}
+				timer -= interval;
+				
+				if(onTickEffect != null)
+					onTickEffect.playEffect(victim.getLocation().clone());
+				
+				if(!applyDirectDamageEffect(damager, victim, damage, type, cause)) {
+					cancel();
+					return;
+				}
+			}
+		}.runTaskTimer(Main.getInstance(), delay, interval);
+	}
+	
+	public static boolean applyDirectDamageEffect(LivingEntity damager, LivingEntity victim, double damage,
+			DamageType type, DamageCause cause) {
+		Utils.neutralizeEntityNoDamageTicks(damager, victim);
+		
+		EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(
+				damager, 
+				victim,
+				cause,
+				DamageSource
+					.builder(type)
+					.withCausingEntity(damager)
+					.withDirectEntity(damager)
+					.build(),
+				damage);
+		
+		Bukkit.getPluginManager().callEvent(event);
+		if(!ManualDamage.tryDoDamage(damager, victim, event.getFinalDamage(), event))
+			return false;
+		
+		return true;
 	}
 	
 }

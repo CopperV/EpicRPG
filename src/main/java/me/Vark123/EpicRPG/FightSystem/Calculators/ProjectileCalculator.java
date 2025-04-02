@@ -132,8 +132,6 @@ public class ProjectileCalculator implements IDamageCalculator {
 		
 		damage = totalDamage.doubleValue();
 		damage = DamageUtils.randomizeDamage(rpg, damage);
-		if(victim instanceof LivingEntity)
-			damage = DamageUtils.randomizeEntityHpDamage(damage, rpg, victim);
 		
 		result.damage = damage;
 		return result;

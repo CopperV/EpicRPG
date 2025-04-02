@@ -16,7 +16,7 @@ public class EpicCritCalculateEvent extends Event {
 	private RpgPlayer rpgPlayer;
 	private Entity victim;
 	@Setter
-	private int chance = 0;
+	private double chance = 0;
 
 	public EpicCritCalculateEvent(RpgPlayer rpgPlayer, Entity victim) {
 		super();
@@ -24,11 +24,11 @@ public class EpicCritCalculateEvent extends Event {
 		this.victim = victim;
 	}
 	
-	public void addChance(int chance) {
+	public void addChance(double chance) {
 		this.chance += chance;
 	}
 	
-	public void removeChance(int chance) {
+	public void removeChance(double chance) {
 		this.chance -= chance;
 	}
 	

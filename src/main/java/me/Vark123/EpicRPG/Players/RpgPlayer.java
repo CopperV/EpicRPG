@@ -6,15 +6,24 @@ import java.sql.SQLException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
+import io.lumine.mythic.bukkit.MythicBukkit;
+import io.lumine.mythic.core.mobs.ActiveMob;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import me.Vark123.EpicRPG.Config;
+import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.RpgScoreboard;
 import me.Vark123.EpicRPG.Core.ExpSystem;
 import me.Vark123.EpicRPG.Core.Events.PlayerKlasaResetEvent;
@@ -62,6 +71,9 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 	private EpicScoreboard scoreboard;
 	private EpicMarker marker;
 	
+	@Getter(value = AccessLevel.NONE)
+	private EnemyHpBarInfo hpBarInfo;
+	
 	public RpgPlayer(Player p) {
 		this.player = p;
 		this.info = new RpgPlayerInfo(this);
@@ -80,6 +92,8 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 //		createDisplay();
 //		updateBarExp();
 //		updateBarLevel();
+		
+		this.hpBarInfo = new EnemyHpBarInfo(p);
 	}
 	
 	public RpgPlayer(Player p, ResultSet set) {
@@ -106,6 +120,8 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 //		createDisplay();
 //		updateBarExp();
 //		updateBarLevel();
+		
+		this.hpBarInfo = new EnemyHpBarInfo(p);
 	}
 	
 	public RpgPlayer(Player p, YamlConfiguration fYml) {
@@ -126,6 +142,8 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 //		createDisplay();
 //		updateBarExp();
 //		updateBarLevel();
+		
+		this.hpBarInfo = new EnemyHpBarInfo(p);
 	}
 	
 	public void createScoreboard() {
@@ -269,6 +287,11 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 		stats.setFinalHealth(stats.getPotionHealth() + stats.getHealth());
 		player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(stats.getFinalHealth());
 	}
+	
+	public void updateEnemyHpBar(LivingEntity entity, double damage) {
+		double newHp = entity.getHealth() - damage;
+		hpBarInfo.updateHpBar(entity, newHp, 20*3);
+	}
 
 	@Override
 	public void print(CommandSender sender) {
@@ -278,6 +301,52 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 		skills.print(sender);
 		reputation.print(sender);
 		vault.print(sender);
+	}
+	
+	private class EnemyHpBarInfo {
+		private BossBar hpInfo;
+		private BukkitTask hpShowTask;
+		
+		public EnemyHpBarInfo(Player owner) {
+			hpInfo = Bukkit.createBossBar(" ", BarColor.WHITE, BarStyle.SOLID);
+			hpInfo.setVisible(false);
+			hpInfo.addPlayer(owner);
+			hpInfo.setProgress(1);
+		}
+		
+		public void updateHpBar(LivingEntity entity, double newHp, int duration) {
+			if(hpShowTask != null && !hpShowTask.isCancelled())
+				hpShowTask.cancel();
+			
+			double maxHp = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+			double percent = newHp / maxHp;
+			
+			double clampedPercent = Utils.normalizeValue(0, 1, percent);
+			newHp = Math.max(newHp, 0);
+			
+			int armor = 0;
+			if(entity instanceof Player) {
+				RpgPlayer victimRpg = PlayerManager.getInstance().getRpgPlayer((Player) entity);
+				armor = victimRpg.getStats().getFinalOchrona();
+			} else if(MythicBukkit.inst().getMobManager().isMythicMob(entity)) {
+				ActiveMob aMob = MythicBukkit.inst().getMobManager().getMythicMobInstance(entity);
+				armor = (int) aMob.getArmor();
+			}
+			
+			hpInfo.setVisible(true);
+			hpInfo.setProgress(clampedPercent);
+			hpInfo.setTitle(entity.getName()+" "
+					+ "§c"+(int)Math.ceil(newHp)+" §4❤"
+					+ (armor > 0 ? " §a"+Math.round(armor)+" §2🛡" : ""));
+			hpShowTask = new BukkitRunnable() {
+				@Override
+				public void run() {
+					hpInfo.setVisible(false);
+				}
+			}.runTaskLater(Main.getInstance(), duration);
+		}
+		
+		
 	}
 	
 }

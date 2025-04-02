@@ -19,7 +19,6 @@ import me.Vark123.EpicRPG.RuneSystem.Templates.EntityHits.PvPRuneHitCondition;
 
 public class Pirokineza extends ACastableRune {
 
-
 	private IRuneHitCondition hitCondition;
 	private BoundingBox boundingBox;
 	private IRunePostDamageEffect hitEffect;
@@ -29,8 +28,8 @@ public class Pirokineza extends ACastableRune {
 		hitCondition = rune.getPvp() == 1 ? 
 				new PvPRuneHitCondition() : new NonPvPRuneHitCondition();
 		boundingBox = new BoundingBox(
-				0.5, 0.5, 0.5, 
-				0.5, 0.5, 0.5);
+				0.7, 0.7, 0.7, 
+				0.7, 0.7, 0.7);
 		
 		hitEffect = new DamageBurnEffect(rune.getDurationTime(), rune.getDamage(), this);
 	}

@@ -31,7 +31,7 @@ public class SelfShootProtectionListener implements Listener {
 		if(!damager.equals(victim))
 			return;
 		
-//		projectile.remove();
+		projectile.remove();
 		e.setCancelled(true);
 	}
 	
