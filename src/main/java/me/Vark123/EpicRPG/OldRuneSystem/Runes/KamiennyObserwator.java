@@ -22,7 +22,7 @@ import me.Vark123.EpicInventory.Pagination.EpicInventory;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.OldRuneSystem.ARune;
 import me.Vark123.EpicRPG.OldRuneSystem.ItemStackRune;
-import me.Vark123.EpicRPG.OldRuneSystem.Events.KamiennyObserwatorEvent;
+import me.Vark123.EpicRPG.RuneSystem.Listeners.Runes.KamiennyObserwatorEvent;
 
 public class KamiennyObserwator extends ARune {
 

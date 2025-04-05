@@ -11,7 +11,7 @@ import me.Vark123.EpicRPG.Players.Components.RpgModifiers.EpicModifierTypes;
 import me.Vark123.EpicRPG.RuneSystem.ACastableRune;
 import me.Vark123.EpicRPG.RuneSystem.EpicRune;
 import me.Vark123.EpicRPG.RuneSystem.Templates.CastSpells.BufferRuneTemplate;
-import me.Vark123.EpicRPG.RuneSystem.Templates.CastSpells.BufferRuneTemplate.BufferRuneEffect;
+import me.Vark123.EpicRPG.RuneSystem.Templates.CastSpells.TimingEffectRuneTemplate.TimingRuneEffect;
 
 public class OgnistaSfera extends ACastableRune {
 
@@ -48,7 +48,7 @@ public class OgnistaSfera extends ACastableRune {
 						loc.getWorld().spawnParticle(Particle.SMOKE, p, 0, 0, 1, 0, force);
 					}
 				},
-				new BufferRuneEffect(1, target -> {
+				new TimingRuneEffect(1, target -> {
 					int points = 6;
 					Location loc = target.getLocation().clone().add(0, 0.1, 0);
 					double radius = 1.5;

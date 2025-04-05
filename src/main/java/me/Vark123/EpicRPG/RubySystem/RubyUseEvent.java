@@ -137,7 +137,7 @@ public class RubyUseEvent implements Listener {
 				}
 
 				p.setHealth(p.getHealth()-storeEvent.getUse());
-				p.playEffect(EntityEffect.HURT);
+				p.playHurtAnimation(0);
 
 				dust = new DustOptions(Color.RED, 1.5f);
 				volume = 1.3f;

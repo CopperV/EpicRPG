@@ -29,7 +29,9 @@ public class CritInfoEffectListener implements Listener {
 		LivingEntity damager = e.getDamager();
 		Location loc = damager.getLocation().clone().add(0, 1, 0);
 		damager.getWorld().playSound(damager, Sound.ENTITY_PLAYER_ATTACK_CRIT, 1.2f, 0.4f);
-		loc.getWorld().spawnParticle(Particle.SCRAPE, loc, 8,
+		loc.getWorld().spawnParticle(Particle.SCRAPE, loc, 20,
+				.4, .8, .4, .04);
+		loc.getWorld().spawnParticle(Particle.SCRAPE, e.getVictim().getLocation().clone().add(0,1,0), 20,
 				.4, .8, .4, .04);
 	}
 

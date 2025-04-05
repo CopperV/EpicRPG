@@ -23,6 +23,30 @@ import me.Vark123.EpicRPG.RuneSystem.Events.RuneCastCostCalcEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.RuneCastGlobalCdCalcEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.RuneCastRuneCdCalcEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.RuneUseEvent;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.CienAssasyna;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.CiosWPlecy;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.CukierekAlboPsikus;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.KulaSmierci;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.OdwrocenieUwagi;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.Skrytobojstwo;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.SmiercOzywiencom;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.SmiertelnaFala;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.StrzalaCiemnosci;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.StrzalaMroku;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.SwietyMrok;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.SzponBeliaraInt;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.SzponBeliaraMana;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.TarczaCienia;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.TchnienieSmierci;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.TrupiJek;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.UderzenieCienia;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.UkazanieSmierci;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.WedrownyCien;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.WloczniaCiemnosci;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.WybraniecBeliara;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.Wyssanie;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.ZeslanieMroku;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.Zmrok;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.AuraRozproszenia;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.BurzaOgnista;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.DeszczOgnia;
@@ -40,7 +64,24 @@ import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.OgnistyWybuch;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.Pirokineza;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.Rozerwanie;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.WulkanicznyGejzer;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Rownowaga.KamiennyObserwator;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Rownowaga.SferaCorristo;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.BrylaLodu;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.EksplozjaLodu;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.FalaMrozu;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.Gejzer;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.Grom;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.LodowaFala;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.LodowaLanca;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.LodowaStrzala;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.LodowaStrzalaLcz;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.LodowaWlocznia;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.LodowePrzebicie;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.LodowyPocisk;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.Pelnia;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.SopelLodu;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.WodnaPiesc;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.Zamiec;
 import me.Vark123.EpicRPG.RuneSystem.Runes._InProgress.PrzyzwanieWilka;
 
 @Getter
@@ -271,7 +312,23 @@ public final class RuneManager {
 		switch(itRune.getType()) {
 			case MUSIC_DISC_11:
 				switch(rune.getMythicType()) {
-					
+					case "CukierekAlboPsikus":			return new CukierekAlboPsikus(rpgPlayer, rune);
+					case "StrzalaMroku":				return new StrzalaMroku(rpgPlayer, rune);
+					case "StrzalaCiemnosci":			return new StrzalaCiemnosci(rpgPlayer, rune);
+					case "SmiercOzywiencom":			return new SmiercOzywiencom(rpgPlayer, rune);
+					case "WloczniaCiemnosci":			return new WloczniaCiemnosci(rpgPlayer, rune);
+					case "Wyssanie":					return new Wyssanie(rpgPlayer, rune);
+					case "TchnienieSmierci":			return new TchnienieSmierci(rpgPlayer, rune);
+					case "Zmrok":						return new Zmrok(rpgPlayer, rune);
+					case "SmiertelnaFala":				return new SmiertelnaFala(rpgPlayer, rune);
+					case "UderzenieCienia":				return new UderzenieCienia(rpgPlayer, rune);
+					case "KulaSmierci":					return new KulaSmierci(rpgPlayer, rune);
+					case "TarczaCienia":				return new TarczaCienia(rpgPlayer, rune);
+					case "TrupiJek":					return new TrupiJek(rpgPlayer, rune);
+					case "UkazanieSmierci":				return new UkazanieSmierci(rpgPlayer, rune);
+					case "ZeslanieMroku":				return new ZeslanieMroku(rpgPlayer, rune);
+					case "ZeslanieMroku_H":				return new ZeslanieMroku(rpgPlayer, rune);
+					case "ZeslanieMroku_M":				return new ZeslanieMroku(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_13:
@@ -286,7 +343,8 @@ public final class RuneManager {
 				break;
 			case MUSIC_DISC_BLOCKS:
 				switch(rune.getMythicType()) {
-				
+					case "Gejzer":						return new Gejzer(rpgPlayer, rune);
+					case "WodnaPiesc":					return new WodnaPiesc(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_CAT:
@@ -296,13 +354,25 @@ public final class RuneManager {
 				break;
 			case MUSIC_DISC_CHIRP:
 				switch(rune.getMythicType()) {
-					case "LodowaStrzala":			return new LodowaStrzala(rpgPlayer, rune);
+					case "LodowaStrzala":				return new LodowaStrzala(rpgPlayer, rune);
+					case "SopelLodu":					return new SopelLodu(rpgPlayer, rune);
+					case "BrylaLodu":					return new BrylaLodu(rpgPlayer, rune);
+					case "LodowaLanca":					return new LodowaLanca(rpgPlayer, rune);
+					case "LodowaWlocznia":				return new LodowaWlocznia(rpgPlayer, rune);
+					case "LodowePrzebicie":				return new LodowePrzebicie(rpgPlayer, rune);
+					case "LodowyPocisk":				return new LodowyPocisk(rpgPlayer, rune);
+					case "Pelnia":						return new Pelnia(rpgPlayer, rune);
+					case "EksplozjaLodu":				return new EksplozjaLodu(rpgPlayer, rune);
+					case "LodowaFala":					return new LodowaFala(rpgPlayer, rune);
+					case "FalaMrozu":					return new FalaMrozu(rpgPlayer, rune);
+					case "Grom":						return new Grom(rpgPlayer, rune);
+					case "Zamiec":						return new Zamiec(rpgPlayer, rune);
 				}
 				
 				break;
 			case MUSIC_DISC_CREATOR:
 				switch(rune.getMythicType()) {
-					case "PrzyzwanieWilka":			return new PrzyzwanieWilka(rpgPlayer, rune);
+					case "PrzyzwanieWilka":				return new PrzyzwanieWilka(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_CREATOR_MUSIC_BOX:
@@ -312,12 +382,19 @@ public final class RuneManager {
 				break;
 			case MUSIC_DISC_FAR:
 				switch(rune.getMythicType()) {
-				
+					case "SwietyMrok":					return new SwietyMrok(rpgPlayer, rune);
+					case "WybraniecBeliara":			return new WybraniecBeliara(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_MALL:
 				switch(rune.getMythicType()) {
-				case "OgnistaStrzalaLcz":				return new OgnistaStrzalaLcz(rpgPlayer, rune);
+					case "OgnistaStrzalaLcz":			return new OgnistaStrzalaLcz(rpgPlayer, rune);
+					case "LodowaStrzalaLcz":			return new LodowaStrzalaLcz(rpgPlayer, rune);
+					case "CiosWPlecy":					return new CiosWPlecy(rpgPlayer, rune);
+					case "CienAssasyna":				return new CienAssasyna(rpgPlayer, rune);
+					case "OdwrocenieUwagi":				return new OdwrocenieUwagi(rpgPlayer, rune);
+					case "Skrytobojstwo":				return new Skrytobojstwo(rpgPlayer, rune);
+					case "WedrownyCien":				return new WedrownyCien(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_MELLOHI:
@@ -364,7 +441,7 @@ public final class RuneManager {
 				break;
 			case MUSIC_DISC_STAL:
 				switch(rune.getMythicType()) {
-				
+					case "SferaCorristo":				return new SferaCorristo(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_STRAD:
@@ -374,12 +451,13 @@ public final class RuneManager {
 				break;
 			case MUSIC_DISC_WAIT:
 				switch(rune.getMythicType()) {
-					
+					case "KamiennyObserwator":			return new KamiennyObserwator(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_WARD:
 				switch(rune.getMythicType()) {
-				
+					case "SzponBeliaraInt":				return new SzponBeliaraInt(rpgPlayer, rune);
+					case "SzponBeliaraMana":			return new SzponBeliaraMana(rpgPlayer, rune);
 				}
 				break;
 		default:

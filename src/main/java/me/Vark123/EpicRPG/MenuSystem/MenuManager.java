@@ -11,9 +11,9 @@ import me.Vark123.EpicRPG.Klejnoty.KlejnotyManager;
 import me.Vark123.EpicRPG.KosturSystem.KosturMenuManager;
 import me.Vark123.EpicRPG.MMExtension.RepairSystem.MMRepairManager;
 import me.Vark123.EpicRPG.MerchantSystem.MerchantManager;
-import me.Vark123.EpicRPG.OldRuneSystem.Runes.KamiennyObserwator;
 import me.Vark123.EpicRPG.Players.AdditionalMenuManager;
 import me.Vark123.EpicRPG.RubySystem.RubyManager;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Rownowaga.KamiennyObserwator;
 import me.Vark123.EpicRPG.Stats.ResetStatsMenuManager;
 import me.Vark123.EpicRPG.SzponBeliara.SzponBeliaraManager;
 import me.Vark123.EpicRPG.UpgradableSystem.InhibitorMenuManager;
@@ -78,7 +78,7 @@ public class MenuManager {
 			case 16:
 				return false;
 			case 17:
-				KamiennyObserwator.openRyseMenu(p);
+				KamiennyObserwator.openMenu(p);
 				return true;
 			case 18:
 				MerchantManager.getInstance().openSellMenu(p);

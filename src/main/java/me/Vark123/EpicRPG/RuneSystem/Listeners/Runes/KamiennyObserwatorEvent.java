@@ -1,4 +1,4 @@
-package me.Vark123.EpicRPG.OldRuneSystem.Events;
+package me.Vark123.EpicRPG.RuneSystem.Listeners.Runes;
 
 import java.util.function.Consumer;
 
@@ -7,8 +7,6 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -17,7 +15,7 @@ import org.bukkit.potion.PotionEffectType;
 import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicInventory.Other.EventCreator;
 
-public class KamiennyObserwatorEvent implements Listener {
+public class KamiennyObserwatorEvent {
 	
 	public static EventCreator<InventoryClickEvent> getClickEvent(){
 		Consumer<InventoryClickEvent> event = e -> {
@@ -43,12 +41,6 @@ public class KamiennyObserwatorEvent implements Listener {
 
 		EventCreator<InventoryClickEvent> creator = new EventCreator<>(InventoryClickEvent.class, event);
 		return creator;
-	}
-	
-	@Deprecated
-	@EventHandler
-	public void onClick(InventoryClickEvent e) {
-		
 	}
 
 }

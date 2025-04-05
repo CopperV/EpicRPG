@@ -245,6 +245,7 @@ public class RpgModifiers implements Serializable {
 	}
 	
 	public static enum EpicModifierTypes {
+		LODOWA_STRZALA,
 		WYOSTRZONE_ZMYSLY,
 		OGNISTA_STRZALA,
 		ZATRUTA_STRZALA,

@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import io.lumine.mythic.api.adapters.AbstractEntity;
+import io.lumine.mythic.bukkit.BukkitAdapter;
 import me.Vark123.EpicRPG.FightSystem.DamageManager;
 import me.Vark123.EpicRPG.FightSystem.DamageType;
 import me.Vark123.EpicRPG.FightSystem.Calculators.IDamageCalculator.DamageCalculatorResult;
@@ -145,6 +147,11 @@ public class MagicEntityDamageListener implements Listener {
 		
 		e.setDamage(damageInfo.damage);
 		Utils.setLastDamageCalc(victim, damageInfo.damage);
+		
+		if(damageInfo.isCrit) {
+			AbstractEntity ae = BukkitAdapter.adapt(victim);
+			ae.setMetadata("EpicCrit", true);
+		}
 	}
 
 }

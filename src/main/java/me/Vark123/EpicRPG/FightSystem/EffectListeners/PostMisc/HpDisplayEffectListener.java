@@ -26,6 +26,9 @@ public class HpDisplayEffectListener implements Listener {
 			return;
 		
 		Entity damager = e.getDamager();
+		if(damager == null)
+			return;
+		
 		if(!(damager instanceof Player)) {
 			if(!MythicBukkit.inst().getMobManager().isActiveMob(damager.getUniqueId()))
 				return;

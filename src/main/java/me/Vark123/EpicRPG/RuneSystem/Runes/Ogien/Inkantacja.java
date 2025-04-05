@@ -11,7 +11,7 @@ import me.Vark123.EpicRPG.Players.Components.RpgModifiers.EpicModifierTypes;
 import me.Vark123.EpicRPG.RuneSystem.ACastableRune;
 import me.Vark123.EpicRPG.RuneSystem.EpicRune;
 import me.Vark123.EpicRPG.RuneSystem.Templates.CastSpells.BufferRuneTemplate;
-import me.Vark123.EpicRPG.RuneSystem.Templates.CastSpells.BufferRuneTemplate.BufferRuneEffect;
+import me.Vark123.EpicRPG.RuneSystem.Templates.CastSpells.TimingEffectRuneTemplate.TimingRuneEffect;
 
 public class Inkantacja extends ACastableRune {
 
@@ -39,7 +39,7 @@ public class Inkantacja extends ACastableRune {
 					double force = rand.nextDouble(0.01, 0.05);
 					_loc.getWorld().spawnParticle(Particle.LARGE_SMOKE, _loc, 6, 0.4f, 0.8f, 0.4f, force);
 				},
-				new BufferRuneEffect(4, target -> {
+				new TimingRuneEffect(4, target -> {
 					Location _loc = target.getLocation().clone().add(0, 1, 0);
 
 					double force = rand.nextDouble(0.01, 0.1);

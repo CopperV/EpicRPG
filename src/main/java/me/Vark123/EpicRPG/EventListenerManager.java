@@ -41,9 +41,18 @@ import me.Vark123.EpicRPG.FightSystem.EffectListeners.Professions.HunterProfessi
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Professions.MageProfessionModifierListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Professions.WarriorProfessionModifierListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.AuraRozproszeniaEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.CienAssasynaEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.CiosWPlecyEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.InkantacjaEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.LodowaStrzalaEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.OgnistaSferaEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.OgnistaStrzalaEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.PelniaEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.SkrytobojstwoEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.TarczaCieniaEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.WedrownyCienEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.WybraniecBeliaraEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.WyssanieEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.DragonMeleeAttackListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.EntityDamageListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.EntityDeathListener;
@@ -62,6 +71,7 @@ import me.Vark123.EpicRPG.FightSystem.Listeners.Crits.PotionCritCalcListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Crits.ProfCritCalcListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Crits.StatsCritCalcListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Death.EntityDeathCmdExecuteListeners;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Death.EntityDeathCukierekAlboPsikusRuneListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Death.EntityDeathRozprucieSkillListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Death.EntityDeathVaultListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Dodge.RuneDodgeCalcListener;
@@ -217,6 +227,7 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new EntityDeathCmdExecuteListeners(), inst);
 		Bukkit.getPluginManager().registerEvents(new EntityDeathVaultListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new EntityDeathRozprucieSkillListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new EntityDeathCukierekAlboPsikusRuneListener(), inst);
 
 		Bukkit.getPluginManager().registerEvents(new WarriorProfessionModifierListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new HunterProfessionModifierListener(), inst);
@@ -242,6 +253,15 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new OgnistaSferaEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new InkantacjaEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new OgnistaStrzalaEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new LodowaStrzalaEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new PelniaEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new CiosWPlecyEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new CienAssasynaEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new WyssanieEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new SkrytobojstwoEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new WedrownyCienEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new WybraniecBeliaraEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new TarczaCieniaEffectListener(), inst);
 
 		Bukkit.getPluginManager().registerEvents(new DollInfoEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new HpDisplayEffectListener(), inst);

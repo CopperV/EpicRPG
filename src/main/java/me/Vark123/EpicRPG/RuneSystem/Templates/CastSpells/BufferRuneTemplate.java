@@ -8,12 +8,11 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers.EpicModifierTypes;
 import me.Vark123.EpicRPG.RuneSystem.ACastableRune;
 import me.Vark123.EpicRPG.RuneSystem.Functional.IRuneEntityEffect;
+import me.Vark123.EpicRPG.RuneSystem.Templates.CastSpells.TimingEffectRuneTemplate.TimingRuneEffect;
 import me.Vark123.EpicRPG.Utils.Utils;
 
 public class BufferRuneTemplate {
@@ -27,7 +26,7 @@ public class BufferRuneTemplate {
 			LivingEntity target,
 			IRuneEntityEffect startEffect,
 			IRuneEntityEffect endEffect,
-			BufferRuneEffect... effects) {
+			TimingRuneEffect... effects) {
 		int duration = castableRune.getRune().getDurationTime();
 		
 		Player caster = castableRune.getPlayer();
@@ -45,7 +44,8 @@ public class BufferRuneTemplate {
 				if(!castableRune.casterInCastWorld() || timer <= 0 
 						|| target.isDead() || caster.isDead()
 						|| (target instanceof Player && !((Player)target).isOnline()) || !caster.isOnline()
-						|| !target.getWorld().getName().equals(caster.getWorld().getName())) {
+						|| !target.getWorld().getName().equals(caster.getWorld().getName())
+						|| !Utils.hasEntityBuff(target, modifier)) {
 					
 					target.sendMessage(Main.getInstance().getPrefix()+" §aEfekt dzialania runy §r"+castableRune.getRune().getName()+" §askonczyl sie");
 					
@@ -76,7 +76,8 @@ public class BufferRuneTemplate {
 					if(!castableRune.casterInCastWorld() || timer <= 0 
 							|| target.isDead() || caster.isDead()
 							|| !((Player)target).isOnline() || !caster.isOnline()
-							|| !target.getWorld().getName().equals(caster.getWorld().getName())) {
+							|| !target.getWorld().getName().equals(caster.getWorld().getName())
+							|| !Utils.hasEntityBuff(target, modifier)) {
 						bar.removeAll();
 						bar.setVisible(false);
 						
@@ -101,7 +102,8 @@ public class BufferRuneTemplate {
 						return;
 					if(!castableRune.casterInCastWorld() || timer <= 0 
 							|| target.isDead() || caster.isDead()
-							|| !target.getWorld().getName().equals(caster.getWorld().getName())) {
+							|| !target.getWorld().getName().equals(caster.getWorld().getName())
+							|| !Utils.hasEntityBuff(target, modifier)) {
 						cancel();
 						return;
 					}
@@ -112,13 +114,6 @@ public class BufferRuneTemplate {
 			}.runTaskTimer(Main.getInstance(), 0, effect.interval);
 		}
 		
-	}
-	
-	@AllArgsConstructor
-	@Getter
-	public static class BufferRuneEffect {
-		int interval;
-		IRuneEntityEffect effect;
 	}
 	
 }

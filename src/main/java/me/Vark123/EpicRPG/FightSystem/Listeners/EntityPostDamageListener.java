@@ -12,6 +12,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
+import io.lumine.mythic.api.adapters.AbstractEntity;
+import io.lumine.mythic.bukkit.BukkitAdapter;
 import me.Vark123.EpicRPG.FightSystem.DamageType;
 import me.Vark123.EpicRPG.FightSystem.Calculators.IDamageCalculator.DamageCalculatorResult;
 import me.Vark123.EpicRPG.FightSystem.Events.EpicPostDamageEffectEvent;
@@ -22,13 +24,20 @@ public class EntityPostDamageListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onDamage(EntityDamageEvent e) {
-		if(e.isCancelled())
-			return;
-
 		if(e instanceof EntityDamageByEntityEvent)
 			return;
 		
+		boolean crit = false;
 		Entity _victim = e.getEntity();
+		AbstractEntity ae = BukkitAdapter.adapt(e.getEntity());
+		if(ae.hasMetadata("EpicCrit")) {
+			crit = (boolean) ae.getMetadata("EpicCrit").get();
+			ae.removeMetadata("EpicCrit");
+		}
+		
+		if(e.isCancelled())
+			return;
+		
 		if(!(_victim instanceof Player))
 			return;
 		
@@ -43,7 +52,7 @@ public class EntityPostDamageListener implements Listener {
 			return;
 		
 		double damage = e.getDamage();
-		DamageCalculatorResult damageInfo = new DamageCalculatorResult(damage, false);
+		DamageCalculatorResult damageInfo = new DamageCalculatorResult(damage, crit);
 		
 		switch(e.getCause()) {
 			case PROJECTILE:
@@ -87,6 +96,14 @@ public class EntityPostDamageListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onDamage(EntityDamageByEntityEvent e) {
+		boolean crit = false;
+		Entity _victim = e.getEntity();
+		AbstractEntity ae = BukkitAdapter.adapt(e.getEntity());
+		if(ae.hasMetadata("EpicCrit")) {
+			crit = (boolean) ae.getMetadata("EpicCrit").get();
+			ae.removeMetadata("EpicCrit");
+		}
+		
 		if(e.isCancelled())
 			return;
 		
@@ -95,7 +112,6 @@ public class EntityPostDamageListener implements Listener {
 
 		DamageSource source = e.getDamageSource();
 		Entity _damager = source.getCausingEntity();
-		Entity _victim = e.getEntity();
 		if(!(_damager instanceof LivingEntity) || !(_victim instanceof LivingEntity))
 			return;
 		
@@ -104,7 +120,7 @@ public class EntityPostDamageListener implements Listener {
 
 		double damage = e.getDamage();
 		DamageType damageType;
-		DamageCalculatorResult damageInfo = new DamageCalculatorResult(damage, false);
+		DamageCalculatorResult damageInfo = new DamageCalculatorResult(damage, crit);
 		
 		switch(e.getCause()) {
 			case PROJECTILE:
@@ -148,12 +164,19 @@ public class EntityPostDamageListener implements Listener {
 
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onDamage(MagicEntityDamageByEntityEvent e) {
+		boolean crit = false;
+		Entity _victim = e.getEntity();
+		AbstractEntity ae = BukkitAdapter.adapt(e.getEntity());
+		if(ae.hasMetadata("EpicCrit")) {
+			crit = (boolean) ae.getMetadata("EpicCrit").get();
+			ae.removeMetadata("EpicCrit");
+		}
+		
 		if(e.isCancelled())
 			return;
 
 		DamageSource source = e.getDamageSource();
 		Entity _damager = source.getDirectEntity();
-		Entity _victim = e.getEntity();
 		if(!(_damager instanceof LivingEntity) || !(_victim instanceof LivingEntity))
 			return;
 		
@@ -162,7 +185,7 @@ public class EntityPostDamageListener implements Listener {
 
 		double damage = e.getDamage();
 		DamageType damageType = DamageType.MAGIC;
-		DamageCalculatorResult damageInfo = new DamageCalculatorResult(damage, false);
+		DamageCalculatorResult damageInfo = new DamageCalculatorResult(damage, crit);
 
 		EpicRune rune = e.getRune();
 		

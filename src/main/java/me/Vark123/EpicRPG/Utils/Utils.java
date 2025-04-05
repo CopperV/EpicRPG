@@ -33,6 +33,7 @@ import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers.EpicModifierTypes;
+import me.Vark123.EpicRPG.RuneSystem.RuneEffectType;
 
 public class Utils {
 
@@ -497,11 +498,52 @@ public class Utils {
 	
 	public static boolean hasEntityBuff(LivingEntity entity, EpicModifierTypes modifier) {
 		if(entity instanceof Player) {
-			return PlayerManager.getInstance().getRpgPlayer((Player) entity).getModifiers().hasActiveModifier(modifier);
+			RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer((Player) entity);
+			if(rpg == null)
+				return false;
+			return rpg.getModifiers().hasActiveModifier(modifier);
 		} else {
 			AbstractEntity ae = BukkitAdapter.adapt(entity);
 			return ae.hasMetadata(modifier.name());
 		}
+	}
+	
+	public static void setEntityEffect(LivingEntity caster, LivingEntity entity, RuneEffectType effect) {
+		if(hasEntityEffect(caster, entity, effect))
+			return;
+		
+		AbstractEntity ae = BukkitAdapter.adapt(entity);
+		ae.setMetadata(effect.name(), caster);
+	}
+	
+	public static void unsetEntityEffect(LivingEntity entity, RuneEffectType effect) {
+		if(!hasEntityEffect(entity, effect))
+			return;
+		
+		AbstractEntity ae = BukkitAdapter.adapt(entity);
+		ae.removeMetadata(effect.name());
+	}
+	
+	public static boolean hasEntityEffect(LivingEntity caster, LivingEntity entity, RuneEffectType effect) {
+		AbstractEntity ae = BukkitAdapter.adapt(entity);
+		if(!ae.hasMetadata(effect.name()))
+			return false;
+		
+		Object obj = ae.getMetadata(effect.name()).get();
+		return obj instanceof LivingEntity && obj.equals(caster);
+	}
+	
+	public static boolean hasEntityEffect(LivingEntity entity, RuneEffectType effect) {
+		AbstractEntity ae = BukkitAdapter.adapt(entity);
+		return ae.hasMetadata(effect.name()) && ae.getMetadata(effect.name()).get() instanceof LivingEntity;
+	}
+	
+	public static LivingEntity getEntityEffectCaster(LivingEntity entity, RuneEffectType effect) {
+		if(!hasEntityEffect(entity, effect))
+			return null;
+		
+		AbstractEntity ae = BukkitAdapter.adapt(entity);
+		return (LivingEntity) ae.getMetadata(effect.name()).get();
 	}
 	
 }

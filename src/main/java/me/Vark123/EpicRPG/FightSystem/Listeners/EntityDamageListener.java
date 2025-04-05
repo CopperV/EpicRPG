@@ -126,6 +126,11 @@ public class EntityDamageListener implements Listener {
 		}
 		
 		e.setDamage(damageInfo.damage);
+		
+		if(damageInfo.isCrit) {
+			AbstractEntity ae = BukkitAdapter.adapt(victim);
+			ae.setMetadata("EpicCrit", true);
+		}
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH)
@@ -276,6 +281,11 @@ public class EntityDamageListener implements Listener {
 		
 		e.setDamage(damageInfo.damage);
 		Utils.setLastDamageCalc(victim, damageInfo.damage);
+		
+		if(damageInfo.isCrit) {
+			AbstractEntity ae = BukkitAdapter.adapt(victim);
+			ae.setMetadata("EpicCrit", true);
+		}
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)

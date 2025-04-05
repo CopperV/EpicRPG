@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,6 +22,7 @@ import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import me.Vark123.EpicComponentAPI.EpicComponent;
+import me.Vark123.EpicRPG.FightSystem.DamageType;
 import me.Vark123.EpicRPG.FightSystem.Events.EpicAttackEvent;
 import me.Vark123.EpicRPG.FightSystem.Events.EpicPostDamageEffectEvent;
 import me.Vark123.EpicRPG.Players.PlayerManager;
@@ -47,12 +49,21 @@ public class SlugaBeliaraEffectListener implements Listener {
 		if(!skills.hasSlugaBeliara())
 			return;
 
-		ItemStack item = p.getInventory().getItemInMainHand();
+		ItemStack item = null;
+		if(e.getDamageType().equals(DamageType.PROJECTILE) && e.getDamageSource().getDirectEntity() instanceof AbstractArrow) {
+			AbstractArrow projectile = (AbstractArrow) e.getDamageSource().getDirectEntity();
+			if(projectile.hasMetadata("rpg_bow")) {
+				item = (ItemStack) projectile.getMetadata("rpg_bow").get(0).value();
+			}
+		} else {
+			item = p.getInventory().getItemInMainHand();
+		}
+
 		if(item == null || item.getType().equals(Material.AIR)
 				|| !MythicBukkit.inst().getItemManager().isMythicItem(item))
 			return;
 		
-		EpicComponent comp = new EpicComponent(item);
+		EpicComponent comp = new EpicComponent(item, MythicBukkit.inst());
 		if(!comp.hasKey("szpon_beliara"))
 			return;
 		
