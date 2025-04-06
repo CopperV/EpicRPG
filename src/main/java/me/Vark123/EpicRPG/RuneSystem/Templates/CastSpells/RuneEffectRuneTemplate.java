@@ -68,7 +68,8 @@ public class RuneEffectRuneTemplate {
 						return;
 					if(!castableRune.casterInCastWorld() || timer <= 0 
 							|| target.isDead() || caster.isDead()
-							|| !target.getWorld().getName().equals(caster.getWorld().getName())) {
+							|| !target.getWorld().getName().equals(caster.getWorld().getName())
+							|| !Utils.hasEntityEffect(caster, target, effect)) {
 						cancel();
 						return;
 					}

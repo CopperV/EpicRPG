@@ -34,7 +34,7 @@ public class Rozerwanie extends ACastableRune {
 		hitCondition = rune.getPvp() == 1 ? 
 				new PvPRuneHitCondition() : new NonPvPRuneHitCondition();
 		boundingBox = new BoundingBox(
-				0.7, 0.7, 0.7, 
+				-0.7, -0.7, -0.7, 
 				0.7, 0.7, 0.7);
 		hitEffect = new DamageBurnEffect(7, rune.getDamage() * 0.1, this);
 	}

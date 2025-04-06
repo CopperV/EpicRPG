@@ -28,7 +28,7 @@ public class StrzalaMroku extends ACastableRune {
 		hitCondition = rune.getPvp() == 1 ? 
 				new PvPRuneHitCondition() : new NonPvPRuneHitCondition();
 		boundingBox = new BoundingBox(
-				0.65, 0.65, 0.65, 
+				-0.65, -0.65, -0.65, 
 				0.65, 0.65, 0.65);
 	}
 

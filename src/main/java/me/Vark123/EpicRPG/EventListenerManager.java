@@ -48,11 +48,15 @@ import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.LodowaStrzalaEffectL
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.OgnistaSferaEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.OgnistaStrzalaEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.PelniaEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.ProwokacjaEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.SkrytobojstwoEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.TajemnyBlaskEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.TarczaCieniaEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.WedrownyCienEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.WybraniecBeliaraEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.WyostrzoneZmyslyEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.WyssanieEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.ZakletaStrzalaEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.DragonMeleeAttackListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.EntityDamageListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.EntityDeathListener;
@@ -262,6 +266,10 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new WedrownyCienEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new WybraniecBeliaraEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new TarczaCieniaEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new WyostrzoneZmyslyEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new ProwokacjaEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new TajemnyBlaskEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new ZakletaStrzalaEffectListener(), inst);
 
 		Bukkit.getPluginManager().registerEvents(new DollInfoEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new HpDisplayEffectListener(), inst);

@@ -17,6 +17,7 @@ import lombok.Getter;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
+import me.Vark123.EpicRPG.Players.Components.RpgModifiers.EpicModifierTypes;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import me.Vark123.EpicRPG.RuneSystem.ACastableRune.RuneLockerTypes;
 import me.Vark123.EpicRPG.RuneSystem.Events.RuneCastCostCalcEvent;
@@ -66,6 +67,25 @@ import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.Rozerwanie;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.WulkanicznyGejzer;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Rownowaga.KamiennyObserwator;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Rownowaga.SferaCorristo;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.Haduoken;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.MagicznaIskra;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.MagicznaSfera;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.MagicznePociski;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.MagicznyPocisk;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.PoteznaRunaDomisia;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.PoteznaRunaDomisia_H;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.PoteznaRunaDomisia_M;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.Prowokacja;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.TajemnyBlask;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.TajemnyBlask_M;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.TajemnyGrad;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.TajemnyGrad_H;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.TajemnyGrad_M;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.TeleportacjaKrotkodystansowa;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.UderzenieChi;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.WyostrzoneZmysly;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.ZakletaStrzala;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.Zryw;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.BrylaLodu;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.EksplozjaLodu;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.FalaMrozu;
@@ -83,6 +103,7 @@ import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.SopelLodu;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.WodnaPiesc;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.Zamiec;
 import me.Vark123.EpicRPG.RuneSystem.Runes._InProgress.PrzyzwanieWilka;
+import me.Vark123.EpicRPG.Utils.Utils;
 
 @Getter
 public final class RuneManager {
@@ -141,6 +162,17 @@ public final class RuneManager {
 			return false;
 		
 		int finalCost = calcCostEvent.getFinalCost();
+		RpgModifiers modifiers = rpg.getModifiers();
+		if(!rune.getMythicType().toLowerCase().startsWith("tajemnyblask")) {
+			String profession = rpg.getInfo().getProffesion();
+			if(Utils.hasEntityBuff(p, EpicModifierTypes.TAJEMNY_BLASK_M) &&
+					profession.equals("§5Mag"))
+				finalCost = (int) Math.min(finalCost, (rune.getPrice() * 0.6));
+			else if(Utils.hasEntityBuff(p, EpicModifierTypes.TAJEMNY_BLASK) &&
+					profession.equals("§5Mag"))
+				finalCost = (int) Math.min(finalCost, (rune.getPrice() * 0.8));
+		}
+		
 		if(rune.isHpInsteadMana()) {
 			if(!hasEnoughHp(rpg, finalCost))
 				return false;
@@ -151,7 +183,6 @@ public final class RuneManager {
 		
 		ACastableRune castableRune = getRune(rpg, rune, itRune);
 		
-		RpgModifiers modifiers = rpg.getModifiers();
 		for(RuneLockerTypes locker : castableRune.lockers) {
 			if(modifiers.hasActiveLocker(locker)) {
 				p.sendMessage(Main.getInstance().getPrefix()+" "+locker.getMessage());
@@ -219,6 +250,14 @@ public final class RuneManager {
 
 		Date now = new Date();
 		long cd = event.getFinalCd();
+		
+		String profession = rpgPlayer.getInfo().getProffesion();
+		if(Utils.hasEntityBuff(p, EpicModifierTypes.TAJEMNY_BLASK_M) &&
+				profession.equals("§5Mag"))
+			cd = (long) (rune.getRegenTime() * 0.35 * 1000);
+		else if(Utils.hasEntityBuff(p, EpicModifierTypes.TAJEMNY_BLASK) &&
+				profession.equals("§5Mag"))
+			cd = (long) (rune.getRegenTime() * 0.5 * 1000);
 		
 		Date cdDate = new Date(now.getTime() + cd);
 		runeCd.get(uid).put(rune.getMythicType(), cdDate);
@@ -333,7 +372,9 @@ public final class RuneManager {
 				break;
 			case MUSIC_DISC_13:
 				switch(rune.getMythicType()) {
-				
+					case "MagicznyPocisk":				return new MagicznyPocisk(rpgPlayer, rune);
+					case "MagicznaIskra":				return new MagicznaIskra(rpgPlayer, rune);
+					case "MagicznePociski":				return new MagicznePociski(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_5:
@@ -345,11 +386,15 @@ public final class RuneManager {
 				switch(rune.getMythicType()) {
 					case "Gejzer":						return new Gejzer(rpgPlayer, rune);
 					case "WodnaPiesc":					return new WodnaPiesc(rpgPlayer, rune);
+					case "Haduoken":					return new Haduoken(rpgPlayer, rune);
+					case "UderzenieChi":				return new UderzenieChi(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_CAT:
 				switch(rune.getMythicType()) {
-				
+					case "PoteznaRunaDomisia":			return new PoteznaRunaDomisia(rpgPlayer, rune);
+					case "PoteznaRunaDomisia_H":		return new PoteznaRunaDomisia_H(rpgPlayer, rune);
+					case "PoteznaRunaDomisia_M":		return new PoteznaRunaDomisia_M(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_CHIRP:
@@ -384,6 +429,8 @@ public final class RuneManager {
 				switch(rune.getMythicType()) {
 					case "SwietyMrok":					return new SwietyMrok(rpgPlayer, rune);
 					case "WybraniecBeliara":			return new WybraniecBeliara(rpgPlayer, rune);
+					case "Prowokacja":					return new Prowokacja(rpgPlayer, rune);
+					case "Zryw":						return new Zryw(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_MALL:
@@ -395,6 +442,8 @@ public final class RuneManager {
 					case "OdwrocenieUwagi":				return new OdwrocenieUwagi(rpgPlayer, rune);
 					case "Skrytobojstwo":				return new Skrytobojstwo(rpgPlayer, rune);
 					case "WedrownyCien":				return new WedrownyCien(rpgPlayer, rune);
+					case "WyostrzoneZmysly":			return new WyostrzoneZmysly(rpgPlayer, rune);
+					case "ZakletaStrzala":				return new ZakletaStrzala(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_MELLOHI:
@@ -442,6 +491,7 @@ public final class RuneManager {
 			case MUSIC_DISC_STAL:
 				switch(rune.getMythicType()) {
 					case "SferaCorristo":				return new SferaCorristo(rpgPlayer, rune);
+					case "TeleportacjaKrotkodystansowa":return new TeleportacjaKrotkodystansowa(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_STRAD:
@@ -452,6 +502,14 @@ public final class RuneManager {
 			case MUSIC_DISC_WAIT:
 				switch(rune.getMythicType()) {
 					case "KamiennyObserwator":			return new KamiennyObserwator(rpgPlayer, rune);
+					case "TajemnyBlask":				return new TajemnyBlask(rpgPlayer, rune);
+					case "TajemnyBlask_M":				return new TajemnyBlask_M(rpgPlayer, rune);
+					case "TajemnyGrad":					return new TajemnyGrad(rpgPlayer, rune);
+					case "TajemnyGrad_H":				return new TajemnyGrad_H(rpgPlayer, rune);
+					case "TajemnyGrad_M":				return new TajemnyGrad_M(rpgPlayer, rune);
+					case "MagicznaSfera":				return new MagicznaSfera(rpgPlayer, rune);
+					case "MagicznaSfera_H":				return new MagicznaSfera(rpgPlayer, rune);
+					case "MagicznaSfera_M":				return new MagicznaSfera(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_WARD:

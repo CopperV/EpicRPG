@@ -38,6 +38,7 @@ public class RainRuneTemplate {
 			IRuneHitCondition hitCondition,
 			IRuneLivingEntityEffect onHitEffect,
 			IRuneLocationEffect onRainEndEffect,
+			IRuneLocationEffect onProjectileStartEffect,
 			IRuneLocationEffect onProjectileEndEffect) {
 		
 		if(onStartEffect != null)
@@ -80,7 +81,7 @@ public class RainRuneTemplate {
 							projectileTickInterval, 
 							maxDropDistance, 
 							boundingBox, 
-							__ -> { },
+							onProjectileStartEffect,
 							onTickEffect,
 							hitCondition,
 							onHitEffect,

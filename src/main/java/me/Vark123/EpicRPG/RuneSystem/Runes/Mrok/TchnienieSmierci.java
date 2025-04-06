@@ -28,7 +28,7 @@ public class TchnienieSmierci extends ACastableRune {
 		hitCondition = rune.getPvp() == 1 ? 
 				new PvPRuneHitCondition() : new NonPvPRuneHitCondition();
 		boundingBox = new BoundingBox(
-				0.8, 0.8, 0.8, 
+				-0.8, -0.8, -0.8, 
 				0.8, 0.8, 0.8);
 		
 		particleBlockData = Material.COAL_BLOCK.createBlockData();

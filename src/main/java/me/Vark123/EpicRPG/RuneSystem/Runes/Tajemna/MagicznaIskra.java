@@ -1,8 +1,12 @@
-package me.Vark123.EpicRPG.RuneSystem.Runes.Woda;
+package me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna;
 
+import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.Particle.DustOptions;
 import org.bukkit.Sound;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.util.BoundingBox;
 
 import me.Vark123.EpicRPG.Players.RpgPlayer;
@@ -14,19 +18,22 @@ import me.Vark123.EpicRPG.RuneSystem.Templates.CastSpells.ProjectileRuneTemplate
 import me.Vark123.EpicRPG.RuneSystem.Templates.EntityHits.NonPvPRuneHitCondition;
 import me.Vark123.EpicRPG.RuneSystem.Templates.EntityHits.PvPRuneHitCondition;
 
-public class SopelLodu extends ACastableRune {
+public class MagicznaIskra extends ACastableRune {
 
 	private IRuneHitCondition hitCondition;
 	private BoundingBox boundingBox;
 	
-	public SopelLodu(RpgPlayer rpgPlayer, EpicRune rune) {
+	private DustOptions dust = new DustOptions(Color.PURPLE, 0.4f);
+	private BlockData particleBlockData = Material.AMETHYST_BLOCK.createBlockData();
+	
+	public MagicznaIskra(RpgPlayer rpgPlayer, EpicRune rune) {
 		super(rpgPlayer, rune);
 		
 		hitCondition = rune.getPvp() == 1 ? 
 				new PvPRuneHitCondition() : new NonPvPRuneHitCondition();
 		boundingBox = new BoundingBox(
-				-0.65, -0.65, -0.65, 
-				0.65, 0.65, 0.65);
+				-0.6, -0.6, -0.6, 
+				0.6, 0.6, 0.6);
 	}
 
 	@Override
@@ -37,23 +44,24 @@ public class SopelLodu extends ACastableRune {
 				this, 
 				startLoc, 
 				startLoc.getDirection().normalize(),
-				0.42, 
+				0.5, 
 				3,
 				1,
 				30, 
 				boundingBox,
 				loc -> {
-					loc.getWorld().playSound(loc, Sound.ENTITY_BAT_TAKEOFF, 1.2f, 0.75f);
+					loc.getWorld().playSound(loc, Sound.ENTITY_ILLUSIONER_MIRROR_MOVE, 1, 1.2f);
 				}, 
 				loc -> {
-					loc.getWorld().spawnParticle(Particle.END_ROD, loc, 8, 
-							0.075f, 0.075f, 0.075f, 0.02f);
+					loc.getWorld().spawnParticle(Particle.DUST, loc, 8, 
+							0.15f, 0.15f, 0.15f, 0.04f, dust);
+					loc.getWorld().spawnParticle(Particle.FALLING_DUST, loc, 8, 
+							0.15f, 0.15f, 0.15f, 0.04f, particleBlockData);
 				}, 
 				hitCondition, 
 				(loc, e) -> {
-					e.getWorld().playSound(loc, Sound.ENTITY_PLAYER_HURT_FREEZE, 1, 1.45f);
-					
-					RuneUtils.damage(player, e, rune);
+					if(RuneUtils.damage(player, e, rune))
+						loc.getWorld().playSound(loc, Sound.ENTITY_ILLUSIONER_PREPARE_MIRROR, 1, 1.3f);
 				}, 
 				loc -> { });
 	}

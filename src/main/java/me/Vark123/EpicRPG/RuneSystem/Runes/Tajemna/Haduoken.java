@@ -1,7 +1,9 @@
-package me.Vark123.EpicRPG.RuneSystem.Runes.Woda;
+package me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna;
 
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.Particle.DustOptions;
 import org.bukkit.Sound;
 import org.bukkit.util.BoundingBox;
 
@@ -14,19 +16,21 @@ import me.Vark123.EpicRPG.RuneSystem.Templates.CastSpells.ProjectileRuneTemplate
 import me.Vark123.EpicRPG.RuneSystem.Templates.EntityHits.NonPvPRuneHitCondition;
 import me.Vark123.EpicRPG.RuneSystem.Templates.EntityHits.PvPRuneHitCondition;
 
-public class SopelLodu extends ACastableRune {
+public class Haduoken extends ACastableRune {
 
 	private IRuneHitCondition hitCondition;
 	private BoundingBox boundingBox;
+
+	private DustOptions dust = new DustOptions(Color.AQUA, 0.7f);
 	
-	public SopelLodu(RpgPlayer rpgPlayer, EpicRune rune) {
+	public Haduoken(RpgPlayer rpgPlayer, EpicRune rune) {
 		super(rpgPlayer, rune);
 		
 		hitCondition = rune.getPvp() == 1 ? 
 				new PvPRuneHitCondition() : new NonPvPRuneHitCondition();
 		boundingBox = new BoundingBox(
-				-0.65, -0.65, -0.65, 
-				0.65, 0.65, 0.65);
+				-0.6, -0.6, -0.6, 
+				0.6, 0.6, 0.6);
 	}
 
 	@Override
@@ -37,23 +41,24 @@ public class SopelLodu extends ACastableRune {
 				this, 
 				startLoc, 
 				startLoc.getDirection().normalize(),
-				0.42, 
-				3,
+				0.75, 
+				2,
 				1,
-				30, 
+				36, 
 				boundingBox,
 				loc -> {
-					loc.getWorld().playSound(loc, Sound.ENTITY_BAT_TAKEOFF, 1.2f, 0.75f);
+					loc.getWorld().playSound(loc, Sound.ENTITY_EVOKER_CAST_SPELL, 1, 0.75f);
 				}, 
 				loc -> {
-					loc.getWorld().spawnParticle(Particle.END_ROD, loc, 8, 
-							0.075f, 0.075f, 0.075f, 0.02f);
+					loc.getWorld().spawnParticle(Particle.DUST, loc, 13, 
+							0.2f, 0.2f, 0.2f, 0.05f, dust);
+					loc.getWorld().spawnParticle(Particle.WHITE_SMOKE, loc, 3, 
+							0.05f, 0.05f, 0.05f, 0.01f);
 				}, 
 				hitCondition, 
 				(loc, e) -> {
-					e.getWorld().playSound(loc, Sound.ENTITY_PLAYER_HURT_FREEZE, 1, 1.45f);
-					
-					RuneUtils.damage(player, e, rune);
+					if(RuneUtils.damage(player, e, rune))
+						loc.getWorld().playSound(loc, Sound.ENTITY_MAGMA_CUBE_JUMP, 1, 0.8f);
 				}, 
 				loc -> { });
 	}

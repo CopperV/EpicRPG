@@ -28,7 +28,7 @@ public class Grom extends ACastableRune {
 		hitCondition = rune.getPvp() == 1 ? 
 				new PvPRuneHitCondition() : new NonPvPRuneHitCondition();
 		boundingBox = new BoundingBox(
-				0.6, 0.6, 0.6, 
+				-0.6, -0.6, -0.6, 
 				0.6, 0.6, 0.6);
 		
 		potion = new PotionEffect(PotionEffectType.SLOWNESS, 20*15, 1);
@@ -70,6 +70,7 @@ public class Grom extends ACastableRune {
 					}
 					
 				}, 
+				loc -> { },
 				loc -> { },
 				loc -> { });
 	}

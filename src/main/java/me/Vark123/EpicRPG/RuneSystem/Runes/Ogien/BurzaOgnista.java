@@ -29,7 +29,7 @@ public class BurzaOgnista extends ACastableRune {
 		hitCondition = rune.getPvp() == 1 ? 
 				new PvPRuneHitCondition() : new NonPvPRuneHitCondition();
 		boundingBox = new BoundingBox(
-				0.8, 0.8, 0.8, 
+				-0.8, -0.8, -0.8, 
 				0.8, 0.8, 0.8);
 		hitEffect = new DamageBurnEffect(8, rune.getDamage() * 0.1, this);
 	}

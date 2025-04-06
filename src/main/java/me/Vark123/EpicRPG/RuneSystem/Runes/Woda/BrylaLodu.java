@@ -32,7 +32,7 @@ public class BrylaLodu extends ACastableRune {
 		hitCondition = rune.getPvp() == 1 ? 
 				new PvPRuneHitCondition() : new NonPvPRuneHitCondition();
 		boundingBox = new BoundingBox(
-				0.7, 0.7, 0.7, 
+				-0.7, -0.7, -0.7, 
 				0.7, 0.7, 0.7);
 		
 		hitEffect = new DamageFreezeEffect(rune.getDurationTime(), rune.getDamage(), this);

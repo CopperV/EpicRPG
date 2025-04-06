@@ -330,7 +330,10 @@ public class RpgModifiers implements Serializable {
 		TAJEMNY_BLASK_M,
 		LODOWA_TARCZA,
 		LODOWA_TARCZA_H,
-		LODOWA_TARCZA_M
+		LODOWA_TARCZA_M,
+		POTEZNA_RUNA_DOMISIA,
+		POTEZNA_RUNA_DOMISIA_H,
+		POTEZNA_RUNA_DOMISIA_M,
 	}
 
 	public void createWywarSilaTask(int seconds, int level) {

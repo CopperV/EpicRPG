@@ -1,9 +1,7 @@
 package me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Particle;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,10 +14,9 @@ import me.Vark123.EpicRPG.FightSystem.Events.EpicPostDamageEffectEvent;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers.EpicModifierTypes;
 import me.Vark123.EpicRPG.Utils.Utils;
 
-public class LodowaStrzalaEffectListener implements Listener {
+public class ZakletaStrzalaEffectListener implements Listener {
 	
-	private static final PotionEffect potion = new PotionEffect(PotionEffectType.SLOWNESS, 20*8, 2);
-	private static final BlockData particleBlockData = Material.ICE.createBlockData();
+	private static final PotionEffect potion = new PotionEffect(PotionEffectType.SLOWNESS, 20*6, 3);
 	
 	@EventHandler
 	public void onMod(EpicAttackEvent e) {
@@ -30,10 +27,10 @@ public class LodowaStrzalaEffectListener implements Listener {
 			return;
 		
 		LivingEntity damager = e.getDamager();
-		if(!Utils.hasEntityBuff(damager, EpicModifierTypes.LODOWA_STRZALA))
+		if(!Utils.hasEntityBuff(damager, EpicModifierTypes.ZAKLETA_STRZALA))
 			return;
 		
-		e.increaseModifier(0.22);
+		e.increaseModifier(0.18);
 	}
 	
 	@EventHandler
@@ -47,12 +44,12 @@ public class LodowaStrzalaEffectListener implements Listener {
 		LivingEntity victim = e.getVictim();
 		LivingEntity damager = e.getDamager();
 		
-		if(!Utils.hasEntityBuff(damager, EpicModifierTypes.LODOWA_STRZALA))
+		if(!Utils.hasEntityBuff(damager, EpicModifierTypes.ZAKLETA_STRZALA))
 			return;
 		
 		Location loc = victim.getLocation().clone().add(0,1,0);
-		loc.getWorld().spawnParticle(Particle.BLOCK, loc, 12,
-				.4, .4, .4, .05, particleBlockData);
+		loc.getWorld().spawnParticle(Particle.ENCHANT, loc, 12,
+				.4, .4, .4, .05);
 		
 		victim.addPotionEffect(potion);
 	}

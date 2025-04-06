@@ -31,7 +31,7 @@ public class LodowePrzebicie extends ACastableRune {
 		hitCondition = rune.getPvp() == 1 ? 
 				new PvPRuneHitCondition() : new NonPvPRuneHitCondition();
 		boundingBox = new BoundingBox(
-				0.85, 0.6, 0.85, 
+				-0.85, -0.6, -0.85, 
 				0.85, 0.6, 0.85);
 		particleBlockData = Material.BLUE_ICE.createBlockData();
 	}

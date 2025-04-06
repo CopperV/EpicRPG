@@ -32,7 +32,7 @@ public class TrupiJek extends ACastableRune {
 		hitCondition = rune.getPvp() == 1 ? 
 				new PvPRuneHitCondition() : new NonPvPRuneHitCondition();
 		boundingBox = new BoundingBox(
-				0.8, 0.8, 0.8, 
+				-0.8, -0.8, -0.8, 
 				0.8, 0.8, 0.8);
 	}
 

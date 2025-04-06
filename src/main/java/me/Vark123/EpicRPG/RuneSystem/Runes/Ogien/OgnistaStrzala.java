@@ -28,7 +28,7 @@ public class OgnistaStrzala extends ACastableRune {
 		hitCondition = rune.getPvp() == 1 ? 
 				new PvPRuneHitCondition() : new NonPvPRuneHitCondition();
 		boundingBox = new BoundingBox(
-				0.5, 0.5, 0.5, 
+				-0.5, -0.5, -0.5, 
 				0.5, 0.5, 0.5);
 		hitEffect = new DamageBurnEffect(3, rune.getDamage() * 0.1, this);
 	}
