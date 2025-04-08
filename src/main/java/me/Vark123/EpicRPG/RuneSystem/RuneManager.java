@@ -67,6 +67,25 @@ import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.Rozerwanie;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.WulkanicznyGejzer;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Rownowaga.KamiennyObserwator;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Rownowaga.SferaCorristo;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.AuraCzystosci;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.BlogoslawionaZiemia;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.OstatniBoj;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.OstatniBoj_H;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.OstatniBoj_M;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.Poswiecenie;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.RytualWzniesienia;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.SilaJednosci;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.Swiatlo;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.SwietaStrzala;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.SwietaStrzalaLcz;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.SwieteSlowo;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.SwietyPlomien;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.SwietyPocisk;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.SzalBitewny;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.Trans;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.WloczniaElysian;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.WypedzanieZla;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.ZniszczenieZla;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.Haduoken;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.MagicznaIskra;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.MagicznaSfera;
@@ -431,6 +450,22 @@ public final class RuneManager {
 					case "WybraniecBeliara":			return new WybraniecBeliara(rpgPlayer, rune);
 					case "Prowokacja":					return new Prowokacja(rpgPlayer, rune);
 					case "Zryw":						return new Zryw(rpgPlayer, rune);
+					case "SwietaStrzala":				return new SwietaStrzala(rpgPlayer, rune);
+					case "Poswiecenie":					return new Poswiecenie(rpgPlayer, rune);
+					case "RytualWzniesienia":			return new RytualWzniesienia(rpgPlayer, rune);
+					case "SwietyPocisk":				return new SwietyPocisk(rpgPlayer, rune);
+					case "Trans":						return new Trans(rpgPlayer, rune);
+					case "WypedzanieZla":				return new WypedzanieZla(rpgPlayer, rune);
+					case "BlogoslawionaZiemia":			return new BlogoslawionaZiemia(rpgPlayer, rune);
+					case "SilaJednosci":				return new SilaJednosci(rpgPlayer, rune);
+					case "SwieteSlowo":					return new SwieteSlowo(rpgPlayer, rune);
+					case "SwietyPlomien":				return new SwietyPlomien(rpgPlayer, rune);
+					case "SzalBitewny":					return new SzalBitewny(rpgPlayer, rune);
+					case "ZniszczenieZla":				return new ZniszczenieZla(rpgPlayer, rune);
+					case "AuraCzystosci":				return new AuraCzystosci(rpgPlayer, rune);
+					case "OstatniBoj":					return new OstatniBoj(rpgPlayer, rune);
+					case "OstatniBoj_H":				return new OstatniBoj_H(rpgPlayer, rune);
+					case "OstatniBoj_M":				return new OstatniBoj_M(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_MALL:
@@ -444,6 +479,7 @@ public final class RuneManager {
 					case "WedrownyCien":				return new WedrownyCien(rpgPlayer, rune);
 					case "WyostrzoneZmysly":			return new WyostrzoneZmysly(rpgPlayer, rune);
 					case "ZakletaStrzala":				return new ZakletaStrzala(rpgPlayer, rune);
+					case "SwietaStrzalaLcz":			return new SwietaStrzalaLcz(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_MELLOHI:
@@ -510,6 +546,8 @@ public final class RuneManager {
 					case "MagicznaSfera":				return new MagicznaSfera(rpgPlayer, rune);
 					case "MagicznaSfera_H":				return new MagicznaSfera(rpgPlayer, rune);
 					case "MagicznaSfera_M":				return new MagicznaSfera(rpgPlayer, rune);
+					case "Swiatlo":						return new Swiatlo(rpgPlayer, rune);
+					case "WloczniaElysian":				return new WloczniaElysian(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_WARD:

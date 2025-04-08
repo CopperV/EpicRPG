@@ -21,6 +21,7 @@ import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgJewelry;
 import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
+import me.Vark123.EpicRPG.Players.Components.RpgModifiers.EpicModifierTypes;
 import me.Vark123.EpicRPG.Utils.Utils;
 import net.minecraft.world.item.ItemArmor;
 
@@ -156,41 +157,41 @@ public class ChangeStats {
 			weaponCheck = false;
 		}
 		
-		if(rpg.getModifiers().hasOstatniBoj_m()) {
+		if(rpg.getModifiers().hasActiveModifier(EpicModifierTypes.OSTATNI_BOJ_M)) {
 			stats.setFinalSila((int) (stats.getFinalSila()*1.27));
 			stats.setFinalWytrzymalosc((int) (stats.getFinalWytrzymalosc()*1.27));
 		}
-		else if(rpg.getModifiers().hasOstatniBoj_h()) {
+		if(rpg.getModifiers().hasActiveModifier(EpicModifierTypes.OSTATNI_BOJ_H)) {
 			stats.setFinalSila((int) (stats.getFinalSila()*1.23));
 			stats.setFinalWytrzymalosc((int) (stats.getFinalWytrzymalosc()*1.23));
 		}
-		else if(rpg.getModifiers().hasOstatniBoj()) {
+		if(rpg.getModifiers().hasActiveModifier(EpicModifierTypes.OSTATNI_BOJ)) {
 			stats.setFinalSila((int) (stats.getFinalSila()*1.2));
 			stats.setFinalWytrzymalosc((int) (stats.getFinalWytrzymalosc()*1.2));
 		}
-		
-		if(rpg.getModifiers().hasSzostyZmysl_m()) {
+
+		if(rpg.getModifiers().hasActiveModifier(EpicModifierTypes.SZOSTY_ZMYSL_M)) {
 			stats.setFinalZrecznosc((int) (stats.getFinalZrecznosc()*1.27));
 			stats.setFinalZdolnosciMysliwskie((int) (stats.getFinalZdolnosciMysliwskie()*1.27));
 		}
-		else if(rpg.getModifiers().hasSzostyZmysl_h()) {
+		if(rpg.getModifiers().hasActiveModifier(EpicModifierTypes.SZOSTY_ZMYSL_H)) {
 			stats.setFinalZrecznosc((int) (stats.getFinalZrecznosc()*1.23));
 			stats.setFinalZdolnosciMysliwskie((int) (stats.getFinalZdolnosciMysliwskie()*1.23));
 		}
-		else if(rpg.getModifiers().hasSzostyZmysl()) {
+		if(rpg.getModifiers().hasActiveModifier(EpicModifierTypes.SZOSTY_ZMYSL)) {
 			stats.setFinalZrecznosc((int) (stats.getFinalZrecznosc()*1.2));
 			stats.setFinalZdolnosciMysliwskie((int) (stats.getFinalZdolnosciMysliwskie()*1.2));
 		}
-		
-		if(rpg.getModifiers().hasPrzyplywEnergii_m()) {
+
+		if(rpg.getModifiers().hasActiveModifier(EpicModifierTypes.PRZYPLYW_ENERGII_M)) {
 			stats.setFinalInteligencja((int) (stats.getFinalInteligencja()*1.27));
 			stats.setFinalMana((int) (stats.getFinalMana()*1.27));
 		}
-		else if(rpg.getModifiers().hasPrzyplywEnergii_h()) {
+		if(rpg.getModifiers().hasActiveModifier(EpicModifierTypes.PRZYPLYW_ENERGII_H)) {
 			stats.setFinalInteligencja((int) (stats.getFinalInteligencja()*1.23));
 			stats.setFinalMana((int) (stats.getFinalMana()*1.23));
 		}
-		else if(rpg.getModifiers().hasPrzyplywEnergii()) {
+		if(rpg.getModifiers().hasActiveModifier(EpicModifierTypes.PRZYPLYW_ENERGII)) {
 			stats.setFinalInteligencja((int) (stats.getFinalInteligencja()*1.2));
 			stats.setFinalMana((int) (stats.getFinalMana()*1.2));
 		}

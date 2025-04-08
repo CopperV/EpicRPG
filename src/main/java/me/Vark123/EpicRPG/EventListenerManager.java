@@ -48,10 +48,15 @@ import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.LodowaStrzalaEffectL
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.OgnistaSferaEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.OgnistaStrzalaEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.PelniaEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.PoswiecenieEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.ProwokacjaEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.RytualWzniesieniaEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.SkrytobojstwoEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.SwietaStrzalaEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.SzalBitewnyEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.TajemnyBlaskEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.TarczaCieniaEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.TransEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.WedrownyCienEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.WybraniecBeliaraEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.WyostrzoneZmyslyEffectListener;
@@ -270,6 +275,11 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new ProwokacjaEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new TajemnyBlaskEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new ZakletaStrzalaEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new PoswiecenieEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new RytualWzniesieniaEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new TransEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new SwietaStrzalaEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new SzalBitewnyEffectListener(), inst);
 
 		Bukkit.getPluginManager().registerEvents(new DollInfoEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new HpDisplayEffectListener(), inst);

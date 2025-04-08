@@ -12,6 +12,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -165,6 +166,23 @@ public final class DamageUtils {
 		
 		Bukkit.getPluginManager().callEvent(event);
 		if(!ManualDamage.tryDoDamage(damager, victim, event.getFinalDamage(), event))
+			return false;
+		
+		return true;
+	}
+	
+	public static boolean applyDirectDamageEffect(LivingEntity victim, double damage,
+			DamageType type, DamageCause cause) {
+		EntityDamageEvent event = new EntityDamageEvent(
+				victim,
+				cause,
+				DamageSource
+					.builder(type)
+					.build(),
+				damage);
+		
+		Bukkit.getPluginManager().callEvent(event);
+		if(!ManualDamage.tryDoDamage(victim, event.getFinalDamage(), event))
 			return false;
 		
 		return true;

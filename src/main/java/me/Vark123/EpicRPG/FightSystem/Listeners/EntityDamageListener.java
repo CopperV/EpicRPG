@@ -55,7 +55,7 @@ public class EntityDamageListener implements Listener {
 			return;
 		
 		DamageCalculatorResult damageInfo = DamageManager.get()
-				.getDefenseCalculator().calc(null, victim, e.getDamage());
+				.getDefenseCalculator().calc(null, victim, e.getDamage(), new DamageCalculatorResult(e.getDamage(), false));
 		
 		EpicDefenseEvent defenseEvent = new EpicDefenseEvent(
 				null, 

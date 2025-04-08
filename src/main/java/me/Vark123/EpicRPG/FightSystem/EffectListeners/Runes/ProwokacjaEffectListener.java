@@ -93,7 +93,6 @@ public class ProwokacjaEffectListener implements Listener {
 		
 		e.setCancelled(true);
 		
-		
 		MythicBukkit.inst().getMobManager().getActiveMob(lVictim.getUniqueId()).ifPresent(aMob -> {
 			if(aMob.hasThreatTable()) {
 				AbstractEntity aVictim = BukkitAdapter.adapt(lVictim);
@@ -101,6 +100,8 @@ public class ProwokacjaEffectListener implements Listener {
 
 				ThreatTable threatTable = aMob.getThreatTable();
 				threatTable.Taunt(BukkitAdapter.adapt(taunt));
+			} else {
+				aMob.setTarget(BukkitAdapter.adapt(target));
 			}
 		});
 	}

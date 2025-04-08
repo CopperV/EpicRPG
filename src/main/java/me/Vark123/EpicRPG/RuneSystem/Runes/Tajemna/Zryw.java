@@ -87,9 +87,11 @@ public class Zryw extends ACastableRune {
 						} else {
 							if(AI2 != null) {
 								AI2.stream().filter(s -> {
+									s = s.toLowerCase();
 									return s.contains("players") || s.contains("attacker");
 								}).findAny().ifPresent(unused -> {
 									AI.stream().filter(s -> {
+										s = s.toLowerCase();
 										if(s.contains("meleeattack") 
 												|| s.contains("arrowattack") 
 												|| s.contains("spiderattack")

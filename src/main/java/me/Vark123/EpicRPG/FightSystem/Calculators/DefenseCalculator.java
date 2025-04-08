@@ -1,18 +1,23 @@
 package me.Vark123.EpicRPG.FightSystem.Calculators;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.damage.DamageType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
+import io.lumine.mythic.api.adapters.AbstractEntity;
+import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.mobs.ActiveMob;
 import me.Vark123.EpicRPG.FightSystem.DamageUtils;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
+import me.Vark123.EpicRPG.Players.Components.RpgModifiers.EpicModifierTypes;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
+import me.Vark123.EpicRPG.RuneSystem.RuneEffectType;
+import me.Vark123.EpicRPG.Utils.Utils;
 
 public class DefenseCalculator implements IDamageCalculator {
 
@@ -60,9 +65,24 @@ public class DefenseCalculator implements IDamageCalculator {
 		Player p = (Player) victim;
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		RpgStats stats = rpg.getStats();
-		RpgModifiers modifiers = rpg.getModifiers();
 		
-		Bukkit.broadcastMessage("Sila Jednosci - Implementacja");
+		if(Utils.hasEntityEffect(p, RuneEffectType.SILA_JEDNOSCI_EFFECT) && !Utils.hasEntityBuff(p, EpicModifierTypes.SILA_JEDNOSCI)) {
+			
+			AbstractEntity ae = BukkitAdapter.adapt(p);
+			LivingEntity caster = (LivingEntity) ae.getMetadata(RuneEffectType.SILA_JEDNOSCI_EFFECT.name()).get();
+			if(Utils.hasEntityEffect(caster, RuneEffectType.SILA_JEDNOSCI_EFFECT)) {
+				baseDamage *= 0.6;
+				
+				victim.getWorld().playSound(victim.getLocation(), Sound.ITEM_SHIELD_BLOCK, 1, 1.2f);
+				caster.getWorld().playSound(caster.getLocation(), Sound.ITEM_SHIELD_BLOCK, 1, 0.8f);
+
+				victim.getWorld().spawnParticle(Particle.WAX_OFF, victim.getLocation().clone().add(0,1,0), 8, 0.4f, 0.8f, 0.4f, 0.1f);
+				caster.getWorld().spawnParticle(Particle.WAX_ON, caster.getLocation().clone().add(0,1,0), 8, 0.4f, 0.8f, 0.4f, 0.1f);
+				
+				DamageUtils.applyDirectDamageEffect(caster, baseDamage, DamageType.GENERIC, DamageCause.CUSTOM);
+			}
+			
+		}
 		
 		if(damager != null && damager instanceof Player
 				&& PlayerManager.getInstance().playerExists((Player) damager)) {
