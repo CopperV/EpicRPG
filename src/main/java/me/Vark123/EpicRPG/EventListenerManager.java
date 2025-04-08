@@ -41,6 +41,7 @@ import me.Vark123.EpicRPG.FightSystem.EffectListeners.Professions.HunterProfessi
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Professions.MageProfessionModifierListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Professions.WarriorProfessionModifierListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.AuraRozproszeniaEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.BlogoslawienstwoPrzedwiecznychEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.CienAssasynaEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.CiosWPlecyEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.InkantacjaEffectListener;
@@ -54,6 +55,7 @@ import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.RytualWzniesieniaEff
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.SkrytobojstwoEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.SwietaStrzalaEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.SzalBitewnyEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.SzalPrzedwiecznychEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.TajemnyBlaskEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.TarczaCieniaEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.TransEffectListener;
@@ -85,6 +87,8 @@ import me.Vark123.EpicRPG.FightSystem.Listeners.Death.EntityDeathRozprucieSkillL
 import me.Vark123.EpicRPG.FightSystem.Listeners.Death.EntityDeathVaultListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Dodge.RuneDodgeCalcListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Dodge.StatsDodgeCalcListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Randomize.RuneRandomizeCalcListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Randomize.StatsRandomizeCalcListener;
 import me.Vark123.EpicRPG.Gems.GemPlaceProtEvent;
 import me.Vark123.EpicRPG.HealthSystem.PlayerHealEvent;
 import me.Vark123.EpicRPG.HorseSystem.HorseDismountEvent;
@@ -258,6 +262,9 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new RuneDodgeCalcListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new StatsDodgeCalcListener(), inst);
 
+		Bukkit.getPluginManager().registerEvents(new StatsRandomizeCalcListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new RuneRandomizeCalcListener(), inst);
+
 		Bukkit.getPluginManager().registerEvents(new AuraRozproszeniaEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new OgnistaSferaEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new InkantacjaEffectListener(), inst);
@@ -280,6 +287,8 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new TransEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new SwietaStrzalaEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new SzalBitewnyEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new BlogoslawienstwoPrzedwiecznychEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new SzalPrzedwiecznychEffectListener(), inst);
 
 		Bukkit.getPluginManager().registerEvents(new DollInfoEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new HpDisplayEffectListener(), inst);

@@ -73,7 +73,7 @@ public final class DamageUtils {
 		EpicDamageRandomizeEvent event = new EpicDamageRandomizeEvent(rpgPlayer, mod);
 		Bukkit.getPluginManager().callEvent(event);
 		
-		mod = event.getModifier();
+		mod = Math.min(event.getModifier(), 0.6);
 		double min = 0.95 - mod;
 		double max = 1.05 + mod;
 		

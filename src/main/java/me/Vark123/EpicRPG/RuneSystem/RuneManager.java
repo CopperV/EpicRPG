@@ -24,6 +24,20 @@ import me.Vark123.EpicRPG.RuneSystem.Events.RuneCastCostCalcEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.RuneCastGlobalCdCalcEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.RuneCastRuneCdCalcEvent;
 import me.Vark123.EpicRPG.RuneSystem.Events.RuneUseEvent;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Chaos.BlogoslawienstwoPrzedwiecznych;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Chaos.BlogoslawienstwoPrzedwiecznych_H;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Chaos.BlogoslawienstwoPrzedwiecznych_M;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Chaos.MasoweZniszczenie;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Chaos.RozerwanieDuszy;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Chaos.Spetanie;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Chaos.SzalPrzedwiecznych;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Chaos.SzalPrzedwiecznych_H;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Chaos.SzalPrzedwiecznych_M;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Chaos.SzalPustki;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Chaos.SzeptNZotha;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Chaos.SzeptNZotha_H;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Chaos.SzeptNZotha_M;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Chaos.SzeptPrzedwiecznych;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.CienAssasyna;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.CiosWPlecy;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.CukierekAlboPsikus;
@@ -387,6 +401,11 @@ public final class RuneManager {
 					case "ZeslanieMroku":				return new ZeslanieMroku(rpgPlayer, rune);
 					case "ZeslanieMroku_H":				return new ZeslanieMroku(rpgPlayer, rune);
 					case "ZeslanieMroku_M":				return new ZeslanieMroku(rpgPlayer, rune);
+					case "RozerwanieDuszy":				return new RozerwanieDuszy(rpgPlayer, rune);
+					case "Spetanie":					return new Spetanie(rpgPlayer, rune);
+					case "Spetanie_H":					return new Spetanie(rpgPlayer, rune);
+					case "Spetanie_M":					return new Spetanie(rpgPlayer, rune);
+					case "MasoweZniszczenie":			return new MasoweZniszczenie(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_13:
@@ -466,6 +485,9 @@ public final class RuneManager {
 					case "OstatniBoj":					return new OstatniBoj(rpgPlayer, rune);
 					case "OstatniBoj_H":				return new OstatniBoj_H(rpgPlayer, rune);
 					case "OstatniBoj_M":				return new OstatniBoj_M(rpgPlayer, rune);
+					case "BlogoslawienstwoPrzedwiecznych":return new BlogoslawienstwoPrzedwiecznych(rpgPlayer, rune);
+					case "BlogoslawienstwoPrzedwiecznych_H":return new BlogoslawienstwoPrzedwiecznych_H(rpgPlayer, rune);
+					case "BlogoslawienstwoPrzedwiecznych_M":return new BlogoslawienstwoPrzedwiecznych_M(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_MALL:
@@ -480,6 +502,9 @@ public final class RuneManager {
 					case "WyostrzoneZmysly":			return new WyostrzoneZmysly(rpgPlayer, rune);
 					case "ZakletaStrzala":				return new ZakletaStrzala(rpgPlayer, rune);
 					case "SwietaStrzalaLcz":			return new SwietaStrzalaLcz(rpgPlayer, rune);
+					case "SzalPrzedwiecznych":			return new SzalPrzedwiecznych(rpgPlayer, rune);
+					case "SzalPrzedwiecznych_H":		return new SzalPrzedwiecznych_H(rpgPlayer, rune);
+					case "SzalPrzedwiecznych_M":		return new SzalPrzedwiecznych_M(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_MELLOHI:
@@ -528,6 +553,12 @@ public final class RuneManager {
 				switch(rune.getMythicType()) {
 					case "SferaCorristo":				return new SferaCorristo(rpgPlayer, rune);
 					case "TeleportacjaKrotkodystansowa":return new TeleportacjaKrotkodystansowa(rpgPlayer, rune);
+					case "SzeptNZotha":					return new SzeptNZotha(rpgPlayer, rune);
+					case "SzeptNZotha_H":				return new SzeptNZotha_H(rpgPlayer, rune);
+					case "SzeptNZotha_M":				return new SzeptNZotha_M(rpgPlayer, rune);
+					case "SzalPustki":					return new SzalPustki(rpgPlayer, rune);
+					case "SzalPustki_H":				return new SzalPustki(rpgPlayer, rune);
+					case "SzalPustki_M":				return new SzalPustki(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_STRAD:
@@ -554,6 +585,7 @@ public final class RuneManager {
 				switch(rune.getMythicType()) {
 					case "SzponBeliaraInt":				return new SzponBeliaraInt(rpgPlayer, rune);
 					case "SzponBeliaraMana":			return new SzponBeliaraMana(rpgPlayer, rune);
+					case "SzeptPrzedwiecznych":			return new SzeptPrzedwiecznych(rpgPlayer, rune);
 				}
 				break;
 		default:
