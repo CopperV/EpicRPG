@@ -2,7 +2,6 @@ package me.Vark123.EpicRPG.FightSystem.EffectListeners.Misc;
 
 import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -88,8 +87,6 @@ public class SlugaBeliaraEffectListener implements Listener {
 		ae.removeMetadata("SzponBeliaraEffect");
 		if(e.isCancelled())
 			return;
-		
-		Bukkit.broadcastMessage("Dodanie obslugi anulowania obrazen");
 		
 		Location current = e.getVictim().getLocation().clone();
 		current.getWorld().playSound(current, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 1.5f, 0.9f);

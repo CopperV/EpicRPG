@@ -60,7 +60,7 @@ public class CienAssasynaEffectListener implements Listener {
 			Collection<Entity> newTargets = new HashSet<>();
 			@Override
 			public void run() {
-				if(e.isCancelled())
+				if(isCancelled())
 					return;
 				newTargets.clear();
 				

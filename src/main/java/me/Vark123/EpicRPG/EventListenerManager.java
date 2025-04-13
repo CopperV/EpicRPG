@@ -44,12 +44,15 @@ import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.AuraRozproszeniaEffe
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.BlogoslawienstwoPrzedwiecznychEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.CienAssasynaEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.CiosWPlecyEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.EksplodujacaStrzalaEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.GruboskornoscEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.InkantacjaEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.LodowaStrzalaEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.OgnistaSferaEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.OgnistaStrzalaEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.PelniaEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.PoswiecenieEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.PrecyzyjnyStrzalEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.ProwokacjaEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.RytualWzniesieniaEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.SkrytobojstwoEffectListener;
@@ -58,12 +61,17 @@ import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.SzalBitewnyEffectLis
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.SzalPrzedwiecznychEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.TajemnyBlaskEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.TarczaCieniaEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.TotemObronnyEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.TransEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.TrujacaAuraEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.WedrownyCienEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.WybraniecBeliaraEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.WyostrzoneZmyslyEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.WyssanieEffectListener;
 import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.ZakletaStrzalaEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.ZatrutaStrzalaEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.ZewNaturyEffectListener;
+import me.Vark123.EpicRPG.FightSystem.EffectListeners.Runes.ZyciodajnaZiemiaEffectListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.DragonMeleeAttackListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.EntityDamageListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.EntityDeathListener;
@@ -119,6 +127,7 @@ import me.Vark123.EpicRPG.Players.Components.Compass.Listeners.PlayerCompassUpda
 import me.Vark123.EpicRPG.Players.SkillControllers.HungerSkillEvent;
 import me.Vark123.EpicRPG.RubySystem.RubyPlaceProtEvent;
 import me.Vark123.EpicRPG.RubySystem.RubyUseEvent;
+import me.Vark123.EpicRPG.RuneSystem.Listeners.RuneCalcCostZrodloNaturyListener;
 import me.Vark123.EpicRPG.RuneSystem.Listeners.RuneCooldownManaReduceListener;
 import me.Vark123.EpicRPG.RuneSystem.Listeners.RuneGlobalCooldownInteligencjaReduceListener;
 import me.Vark123.EpicRPG.RuneSystem.Listeners.RuneInteractListener;
@@ -289,6 +298,14 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new SzalBitewnyEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new BlogoslawienstwoPrzedwiecznychEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new SzalPrzedwiecznychEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new ZyciodajnaZiemiaEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new TrujacaAuraEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new ZatrutaStrzalaEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new GruboskornoscEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new TotemObronnyEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new EksplodujacaStrzalaEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new ZewNaturyEffectListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new PrecyzyjnyStrzalEffectListener(), inst);
 
 		Bukkit.getPluginManager().registerEvents(new DollInfoEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new HpDisplayEffectListener(), inst);
@@ -298,6 +315,7 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new RuneStunEffectListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new RuneCooldownManaReduceListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new RuneGlobalCooldownInteligencjaReduceListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new RuneCalcCostZrodloNaturyListener(), inst);
 
 		Bukkit.getPluginManager().registerEvents(new ConsumableUseListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new LoadConsumablesOnServerLoadListener(), inst);

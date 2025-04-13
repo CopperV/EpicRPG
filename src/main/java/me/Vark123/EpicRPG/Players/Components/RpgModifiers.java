@@ -335,7 +335,8 @@ public class RpgModifiers implements Serializable {
 		POTEZNA_RUNA_DOMISIA_H,
 		POTEZNA_RUNA_DOMISIA_M,
 		SWIATLO,
-		AURA_CZYSTOSCI
+		AURA_CZYSTOSCI,
+		SEKRET_WIELKANOCY
 	}
 
 	public void createWywarSilaTask(int seconds, int level) {
