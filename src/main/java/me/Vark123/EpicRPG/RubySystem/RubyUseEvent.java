@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
-import org.bukkit.EntityEffect;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
@@ -17,8 +16,6 @@ import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -28,6 +25,7 @@ import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicRPG.HealthSystem.RpgPlayerHealEvent;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
+import me.Vark123.EpicRPG.Utils.Utils;
 
 public class RubyUseEvent implements Listener {
 
@@ -132,8 +130,7 @@ public class RubyUseEvent implements Listener {
 				}
 				
 				if(storeEvent.getUse() > 0) {
-					EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(p, p, DamageCause.CONTACT, storeEvent.getUse());
-					Bukkit.getPluginManager().callEvent(event);
+					Utils.takeEntityHp(p, storeEvent.getUse());
 				}
 
 				p.setHealth(p.getHealth()-storeEvent.getUse());

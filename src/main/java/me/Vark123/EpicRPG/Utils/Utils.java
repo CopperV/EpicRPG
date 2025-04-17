@@ -12,16 +12,19 @@ import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.adapters.AbstractLocation;
@@ -30,6 +33,7 @@ import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.mobs.ActiveMob;
 import me.Vark123.EpicComponentAPI.EpicComponent;
+import me.Vark123.EpicRPG.FightSystem.DamageUtils;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers.EpicModifierTypes;
@@ -40,6 +44,10 @@ public class Utils {
 	private static final String[] currencySuffixes = {"", "K", "M", "B", "T"};
 	
 	private Utils() {}
+	
+	public static void takeEntityHp(LivingEntity entity, double amount) {
+		DamageUtils.applyDirectDamageEffect(entity, amount, DamageType.GENERIC, DamageCause.CONTACT);
+	}
 	
 	public static void resetSetInfo(ItemStack it) {
 		if(it == null || it.getType().equals(Material.AIR))
@@ -176,6 +184,8 @@ public class Utils {
 	}
 	
 	public static boolean isRune(ItemStack item) {
+		if(item == null || item.getType().equals(Material.AIR))
+			return false;
 		if(!MythicBukkit.inst().getItemManager().isMythicItem(item))
 			return false;
 		if(item.getType().name().contains("MUSIC_DISC")) 
@@ -448,6 +458,11 @@ public class Utils {
 	
 	public static void drawLine(Particle particle, Location start, Location end, double step, 
 			int amount, float offsetX, float offsetY, float offsetZ, float speed) {
+		drawLine(particle, start, end, step, amount, offsetX, offsetY, offsetZ, speed, null);
+	}
+	
+	public static <T> void drawLine(Particle particle, Location start, Location end, double step, 
+			int amount, float offsetX, float offsetY, float offsetZ, float speed, @Nullable T data) {
 		Vector dir = new Vector(
 				end.getX() - start.getX(),
 				end.getY() - start.getY(),
@@ -455,7 +470,7 @@ public class Utils {
 		).normalize().multiply(step);
 		Location loc = start.clone();
 		while(start.distanceSquared(loc) <= start.distanceSquared(end)) {
-			loc.getWorld().spawnParticle(particle, loc, amount, offsetX, offsetY, offsetZ, speed);
+			loc.getWorld().spawnParticle(particle, loc, amount, offsetX, offsetY, offsetZ, speed, data);
 			loc.add(dir);
 		}
 	}

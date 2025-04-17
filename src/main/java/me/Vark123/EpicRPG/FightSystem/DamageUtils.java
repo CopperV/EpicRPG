@@ -22,6 +22,7 @@ import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.FightSystem.Events.EpicCritCalculateEvent;
 import me.Vark123.EpicRPG.FightSystem.Events.EpicDamageRandomizeEvent;
 import me.Vark123.EpicRPG.FightSystem.Events.EpicDodgeCalculateEvent;
+import me.Vark123.EpicRPG.FightSystem.Events.EpicMegaCritCalculateEvent;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers.EpicModifierTypes;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
@@ -40,6 +41,18 @@ public final class DamageUtils {
 		
 		double max = victim != null && victim instanceof Player ?
 				5 : 1;
+		
+		double chance = event.getChance();
+		double los = rand.nextDouble(max);
+		
+		return los < chance;
+	}
+	
+	public static boolean checkMegaCrit(RpgPlayer rpgPlayer, Entity victim) {
+		EpicMegaCritCalculateEvent event = new EpicMegaCritCalculateEvent(rpgPlayer, victim);
+		Bukkit.getPluginManager().callEvent(event);
+		
+		double max = 1;
 		
 		double chance = event.getChance();
 		double los = rand.nextDouble(max);

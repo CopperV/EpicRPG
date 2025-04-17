@@ -10,9 +10,6 @@ import org.bukkit.event.Listener;
 import me.Vark123.EpicRPG.OldFightSystem.EpicDamageType;
 import me.Vark123.EpicRPG.OldFightSystem.Events.EpicAttackEvent;
 import me.Vark123.EpicRPG.OldRuneSystem.ItemStackRune;
-import me.Vark123.EpicRPG.OldRuneSystem.Runes.BlogoslawienstwoPrzedwiecznych;
-import me.Vark123.EpicRPG.OldRuneSystem.Runes.BlogoslawienstwoPrzedwiecznych_H;
-import me.Vark123.EpicRPG.OldRuneSystem.Runes.BlogoslawienstwoPrzedwiecznych_M;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
@@ -105,12 +102,6 @@ public class RuneMagicModifierListener implements Listener {
 		if(modifiers.hasPaktKrwi_m() && !modifiers.hasPaktKrwiMeasure_m() 
 				&& ir.getMagicType().equalsIgnoreCase("krew"))
 			modifier += 1;
-		if(BlogoslawienstwoPrzedwiecznych.getEffected().containsKey(p))
-			modifier += BlogoslawienstwoPrzedwiecznych.getEffected().get(p)*0.03;
-		if(BlogoslawienstwoPrzedwiecznych_H.getEffected().containsKey(p))
-			modifier += BlogoslawienstwoPrzedwiecznych_H.getEffected().get(p)*0.04;
-		if(BlogoslawienstwoPrzedwiecznych_M.getEffected().containsKey(p))
-			modifier += BlogoslawienstwoPrzedwiecznych_M.getEffected().get(p)*0.05;
 		if(modifiers.hasTajemnyBlask_m() && rpg.getInfo().getProffesion().equals("§2Mysliwy")) {
 			modifier += rand.nextDouble(0.5) + 0.25;
 		} else if(modifiers.hasTajemnyBlask() && rpg.getInfo().getProffesion().equals("§2Mysliwy")) {

@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -16,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 
 import lombok.Getter;
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers.EpicModifierTypes;
@@ -39,6 +41,30 @@ import me.Vark123.EpicRPG.RuneSystem.Runes.Chaos.SzeptNZotha;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Chaos.SzeptNZotha_H;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Chaos.SzeptNZotha_M;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Chaos.SzeptPrzedwiecznych;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.BarbarzynskiSzal;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.Gniew;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.GniewPrzodkow;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.KlatwaKrwi;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.KrewPrzodkow;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.KrwawaFala;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.KrwawaStrzala;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.KrwawyBicz;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.KrwawyDeszcz;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.KrwawyPocisk;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.Mord;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.PlugawaKrew;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.Rozprucie;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.RytualKrwi;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.SpiralaKrwi;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.Wampiryzm;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.Wampiryzm_H;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.Wampiryzm_M;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.WiezyKrwi;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.ZadzaKrwi;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.ZatrutaKrew;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.ZewSmierci;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.ZewSmierci_H;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.ZewSmierci_M;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.CienAssasyna;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.CiosWPlecy;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.CukierekAlboPsikus;
@@ -298,6 +324,35 @@ public final class RuneManager {
 		return true;
 	}
 	
+	public boolean isRegenTimePassed(Player p, ItemStack itRune) {
+		if(itRune == null || itRune.getType().equals(Material.AIR))
+			return false;
+		
+		if(hasGlobalCd(p))
+			return false;
+		
+		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
+		EpicRune rune = new EpicRune(itRune);
+		if(rune.isClassRequired()) {
+			String proffesion = ChatColor.stripColor(rpg.getInfo().getProffesion());
+			if(!proffesion.equalsIgnoreCase(rune.getKlasa())) {
+				p.sendMessage(Main.getInstance().getPrefix()+" §cTylko "+rune.getKlasa()+" §cmoze uzyc tej runy!");
+				return false;
+			}
+		}
+
+		if(rpg.getStats().getKrag() < rune.getKrag()) {
+			p.sendMessage(Main.getInstance().getPrefix()+" §cMusisz posiadac §7§o"+rune.getKrag()+" §ckrag magii, by uzyc "+rune.getName());
+			return false;
+		}
+		
+		if(!isRegenTimePassed(p, rune))
+			return false;
+		
+		p.sendMessage(Main.getInstance().getPrefix()+" §aRuna §r§f"+rune.getName()+" §ajest gotowa do uzycia");
+		return true;
+	}
+	
 	public boolean isRegenTimePassed(Player p, EpicRune rune) {
 		UUID uid = p.getUniqueId();
 		String mythicType = rune.getMythicType();
@@ -368,7 +423,7 @@ public final class RuneManager {
 		}
 		
 		double presentHealth = p.getHealth();
-		if(cost > (presentHealth + 1))
+		if(cost < (presentHealth + 1))
 			return true;
 		
 		p.sendMessage("§7[§6EpicRPG§7] §cNie masz wystarczajaco zycia by uzyc tej runy!");
@@ -377,9 +432,7 @@ public final class RuneManager {
 	}
 	
 	public void spendHp(RpgPlayer rpg, int cost) {
-		//TODO
-		//Zadawanie sobie obrazen
-		rpg.getPlayer().sendMessage("Do implementacji - pobieranie zycia");
+		Utils.takeEntityHp(rpg.getPlayer(), cost);
 	}
 	
 	public boolean hasEnoughMana(RpgPlayer rpg, int cost) {
@@ -397,7 +450,7 @@ public final class RuneManager {
 			
 			cost = (int) Math.ceil(cost*0.25);
 			double presentHealth = p.getHealth();
-			if(cost > (presentHealth + 1))
+			if(cost < (presentHealth + 1))
 				return true;
 			
 			p.sendMessage("§7[§6EpicRPG§7] §cNie masz ani many, ani zycia by uzyc tej runy!");
@@ -555,6 +608,11 @@ public final class RuneManager {
 					case "BlogoslawienstwoPrzedwiecznych_H":return new BlogoslawienstwoPrzedwiecznych_H(rpgPlayer, rune);
 					case "BlogoslawienstwoPrzedwiecznych_M":return new BlogoslawienstwoPrzedwiecznych_M(rpgPlayer, rune);
 					case "Gruboskornosc":				return new Gruboskornosc(rpgPlayer, rune);
+					case "BarbarzynskiSzal":			return new BarbarzynskiSzal(rpgPlayer, rune);
+					case "Wampiryzm":					return new Wampiryzm(rpgPlayer, rune, Arrays.asList(RuneLockerTypes.WAMPIRYZM));
+					case "Wampiryzm_H":					return new Wampiryzm_H(rpgPlayer, rune, Arrays.asList(RuneLockerTypes.WAMPIRYZM));
+					case "Wampiryzm_M":					return new Wampiryzm_M(rpgPlayer, rune, Arrays.asList(RuneLockerTypes.WAMPIRYZM));
+					case "ZadzaKrwi":					return new ZadzaKrwi(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_MALL:
@@ -586,6 +644,8 @@ public final class RuneManager {
 					case "SzostyZmysl":					return new SzostyZmysl(rpgPlayer, rune);
 					case "SzostyZmysl_H":				return new SzostyZmysl_H(rpgPlayer, rune);
 					case "SzostyZmysl_M":				return new SzostyZmysl_M(rpgPlayer, rune);
+					case "Mord":						return new Mord(rpgPlayer, rune);
+					case "KrwawaStrzala":				return new KrwawaStrzala(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_MELLOHI:
@@ -617,7 +677,15 @@ public final class RuneManager {
 				break;
 			case MUSIC_DISC_PIGSTEP:
 				switch(rune.getMythicType()) {
-				
+					case "WiezyKrwi":					return new WiezyKrwi(rpgPlayer, rune);
+					case "Gniew":						return new Gniew(rpgPlayer, rune);
+					case "KrewPrzodkow":				return new KrewPrzodkow(rpgPlayer, rune);
+					case "PlugawaKrew":					return new PlugawaKrew(rpgPlayer, rune);
+					case "KlatwaKrwi":					return new KlatwaKrwi(rpgPlayer, rune);
+					case "RytualKrwi":					return new RytualKrwi(rpgPlayer, rune);
+					case "ZewSmierci":					return new ZewSmierci(rpgPlayer, rune);
+					case "ZewSmierci_H":				return new ZewSmierci_H(rpgPlayer, rune);
+					case "ZewSmierci_M":				return new ZewSmierci_M(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_PRECIPICE:
@@ -682,6 +750,18 @@ public final class RuneManager {
 					case "SzponBeliaraInt":				return new SzponBeliaraInt(rpgPlayer, rune);
 					case "SzponBeliaraMana":			return new SzponBeliaraMana(rpgPlayer, rune);
 					case "SzeptPrzedwiecznych":			return new SzeptPrzedwiecznych(rpgPlayer, rune);
+					case "KrwawyPocisk":				return new KrwawyPocisk(rpgPlayer, rune);
+					case "ZatrutaKrew":					return new ZatrutaKrew(rpgPlayer, rune);
+					case "Rozprucie":					return new Rozprucie(rpgPlayer, rune);
+					case "GniewPrzodkow":				return new GniewPrzodkow(rpgPlayer, rune);
+					case "GniewPrzodkow_H":				return new GniewPrzodkow(rpgPlayer, rune);
+					case "GniewPrzodkow_M":				return new GniewPrzodkow(rpgPlayer, rune);
+					case "KrwawyDeszcz":				return new KrwawyDeszcz(rpgPlayer, rune);
+					case "SpiralaKrwi":					return new SpiralaKrwi(rpgPlayer, rune);
+					case "KrwawyBicz":					return new KrwawyBicz(rpgPlayer, rune);
+					case "KrwawaFala":					return new KrwawaFala(rpgPlayer, rune);
+					case "KrwawaFala_H":				return new KrwawaFala(rpgPlayer, rune);
+					case "KrwawaFala_M":				return new KrwawaFala(rpgPlayer, rune);
 				}
 				break;
 		default:

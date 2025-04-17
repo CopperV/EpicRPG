@@ -34,7 +34,7 @@ public class MalaBlyskawica extends ACastableRune {
 		hitCondition = rune.getPvp() == 1 ? 
 				new PvPRuneHitCondition() : new NonPvPRuneHitCondition();
 		boundingBox = new BoundingBox(
-				-1.5, -0.2, -1.5, 
+				-1.5, -0.5, -1.5, 
 				1.5, 1.5, 1.5);
 	}
 

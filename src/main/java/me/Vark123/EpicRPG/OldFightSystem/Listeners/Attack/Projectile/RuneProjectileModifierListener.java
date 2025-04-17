@@ -13,9 +13,6 @@ import org.bukkit.inventory.ItemStack;
 
 import me.Vark123.EpicRPG.OldFightSystem.EpicDamageType;
 import me.Vark123.EpicRPG.OldFightSystem.Events.EpicAttackEvent;
-import me.Vark123.EpicRPG.OldRuneSystem.Runes.BlogoslawienstwoPrzedwiecznych;
-import me.Vark123.EpicRPG.OldRuneSystem.Runes.BlogoslawienstwoPrzedwiecznych_H;
-import me.Vark123.EpicRPG.OldRuneSystem.Runes.BlogoslawienstwoPrzedwiecznych_M;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
@@ -88,12 +85,6 @@ public class RuneProjectileModifierListener implements Listener {
 			modifier += 0.44;
 		if(modifiers.hasSzalPrzedwiecznych_m())
 			modifier += 0.6;
-		if(BlogoslawienstwoPrzedwiecznych.getEffected().containsKey(p))
-			modifier += BlogoslawienstwoPrzedwiecznych.getEffected().get(p)*0.03;
-		if(BlogoslawienstwoPrzedwiecznych_H.getEffected().containsKey(p))
-			modifier += BlogoslawienstwoPrzedwiecznych_H.getEffected().get(p)*0.04;
-		if(BlogoslawienstwoPrzedwiecznych_M.getEffected().containsKey(p))
-			modifier += BlogoslawienstwoPrzedwiecznych_M.getEffected().get(p)*0.05;
 		if(modifiers.hasTajemnyBlask_m() && rpg.getInfo().getProffesion().equals("§2Mysliwy")) {
 			modifier += rand.nextDouble(0.5) + 0.25;
 		} else if(modifiers.hasTajemnyBlask() && rpg.getInfo().getProffesion().equals("§2Mysliwy")) {

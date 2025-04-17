@@ -51,7 +51,8 @@ public class EntityDamageListener implements Listener {
 		DamageCause cause = e.getCause();
 		if(cause.equals(DamageCause.FALL)
 				|| cause.equals(DamageCause.LAVA)
-				|| cause.equals(DamageCause.VOID))
+				|| cause.equals(DamageCause.VOID)
+				|| cause.equals(DamageCause.CONTACT))
 			return;
 		
 		DamageCalculatorResult damageInfo = DamageManager.get()

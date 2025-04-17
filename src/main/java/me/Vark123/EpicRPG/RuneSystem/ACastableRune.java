@@ -49,7 +49,8 @@ public abstract class ACastableRune {
 	public static enum RuneLockerTypes {
 		BUFF ("§cUzywasz obecnie innej runy modyfikujacej obrazenia"),
 		PROWOKACJA ("§cEfekt prowokacji jest jeszcze aktywny"),
-		EKSPLODUJACA_STRZALA ("§cObecnie posiadasz efekt innej eksplodujacej strzaly");
+		EKSPLODUJACA_STRZALA ("§cObecnie posiadasz efekt innej eksplodujacej strzaly"),
+		WAMPIRYZM ("§cObecnie posiadasz efekt innego wampiryzmu");
 		
 		private String message;
 		private RuneLockerTypes(String message) {
