@@ -114,7 +114,6 @@ public class KosturMenuEvents {
 			ItemMeta im = kostur.getItemMeta();
 			List<String> lore = im.getLore();
 			List<ItemStack> toReturn = new LinkedList<>();
-			EpicComponent comp;
 			
 			Inventory inv = e.getView().getTopInventory();
 			Player p = (Player) e.getPlayer();
@@ -122,14 +121,7 @@ public class KosturMenuEvents {
 			String[] strSlots = KosturMenuManager.getInstance().getRuneSlots();
 			for(int i = 0; i < strSlots.length; ++i) {
 				ItemStack rune = inv.getItem(10+2*i);
-				if(rune == null 
-						|| !rune.getType().toString().contains("DISC")) {
-					kosturNBT.setString(strSlots[i], "-");
-					toReturn.add(rune);
-					continue;
-				}
-				
-				if(!Utils.isMythicMobItem(rune)) {
+				if(!Utils.isRune(rune)) {
 					kosturNBT.setString(strSlots[i], "-");
 					toReturn.add(rune);
 					continue;

@@ -44,7 +44,7 @@ public class TrupiJek extends ACastableRune {
 			return;
 		
 		int mana = (int) Math.min(Math.min(stats.getFinalMana() * 0.2, stats.getPresentMana()), 400);
-		double damage = mana * 40;
+		double damage = mana * 30;
 		stats.removePresentManaSmart(mana);
 		
 		Location startLoc = player.getLocation().clone().add(0, 1.3, 0);

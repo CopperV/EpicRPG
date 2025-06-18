@@ -112,6 +112,8 @@ import me.Vark123.EpicRPG.FightSystem.Listeners.Death.EntityDeathRozprucieSkillL
 import me.Vark123.EpicRPG.FightSystem.Listeners.Death.EntityDeathVaultListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Dodge.RuneDodgeCalcListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Dodge.StatsDodgeCalcListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Piercing.ProfPierceCalcListener;
+import me.Vark123.EpicRPG.FightSystem.Listeners.Piercing.StatsPierceCalcListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Randomize.RuneRandomizeCalcListener;
 import me.Vark123.EpicRPG.FightSystem.Listeners.Randomize.StatsRandomizeCalcListener;
 import me.Vark123.EpicRPG.Gems.GemPlaceProtEvent;
@@ -287,6 +289,9 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(new PotionCritCalcListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new ProfCritCalcListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new StatsCritCalcListener(), inst);
+
+		Bukkit.getPluginManager().registerEvents(new StatsPierceCalcListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new ProfPierceCalcListener(), inst);
 		
 		Bukkit.getPluginManager().registerEvents(new RuneDodgeCalcListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new StatsDodgeCalcListener(), inst);

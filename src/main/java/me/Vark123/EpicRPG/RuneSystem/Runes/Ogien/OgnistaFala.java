@@ -26,7 +26,7 @@ public class OgnistaFala extends ACastableRune {
 		hitCondition = rune.getPvp() == 1 ? 
 				new PvPRuneHitCondition() : new NonPvPRuneHitCondition();
 		
-		hitEffect = new DamageBurnEffect(10, rune.getDamage() * 0.1, this);
+		hitEffect = new DamageBurnEffect(10, rune.getDamage() * 0.12, this);
 	}
 
 	@Override

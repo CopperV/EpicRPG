@@ -20,7 +20,7 @@ import me.Vark123.EpicRPG.Players.RpgPlayer;
 @Getter
 public class DrinkConsumable extends AConsumable {
 	
-	protected static final int DRINK_DURATION = 20*1;
+	protected static final int DRINK_DURATION = (int) (20*1);
 	protected static final PotionEffect DRINK_EFFECT = new PotionEffect(PotionEffectType.SLOWNESS, DRINK_DURATION, 1);
 	
 	private IConsumableEffect consumableEffect;
@@ -43,6 +43,8 @@ public class DrinkConsumable extends AConsumable {
 		Player p = rpg.getPlayer();
 		String world = p.getWorld().getName();
 		int step = 4;
+		
+		p.addPotionEffect(DRINK_EFFECT);
 		
 		new BukkitRunnable() {
 			int timer = 0;

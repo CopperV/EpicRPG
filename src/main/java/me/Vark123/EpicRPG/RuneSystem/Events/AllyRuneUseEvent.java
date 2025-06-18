@@ -9,6 +9,7 @@ import org.bukkit.event.HandlerList;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import me.Vark123.EpicRPG.RuneSystem.ACastableRune;
 import me.Vark123.EpicRPG.RuneSystem.EpicRune;
 
 @Getter
@@ -19,6 +20,7 @@ public class AllyRuneUseEvent extends Event {
 	
 	private Player caster;
 	private EpicRune rune;
+	private ACastableRune castableRune;
 	private Collection<LivingEntity> affectedEntities;
 	
 	@Override

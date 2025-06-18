@@ -23,6 +23,7 @@ import me.Vark123.EpicRPG.FightSystem.Events.EpicCritCalculateEvent;
 import me.Vark123.EpicRPG.FightSystem.Events.EpicDamageRandomizeEvent;
 import me.Vark123.EpicRPG.FightSystem.Events.EpicDodgeCalculateEvent;
 import me.Vark123.EpicRPG.FightSystem.Events.EpicMegaCritCalculateEvent;
+import me.Vark123.EpicRPG.FightSystem.Events.EpicPierceCalculateEvent;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers.EpicModifierTypes;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
@@ -36,7 +37,7 @@ public final class DamageUtils {
 	private DamageUtils() { }
 	
 	public static boolean checkCrit(RpgPlayer rpgPlayer, Entity victim) {
-		EpicCritCalculateEvent event = new EpicCritCalculateEvent(rpgPlayer, victim);
+		EpicCritCalculateEvent event = new EpicCritCalculateEvent(rpgPlayer);
 		Bukkit.getPluginManager().callEvent(event);
 		
 		double max = victim != null && victim instanceof Player ?
@@ -49,7 +50,7 @@ public final class DamageUtils {
 	}
 	
 	public static boolean checkMegaCrit(RpgPlayer rpgPlayer, Entity victim) {
-		EpicMegaCritCalculateEvent event = new EpicMegaCritCalculateEvent(rpgPlayer, victim);
+		EpicMegaCritCalculateEvent event = new EpicMegaCritCalculateEvent(rpgPlayer);
 		Bukkit.getPluginManager().callEvent(event);
 		
 		double max = 1;
@@ -105,13 +106,12 @@ public final class DamageUtils {
 	}
 	
 	public static boolean checkArmorPierce(RpgPlayer damager, LivingEntity victim, double armor) {
-		double zr = damager.getStats().getFinalZrecznosc();
+		EpicPierceCalculateEvent event = new EpicPierceCalculateEvent(damager);
+		Bukkit.getPluginManager().callEvent(event);
+		
 		double maxChance = 0.6;
-		double maxZr = 1500;
 		
-		zr = Utils.limitValue(0, maxZr, zr);
-		
-		double chance = Utils.scaleValue(0, maxZr, 0, maxChance, zr);
+		double chance = Utils.limitValue(0, maxChance, event.getChance());
 		double random = rand.nextDouble();
 		return random < chance;
 	}

@@ -8,7 +8,7 @@ import lombok.Setter;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 
 @Getter
-public class EpicMegaCritCalculateEvent extends Event {
+public class EpicPierceCalculateEvent extends Event {
 	
 	private static final HandlerList handlers = new HandlerList();
 
@@ -16,7 +16,7 @@ public class EpicMegaCritCalculateEvent extends Event {
 	@Setter
 	private double chance = 0;
 
-	public EpicMegaCritCalculateEvent(RpgPlayer rpgPlayer) {
+	public EpicPierceCalculateEvent(RpgPlayer rpgPlayer) {
 		super();
 		this.rpgPlayer = rpgPlayer;
 	}

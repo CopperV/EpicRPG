@@ -65,7 +65,7 @@ public class SzponBeliaraMana extends ACastableRune {
 		MultipleProjectileRuneTemplate.castProjectile(
 				this, 
 				startLoc, 
-				startLoc.getDirection().normalize(),
+				direction,
 				velocity, 
 				1,
 				1,
@@ -93,7 +93,7 @@ public class SzponBeliaraMana extends ACastableRune {
 					}
 				}, 
 				loc -> {
-					Vector vec = startLoc.getDirection().normalize().multiply(-1);
+					Vector vec = direction.normalize().multiply(-1);
 					Location startLoc2 = loc.clone().add(vec.clone().multiply(velocity));
 					double distance = startLoc2.distance(startLoc);
 					

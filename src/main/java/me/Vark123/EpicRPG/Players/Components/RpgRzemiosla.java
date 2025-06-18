@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -76,13 +75,6 @@ public class RpgRzemiosla implements Serializable, ChatPrintable {
 		this.kowalstwo = false;
 		this.luczarstwo = false;
 		this.jubilerstwo = false;
-		
-		String name = rpg.getPlayer().getName();
-		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "lp user "+name+" permission unset Skill.Platnerstwo epicrpg");
-		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "lp user "+name+" permission unset Skill.Kowalstwo epicrpg");
-		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "lp user "+name+" permission unset Skill.Luczarstwo epicrpg");
-		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "lp user "+name+" permission unset Skill.Alchemia epicrpg");
-		Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "lp user "+name+" permission unset Skill.Jubilerstwo epicrpg");
 	}
 
 	@Override

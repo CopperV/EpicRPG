@@ -32,16 +32,20 @@ public class WeaknessMeleeAttackListener implements Listener {
 		
 		Location eyeLoc = player.getEyeLocation();
 		RayTraceResult result = player.getWorld()
-				.rayTraceEntities(eyeLoc, eyeLoc.getDirection().normalize(), 5);
+				.rayTraceEntities(eyeLoc, eyeLoc.getDirection().normalize(), 5, en -> !en.equals(player));
 		if(result == null || result.getHitEntity() == null)
 			return;
 		
 		Entity entity = result.getHitEntity();
-		if(!hitCondition.check(player, (LivingEntity) entity))
+		LivingEntity le = (LivingEntity) entity;
+		if(!hitCondition.check(player, le))
 			return;
 		
-		if(DamageUtils.applyDirectDamageEffect(player, (LivingEntity) entity, 1, DamageType.PLAYER_ATTACK, DamageCause.ENTITY_ATTACK)) {
-			Utils.setEntityNoDamageTicks(player, (LivingEntity) entity);
+		if(Utils.hasNoDamageTicks(player, player))
+			return;
+		
+		if(DamageUtils.applyDirectDamageEffect(player, le, 1, DamageType.PLAYER_ATTACK, DamageCause.ENTITY_ATTACK)) {
+			Utils.setEntityNoDamageTicks(player, le);
 		}
 	}
 

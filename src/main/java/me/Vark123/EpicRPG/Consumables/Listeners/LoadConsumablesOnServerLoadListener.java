@@ -15,6 +15,7 @@ import me.Vark123.EpicRPG.Consumables.Impl.EffectPotionConsumable;
 import me.Vark123.EpicRPG.Consumables.Impl.HpPotionConsumable;
 import me.Vark123.EpicRPG.Consumables.Impl.ManaPotionConsumable;
 import me.Vark123.EpicRPG.Consumables.Impl.TimingHpPotionConsumable;
+import me.Vark123.EpicRPG.Consumables.Impl.TimingManaPotionConsumable;
 import me.Vark123.EpicRPG.Consumables.Impl.TimingWitcherPotionConsumable;
 import me.Vark123.EpicRPG.Consumables.Impl.WitcherPotionConsumable;
 import me.Vark123.EpicRPG.Consumables.Impl.WywarPotionConsumable;
@@ -56,12 +57,12 @@ public class LoadConsumablesOnServerLoadListener implements Listener {
 		manager.registerConsumable("T_Zycie5", new TimingHpPotionConsumable(30, 30));
 		manager.registerConsumable("T_Zycie6", new TimingHpPotionConsumable(40, 40));
 
-		manager.registerConsumable("T_Mana1", new TimingHpPotionConsumable(2, 20));
-		manager.registerConsumable("T_Mana2", new TimingHpPotionConsumable(3, 25));
-		manager.registerConsumable("T_Mana3", new TimingHpPotionConsumable(5, 30));
-		manager.registerConsumable("T_Mana4", new TimingHpPotionConsumable(10, 35));
-		manager.registerConsumable("T_Mana5", new TimingHpPotionConsumable(15, 45));
-		manager.registerConsumable("T_Mana6", new TimingHpPotionConsumable(25, 50));
+		manager.registerConsumable("T_Mana1", new TimingManaPotionConsumable(2, 20));
+		manager.registerConsumable("T_Mana2", new TimingManaPotionConsumable(3, 25));
+		manager.registerConsumable("T_Mana3", new TimingManaPotionConsumable(5, 30));
+		manager.registerConsumable("T_Mana4", new TimingManaPotionConsumable(10, 35));
+		manager.registerConsumable("T_Mana5", new TimingManaPotionConsumable(15, 45));
+		manager.registerConsumable("T_Mana6", new TimingManaPotionConsumable(25, 50));
 
 		manager.registerConsumable("T_Wiedzmin1", new TimingWitcherPotionConsumable(7, 4, 15));
 		manager.registerConsumable("T_Wiedzmin2", new TimingWitcherPotionConsumable(9, 5, 20));

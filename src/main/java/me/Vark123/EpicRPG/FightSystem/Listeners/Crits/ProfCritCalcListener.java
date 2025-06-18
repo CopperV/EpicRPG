@@ -15,10 +15,10 @@ public class ProfCritCalcListener implements Listener {
 	public void onCalc(EpicCritCalculateEvent e) {
 		RpgPlayer rpg = e.getRpgPlayer();
 		RpgPlayerInfo info = rpg.getInfo();
-		if(!info.getShortProf().toLowerCase().contains("mys"))
+		if(!info.getShortProf().toLowerCase().contains("mag"))
 			return;
 		
-		double walka = 50;
+		double walka = 25;
 		double maxWalka = Config.get().getMaxWalkaCrit();
 		
 		double chance = Utils.scaleValue(0, maxWalka, 0, 1, walka);

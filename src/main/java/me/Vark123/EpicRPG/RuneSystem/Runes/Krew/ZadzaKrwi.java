@@ -65,7 +65,7 @@ public class ZadzaKrwi extends ACastableRune {
 					return hitCondition.check(player, le);
 				}).stream().map(entity -> (LivingEntity) entity).collect(Collectors.toSet());
 
-		AllyRuneUseEvent event = new AllyRuneUseEvent(player, rune, new HashSet<>(affected));
+		AllyRuneUseEvent event = new AllyRuneUseEvent(player, rune, this, new HashSet<>(affected));
 		Bukkit.getPluginManager().callEvent(event);
 		affected = event.getAffectedEntities();
 

@@ -135,6 +135,10 @@ public class PlayerPlaceholders extends PlaceholderExpansion {
 				double percent = (double) kryt / 2500. * 100.;
 				return String.format("%.1f",percent);
 			}
+			case "summon_points":
+				return stats.getFinalSummonPoints()+"";
+			case "current_summon_points":
+				return stats.getCurrentSummonPoints()+"";
 			case "pn":
 				return info.getPn()+"";
 			case "exp_percent":

@@ -28,9 +28,9 @@ public class DeszczOgnia extends ACastableRune {
 		hitCondition = rune.getPvp() == 1 ? 
 				new PvPRuneHitCondition() : new NonPvPRuneHitCondition();
 		boundingBox = new BoundingBox(
-				-0.6, -0.6, -0.6, 
-				0.6, 0.6, 0.6);
-		hitEffect = new DamageBurnEffect(14, rune.getDamage() * 0.1, this);
+				-0.3, -0.3, -0.3, 
+				0.3, 0.3, 0.3);
+		hitEffect = new DamageBurnEffect(14, rune.getDamage() * 0.12, this);
 	}
 
 	@Override

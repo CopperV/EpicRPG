@@ -1,6 +1,7 @@
 package me.Vark123.EpicRPG.FightSystem.Listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -40,6 +41,9 @@ public class EntityDeathListener implements Listener {
 			return;		
 		
 		Entity killer = ((EntityDamageByEntityEvent) event).getDamager();
+		if(killer instanceof AbstractArrow arrow && arrow.getShooter() instanceof Entity)
+			killer = (Entity) arrow.getShooter();
+		
 		if(MythicBukkit.inst().getMobManager().isMythicMob(killer)) {
 			ActiveMob aMob = MythicBukkit.inst().getMobManager().getMythicMobInstance(killer);
 			if(aMob.getOwner().isPresent())

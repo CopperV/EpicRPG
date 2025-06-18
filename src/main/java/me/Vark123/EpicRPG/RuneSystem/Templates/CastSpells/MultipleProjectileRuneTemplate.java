@@ -101,7 +101,7 @@ public class MultipleProjectileRuneTemplate {
 							onHitEffect.playEffect(loc, e);
 						
 						hitted.add(e);
-						if(maxHits > 0 && hitted.size() >= maxDistance)
+						if(maxHits > 0 && hitted.size() >= maxHits)
 							cancel();
 					});
 					

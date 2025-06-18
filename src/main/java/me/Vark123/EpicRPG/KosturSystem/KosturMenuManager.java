@@ -72,7 +72,7 @@ public class KosturMenuManager {
 		runesFreeSlots = new int[] {10, 12, 14, 16};
 		createFreeSlots = new int[] {10, 19, 11, 20, 12, 21, 
 				14, 15, 16, 23, 24, 25};
-		runeSlots = new String[] {"PPP","PPL","PLP","PLL"};
+		runeSlots = new String[] {"ppp","ppl","plp","pll"};
 		
 		empty = new ItemStack(Material.BLACK_STAINED_GLASS_PANE, 1);{
 			ItemMeta im = empty.getItemMeta();

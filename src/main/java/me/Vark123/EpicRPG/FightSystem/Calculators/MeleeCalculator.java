@@ -155,9 +155,9 @@ public class MeleeCalculator implements IDamageCalculator {
 	private Collection<ComparableStat> getMostSignificantStats(RpgStats stats, boolean isCrit) {
 		//INIT
 		List<ComparableStat> startList = new ArrayList<>(6);
-		startList.add(new ComparableStat(StatTypes.SILA, stats.getFinalSila(), 1, isCrit ? 0.0031 : 0.0031, isCrit ? 0.45 : 0.45));
+		startList.add(new ComparableStat(StatTypes.SILA, stats.getFinalSila(), 1, isCrit ? 0.0033 : 0.0029, isCrit ? 0.47 : 0.42));
 		startList.add(new ComparableStat(StatTypes.WYTRZYMALOSC, stats.getFinalWytrzymalosc(), 1, isCrit ? 0.0015 : 0.0013, isCrit ? 0.23 : 0.2));
-		startList.add(new ComparableStat(StatTypes.ZRECZNOSC, stats.getFinalZrecznosc(), 1, isCrit ? 0.004 : 0.0018, isCrit ? 0.55 : 0.28));
+		startList.add(new ComparableStat(StatTypes.ZRECZNOSC, stats.getFinalZrecznosc(), 1, isCrit ? 0.0028 : 0.0016, isCrit ? 0.38 : 0.28));
 		startList.add(new ComparableStat(StatTypes.ZDOLNOSCI_MYSLIWSKIE, stats.getFinalZdolnosciMysliwskie(), 1, isCrit ? 0.0022 : 0.002, isCrit ? 0.32 : 0.3));
 		startList.add(new ComparableStat(StatTypes.INTELIGENCJA, stats.getFinalInteligencja(), 1, isCrit ? 0.0018 : 0.0015, isCrit ? 0.27 : 0.23));
 		startList.add(new ComparableStat(StatTypes.MANA, stats.getFinalMana(), 0.5, isCrit ? 0.0008 : 0.0006, isCrit ? 0.12 : 0.09));

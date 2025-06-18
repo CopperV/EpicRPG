@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.bukkit.BukkitAdapter;
@@ -90,7 +91,9 @@ public class EntityPostDamageListener implements Listener {
 			e.setCancelled(true);
 			return;
 		}
-		
+
+		if(e.isApplicable(DamageModifier.ARMOR))
+			e.setDamage(DamageModifier.ARMOR, 0);
 		e.setDamage(damageInfo.damage);
 	}
 
@@ -158,7 +161,9 @@ public class EntityPostDamageListener implements Listener {
 			e.setCancelled(true);
 			return;
 		}
-		
+
+		if(e.isApplicable(DamageModifier.ARMOR))
+			e.setDamage(DamageModifier.ARMOR, 0);
 		e.setDamage(damageInfo.damage);
 	}
 
@@ -208,7 +213,9 @@ public class EntityPostDamageListener implements Listener {
 			e.setCancelled(true);
 			return;
 		}
-		
+
+		if(e.isApplicable(DamageModifier.ARMOR))
+			e.setDamage(DamageModifier.ARMOR, 0);
 		e.setDamage(damageInfo.damage);
 	}
 	

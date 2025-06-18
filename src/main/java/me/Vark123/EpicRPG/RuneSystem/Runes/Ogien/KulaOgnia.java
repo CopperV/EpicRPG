@@ -30,7 +30,7 @@ public class KulaOgnia extends ACastableRune {
 		boundingBox = new BoundingBox(
 				-0.75, -0.75, -0.75, 
 				0.75, 0.75, 0.75);
-		hitEffect = new DamageBurnEffect(6, rune.getDamage() * 0.1, this);
+		hitEffect = new DamageBurnEffect(6, rune.getDamage() * 0.12, this);
 	}
 
 	@Override

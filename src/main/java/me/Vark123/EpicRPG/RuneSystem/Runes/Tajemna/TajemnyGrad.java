@@ -31,8 +31,8 @@ public class TajemnyGrad extends ACastableRune {
 		hitCondition = rune.getPvp() == 1 ? 
 				new PvPRuneHitCondition() : new NonPvPRuneHitCondition();
 		boundingBox = new BoundingBox(
-				-0.5, -0.5, -0.5, 
-				0.5, 0.5, 0.5);
+				-0.25, -0.25, -0.25, 
+				0.25, 0.25, 0.25);
 	}
 
 	@Override

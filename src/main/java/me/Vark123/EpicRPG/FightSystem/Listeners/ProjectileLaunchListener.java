@@ -60,7 +60,7 @@ public class ProjectileLaunchListener implements Listener {
 			ItemStack arr = e.getConsumable();
 			p.getInventory().addItem(arr);
 		} else if(bow.getType().equals(Material.BOW)) {
-			e.setConsumeItem(false);
+			p.getInventory().addItem(e.getConsumable().clone());
 			p.updateInventory();
 		}
 	}

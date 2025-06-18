@@ -1,9 +1,12 @@
 package me.Vark123.EpicRPG.FightSystem.EffectListeners.Professions;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 
 import me.Vark123.EpicRPG.FightSystem.DamageType;
 import me.Vark123.EpicRPG.FightSystem.Calculators.IDamageCalculator.DamageCalculatorResult;
@@ -27,6 +30,14 @@ public class HunterProfessionModifierListener implements Listener {
 		if(!(damager instanceof Player))
 			return;
 		
+		Entity projectile = e.getDamageSource().getDirectEntity();
+		if(!(projectile instanceof Projectile))
+			return;
+
+		ItemStack bow = (ItemStack) projectile.getMetadata("rpg_bow").get(0).value();
+		if(!bow.getType().equals(Material.BOW))
+			return;
+		
 		Player p = (Player) damager;
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		RpgPlayerInfo info = rpg.getInfo();
@@ -34,7 +45,7 @@ public class HunterProfessionModifierListener implements Listener {
 		if(!ChatColor.stripColor(info.getShortProf().toLowerCase()).equalsIgnoreCase("mys"))
 			return;
 		
-		e.increaseModifier(0.15);
+		e.increaseModifier(0.05);
 	}
 	
 	@EventHandler
@@ -62,7 +73,7 @@ public class HunterProfessionModifierListener implements Listener {
 		if(!ChatColor.stripColor(info.getShortProf().toLowerCase()).equalsIgnoreCase("mys"))
 			return;
 		
-		e.increaseModifier(0.15);
+		e.increaseModifier(0.07);
 	}
 
 }

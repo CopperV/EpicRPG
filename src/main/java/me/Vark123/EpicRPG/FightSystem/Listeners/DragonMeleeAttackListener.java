@@ -30,17 +30,17 @@ public class DragonMeleeAttackListener implements Listener {
 		Player player = e.getPlayer();
 		Location eyeLoc = player.getEyeLocation();
 		RayTraceResult result = player.getWorld()
-				.rayTraceEntities(eyeLoc, eyeLoc.getDirection().normalize(), 5);
+				.rayTraceEntities(eyeLoc, eyeLoc.getDirection().normalize(), 8, en -> !en.equals(player));
 		if(result == null || result.getHitEntity() == null)
 			return;
 		
 		Entity entity = result.getHitEntity();
-		
 		if (!(entity instanceof LivingEntity))
 			return;
 		
 		if (!MythicBukkit.inst().getAPIHelper().isMythicMob(entity))
 			return;
+		
 		if (entity.isDead())
 			return;
 		
@@ -55,10 +55,13 @@ public class DragonMeleeAttackListener implements Listener {
 		Disguise disguise = DisguiseAPI.getDisguise(entity);
 		if(!disguise.getType().equals(DisguiseType.ENDER_DRAGON))
 			return;
+
+		LivingEntity le = (LivingEntity) entity;
+		if(Utils.hasNoDamageTicks(player, le))
+			return;
 		
-		
-		if(DamageUtils.applyDirectDamageEffect(player, (LivingEntity) entity, 1, DamageType.PLAYER_ATTACK, DamageCause.ENTITY_ATTACK)) {
-			Utils.setEntityNoDamageTicks(player, (LivingEntity) entity);
+		if(DamageUtils.applyDirectDamageEffect(player, le, 1, DamageType.PLAYER_ATTACK, DamageCause.ENTITY_ATTACK)) {
+			Utils.setEntityNoDamageTicks(player, le);
 		}
 	}
 	

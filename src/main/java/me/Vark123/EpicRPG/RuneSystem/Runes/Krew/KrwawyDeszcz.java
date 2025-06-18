@@ -35,8 +35,8 @@ public class KrwawyDeszcz extends ACastableRune {
 		hitCondition = rune.getPvp() == 1 ? 
 				new PvPRuneHitCondition() : new NonPvPRuneHitCondition();
 		boundingBox = new BoundingBox(
-				-0.55, -0.55, -0.55, 
-				0.55, 0.55, 0.55);
+				-0.25, -0.25, -0.25, 
+				0.25, 0.25, 0.25);
 		hitEffect = new DamageCustomEffect(
 				15,
 				30,

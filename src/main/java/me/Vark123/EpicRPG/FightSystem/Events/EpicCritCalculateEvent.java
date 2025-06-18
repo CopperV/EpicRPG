@@ -1,6 +1,5 @@
 package me.Vark123.EpicRPG.FightSystem.Events;
 
-import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -14,14 +13,12 @@ public class EpicCritCalculateEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 
 	private RpgPlayer rpgPlayer;
-	private Entity victim;
 	@Setter
 	private double chance = 0;
 
-	public EpicCritCalculateEvent(RpgPlayer rpgPlayer, Entity victim) {
+	public EpicCritCalculateEvent(RpgPlayer rpgPlayer) {
 		super();
 		this.rpgPlayer = rpgPlayer;
-		this.victim = victim;
 	}
 	
 	public void addChance(double chance) {

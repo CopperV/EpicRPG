@@ -69,3 +69,5 @@ commands:
   ekwipunek:
     aliases: [eq]
   epicmoney:
+  epicstat:
+    aliases: [estat, stat]

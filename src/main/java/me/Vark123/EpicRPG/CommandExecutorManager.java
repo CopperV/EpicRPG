@@ -28,6 +28,7 @@ import me.Vark123.EpicRPG.Core.Commands.RpgMMCommand;
 import me.Vark123.EpicRPG.Core.Commands.SklepCommand;
 import me.Vark123.EpicRPG.Core.Commands.SoulbindItemCommand;
 import me.Vark123.EpicRPG.Core.Commands.SprzedajCommand;
+import me.Vark123.EpicRPG.Core.Commands.StatModCommand;
 import me.Vark123.EpicRPG.Core.Commands.UniquetemCommand;
 import me.Vark123.EpicRPG.Core.Commands.SystemCmds.DragonCoinsBuyCommand;
 import me.Vark123.EpicRPG.Core.Commands.SystemCmds.DragonCoinsChangeCommand;
@@ -93,6 +94,8 @@ public class CommandExecutorManager {
 		Bukkit.getPluginCommand("epicrpg").setExecutor(new EpicRPGCommand());
 		Bukkit.getPluginCommand("epicboost").setExecutor(new BaseBoostCommand());
 		Bukkit.getPluginCommand("modyfikatory").setExecutor(new BoosterMenuCommand());
+
+		Bukkit.getPluginCommand("epicstat").setExecutor(new StatModCommand());
 		
 		BoostCommandManager.get().registerSubcommand(new CoinsBoosterCommand());
 		BoostCommandManager.get().registerSubcommand(new ExpBoosterCommand());

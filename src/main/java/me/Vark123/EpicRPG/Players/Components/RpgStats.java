@@ -21,8 +21,11 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import me.Vark123.EpicRPG.Config;
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.FightSystem.Events.EpicCritCalculateEvent;
+import me.Vark123.EpicRPG.FightSystem.Events.EpicDodgeCalculateEvent;
+import me.Vark123.EpicRPG.FightSystem.Events.EpicMegaCritCalculateEvent;
+import me.Vark123.EpicRPG.FightSystem.Events.EpicPierceCalculateEvent;
 import me.Vark123.EpicRPG.HealthSystem.RpgPlayerHealEvent;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Events.RpgPlayerManaRegenEvent;
@@ -383,14 +386,22 @@ public class RpgStats implements Serializable, ChatPrintable {
 	
 	@Override
 	public void print(CommandSender sender) {
-		int kryt = finalWalka;
-		int bonusKryt = rpg.getInfo().getShortProf().equalsIgnoreCase("mys") ? 50 : 0;
-		if(rpg.getSkills().hasCiosKrytyczny())
-			bonusKryt += 25;
-		kryt += bonusKryt;
+		EpicCritCalculateEvent critEvent = new EpicCritCalculateEvent(rpg);
+		EpicPierceCalculateEvent pierceEvent = new EpicPierceCalculateEvent(rpg);
+		EpicDodgeCalculateEvent dodgeEvent = new EpicDodgeCalculateEvent(rpg);
+		EpicMegaCritCalculateEvent megaCritEvent = new EpicMegaCritCalculateEvent(rpg);
 		
-		double percent1 = (double) kryt / (double)(Config.get().getMaxWalkaCrit()) * 100.;
-		double percent2 = (double) kryt / (double)(Config.get().getMaxWalkaCrit()*5) * 100.;
+		Bukkit.getPluginManager().callEvent(critEvent);
+		Bukkit.getPluginManager().callEvent(pierceEvent);
+		Bukkit.getPluginManager().callEvent(dodgeEvent);
+		Bukkit.getPluginManager().callEvent(megaCritEvent);
+		
+		double percent1 = critEvent.getChance() * 100;
+		double percent2 = percent1 * 0.2;
+		
+		double piercePercent = Utils.limitValue(0, 0.6, pierceEvent.getChance()) * 100;
+		double dodgePercent = Utils.limitValue(0, 0.3, dodgeEvent.getChance()) * 100;
+		double megaCritPercent = Utils.limitValue(0, 1, megaCritEvent.getChance()) * 100;
 		
 		TableGenerator generator = new TableGenerator(TableGenerator.Alignment.LEFT, TableGenerator.Alignment.LEFT, TableGenerator.Alignment.LEFT);
 		generator.addRow("", "§2Obrazenia: §a"+obrazenia+"§7/§a"+potionObrazenia+"§7/§a"+finalObrazenia, 
@@ -405,7 +416,10 @@ public class RpgStats implements Serializable, ChatPrintable {
 				"§2Zycie: §a"+health+"§7/§a"+potionHealth+"§7/§a"+finalHealth);
 		generator.addRow("", "§2Krytyk §7[§2PVE§7]: §a"+Utils.formatCurrency(percent1)+"%",
 				"§2Krytyk §7[§2PVP§7]: §a"+Utils.formatCurrency(percent2)+"%");
-		generator.addRow("", "§2Krag: §a"+krag);
+		generator.addRow("", "§2Przebicie: §a"+Utils.formatCurrency(piercePercent)+"%",
+				"§2Unik: §a"+Utils.formatCurrency(dodgePercent)+"%");
+		generator.addRow("", "§2Mega Krytyk: §a"+Utils.formatCurrency(megaCritPercent)+"%",
+				"§2Krag: §a"+krag);
 		List<String> lines = generator.generate(Receiver.CLIENT, true, true);
 		
 		
