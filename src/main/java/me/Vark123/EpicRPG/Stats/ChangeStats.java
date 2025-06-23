@@ -29,6 +29,8 @@ public class ChangeStats {
 	
 	private static final String STR_GET_METHOD = "getFinal";
 	private static final String STR_SET_METHOD = "setFinal";
+	
+	private static final double CRAFTED_ITEM_MODIFIER = 1.1;
 
 	public static void change(RpgPlayer rpg) {
 		change(rpg, false);
@@ -99,7 +101,7 @@ public class ChangeStats {
 		ItemStack off = p.getInventory().getItemInOffHand();
 		if(off!=null && !off.getType().equals(Material.AIR)) {
 			EpicComponent compi = new EpicComponent(off, MythicBukkit.inst());
-			if(compi.hasKey("rpgtype") && compi.getString("rpgtype").equalsIgnoreCase("gem"))
+			if(compi.hasKey("rpgtype") && compi.getString("rpgtype").equalsIgnoreCase("gem") && Utils.canUseItem(off, p))
 				changeStatsItem(stats, off);
 		}
 		
@@ -246,6 +248,10 @@ public class ChangeStats {
 				!item.hasItemMeta() ||
 				!item.getItemMeta().hasLore())
 			return;
+		
+		double modifier = Utils.isItemCrafted(item) && Utils.isItemCraftedByPlayer(item, stats.getRpg().getPlayer()) ? 
+				CRAFTED_ITEM_MODIFIER :
+				1;
 
 		item.getItemMeta().getLore().parallelStream().filter(s -> {
 			if(!s.contains(": §7"))
@@ -262,7 +268,7 @@ public class ChangeStats {
 			String tmp = ChatColor.stripColor(s.split(": ")[1]);
 			if(!StringUtils.isNumeric(tmp))
 				return;
-			int toAdd = Integer.parseInt(tmp);
+			int toAdd = (int) (Integer.parseInt(tmp) * modifier);
 			s = s.replace("§4- §8", "");
 			s = s.split(":")[0];
 			s = Utils.convertToClassConvention(s);
@@ -300,6 +306,10 @@ public class ChangeStats {
 				!item.getItemMeta().hasLore())
 			return;
 		
+		double modifier = Utils.isItemCrafted(item) && Utils.isItemCraftedByPlayer(item, stats.getRpg().getPlayer()) ? 
+				CRAFTED_ITEM_MODIFIER :
+				1;
+		
 		item.getItemMeta().getLore().parallelStream().filter(s -> {
 			if(!s.contains(": §7"))
 				return false;
@@ -313,7 +323,7 @@ public class ChangeStats {
 			return true;
 		}).forEach(s -> {
 			s = s.replace("+", "");
-			int toAdd = Integer.parseInt(ChatColor.stripColor(s.split(": ")[1]));
+			int toAdd = (int) (Integer.parseInt(ChatColor.stripColor(s.split(": ")[1])) * modifier);
 			s = s.replace("§4- §8", "");
 			s = s.split(":")[0];
 			s = Utils.convertToClassConvention(s);

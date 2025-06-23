@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import me.Vark123.EpicRPG.Consumables.ConsumableManager;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
+import me.Vark123.EpicRPG.Utils.Utils;
 
 public class ConsumableUseListener implements Listener {
 	
@@ -27,6 +28,8 @@ public class ConsumableUseListener implements Listener {
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		
 		ItemStack it = e.getItem();
+		if(!Utils.canUseItem(it, p))
+			return;
 		
 		ConsumableManager.inst().getConsumable(it).ifPresent(consumable -> {
 			if(!consumable.canConsume(rpg))

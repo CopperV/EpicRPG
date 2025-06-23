@@ -5,8 +5,10 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.Sound;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BoundingBox;
 
+import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.RuneSystem.ACastableRune;
 import me.Vark123.EpicRPG.RuneSystem.EpicRune;
@@ -35,32 +37,45 @@ public class Haduoken extends ACastableRune {
 
 	@Override
 	public void castSpell() {
-		Location startLoc = player.getLocation().clone().add(0, 1.3, 0);
-		
-		ProjectileRuneTemplate.castProjectile(
-				this, 
-				startLoc, 
-				startLoc.getDirection().normalize(),
-				0.75, 
-				2,
-				1,
-				36, 
-				boundingBox,
-				loc -> {
-					loc.getWorld().playSound(loc, Sound.ENTITY_EVOKER_CAST_SPELL, 1, 0.75f);
-				}, 
-				loc -> {
-					loc.getWorld().spawnParticle(Particle.DUST, loc, 13, 
-							0.2f, 0.2f, 0.2f, 0.05f, dust);
-					loc.getWorld().spawnParticle(Particle.WHITE_SMOKE, loc, 3, 
-							0.05f, 0.05f, 0.05f, 0.01f);
-				}, 
-				hitCondition, 
-				(loc, e) -> {
-					if(RuneUtils.damage(player, e, rune))
-						loc.getWorld().playSound(loc, Sound.ENTITY_MAGMA_CUBE_JUMP, 1, 0.8f);
-				}, 
-				loc -> { });
+		ACastableRune castableRune = this;
+		new BukkitRunnable() {
+			int amount = 2;
+			@Override
+			public void run() {
+				if(amount <= 0 || !casterInCastWorld()) {
+					cancel();
+					return;
+				}
+				--amount;
+				
+				Location startLoc = player.getLocation().clone().add(0, 1.3, 0);
+				
+				ProjectileRuneTemplate.castProjectile(
+						castableRune, 
+						startLoc, 
+						startLoc.getDirection().normalize(),
+						0.75, 
+						2,
+						1,
+						36, 
+						boundingBox,
+						loc -> {
+							loc.getWorld().playSound(loc, Sound.ENTITY_EVOKER_CAST_SPELL, 1, 0.75f);
+						}, 
+						loc -> {
+							loc.getWorld().spawnParticle(Particle.DUST, loc, 13, 
+									0.2f, 0.2f, 0.2f, 0.05f, dust);
+							loc.getWorld().spawnParticle(Particle.WHITE_SMOKE, loc, 3, 
+									0.05f, 0.05f, 0.05f, 0.01f);
+						}, 
+						hitCondition, 
+						(loc, e) -> {
+							if(RuneUtils.damage(player, e, rune))
+								loc.getWorld().playSound(loc, Sound.ENTITY_MAGMA_CUBE_JUMP, 1, 0.8f);
+						}, 
+						loc -> { });
+			}
+		}.runTaskTimer(Main.getInstance(), 0, 10);
 	}
 
 }

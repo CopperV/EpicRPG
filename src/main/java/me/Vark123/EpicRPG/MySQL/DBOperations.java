@@ -83,7 +83,7 @@ public class DBOperations {
 				"player_stats.potion_dmg, player_stats.potion_def, "+
 				"player_stats.p_stygia, player_stats.p_coins, player_stats.p_brylki, player_stats.p_event, player_stats.p_event2," + 
 				"player_info.health, player_info.p_health, player_info.item_drop, player_info.tutorial, player_info.check_hp," + 
-				"player_rzemioslo.alchemia, player_rzemioslo.kowalstwo, player_rzemioslo.platnerstwo, player_rzemioslo.luczarstwo, player_rzemioslo.jubilerstwo," + 
+				"player_rzemioslo.alchemia, player_rzemioslo.kowalstwo, player_rzemioslo.platnerstwo, player_rzemioslo.luczarstwo, player_rzemioslo.jubilerstwo, player_rzemioslo.kucharz, player_rzemioslo.skryba," + 
 				"player_skills.manaReg, player_skills.unlimitArr, player_skills.foodless, player_skills.slugaBeliara, player_skills.magKrwi, player_skills.ciosKrytyczny, "+
 				"player_skills.magnetyzm, player_skills.silaZywiolow, player_skills.polnocnyBarbarzynca, player_skills.rozprucie, " + 
 				"player_reputation.archolos_id, player_reputation.archolos_amount, player_reputation.klan_id, player_reputation.klan_amount, player_reputation.witcher_id, player_reputation.witcher_amount " + 
@@ -182,7 +182,9 @@ public class DBOperations {
 				+rzemiosla.hasKowalstwo()+","
 				+rzemiosla.hasPlatnerstwo()+","
 				+rzemiosla.hasLuczarstwo()+","
-				+rzemiosla.hasJubilerstwo()+");");
+				+rzemiosla.hasJubilerstwo()+","
+				+rzemiosla.hasKucharz()+","
+				+rzemiosla.hasSkryba()+");");
 		calls.add("CALL SavePlayerSkills("
 				+id+","
 				+skills.hasManaReg()+","

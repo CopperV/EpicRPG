@@ -39,13 +39,13 @@ public class KatedraScrollEvent implements Listener {
 				|| !it.getItemMeta().hasDisplayName()
 				|| !it.getItemMeta().getDisplayName().equalsIgnoreCase("§e§lprzepustka - katedra"))
 			return;
-		EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
-		if(!comp.hasKey("soulbind")) {
+		
+		if(!Utils.isItemSoulbinded(it)) {
 			p.sendMessage(Main.getInstance().getPrefix()+" §cPrzedmiot zbugowany!");
 			p.sendMessage(Main.getInstance().getPrefix()+" §cNie mozesz go uzyc!");
 			return;
 		}
-		if(!comp.getString("soulbind").equalsIgnoreCase(p.getName())) {
+		if(!Utils.isItemSoulbindedToPlayer(it, p)) {
 			p.sendMessage(Main.getInstance().getPrefix()+" §cZwoj jest przypisany do kogos innego!");
 			p.sendMessage(Main.getInstance().getPrefix()+" §cNie mozesz go uzyc!");
 			return;

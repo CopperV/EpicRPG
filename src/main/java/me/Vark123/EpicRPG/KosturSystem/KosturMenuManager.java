@@ -4,8 +4,10 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -215,7 +217,6 @@ public class KosturMenuManager {
 			.ignoreEvents(DisabledEvents.INVENTORY_DRAG)
 			.disableUpdateTask()
 			.listener(KosturMenuEvents.getEvents().getKosturModifyClickEvent())
-			.listener(KosturMenuEvents.getEvents().getKosturModifyCloseEvent())
 			.provider(getRuneProvider(kostur))
 			.build(Main.getInstance())
 			.open(p);
@@ -269,22 +270,73 @@ public class KosturMenuManager {
 				}
 				
 				EpicComponent comp = new EpicComponent(kostur, MythicBukkit.inst());
-				if(!comp.getString("ppp").equals("-")) {
-					ItemStack it = manag.getItemStack(comp.getString("ppp"));
-					contents.set(10, it);
+				for(int i = 0; i < runeSlots.length; ++i) {
+					if(!comp.hasKey(runeSlots[i])) {
+						EpicComponent slotComp = comp.getComponent(runeSlots[i]);
+						slotComp.setString("id", "-");
+						comp.setComponent(runeSlots[i], slotComp);
+						comp.applyTo(kostur);
+					}
+					
+					EpicComponent slotComp = comp.getComponent(runeSlots[i]);
+					if(slotComp.getString("id").equals("-"))
+						continue;
+					
+					ItemStack it = manag.getItemStack(slotComp.getString("id"));
+					if(slotComp.hasKey("soulbind"))
+						Utils.setItemSoulbinded(it, Bukkit.getPlayer(slotComp.getUUID("soulbind")));
+					
+					int slot = runesFreeSlots[i];
+					contents.set(slot, it);
 				}
-				if(!comp.getString("ppl").equals("-")) {
-					ItemStack it = manag.getItemStack(comp.getString("ppl"));
-					contents.set(12, it);
+			}
+
+			@Override
+			public void close(Player player, EpicInventory inventory) {
+				EpicComponent kosturNBT = new EpicComponent(kostur, MythicBukkit.inst());
+				ItemMeta im = kostur.getItemMeta();
+				List<String> lore = im.getLore();
+				List<ItemStack> toReturn = new LinkedList<>();
+				
+				Inventory inv = inventory.getInventory();
+				
+				String[] strSlots = KosturMenuManager.getInstance().getRuneSlots();
+				for(int i = 0; i < strSlots.length; ++i) {
+					EpicComponent slotComp = kosturNBT.getComponent(strSlots[i]);
+					ItemStack rune = inv.getItem(10+2*i);
+					if(!Utils.isRune(rune) || !Utils.canUseItem(rune, player)) {
+						slotComp.setString("id", "-");
+						toReturn.add(rune);
+
+						lore.set(5+i, "§d☬ §7"+strSlots[i]+": §fpusty");
+					} else {
+						String mmId = Utils.getMythicMobItemType(rune);
+						String name = rune.getItemMeta().getDisplayName();
+						
+						slotComp.setString("id", mmId);
+						if(Utils.isItemSoulbinded(rune)) {
+							slotComp.setUUID("soulbind", Utils.getSoulbindedUUID(rune));
+						}
+
+						lore.set(5+i, "§d☬ §7"+strSlots[i]+": "+name+(
+								Utils.isItemSoulbinded(rune) ? 
+								" §7~§e§o"+Utils.getSoulbindedPlayer(rune).getName() :
+								""));
+					}
+					kosturNBT.setComponent(strSlots[i], slotComp);
 				}
-				if(!comp.getString("plp").equals("-")) {
-					ItemStack it = manag.getItemStack(comp.getString("plp"));
-					contents.set(14, it);
-				}
-				if(!comp.getString("pll").equals("-")) {
-					ItemStack it = manag.getItemStack(comp.getString("pll"));
-					contents.set(16, it);
-				}
+				
+//				kostur = NBT.itemStackFromNBT(kosturNBT);
+				kosturNBT.applyTo(kostur);
+				im = kostur.getItemMeta();
+				im.setLore(lore);
+				kostur.setItemMeta(im);
+				
+				Utils.dropItemStack(player, kostur);
+				toReturn.forEach(it -> {
+					Utils.dropItemStack(player, it);
+				});
+				inv.clear();
 			}
 		};
 	}

@@ -52,6 +52,9 @@ public class RubyUseEvent implements Listener {
 			return;
 
 		Player p = e.getPlayer();
+		if(!Utils.canUseItem(ruby, p))
+			return;
+
 		if(RubyManager.getInstance().getCooldowns().containsKey(p)
 				&& (new Date().getTime() - RubyManager.getInstance().getCooldowns().get(p).getTime()) < RubyManager.getInstance().CLICK_COOLDOWN)
 			return;

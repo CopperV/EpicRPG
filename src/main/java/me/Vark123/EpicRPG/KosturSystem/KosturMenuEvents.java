@@ -1,7 +1,6 @@
 package me.Vark123.EpicRPG.KosturSystem;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -11,10 +10,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import io.lumine.mythic.bukkit.MythicBukkit;
-import io.lumine.mythic.core.items.ItemExecutor;
 import lombok.Getter;
 import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicInventory.Other.EventCreator;
@@ -28,7 +25,6 @@ public class KosturMenuEvents {
 	private final EventCreator<InventoryClickEvent> kosturClickEvent;
 	private final EventCreator<InventoryCloseEvent> kosturCloseEvent;
 	private final EventCreator<InventoryClickEvent> kosturModifyClickEvent;
-	private final EventCreator<InventoryCloseEvent> kosturModifyCloseEvent;
 	private final EventCreator<InventoryClickEvent> kosturCreateClickEvent;
 	private final EventCreator<InventoryCloseEvent> kosturCreateCloseEvent;
 	
@@ -36,7 +32,6 @@ public class KosturMenuEvents {
 		kosturClickEvent = kosturClickEventCreator();
 		kosturCloseEvent = kosturCloseEventCreator();
 		kosturModifyClickEvent = kosturModifyClickEventCreator();
-		kosturModifyCloseEvent = kosturModifyCloseEventCreator();
 		kosturCreateClickEvent = kosturCreateClickEventCreator();
 		kosturCreateCloseEvent = kosturCreateCloseEventCreator();
 	}
@@ -54,7 +49,7 @@ public class KosturMenuEvents {
 			Player p = (Player) e.getWhoClicked();
 			Inventory inv = e.getView().getTopInventory();
 			ItemStack kostur = inv.getItem(KosturMenuManager.getInstance().getKosturFreeSlots()[0]);
-			if(kostur == null || kostur.getType().equals(Material.AIR)) {
+			if(kostur == null || kostur.getType().equals(Material.AIR) || !Utils.canUseItem(kostur, p)) {
 				p.closeInventory();
 				return;
 			}
@@ -106,50 +101,6 @@ public class KosturMenuEvents {
 		return creator;
 	}
 	
-	private EventCreator<InventoryCloseEvent> kosturModifyCloseEventCreator() {
-		Consumer<InventoryCloseEvent> event = e -> {
-			ItemExecutor manag = MythicBukkit.inst().getItemManager();
-			ItemStack kostur = manag.getItemStack("Runiczny_Kostur");
-			EpicComponent kosturNBT = new EpicComponent(kostur, MythicBukkit.inst());
-			ItemMeta im = kostur.getItemMeta();
-			List<String> lore = im.getLore();
-			List<ItemStack> toReturn = new LinkedList<>();
-			
-			Inventory inv = e.getView().getTopInventory();
-			Player p = (Player) e.getPlayer();
-			
-			String[] strSlots = KosturMenuManager.getInstance().getRuneSlots();
-			for(int i = 0; i < strSlots.length; ++i) {
-				ItemStack rune = inv.getItem(10+2*i);
-				if(!Utils.isRune(rune)) {
-					kosturNBT.setString(strSlots[i], "-");
-					toReturn.add(rune);
-					continue;
-				}
-				
-				String mmId = Utils.getMythicMobItemType(rune);
-				String name = rune.getItemMeta().getDisplayName();
-				lore.set(5+i, "§d☬ §7"+strSlots[i]+": "+name);
-				kosturNBT.setString(strSlots[i], mmId);
-			}
-			
-//			kostur = NBT.itemStackFromNBT(kosturNBT);
-			kosturNBT.applyTo(kostur);
-			im = kostur.getItemMeta();
-			im.setLore(lore);
-			kostur.setItemMeta(im);
-			
-			Utils.dropItemStack(p, kostur);
-			toReturn.forEach(it -> {
-				Utils.dropItemStack(p, it);
-			});
-			inv.clear();
-		};
-		
-		EventCreator<InventoryCloseEvent> creator = new EventCreator<>(InventoryCloseEvent.class, event);
-		return creator;
-	}
-	
 	private EventCreator<InventoryClickEvent> kosturCreateClickEventCreator() {
 		Consumer<InventoryClickEvent> event = e -> {
 			int slot = e.getSlot();
@@ -170,8 +121,7 @@ public class KosturMenuEvents {
 				}
 				
 				EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
-				if(!comp.hasKey("soulbind")
-						|| !comp.getString("soulbind").equalsIgnoreCase(p.getName())) {
+				if(!Utils.isItemSoulbindedToPlayer(it, p)) {
 					p.closeInventory();
 					return;
 				}

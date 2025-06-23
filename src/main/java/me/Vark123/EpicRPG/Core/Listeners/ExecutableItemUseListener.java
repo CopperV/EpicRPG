@@ -20,6 +20,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicRPG.Main;
+import me.Vark123.EpicRPG.Utils.Utils;
 import me.clip.placeholderapi.PlaceholderAPI;
 
 public class ExecutableItemUseListener implements Listener {
@@ -39,6 +40,9 @@ public class ExecutableItemUseListener implements Listener {
 		
 		ItemStack item = p.getInventory().getItemInMainHand();
 		if(item == null || item.getType().equals(Material.AIR))
+			return;
+		
+		if(!Utils.canUseItem(item, p))
 			return;
 
 		EpicComponent itComp = new EpicComponent(item, MythicBukkit.inst());

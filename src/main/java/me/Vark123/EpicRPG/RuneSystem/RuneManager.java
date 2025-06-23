@@ -237,6 +237,11 @@ public final class RuneManager {
 		if(hasGlobalCd(p))
 			return false;
 		
+		if(!Utils.canUseItem(itRune, p)) {
+			p.sendMessage("§7[§bEpicRPG§7] §cTa runa jest przypisana do kogos innego! Nie mozesz jej uzyc!");
+			return false;
+		}
+		
 		EpicRune rune = new EpicRune(itRune);
 		if(rune.isClassRequired()) {
 			String proffesion = ChatColor.stripColor(rpg.getInfo().getProffesion());

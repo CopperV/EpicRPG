@@ -1,9 +1,5 @@
 package me.Vark123.EpicRPG.Core.Commands;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -11,11 +7,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.items.ItemExecutor;
-import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Utils.Utils;
 
@@ -47,24 +41,14 @@ public class SoulbindItemCommand implements CommandExecutor {
 			sender.sendMessage(Main.getInstance().getPrefix()+ args[2]+" §cnie jest liczba");
 			return false;
 		}
+		
+		Player p = Bukkit.getPlayer(args[0]);
+		
 		ItemStack it = manag.getItemStack(args[1]);
 		it.setAmount(Integer.parseInt(args[2]));
 		
-		ItemMeta im = it.getItemMeta();
-		List<String> lore = im.hasLore() ? im.getLore() : new ArrayList<>();
-		lore.add(" ");
-		lore.add("§aPrzypisanie: §e§o"+args[0]);
-		lore.add(" ");
-		im.setLore(lore);
-		it.setItemMeta(im);
+		Utils.setItemSoulbinded(it, p);
 		
-		EpicComponent itComp = new EpicComponent(it, MythicBukkit.inst());
-		itComp.setString("soulbind", args[0]);
-		Random rand = new Random();
-		itComp.setInteger("random"+rand.nextInt(), rand.nextInt());
-		itComp.applyTo(it);
-		
-		Player p = Bukkit.getPlayer(args[0]);
 		Utils.dropItemStack(p, it);
 		sender.sendMessage(Main.getInstance().getPrefix()+" §aDodano "+it.getItemMeta().getDisplayName()+" do ekwipunku "+args[0]);
 		

@@ -51,6 +51,9 @@ public class HorseStickUseEvent implements Listener {
 		if(!Utils.isMythicMobItem(it))
 			return;
 		
+		if(!Utils.canUseItem(it, p))
+			return;
+		
 		if(p.isInsideVehicle()) {
 			p.sendMessage(Main.getInstance().getPrefix() + " §c§lBedac na wierzchowcu nie mozesz przyzwac kolejnego wierzchowca!");
 			e.setCancelled(true);

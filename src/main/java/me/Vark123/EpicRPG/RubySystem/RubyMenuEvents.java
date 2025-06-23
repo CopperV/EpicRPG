@@ -53,8 +53,7 @@ public class RubyMenuEvents {
 					break;
 				
 				EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
-				if(!comp.hasKey("soulbind")
-						|| !comp.getString("soulbind").equalsIgnoreCase(e.getWhoClicked().getName()))
+				if(!Utils.isItemSoulbindedToPlayer(it, p))
 					break;
 				
 				int rubyCraftLevel = i/2 + 1;
@@ -112,8 +111,7 @@ public class RubyMenuEvents {
 					break;
 				
 				EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
-				if(!comp.hasKey("soulbind")
-						|| !comp.getString("soulbind").equalsIgnoreCase(e.getWhoClicked().getName()))
+				if(!Utils.isItemSoulbindedToPlayer(it, p))
 					break;
 				
 				int rubyCraftLevel = i/2 + 1;

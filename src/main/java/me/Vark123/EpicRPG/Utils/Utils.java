@@ -1,14 +1,17 @@
 package me.Vark123.EpicRPG.Utils;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -559,6 +562,124 @@ public class Utils {
 		
 		AbstractEntity ae = BukkitAdapter.adapt(entity);
 		return (LivingEntity) ae.getMetadata(effect.name()).get();
+	}
+	
+	public static boolean isItemSoulbinded(ItemStack it) {
+		EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
+		return comp.hasKey("soulbind");
+	}
+	
+	public static boolean isItemSoulbindedToPlayer(ItemStack it, Player player) {
+		return isItemSoulbindedToPlayer(it, player.getUniqueId());
+	}
+	
+	public static boolean isItemSoulbindedToPlayer(ItemStack it, UUID uid) {
+		if(!isItemSoulbinded(it))
+			return false;
+
+		EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
+		UUID soulbinded = comp.getUUID("soulbind");
+		return soulbinded != null && soulbinded.equals(uid);
+	}
+	
+	public static void setItemSoulbinded(ItemStack it, Player player) {
+		if(isItemSoulbinded(it))
+			return;
+		
+		ItemMeta im = it.getItemMeta();
+		List<String> lore = im.hasLore() ? im.getLore() : new ArrayList<>();
+		lore.add(" ");
+		lore.add("§aPrzypisanie: §e§o"+player.getName());
+		lore.add(" ");
+		im.setLore(lore);
+		it.setItemMeta(im);
+		
+		EpicComponent itComp = new EpicComponent(it, MythicBukkit.inst());
+		itComp.setUUID("soulbind", player.getUniqueId());
+		itComp.setUUID("random", UUID.randomUUID());
+		itComp.applyTo(it);
+	}
+	
+	public static Player getSoulbindedPlayer(ItemStack it) {
+		if(!isItemSoulbinded(it))
+			return null;
+		
+		EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
+		UUID uid = comp.getUUID("soulbind");
+		
+		return Bukkit.getPlayer(uid);
+	}
+	
+	public static UUID getSoulbindedUUID(ItemStack it) {
+		if(!isItemSoulbinded(it))
+			return null;
+		
+		EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
+		UUID uid = comp.getUUID("soulbind");
+		
+		return uid;
+	}
+	
+	public static boolean canUseItem(ItemStack it, Player player) {
+		if(isItemSoulbinded(it) && !isItemSoulbindedToPlayer(it, player))
+			return false;
+		
+		return true;
+	}
+
+	public static boolean isItemCrafted(ItemStack it) {
+		EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
+		return comp.hasKey("crafted_by");
+	}
+	
+	public static boolean isItemCraftedByPlayer(ItemStack it, Player player) {
+		return isItemCraftedByPlayer(it, player.getUniqueId());
+	}
+	
+	public static boolean isItemCraftedByPlayer(ItemStack it, UUID uid) {
+		if(!isItemCrafted(it))
+			return false;
+
+		EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
+		UUID craftedBy = comp.getUUID("crafted_by");
+		return craftedBy != null && craftedBy.equals(uid);
+	}
+	
+	public static void setItemCraftedBy(ItemStack it, Player player) {
+		if(isItemCrafted(it))
+			return;
+		
+		ItemMeta im = it.getItemMeta();
+		List<String> lore = im.hasLore() ? im.getLore() : new ArrayList<>();
+		lore.add(" ");
+		lore.add("§aStworzyl: §7§o"+player.getName());
+		lore.add(" ");
+		im.setLore(lore);
+		it.setItemMeta(im);
+		
+		EpicComponent itComp = new EpicComponent(it, MythicBukkit.inst());
+		itComp.setUUID("crafted_by", player.getUniqueId());
+		itComp.applyTo(it);
+	}
+	
+	public static Player getItemCrafterPlayer(ItemStack it) {
+		if(!isItemCrafted(it))
+			return null;
+		
+		EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
+		UUID uid = comp.getUUID("crafted_by");
+		
+		return Bukkit.getPlayer(uid);
+	}
+	
+	public static UUID getItemCrafterUUID(ItemStack it) {
+		if(!isItemCrafted(it))
+			return null;
+		
+		EpicComponent comp = new EpicComponent(it, MythicBukkit.inst());
+		UUID uid = comp.getUUID("crafted_by");
+		
+		return uid;
 	}
 	
 }

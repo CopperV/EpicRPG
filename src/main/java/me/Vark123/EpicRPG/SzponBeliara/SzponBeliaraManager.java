@@ -152,6 +152,14 @@ public class SzponBeliaraManager {
 						p.closeInventory();
 						return;
 					}
+					
+					if(!Utils.canUseItem(_esencjaDemona, player) ||
+							!Utils.canUseItem(_esencjaSzpona, player) ||
+							!Utils.canUseItem(_klejnot, player) ||
+							!Utils.canUseItem(_szpon, player)) {
+						p.closeInventory();
+						return;
+					}
 
 					EpicComponent _szponNBT = new EpicComponent(_szpon, MythicBukkit.inst());
 					
@@ -232,6 +240,10 @@ public class SzponBeliaraManager {
 					
 					String add = _szponId.endsWith("I") ? "I" : "_I";
 					ItemStack newSzpon = MythicBukkit.inst().getItemManager().getItemStack(_szponId+add);
+					
+					if(Utils.isItemSoulbinded(_szpon)) {
+						Utils.setItemSoulbinded(newSzpon, player);
+					}
 					
 					inv.clear();
 					Utils.dropItemStack(player, newSzpon);

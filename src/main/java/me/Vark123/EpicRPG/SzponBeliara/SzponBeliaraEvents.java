@@ -50,6 +50,13 @@ public class SzponBeliaraEvents {
 				p.closeInventory();
 				return;
 			}
+			
+			if(!Utils.canUseItem(kamien, p) ||
+					!Utils.canUseItem(pakt, p) ||
+					!Utils.canUseItem(szpon, p)) {
+				p.closeInventory();
+				return;
+			}
 
 			EpicComponent compSzpon = new EpicComponent(szpon, MythicBukkit.inst());
 			EpicComponent compPakt = new EpicComponent(pakt, MythicBukkit.inst());

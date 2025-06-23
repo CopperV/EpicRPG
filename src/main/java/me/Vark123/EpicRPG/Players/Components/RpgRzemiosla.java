@@ -25,6 +25,8 @@ public class RpgRzemiosla implements Serializable, ChatPrintable {
 	private boolean platnerstwo;
 	private boolean luczarstwo;
 	private boolean jubilerstwo;
+	private boolean kucharz;
+	private boolean skryba;
 	
 	public RpgRzemiosla(RpgPlayer rpg) {
 		this.rpg = rpg;
@@ -38,6 +40,8 @@ public class RpgRzemiosla implements Serializable, ChatPrintable {
 		this.kowalstwo = set.getBoolean("player_rzemioslo.kowalstwo");
 		this.luczarstwo = set.getBoolean("player_rzemioslo.luczarstwo");
 		this.jubilerstwo = set.getBoolean("player_rzemioslo.jubilerstwo");
+		this.kucharz = set.getBoolean("player_rzemioslo.kucharz");
+		this.skryba = set.getBoolean("player_rzemioslo.skryba");
 	}
 	
 	public RpgRzemiosla(RpgPlayer rpg, YamlConfiguration fYml) {
@@ -47,6 +51,8 @@ public class RpgRzemiosla implements Serializable, ChatPrintable {
 		this.kowalstwo = fYml.getBoolean("kowalstwo");
 		this.luczarstwo = fYml.getBoolean("luczarstwo");
 		this.jubilerstwo = fYml.getBoolean("jubilerstwo");
+		this.kucharz = fYml.getBoolean("kucharz");
+		this.skryba = fYml.getBoolean("skryba");
 	}
 
 	public boolean hasAlchemia() {
@@ -68,6 +74,14 @@ public class RpgRzemiosla implements Serializable, ChatPrintable {
 	public boolean hasJubilerstwo() {
 		return jubilerstwo;
 	}
+
+	public boolean hasKucharz() {
+		return kucharz;
+	}
+
+	public boolean hasSkryba() {
+		return skryba;
+	}
 	
 	public void reset() {
 		this.alchemia = false;
@@ -75,6 +89,8 @@ public class RpgRzemiosla implements Serializable, ChatPrintable {
 		this.kowalstwo = false;
 		this.luczarstwo = false;
 		this.jubilerstwo = false;
+		this.kucharz = false;
+		this.skryba = false;
 	}
 
 	@Override
@@ -90,6 +106,10 @@ public class RpgRzemiosla implements Serializable, ChatPrintable {
 			learned.append("§aLuczarstwo§7, ");
 		if(jubilerstwo)
 			learned.append("§aJubilerstwo§7, ");
+		if(kucharz)
+			learned.append("§aKucharz§7, ");
+		if(skryba)
+			learned.append("§aSkryba§7, ");
 		
 		if(!learned.isEmpty())
 			learned.setLength(learned.length()-4);

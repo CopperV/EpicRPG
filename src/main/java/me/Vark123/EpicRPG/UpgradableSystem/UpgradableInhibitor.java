@@ -105,6 +105,8 @@ public class UpgradableInhibitor {
 					continue;
 				if(!Utils.isMythicMobItem(it))
 					return false;
+				if(!Utils.canUseItem(it, p))
+					return false;
 				String mmId = Utils.getMythicMobItemType(it);
 				if(!mmItemCosts.containsKey(mmId))
 					continue;

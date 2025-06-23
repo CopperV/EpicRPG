@@ -100,8 +100,7 @@ public class GemEvents {
 				}
 				
 				EpicComponent itComp = new EpicComponent(it, MythicBukkit.inst());
-				if(!itComp.hasKey("soulbind")
-						|| !itComp.getString("soulbind").equalsIgnoreCase(e.getWhoClicked().getName())) {
+				if(!Utils.isItemSoulbindedToPlayer(it, p)) {
 					p.closeInventory();
 					return;
 				}
@@ -204,8 +203,7 @@ public class GemEvents {
 				}
 				
 				EpicComponent itComp = new EpicComponent(it, MythicBukkit.inst());
-				if(!itComp.hasKey("soulbind")
-						|| !itComp.getString("soulbind").equalsIgnoreCase(e.getWhoClicked().getName())) {
+				if(!Utils.isItemSoulbindedToPlayer(it, p)) {
 					p.closeInventory();
 					return;
 				}
@@ -297,8 +295,7 @@ public class GemEvents {
 				}
 				
 				EpicComponent compTrophy = new EpicComponent(trophy, MythicBukkit.inst());
-				if(!compTrophy.hasKey("soulbind")
-						|| !compTrophy.getString("soulbind").equalsIgnoreCase(e.getWhoClicked().getName())) {
+				if(!Utils.isItemSoulbindedToPlayer(trophy, p)) {
 					p.closeInventory();
 					return;
 				}

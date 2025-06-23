@@ -38,6 +38,9 @@ public class RuneInteractListener implements Listener {
 	
 		String mmType = MythicBukkit.inst().getItemManager().getMythicTypeFromItem(originalRune);
 		ItemStack rune = MythicBukkit.inst().getItemManager().getItemStack(mmType);
+		
+		if(Utils.isItemSoulbinded(originalRune))
+			Utils.setItemSoulbinded(rune, Utils.getSoulbindedPlayer(originalRune));
 				
 		if(RuneManager.get().tryCastRune(rpg, rune)) {
 			e.setUseInteractedBlock(Result.DENY);
@@ -67,6 +70,9 @@ public class RuneInteractListener implements Listener {
 	
 		String mmType = Utils.getMythicMobItemType(originalRune);
 		ItemStack rune = MythicBukkit.inst().getItemManager().getItemStack(mmType);
+		
+		if(Utils.isItemSoulbinded(originalRune))
+			Utils.setItemSoulbinded(rune, Utils.getSoulbindedPlayer(originalRune));
 		
 		if(RuneManager.get().tryCastRune(rpg, rune)) {
 			e.setCancelled(true);

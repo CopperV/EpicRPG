@@ -23,6 +23,8 @@ public class CheckStats {
 				!item.hasItemMeta() ||
 				!item.getItemMeta().hasLore())
 			return true;
+		if(!Utils.canUseItem(item, rpg.getPlayer()))
+			return false;
 		if(Utils.isRune(item))
 			return false;
 		EpicComponent itComp = new EpicComponent(item, MythicBukkit.inst());

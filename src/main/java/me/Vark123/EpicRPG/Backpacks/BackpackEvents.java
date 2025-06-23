@@ -70,8 +70,7 @@ public class BackpackEvents {
 				
 				EpicComponent itComp = new EpicComponent(it, MythicBukkit.inst());
 				
-				if(!itComp.hasKey("soulbind")
-						|| !itComp.getString("soulbind").equalsIgnoreCase(e.getWhoClicked().getName())) {
+				if(!Utils.isItemSoulbindedToPlayer(it, p)) {
 					toReturn.add(it);
 					continue;
 				}
@@ -186,8 +185,7 @@ public class BackpackEvents {
 				}
 				
 				EpicComponent itComp = new EpicComponent(katedraIt, MythicBukkit.inst());
-				if(!itComp.hasKey("soulbind")
-						|| !itComp.getString("soulbind").equalsIgnoreCase(p.getName())) {
+				if(!Utils.isItemSoulbindedToPlayer(katedraIt, p)) {
 					p.closeInventory();
 					return;
 				}

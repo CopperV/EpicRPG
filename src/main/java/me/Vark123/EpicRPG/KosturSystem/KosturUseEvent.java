@@ -1,5 +1,6 @@
 package me.Vark123.EpicRPG.KosturSystem;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
@@ -57,14 +58,19 @@ public class KosturUseEvent implements Listener {
 		String key = manager.finishCombo(p, kostur);
 		if(!comp.hasKey(key))
 			return;
-		String mm = comp.getString(key);
-		if(mm.equalsIgnoreCase("-")) {
+		
+		EpicComponent slotComp = comp.getComponent(key);
+		if(slotComp == null || !slotComp.hasKey("id") || slotComp.getString("id").equals("-")) {
 			p.getWorld().spawnParticle(Particle.DRAGON_BREATH, p.getEyeLocation(), 5, 0.25, 0.25, 0.25, 0.1);
 			return;
 		}
 		
 		ItemExecutor manag = MythicBukkit.inst().getItemManager();
-		ItemStack rune = manag.getItemStack(mm);
+		ItemStack rune = manag.getItemStack(slotComp.getString("id"));
+		if(slotComp.hasKey("soulbind")) {
+			Utils.setItemSoulbinded(rune, Bukkit.getPlayer(slotComp.getUUID("soulbind")));
+		}
+		
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		
 		if(!p.isSneaking()) {
