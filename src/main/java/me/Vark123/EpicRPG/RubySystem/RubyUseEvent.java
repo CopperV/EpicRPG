@@ -60,7 +60,7 @@ public class RubyUseEvent implements Listener {
 			return;
 		RubyManager.getInstance().getCooldowns().put(p, new Date());
 		
-		boolean use = p.isSneaking();
+		boolean use = !p.isSneaking();
 		boolean hpRuby = type.equalsIgnoreCase("hp_ruby");
 
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
