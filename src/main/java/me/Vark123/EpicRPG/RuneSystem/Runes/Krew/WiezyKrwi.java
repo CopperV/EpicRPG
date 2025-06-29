@@ -69,14 +69,9 @@ public class WiezyKrwi extends ACastableRune {
 		}).stream().map(entity -> (LivingEntity) entity).min((e1, e2) -> {
 			double comp1 = (e1.getLocation().distance(_loc) / angle
 					- e2.getLocation().distance(_loc) / angle) * 0.7;
-			double comp2 = (Utils.getAngle(player, e1) / angle
-					- Utils.getAngle(player, e2)) * 0.3;
-			double result = comp1+comp2;
-			if(result < 0)
-				return -1;
-			else if(result > 0)
-				return 1;
-			return 0;
+			double comp2 = ((Utils.getAngle(player, e1)
+					- Utils.getAngle(player, e2))) / angle * 0.3;
+			return Double.compare(comp1 + comp2, 0);
 		}).ifPresent(e -> target = e);
 		
 		if(target != null) {

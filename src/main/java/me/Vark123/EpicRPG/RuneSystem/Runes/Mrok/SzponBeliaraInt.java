@@ -1,5 +1,6 @@
 package me.Vark123.EpicRPG.RuneSystem.Runes.Mrok;
 
+import org.apache.commons.lang3.mutable.MutableDouble;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -42,6 +43,8 @@ public class SzponBeliaraInt extends ACastableRune {
 		Location startLoc = player.getLocation().clone().add(0, 1.3, 0);
 		double velocity = 0.7;
 		
+		MutableDouble damage = new MutableDouble(rune.getDamage());
+		
 		MultipleProjectileRuneTemplate.castProjectile(
 				this, 
 				startLoc, 
@@ -63,19 +66,23 @@ public class SzponBeliaraInt extends ACastableRune {
 				}, 
 				hitCondition, 
 				(loc, e) -> {
-					if(RuneUtils.damage(player, e, rune)) {
+					if(RuneUtils.damage(player, e, rune, damage.doubleValue())) {
 						e.getWorld().playSound(loc, Sound.ENTITY_ZOMBIE_HORSE_HURT, 0.9f, 0.7f);
 
 						loc.getWorld().spawnParticle(Particle.DUST, loc, 15, 
 								0.35f, 0.35f, 0.35f, 0.12f, dust);
 						loc.getWorld().spawnParticle(Particle.FALLING_DUST, loc, 25, 
 								0.25f, 0.25f, 0.25f, 0.1f, particleBlockData);
+						
+						damage.setValue(damage.doubleValue() * 0.85);
 					}
 				}, 
 				loc -> {
 					Vector vec = startLoc.getDirection().normalize().multiply(-1);
 					Location startLoc2 = loc.clone().add(vec.clone().multiply(velocity));
 					double distance = startLoc2.distance(startLoc);
+
+					damage.setValue(damage.doubleValue());
 					
 					MultipleProjectileRuneTemplate.castProjectile(
 							this, 
@@ -96,13 +103,15 @@ public class SzponBeliaraInt extends ACastableRune {
 							}, 
 							hitCondition, 
 							(_loc, e) -> {
-								if(RuneUtils.damage(player, e, rune)) {
+								if(RuneUtils.damage(player, e, rune, damage.doubleValue())) {
 									e.getWorld().playSound(_loc, Sound.ENTITY_ZOMBIE_HORSE_HURT, 0.9f, 0.7f);
 
 									_loc.getWorld().spawnParticle(Particle.DUST, _loc, 15, 
 											0.35f, 0.35f, 0.35f, 0.12f, dust);
 									_loc.getWorld().spawnParticle(Particle.FALLING_DUST, _loc, 25, 
 											0.25f, 0.25f, 0.25f, 0.1f, particleBlockData);
+									
+									damage.setValue(damage.doubleValue() * 0.85);
 								}
 							}, 
 							_loc -> { });

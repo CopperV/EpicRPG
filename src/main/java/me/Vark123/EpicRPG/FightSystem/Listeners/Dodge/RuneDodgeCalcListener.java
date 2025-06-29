@@ -18,11 +18,11 @@ public class RuneDodgeCalcListener implements Listener {
 		double modifier = 0;
 		
 		if(modifiers.hasActiveModifier(EpicModifierTypes.WTOPIENIE))
-			modifier += 0.08;
+			modifier += 0.06;
 		if(modifiers.hasActiveModifier(EpicModifierTypes.WTOPIENIE_H))
-			modifier += 0.1;
+			modifier += 0.075;
 		if(modifiers.hasActiveModifier(EpicModifierTypes.WTOPIENIE_M))
-			modifier += 0.125;
+			modifier += 0.1;
 		
 		e.addChance(modifier);
 	}
