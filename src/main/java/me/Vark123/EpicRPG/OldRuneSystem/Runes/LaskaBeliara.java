@@ -33,8 +33,8 @@ public class LaskaBeliara extends ARune {
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		RpgModifiers modifiers = rpg.getModifiers();
 		
-		modifiers.setLaskaBeliara(true);
-		modifiers.setModifier1_lock(true);
+//		modifiers.setLaskaBeliara(true);
+//		modifiers.setModifier1_lock(true);
 		
 		p.getWorld().playSound(p.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_CHARGE, 1, 0.6f);
 		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
@@ -56,8 +56,8 @@ public class LaskaBeliara extends ARune {
 					bar.setVisible(false);
 					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_DEPLETE, 1, 0.9f);
-					modifiers.setLaskaBeliara(false);
-					modifiers.setModifier1_lock(false);
+//					modifiers.setLaskaBeliara(false);
+//					modifiers.setModifier1_lock(false);
 					this.cancel();
 					return;
 				}

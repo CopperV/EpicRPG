@@ -25,8 +25,8 @@ public class WedrownyCienTargetEvent implements Listener {
 			return;
 		
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer((Player) target);
-		if(!rpg.getModifiers().hasWedrownyCien())
-			return;
+//		if(!rpg.getModifiers().hasWedrownyCien())
+//			return;
 		
 		e.setCancelled(true);
 	}

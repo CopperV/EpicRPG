@@ -94,10 +94,10 @@ public class RuneManager {
 		ARune r = getRune(ir, p, rune.getType(), rune.getItemMeta().getDisplayName());
 		
 		RpgModifiers modifiers = rpg.getModifiers();
-		if(modifiers.hasModifier1_lock() && r.hasModifier1()) {
-			p.sendMessage(Main.getInstance().getPrefix()+" §cUzywasz obecnie innej runy modyfikujacej obrazenia.");
-			return false;
-		}
+//		if(modifiers.hasModifier1_lock() && r.hasModifier1()) {
+//			p.sendMessage(Main.getInstance().getPrefix()+" §cUzywasz obecnie innej runy modyfikujacej obrazenia.");
+//			return false;
+//		}
 //		if(modifiers.hasModifier2_lock() && r.hasModifier2()) {
 //			p.sendMessage(Main.getInstance().getPrefix()+" §cUzyles przed chwila masowej runy obszarowej. Poczekaj chwile.");
 //			return false;
@@ -120,10 +120,8 @@ public class RuneManager {
 		RuneUseEvent event = new RuneUseEvent(p, ir);
 		Bukkit.getPluginManager().callEvent(event);
 		
-		rpg.displayUpdate();
+//		rpg.displayUpdate();
 		r.castSpell();
-		if(rpg.getModifiers().hasLodowyBlok() && LodowyBlok.getEffected().contains(p) && !(r instanceof LodowyBlok))
-			LodowyBlok.getEffected().remove(p);
 		
 		return true;
 	}
@@ -143,18 +141,18 @@ public class RuneManager {
 	public void createRuneCd(RpgPlayer rpg, ItemStackRune ir) {
 		Player p = rpg.getPlayer();
 
-		if((rpg.getModifiers().hasTajemnyBlask() || rpg.getModifiers().hasTajemnyBlask_m()) 
-				&& rpg.getInfo().getProffesion().equals("§5Mag")
-				&& !ir.getName().toLowerCase().contains("tajemny blask")) {
-			if(rpg.getModifiers().hasTajemnyBlask_m()) {
-				ir.setRegenTime((int)(ir.getRegenTime()*0.25));
-			} else if(rpg.getModifiers().hasTajemnyBlask()) {
-				ir.setRegenTime((int)(ir.getRegenTime()*0.4));
-			}
-		}
-		else if(rpg.getStats().getFinalMana() > 49) {
-			ir.modifyRegenTime(rpg.getStats());
-		}
+//		if((rpg.getModifiers().hasTajemnyBlask() || rpg.getModifiers().hasTajemnyBlask_m()) 
+//				&& rpg.getInfo().getProffesion().equals("§5Mag")
+//				&& !ir.getName().toLowerCase().contains("tajemny blask")) {
+//			if(rpg.getModifiers().hasTajemnyBlask_m()) {
+//				ir.setRegenTime((int)(ir.getRegenTime()*0.25));
+//			} else if(rpg.getModifiers().hasTajemnyBlask()) {
+//				ir.setRegenTime((int)(ir.getRegenTime()*0.4));
+//			}
+//		}
+//		else if(rpg.getStats().getFinalMana() > 49) {
+//			ir.modifyRegenTime(rpg.getStats());
+//		}
 		Map<String, ItemStackRune> cds = playerRuneCd.getOrDefault(p.getUniqueId(), new ConcurrentHashMap<>());
 		cds.put(ir.getName(), ir);
 		playerRuneCd.put(p.getUniqueId(), cds);
@@ -247,14 +245,14 @@ public class RuneManager {
 		RpgStats stats = rpg.getStats();
 		int price = ir.getPrice();
 		if(!ir.getName().toLowerCase().contains("tajemny blask")) {
-			if(rpg.getModifiers().hasTajemnyBlask_m() && rpg.getInfo().getProffesion().equals("§5Mag")) {
-				price *= 0.5;
-			} else if(rpg.getModifiers().hasTajemnyBlask() && rpg.getInfo().getProffesion().equals("§5Mag")) {
-				price *= 0.7;
-			}
+//			if(rpg.getModifiers().hasTajemnyBlask_m() && rpg.getInfo().getProffesion().equals("§5Mag")) {
+//				price *= 0.5;
+//			} else if(rpg.getModifiers().hasTajemnyBlask() && rpg.getInfo().getProffesion().equals("§5Mag")) {
+//				price *= 0.7;
+//			}
 		}
-		else if(rpg.getModifiers().hasZrodloNatury())
-			price *= 0.8;
+//		else if(rpg.getModifiers().hasZrodloNatury())
+//			price *= 0.8;
 		if(p.getWorld().getName().toLowerCase().contains("dungeon12")
 				&& p.getNearbyEntities(30, 10, 30)
 					.stream()
@@ -302,8 +300,8 @@ public class RuneManager {
 		}
 		double presentHealth = p.getHealth();
 		int price = ir.getPrice();
-		if(rpg.getModifiers().hasZrodloNatury())
-			price *= 0.8;
+//		if(rpg.getModifiers().hasZrodloNatury())
+//			price *= 0.8;
 		if(p.getWorld().getName().toLowerCase().contains("dungeon12")
 				&& p.getNearbyEntities(30, 10, 30)
 					.stream()
@@ -329,9 +327,9 @@ public class RuneManager {
 	
 	public void spendMana(RpgPlayer rpg, ItemStackRune ir) {
 		int price = ir.getPrice();
-		if(rpg.getModifiers().hasZrodloNatury()){
-			price *= 0.8;
-		}
+//		if(rpg.getModifiers().hasZrodloNatury()){
+//			price *= 0.8;
+//		}
 		
 		Player p = rpg.getPlayer();
 		if(p.getWorld().getName().toLowerCase().contains("dungeon12")
@@ -366,9 +364,9 @@ public class RuneManager {
 	public void spendHp(RpgPlayer rpg, ItemStackRune ir) {
 		Player p = rpg.getPlayer();
 		int price = ir.getPrice();
-		if(rpg.getModifiers().hasZrodloNatury()){
-			price *= 0.8;
-		}
+//		if(rpg.getModifiers().hasZrodloNatury()){
+//			price *= 0.8;
+//		}
 		if(p.getWorld().getName().toLowerCase().contains("dungeon12")
 				&& p.getNearbyEntities(30, 10, 30)
 					.stream()

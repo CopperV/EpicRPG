@@ -55,10 +55,10 @@ public class EksplodujacaStrzalaHitEffectEvent implements Listener {
 		
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		RpgModifiers modifiers = rpg.getModifiers();
-		if(!modifiers.hasEksplodujacaStrzala()
-				&& !modifiers.hasEksplodujacaStrzala_h()
-				&& !modifiers.hasEksplodujacaStrzala_m())
-			return;
+//		if(!modifiers.hasEksplodujacaStrzala()
+//				&& !modifiers.hasEksplodujacaStrzala_h()
+//				&& !modifiers.hasEksplodujacaStrzala_m())
+//			return;
 		
 		if(!arrow.hasMetadata("rpg_bow") || !arrow.hasMetadata("rpg_force"))
 			return;
@@ -68,13 +68,13 @@ public class EksplodujacaStrzalaHitEffectEvent implements Listener {
 //		double dmg = arrow.getDamage();
 		
 		MutableDouble baseDmg;
-		if(modifiers.hasEksplodujacaStrzala()) {
-			baseDmg = new MutableDouble(DEFAULT_EXPLOSION_DMG_MOD);
-		} else if(modifiers.hasEksplodujacaStrzala_h()) {
-			baseDmg = new MutableDouble(DEFAULT_EXPLOSION_DMG_MOD_H);
-		} else {
-			baseDmg = new MutableDouble(DEFAULT_EXPLOSION_DMG_MOD_M);
-		}
+//		if(modifiers.hasEksplodujacaStrzala()) {
+//			baseDmg = new MutableDouble(DEFAULT_EXPLOSION_DMG_MOD);
+//		} else if(modifiers.hasEksplodujacaStrzala_h()) {
+//			baseDmg = new MutableDouble(DEFAULT_EXPLOSION_DMG_MOD_H);
+//		} else {
+//			baseDmg = new MutableDouble(DEFAULT_EXPLOSION_DMG_MOD_M);
+//		}
 		if(bow.getType().equals(Material.CROSSBOW)) {
 			double enchantMod = 0;
 			int enchant = bow.getEnchantmentLevel(Enchantment.QUICK_CHARGE);
@@ -98,7 +98,7 @@ public class EksplodujacaStrzalaHitEffectEvent implements Listener {
 					enchantMod = 0.7;
 					break;
 			}
-			baseDmg.setValue(baseDmg.doubleValue()*enchantMod);
+//			baseDmg.setValue(baseDmg.doubleValue()*enchantMod);
 		}
 
 		final Location loc = arrow.getLocation();
@@ -136,9 +136,9 @@ public class EksplodujacaStrzalaHitEffectEvent implements Listener {
 		}).forEach(entity -> {
 			Location eLoc = entity.getLocation();
 			double dist = eLoc.distance(loc);
-			double eDmg = dmg * baseDmg.doubleValue() * (24.0 - dist) / 24.0;
+//			double eDmg = dmg * baseDmg.doubleValue() * (24.0 - dist) / 24.0;
 			
-			CustomProjectileEntityDamageEvent event = new CustomProjectileEntityDamageEvent(proj, entity, eDmg);
+			CustomProjectileEntityDamageEvent event = new CustomProjectileEntityDamageEvent(proj, entity, 0);
 			Bukkit.getPluginManager().callEvent(event);
 			if(event.isCancelled()) {
 				return;

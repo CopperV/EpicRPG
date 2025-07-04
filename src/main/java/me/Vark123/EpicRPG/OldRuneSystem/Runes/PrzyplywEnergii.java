@@ -28,7 +28,7 @@ public class PrzyplywEnergii extends ARune {
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		RpgModifiers modifiers = rpg.getModifiers();
 		p.getWorld().playSound(p.getLocation(), Sound.EVENT_RAID_HORN, 100, .7f);
-		modifiers.setPrzyplywEnergii(true);
+//		modifiers.setPrzyplywEnergii(true);
 		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
 		
 		new BukkitRunnable() {
@@ -48,7 +48,7 @@ public class PrzyplywEnergii extends ARune {
 					bar.setVisible(false);
 					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GHAST_SHOOT, 1, 1);
-					modifiers.setPrzyplywEnergii(false);
+//					modifiers.setPrzyplywEnergii(false);
 					Location loc = p.getLocation();
 					for(double y = 0.1;y<=2.2;y+=0.1) {
 						for(double t = 0;t<=2*Math.PI;t+=(Math.PI/16)) {

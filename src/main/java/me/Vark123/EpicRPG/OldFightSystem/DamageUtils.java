@@ -53,12 +53,12 @@ public final class DamageUtils {
 		RpgModifiers modifiers = rpg.getModifiers();
 		
 		double mod = stats.getFinalZrecznosc() / 35.;
-		if(modifiers.hasSzalPrzedwiecznych())
-			mod += 15;
-		if(modifiers.hasSzalPrzedwiecznych_h())
-			mod += 23;
-		if(modifiers.hasSzalPrzedwiecznych_m())
-			mod += 30;
+//		if(modifiers.hasSzalPrzedwiecznych())
+//			mod += 15;
+//		if(modifiers.hasSzalPrzedwiecznych_h())
+//			mod += 23;
+//		if(modifiers.hasSzalPrzedwiecznych_m())
+//			mod += 30;
 		
 		double min = 95 - mod;
 		double max = 105 + mod;
@@ -186,21 +186,21 @@ public final class DamageUtils {
 		double los = rand.nextDouble(100);
 		double chance = (stats.getFinalZdolnosciMysliwskie()+stats.getFinalZrecznosc())/65.;
 		
-		if(rpg.getModifiers().hasWtopienie())
-			chance += 8;
-		if(rpg.getModifiers().hasWtopienie_h())
-			chance += 10;
-		if(rpg.getModifiers().hasWtopienie_m())
-			chance += 12.5;
+//		if(rpg.getModifiers().hasWtopienie())
+//			chance += 8;
+//		if(rpg.getModifiers().hasWtopienie_h())
+//			chance += 10;
+//		if(rpg.getModifiers().hasWtopienie_m())
+//			chance += 12.5;
 		
 		if(chance > 30)
 			chance = 30;
 
-		if(rpg.getModifiers().hasTajemnyBlask_m() && rpg.getInfo().getProffesion().equals("§2Mysliwy")) {
-			chance = 50;
-		} else if(rpg.getModifiers().hasTajemnyBlask() && rpg.getInfo().getProffesion().equals("§2Mysliwy")) {
-			chance = 30;
-		}
+//		if(rpg.getModifiers().hasTajemnyBlask_m() && rpg.getInfo().getProffesion().equals("§2Mysliwy")) {
+//			chance = 50;
+//		} else if(rpg.getModifiers().hasTajemnyBlask() && rpg.getInfo().getProffesion().equals("§2Mysliwy")) {
+//			chance = 30;
+//		}
 		
 		if(los >= chance)
 			return false;

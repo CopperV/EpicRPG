@@ -80,8 +80,8 @@ public class MeleeCalculator implements IDamageCalculator {
 		RpgModifiers modifiers = rpg.getModifiers();
 		
 		boolean crit = DamageUtils.checkCrit(rpg, victim);
-		if(modifiers.hasPenetracja())
-			crit = true;
+//		if(modifiers.hasPenetracja())
+//			crit = true;
 		pair.setValue(crit);
 		
 		if(skills.hasPolnocnyBarbarzynca() && !hasWeapon(p)) {

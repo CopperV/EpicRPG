@@ -153,7 +153,7 @@ public class RpgSkills implements Serializable, ChatPrintable {
 		
 		sender.sendMessage("§6§l========================= ");
 		sender.sendMessage("    §2Wyuczone umiejetnosci: "+(builder.isEmpty() ? 
-				"§cZADNE" :
+				"§c-" :
 					builder.toString()));
 	}
 	

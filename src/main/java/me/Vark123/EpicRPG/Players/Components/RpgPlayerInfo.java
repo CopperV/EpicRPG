@@ -45,7 +45,6 @@ public class RpgPlayerInfo implements Serializable, ChatPrintable{
 	public RpgPlayerInfo(RpgPlayer rpg) {
 		this.rpg = rpg;
 		this.nextLevel = 500;
-//		this.nextLevel = RpgSystem.getNextLevelExp(level);
 	}
 	
 	public RpgPlayerInfo(RpgPlayer rpg, ResultSet set) throws SQLException {
@@ -54,7 +53,6 @@ public class RpgPlayerInfo implements Serializable, ChatPrintable{
 		this.level = set.getInt("player_stats.level");
 		this.exp = set.getInt("player_stats.exp");
 		this.nextLevel = set.getInt("player_stats.nextLevel");
-//		this.nextLevel = RpgSystem.getNextLevelExp(level);
 		this.pn = set.getInt("player_stats.pn");
 		this.proffesion = set.getString("player_stats.klasa");
 		
@@ -68,7 +66,6 @@ public class RpgPlayerInfo implements Serializable, ChatPrintable{
 		this.level = fYml.getInt("level");
 		this.exp = fYml.getInt("exp");
 		this.nextLevel = fYml.getInt("nextLevel");
-//		this.nextLevel = RpgSystem.getNextLevelExp(level);
 		this.proffesion = fYml.getString("proffesion");
 		this.pn = fYml.getInt("PN");
 		

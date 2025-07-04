@@ -1,6 +1,7 @@
 package me.Vark123.EpicRPG.Players.BaseEvents;
 
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -31,7 +32,7 @@ public class PlayerJoinEvent implements Listener {
 							p.kickPlayer("§cBlad podczas wczytywania danych. Zglos blad administratorowi");
 							return;
 						}
-						
+						p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 						
 						if(rpg.getInfo().getLevel() == 1) {
 							new BukkitRunnable() {

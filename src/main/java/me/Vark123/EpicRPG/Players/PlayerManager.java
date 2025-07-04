@@ -7,7 +7,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Singleton;
 
 import org.bukkit.Bukkit;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 
 import lombok.Getter;
@@ -57,8 +56,7 @@ public class PlayerManager {
 		ChangeStats.change(rpg);
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), ()->{
-			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(rpg.getStats().getFinalHealth());
-			p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+//			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(rpg.getStats().getFinalHealth());
 			if(rpg.getSkills().hasHungerless()) 
 				p.setFoodLevel(18);
 			else

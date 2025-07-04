@@ -42,8 +42,8 @@ public class TrujacaAuraEffectListener implements Listener {
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		RpgModifiers modifiers = rpg.getModifiers();
 		
-		if(!modifiers.hasTrujacaAura())
-			return;
+//		if(!modifiers.hasTrujacaAura())
+//			return;
 		
 		double dmg = e.getDmg()*0.05;
 		if(RuneDamage.directDamageEffect(p, (LivingEntity) victim, 

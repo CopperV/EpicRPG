@@ -101,7 +101,7 @@ public class Kataklizm extends ACastableRune {
 				radius,
 				time,
 				0.5,
-				1, 
+				2, 
 				5, 
 				1,
 				1,

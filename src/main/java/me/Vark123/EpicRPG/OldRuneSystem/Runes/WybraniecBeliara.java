@@ -29,8 +29,8 @@ public class WybraniecBeliara extends ARune {
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(p);
 		RpgModifiers modifiers = rpg.getModifiers();
 		p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
-		modifiers.setWybraniecBeliara(true);
-		modifiers.setModifier1_lock(true);
+//		modifiers.setWybraniecBeliara(true);
+//		modifiers.setModifier1_lock(true);
 		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
 		
 		new BukkitRunnable() {
@@ -50,8 +50,8 @@ public class WybraniecBeliara extends ARune {
 					bar.setVisible(false);
 					p.sendMessage("§7[§6EpicRPG§7] §aEfekt dzialania runy "+dr.getName()+" skonczyl sie");
 					p.getWorld().playSound(p.getLocation(), Sound.ENTITY_GHAST_SHOOT, 1, 1);
-					modifiers.setWybraniecBeliara(false);
-					modifiers.setModifier1_lock(false);
+//					modifiers.setWybraniecBeliara(false);
+//					modifiers.setModifier1_lock(false);
 					Location loc = p.getLocation();
 					for(double y = 0.1;y<=2.2;y+=0.1) {
 						for(double t = 0;t<=2*Math.PI;t+=(Math.PI/16)) {

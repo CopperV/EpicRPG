@@ -41,8 +41,8 @@ public class GradStrzalLaunchEvent implements Listener {
 			return;
 		
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer((Player) e.getEntity());
-		if(!rpg.getModifiers().hasGradStrzal())
-			return;
+//		if(!rpg.getModifiers().hasGradStrzal())
+//			return;
 		
 		AbstractArrow arrow = (AbstractArrow) e.getProjectile();
 		Vector velocity = e.getProjectile().getVelocity();

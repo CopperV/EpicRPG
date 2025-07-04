@@ -121,6 +121,12 @@ public class StatModCommand implements CommandExecutor {
 				message = message.replace("%stat_name%", "Ochrona");
 				message = message.replace("%stat_amount%", (stats.getOchrona()+stats.getPotionOchrona())+"");
 				break;
+			case "hp":
+				stats.addPotionHealth(amount);
+				ChangeStats.change(rpg);
+				message = message.replace("%stat_name%", "HP");
+				message = message.replace("%stat_amount%", (stats.getHealth()+stats.getPotionHealth())+"");
+				break;
 			default:
 				return false;
 		}

@@ -44,7 +44,7 @@ public class PaktKrwi_M extends ARune {
 		modifiers.setPaktKrwi_m(true);
 		modifiers.setPaktKrwiMeasure_m(true);
 		modifiers.setPaktKrwiHp_m(0);
-		modifiers.setModifier1_lock(true);
+//		modifiers.setModifier1_lock(true);
 		p.sendMessage("§7[§6EpicRPG§7] §aUzyles runy "+dr.getName());
 		
 		new BukkitRunnable() {
@@ -78,7 +78,7 @@ public class PaktKrwi_M extends ARune {
 					modifiers.setPaktKrwi_m(false);
 					modifiers.setPaktKrwiMeasure_m(false);
 					modifiers.setPaktKrwiHp_m(0);
-					modifiers.setModifier1_lock(false);
+//					modifiers.setModifier1_lock(false);
 					
 					Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), () -> {
 						p.damage(1);
@@ -94,7 +94,7 @@ public class PaktKrwi_M extends ARune {
 					hpBar.removeAll();
 					hpBar.setVisible(false);
 					modifier1 = false;
-					modifiers.setModifier1_lock(false);
+//					modifiers.setModifier1_lock(false);
 					hpEffect();
 					cancel();
 					return;
