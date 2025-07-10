@@ -1,7 +1,6 @@
 package me.Vark123.EpicRPG.RuneSystem.Runes.Krew;
 
-import java.util.Random;
-
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -20,10 +19,7 @@ import me.Vark123.EpicRPG.RuneSystem.Templates.EntityHits.PvPRuneHitCondition;
 
 public class Furia extends ACastableRune {
 
-	private static final Random rand = new Random();
-	private static final double red = 138./255.;
-	private static final double green = 3./255.;
-	private static final double blue = 3./255.;
+	private final Color partColor = Color.fromRGB(138, 3, 3);
 	
 	private IRuneHitCondition hitCondition;
 	private BoundingBox boundingBox;
@@ -66,25 +62,13 @@ public class Furia extends ACastableRune {
 							loc.getWorld().playSound(loc, Sound.ENTITY_BLAZE_SHOOT, 1, 1f);
 						}, 
 						loc -> {
-							for(int i = 0; i < 12; ++i) {
-								double x = rand.nextDouble(0.8) - 0.4;
-								double y = rand.nextDouble(0.8) - 0.4;
-								double z = rand.nextDouble(0.8) - 0.4;
-								Location tmp = loc.clone().add(x,y,z);
-								tmp.getWorld().spawnParticle(Particle.ENTITY_EFFECT, tmp, 0, red, green, blue, 1);
-							}
+							loc.getWorld().spawnParticle(Particle.ENTITY_EFFECT, loc, 12, 0.4, 0.4, 0.4, 1, partColor);
 						}, 
 						hitCondition, 
 						(loc, e) -> {
 							if(RuneUtils.damage(player, e, rune)) {
 								e.getWorld().playSound(loc, Sound.ENTITY_PLAYER_HURT_SWEET_BERRY_BUSH, 1, 0.66f);
-								for(int i = 0; i < 12; ++i) {
-									double x = rand.nextDouble(1.2) - 0.6;
-									double y = rand.nextDouble(1.2) - 0.6;
-									double z = rand.nextDouble(1.2) - 0.6;
-									Location tmp = loc.clone().add(x,y,z);
-									tmp.getWorld().spawnParticle(Particle.ENTITY_EFFECT, tmp, 0, red, green, blue, 1);
-								}
+								loc.getWorld().spawnParticle(Particle.ENTITY_EFFECT, loc, 12, 0.6, 0.6, 0.6, 1, partColor);
 							}
 						}, 
 						loc -> { });

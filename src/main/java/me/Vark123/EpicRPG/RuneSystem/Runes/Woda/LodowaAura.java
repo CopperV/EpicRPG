@@ -70,6 +70,7 @@ public class LodowaAura extends ACastableRune {
 				EpicModifierTypes.LODOWA_AURA,
 				player,
 				target -> {
+					target.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).removeModifier(modifier);
 					target.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).addModifier(modifier);
 					target.setAbsorptionAmount(target.getAbsorptionAmount() + value);
 				}, 

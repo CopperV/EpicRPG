@@ -47,6 +47,10 @@ public class MagicCalculator implements IDamageCalculator {
 		else if(info.getSetCounts().getOrDefault("Mroczna_Zamiec_M", 0) > 3) {
 			wplyw += 0.17;
 		}
+
+		if(info.getSetCounts().getOrDefault("Wodny_Krag", 0) > 3) {
+			wplyw += 0.01;
+		}
 		
 		//DMG OD OBRAZEN
 		double addDmg = (stats.getFinalObrazenia() / Math.max(wplyw, 0.01)) * 0.01;

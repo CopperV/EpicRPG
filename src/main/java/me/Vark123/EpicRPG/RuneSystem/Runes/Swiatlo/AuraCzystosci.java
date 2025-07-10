@@ -45,6 +45,7 @@ public class AuraCzystosci extends ACastableRune {
 				target -> {
 					target.getWorld().playSound(target.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.2f, 0.7f);
 
+					target.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).removeModifier(modifier);
 					target.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).addModifier(modifier);
 					target.setAbsorptionAmount(target.getAbsorptionAmount() + value);
 				}, 

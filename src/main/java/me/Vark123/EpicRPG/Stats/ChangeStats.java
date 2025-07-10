@@ -21,7 +21,6 @@ import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgJewelry;
 import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
-import me.Vark123.EpicRPG.Players.Components.RpgModifiers.EpicModifierTypes;
 import me.Vark123.EpicRPG.Utils.Utils;
 import net.minecraft.world.item.ItemArmor;
 
@@ -159,44 +158,50 @@ public class ChangeStats {
 			weaponCheck = false;
 		}
 		
-		if(rpg.getModifiers().hasActiveModifier(EpicModifierTypes.OSTATNI_BOJ_M)) {
-			stats.setFinalSila((int) (stats.getFinalSila()*1.27));
-			stats.setFinalWytrzymalosc((int) (stats.getFinalWytrzymalosc()*1.27));
-		}
-		if(rpg.getModifiers().hasActiveModifier(EpicModifierTypes.OSTATNI_BOJ_H)) {
-			stats.setFinalSila((int) (stats.getFinalSila()*1.23));
-			stats.setFinalWytrzymalosc((int) (stats.getFinalWytrzymalosc()*1.23));
-		}
-		if(rpg.getModifiers().hasActiveModifier(EpicModifierTypes.OSTATNI_BOJ)) {
-			stats.setFinalSila((int) (stats.getFinalSila()*1.2));
-			stats.setFinalWytrzymalosc((int) (stats.getFinalWytrzymalosc()*1.2));
-		}
-
-		if(rpg.getModifiers().hasActiveModifier(EpicModifierTypes.SZOSTY_ZMYSL_M)) {
-			stats.setFinalZrecznosc((int) (stats.getFinalZrecznosc()*1.27));
-			stats.setFinalZdolnosciMysliwskie((int) (stats.getFinalZdolnosciMysliwskie()*1.27));
-		}
-		if(rpg.getModifiers().hasActiveModifier(EpicModifierTypes.SZOSTY_ZMYSL_H)) {
-			stats.setFinalZrecznosc((int) (stats.getFinalZrecznosc()*1.23));
-			stats.setFinalZdolnosciMysliwskie((int) (stats.getFinalZdolnosciMysliwskie()*1.23));
-		}
-		if(rpg.getModifiers().hasActiveModifier(EpicModifierTypes.SZOSTY_ZMYSL)) {
-			stats.setFinalZrecznosc((int) (stats.getFinalZrecznosc()*1.2));
-			stats.setFinalZdolnosciMysliwskie((int) (stats.getFinalZdolnosciMysliwskie()*1.2));
-		}
-
-		if(rpg.getModifiers().hasActiveModifier(EpicModifierTypes.PRZYPLYW_ENERGII_M)) {
-			stats.setFinalInteligencja((int) (stats.getFinalInteligencja()*1.27));
-			stats.setFinalMana((int) (stats.getFinalMana()*1.27));
-		}
-		if(rpg.getModifiers().hasActiveModifier(EpicModifierTypes.PRZYPLYW_ENERGII_H)) {
-			stats.setFinalInteligencja((int) (stats.getFinalInteligencja()*1.23));
-			stats.setFinalMana((int) (stats.getFinalMana()*1.23));
-		}
-		if(rpg.getModifiers().hasActiveModifier(EpicModifierTypes.PRZYPLYW_ENERGII)) {
-			stats.setFinalInteligencja((int) (stats.getFinalInteligencja()*1.2));
-			stats.setFinalMana((int) (stats.getFinalMana()*1.2));
-		}
+		new StatChangeEvent.StatChangeEventManager(rpg, StatTypes.OBRAZENIA,
+				() -> stats.getFinalObrazenia(), 
+				newValue -> stats.setFinalObrazenia(newValue))
+			.invoke();
+		new StatChangeEvent.StatChangeEventManager(rpg, StatTypes.OCHRONA,
+				() -> stats.getFinalOchrona(), 
+				newValue -> stats.setFinalOchrona(newValue))
+			.invoke();
+		new StatChangeEvent.StatChangeEventManager(rpg, StatTypes.SILA,
+				() -> stats.getFinalSila(), 
+				newValue -> stats.setFinalSila(newValue))
+			.invoke();
+		new StatChangeEvent.StatChangeEventManager(rpg, StatTypes.WYTRZYMALOSC,
+				() -> stats.getFinalWytrzymalosc(), 
+				newValue -> stats.setFinalWytrzymalosc(newValue))
+			.invoke();
+		new StatChangeEvent.StatChangeEventManager(rpg, StatTypes.ZRECZNOSC,
+				() -> stats.getFinalZrecznosc(), 
+				newValue -> stats.setFinalZrecznosc(newValue))
+			.invoke();
+		new StatChangeEvent.StatChangeEventManager(rpg, StatTypes.ZDOLNOSCI_MYSLIWSKIE,
+				() -> stats.getFinalZdolnosciMysliwskie(), 
+				newValue -> stats.setFinalZdolnosciMysliwskie(newValue))
+			.invoke();
+		new StatChangeEvent.StatChangeEventManager(rpg, StatTypes.INTELIGENCJA,
+				() -> stats.getFinalInteligencja(), 
+				newValue -> stats.setFinalInteligencja(newValue))
+			.invoke();
+		new StatChangeEvent.StatChangeEventManager(rpg, StatTypes.MANA,
+				() -> stats.getFinalMana(), 
+				newValue -> stats.setFinalMana(newValue))
+			.invoke();
+		new StatChangeEvent.StatChangeEventManager(rpg, StatTypes.ZYCIE,
+				() -> stats.getFinalHealth(), 
+				newValue -> stats.setFinalHealth(newValue))
+			.invoke();
+		new StatChangeEvent.StatChangeEventManager(rpg, StatTypes.WALKA,
+				() -> stats.getFinalWalka(), 
+				newValue -> stats.setFinalWalka(newValue))
+			.invoke();
+		new StatChangeEvent.StatChangeEventManager(rpg, StatTypes.SUMMONS,
+				() -> stats.getFinalSummonPoints(), 
+				newValue -> stats.setFinalSummonPoints(newValue))
+			.invoke();
 	}
 	
 	private static void dropBackItem(RpgPlayer rpg) {

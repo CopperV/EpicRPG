@@ -12,6 +12,7 @@ public enum StatTypes {
 	MANA,
 	ZYCIE,
 	WALKA,
-	KRAG;
+	KRAG,
+	SUMMONS;
 	
 }

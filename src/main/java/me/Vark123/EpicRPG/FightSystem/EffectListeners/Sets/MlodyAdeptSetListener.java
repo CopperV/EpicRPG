@@ -12,8 +12,8 @@ import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 import me.Vark123.EpicRPG.RuneSystem.EpicRune;
 
-public class MroznaZamiecSetListener implements Listener {
-
+public class MlodyAdeptSetListener implements Listener {
+	
 	@EventHandler
 	public void onAttack(EpicAttackEvent e) {
 		if(e.isCancelled())
@@ -28,26 +28,21 @@ public class MroznaZamiecSetListener implements Listener {
 				|| !(args[1] instanceof EpicRune))
 			return;
 		
-		Entity damager = e.getDamager();
-		if(!(damager instanceof Player))
-			return;
-
 		EpicRune rune = (EpicRune) args[1];
-		String type = rune.getMagicType();
-		if(!(type.equalsIgnoreCase("mrok") || type.equalsIgnoreCase("woda")
-				|| type.equalsIgnoreCase("natura")))
+		if(rune.getKrag() < 6)
 			return;
 		
-		Player player = (Player) damager;
+		Entity damager = e.getDamager();
+		if(!(damager instanceof Player player))
+			return;
+		
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(player);
 		RpgPlayerInfo info = rpg.getInfo();
 		
-		if(info.getSetCounts().getOrDefault("Mroczna_Zamiec", 0) >= 3)
-			e.increaseModifier(0.15);
-		if(info.getSetCounts().getOrDefault("Mroczna_Zamiec_H", 0) >= 3)
-			e.increaseModifier(0.2);
-		if(info.getSetCounts().getOrDefault("Mroczna_Zamiec_M", 0) >= 3)
-			e.increaseModifier(0.25);
+		if(info.getSetCounts().getOrDefault("Mlody_Adept", 0) < 3)
+			return;
+		
+		e.increaseModifier(0.05);
 	}
 	
 }

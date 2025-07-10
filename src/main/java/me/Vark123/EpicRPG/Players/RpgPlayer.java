@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -18,6 +19,8 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -44,6 +47,7 @@ import me.Vark123.EpicRPG.Players.Components.Compass.EpicCompass;
 import me.Vark123.EpicRPG.Players.Components.Markers.EpicMarker;
 import me.Vark123.EpicRPG.Players.Components.Scoreboard.EpicScoreboard;
 import me.Vark123.EpicRPG.Stats.ChangeStats;
+import me.Vark123.EpicRPG.Stats.StatTypes;
 import me.Vark123.EpicRPG.Utils.ChatPrintable;
 import me.Vark123.EpicRPG.Utils.Utils;
 
@@ -79,6 +83,8 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 	
 	private NamespacedKey statsKey = NamespacedKey.fromString("rpg_player", Main.getInstance());
 	
+	private BukkitTask timingTask;
+	
 	public RpgPlayer(Player p) {
 		this.player = p;
 		this.info = new RpgPlayerInfo(this);
@@ -96,6 +102,8 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 		this.marker = new EpicMarker(this);
 		
 		this.hpBarInfo = new EnemyHpBarInfo(p);
+		
+		startTasks();
 	}
 	
 	public RpgPlayer(Player p, ResultSet set) {
@@ -121,6 +129,8 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 		this.marker = new EpicMarker(this);
 		
 		this.hpBarInfo = new EnemyHpBarInfo(p);
+		
+		startTasks();
 	}
 	
 	public RpgPlayer(Player p, YamlConfiguration fYml) {
@@ -140,6 +150,8 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 		this.marker = new EpicMarker(this);
 		
 		this.hpBarInfo = new EnemyHpBarInfo(p);
+		
+		startTasks();
 	}
 	
 	public void createScoreboard() {
@@ -150,10 +162,50 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 		RpgScoreboard.removeScoreboard(player);
 	}
 	
+	public void startTasks() {
+		timingTask = new BukkitRunnable() {
+			PotionEffect potion = new PotionEffect(PotionEffectType.SPEED, 20*5, 0);
+			@Override
+			public void run() {
+				if(isCancelled())
+					return;
+				
+				if(info.getSetCounts().getOrDefault("Zirael", 0) > 1) {
+					Location sourceLoc = player.getLocation().clone();
+					double radius = 12;
+					
+					int amount = sourceLoc.getWorld().getNearbyEntities(sourceLoc, radius, radius, radius, entity -> {
+						if(entity.getLocation().distanceSquared(sourceLoc) > radius * radius)
+							return false;
+
+						if(!MythicBukkit.inst().getMobManager().isMythicMob(entity))
+							return false;
+						
+						ActiveMob aMob = MythicBukkit.inst().getMobManager().getMythicMobInstance(entity);
+						if(aMob.isDead() || aMob.getType().getIsInvincible()
+								|| (aMob.hasFaction() && (aMob.getFaction().equals("ALLY") || aMob.getFaction().equals("SUMMONS"))))
+							return false;
+						
+						if(!aMob.getEntity().isDamageable())
+							return false;
+						
+						return true;
+					}).size();
+					
+					if(amount >= 6) {
+						player.addPotionEffect(potion);
+					}
+				}
+			}
+		}.runTaskTimerAsynchronously(Main.getInstance(), 0, 20*3);
+	}
+	
 	public void endTasks() {
 		skills.endTasks();
 		
 		compass.getCompass().removeAll();
+		
+		timingTask.cancel();
 	}
 	
 	public boolean resetStats() {

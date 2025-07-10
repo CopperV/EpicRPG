@@ -6,20 +6,24 @@ import java.util.Random;
 import java.util.UUID;
 
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import io.lumine.mythic.bukkit.MythicBukkit;
 import me.Vark123.EpicComponentAPI.EpicComponent;
-import me.Vark123.EpicOptions.Main;
+import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.FightSystem.DamageType;
 import me.Vark123.EpicRPG.FightSystem.Calculators.IDamageCalculator.DamageCalculatorResult;
 import me.Vark123.EpicRPG.FightSystem.Events.EpicAttackEvent;
@@ -176,6 +180,15 @@ public class OstrzeMrozu_MSetComboListener implements Listener {
 		p.getWorld().spawnParticle(Particle.COMPOSTER, p.getLocation().add(0,1,0), 24, 0.45f, 1f, 0.45f, 0.12f);
 
 		double amount = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()*0.7;
+
+		AttributeModifier modifier = new AttributeModifier(
+				new NamespacedKey(me.Vark123.EpicRPG.Main.getInstance(), "ostrze_mrozu_divineshield"),
+				amount,
+				Operation.ADD_NUMBER,
+				EquipmentSlotGroup.ANY);
+
+		p.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).removeModifier(modifier);
+		p.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).addModifier(modifier);
 		p.setAbsorptionAmount(p.getAbsorptionAmount()+amount);
 		
 		divineShieldCooldowns.add(p.getUniqueId());
@@ -191,8 +204,9 @@ public class OstrzeMrozu_MSetComboListener implements Listener {
 					p.setAbsorptionAmount(0);
 				else
 					p.setAbsorptionAmount(p.getAbsorptionAmount() - amount);
+				p.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).removeModifier(modifier);
 			}
-		}.runTaskLater(Main.getInst(), 20*8);
+		}.runTaskLater(Main.getInstance(), 20*8);
 	}
 	
 	//MYSLIWY
