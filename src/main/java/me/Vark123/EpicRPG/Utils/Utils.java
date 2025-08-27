@@ -3,8 +3,10 @@ package me.Vark123.EpicRPG.Utils;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -12,6 +14,7 @@ import javax.annotation.Nonnull;
 
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -29,6 +32,12 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.flags.Flags;
+import com.sk89q.worldguard.protection.flags.StateFlag.State;
+import com.sk89q.worldguard.protection.regions.RegionQuery;
+
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.adapters.AbstractLocation;
 import io.lumine.mythic.api.adapters.AbstractVector;
@@ -41,6 +50,8 @@ import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers.EpicModifierTypes;
 import me.Vark123.EpicRPG.RuneSystem.RuneEffectType;
+import me.Vark123.EpicRPG.RuneSystem.SummonSystem.SummonManager;
+import me.Vark123.EpicRPG.Utils.Events.PlayersAllyCheckEvent;
 
 public class Utils {
 
@@ -680,6 +691,85 @@ public class Utils {
 		UUID uid = comp.getUUID("crafted_by");
 		
 		return uid;
+	}
+	
+	private static final Collection<String> playerAlliesFactions = Set.of(
+			"DEFENDERS",
+			"SUMMONS",
+			"NEUTRAL",
+			"NEUTRAL_ANIMALS"
+	);
+	
+	public static boolean isEntityAlly(LivingEntity checking, LivingEntity checked) {
+		// Can't attack yourself
+        if (checking.equals(checked)) {
+            return true;
+        }
+
+        AbstractEntity abstractChecking = BukkitAdapter.adapt(checking);
+        AbstractEntity abstractChecked = BukkitAdapter.adapt(checked);
+
+        boolean checkingIsAllyMob = isEntityMythicMobAlly(abstractChecking);
+        boolean checkedIsAllyMob = isEntityMythicMobAlly(abstractChecked);
+        
+        if(SummonManager.get().isSummon(abstractChecking))
+        	checking = SummonManager.get().getSummonOwner(abstractChecking);
+        if(SummonManager.get().isSummon(abstractChecked))
+        	checked = SummonManager.get().getSummonOwner(abstractChecked);
+        
+        boolean checkingIsPlayer = checking instanceof Player;
+        boolean checkedIsPlayer = checked instanceof Player;
+        
+        if(!(checkingIsAllyMob || checkingIsPlayer) || !(checkedIsAllyMob || checkedIsPlayer))
+        	return false;
+
+        boolean checkingInPvp = isInPvPZone(checking);
+        boolean checkedInPvp = isInPvPZone(checked);
+        boolean pvpAllowed = checkingInPvp && checkedInPvp;
+
+        if(checkingIsPlayer && checkedIsPlayer) {
+        	Player p1 = (Player) checking;
+        	Player p2 = (Player) checked;
+        	if(p1.getGameMode() == GameMode.SPECTATOR || p1.getGameMode() == GameMode.CREATIVE
+        			|| p2.getGameMode() == GameMode.SPECTATOR || p2.getGameMode() == GameMode.CREATIVE)
+        		return true;
+        	
+        	if(!pvpAllowed)
+        		return true;
+        	
+        	PlayersAllyCheckEvent event = new PlayersAllyCheckEvent(p1, p2);
+        	Bukkit.getPluginManager().callEvent(event);
+        	return event.isAllies();
+        }
+
+        return true;
+	}
+	
+	private static boolean isEntityMythicMobAlly(AbstractEntity entity) {
+		if(!MythicBukkit.inst().getMobManager().isActiveMob(entity))
+			return false;
+		
+		ActiveMob aMob = MythicBukkit.inst().getMobManager().getMythicMobInstance(entity);
+		if(aMob == null || aMob.isDead())
+			return false;
+		
+		String faction = aMob.getFaction();
+		return faction != null && playerAlliesFactions.contains(faction.toUpperCase());
+	}
+	
+	public static boolean isInPvPZone(Entity entity) {
+        RegionQuery query = WorldGuard.getInstance()
+                .getPlatform()
+                .getRegionContainer()
+                .createQuery();
+        
+        ApplicableRegionSet set = query.getApplicableRegions(
+                com.sk89q.worldedit.bukkit.BukkitAdapter.adapt(entity.getLocation()));
+        State flag = set.queryValue(null, Flags.PVP);
+        String worldName = entity.getWorld().getName().toLowerCase();
+        boolean isDungeonOrRaid = worldName.contains("dungeon") || worldName.contains("raid");
+            
+        return flag == State.ALLOW && !isDungeonOrRaid;
 	}
 	
 }

@@ -4,50 +4,59 @@ import java.util.Random;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import io.lumine.mythic.api.mobs.entities.SpawnReason;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.mobs.ActiveMob;
+import io.lumine.mythic.core.mobs.MobExecutor;
 import me.Vark123.EpicRPG.RuneSystem.ACastableRune;
 import me.Vark123.EpicRPG.RuneSystem.Functional.IRuneLocationEffect;
+import me.Vark123.EpicRPG.RuneSystem.SummonSystem.SummonDefinition;
 import me.Vark123.EpicRPG.RuneSystem.SummonSystem.SummonManager;
+import me.Vark123.EpicRPG.RuneSystem.SummonSystem.SummonRegistry;
 import me.Vark123.EpicRPG.Utils.Utils;
 
 public class SummonRuneTemplate {
 
 	private static final Random rand = new Random();
-	private static final String CONTROLABLE_SUFFIX = "_Controlable";
-	private static final String WILD_SUFFIX = "_Wild";
+	private static final MobExecutor mobManager = MythicBukkit.inst().getMobManager();
 	
 	private SummonRuneTemplate() { }
 	
 	public static void castSummon(
 			ACastableRune castableRune,
-			String mobType,
 			Location summonLoc,
 			double spawnRadius,
 			IRuneLocationEffect onControlableSpawnEffect,
 			IRuneLocationEffect onWildSpawnEffect) {
 		
 		int finalInt = castableRune.getRpgPlayer().getStats().getFinalInteligencja();
-		boolean canControl = castableRune.getRune().getMinIntToControl() <= finalInt;
 		
-		String finalMobType = mobType + (canControl ? CONTROLABLE_SUFFIX : WILD_SUFFIX);
-		MythicBukkit.inst().getMobManager().getMythicMob(finalMobType).ifPresent(mythicMob -> {
+		SummonDefinition def = SummonRegistry.getDefinition(castableRune.getRune().getMythicType());
+		if(def == null) {
+			throw new IllegalArgumentException(castableRune.getRune().getMythicType()+" is not summon-type rune");
+		}
+		
+		boolean canControl = castableRune.getRune().getMinIntToControl() <= finalInt;
+		String mobType = canControl ? def.getVariantForInt(finalInt).getMobType() : def.getWildMobType();
+		
+		mobManager.getMythicMob(mobType).ifPresent(mythicMob -> {
 			double angle1 = rand.nextDouble(Math.PI*2);
-			double angle2 = rand.nextDouble(Math.PI*2);
 			
-			Location randomLoc = summonLoc.clone().add(Utils.transferSphericalToVector(spawnRadius, angle1, angle2));
+			Location randomLoc = summonLoc.clone().add(Utils.transferSphericalToVector(spawnRadius, angle1, 0));
 			
-			ActiveMob aMob = MythicBukkit.inst().getMobManager().spawnMob(finalMobType, BukkitAdapter.adapt(randomLoc), SpawnReason.SUMMON, 1);
+			ActiveMob aMob = mobManager.spawnMob(mobType, BukkitAdapter.adapt(randomLoc), SpawnReason.SUMMON, 1);
 			aMob.getVariables().putInt("mana_cost", castableRune.getRune().getPriceOverTime());
+			
+			aMob.getEntity().getBukkitEntity().setVelocity(new Vector(0, 0.3, 0));
 			
 			Player p = castableRune.getPlayer();
 			SummonManager.get().addPlayerSummonInfo(p, aMob, castableRune);
 			
 			if(canControl) {
-				aMob.setOwner(castableRune.getPlayer().getUniqueId());
+				aMob.setOwnerUUID(castableRune.getPlayer().getUniqueId());
 				
 				onControlableSpawnEffect.playEffect(BukkitAdapter.adapt(aMob.getLocation()));
 			} else {

@@ -176,6 +176,7 @@ import me.Vark123.EpicRPG.RuneSystem.Runes.Rownowaga.SferaCorristo;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Rownowaga.SilaRownowagi;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Rownowaga.SilaRownowagi_H;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Rownowaga.SilaRownowagi_M;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Summons.BaseSummonRune;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.AuraCzystosci;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.BlogoslawionaZiemia;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.Czystka;
@@ -239,7 +240,6 @@ import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.Pelnia;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.SopelLodu;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.WodnaPiesc;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.Zamiec;
-import me.Vark123.EpicRPG.RuneSystem.Runes._InProgress.PrzyzwanieWilka;
 import me.Vark123.EpicRPG.Utils.Utils;
 
 @Getter
@@ -501,9 +501,7 @@ public final class RuneManager {
 		}
 
 		cost = (int) Math.ceil(cost*0.25);
-		//TODO
-		//Zadawanie sobie obrazen
-		rpg.getPlayer().sendMessage("Do implementacji - pobieranie zycia");
+		spendHp(rpg, cost);
 	}
 	
 	public boolean isSilaZywiolowEffect(RpgPlayer rpgPlayer) {
@@ -615,7 +613,9 @@ public final class RuneManager {
 				break;
 			case MUSIC_DISC_CREATOR:
 				switch(rune.getMythicType()) {
-					case "PrzyzwanieWilka":				return new PrzyzwanieWilka(rpgPlayer, rune);
+					case "PrzyzwanieNiedzwiedzia":
+					case "PrzyzwanieDzika":
+					case "PrzyzwanieWilka":				return new BaseSummonRune(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_CREATOR_MUSIC_BOX:
@@ -751,7 +751,13 @@ public final class RuneManager {
 				break;
 			case MUSIC_DISC_RELIC:
 				switch(rune.getMythicType()) {
-				
+					case "PrzyzwanieSzkieletaMaga":
+					case "PrzyzwanieSzkieletaWojownika":
+					case "PrzyzwanieSzkieletaStrzelca":
+					case "ObudzenieGolema":
+					case "PrzyzwanieSzkieleta":
+					case "PrzyzwanieZombie":
+					case "PrzyzwanieGoblina":			return new BaseSummonRune(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_STAL:

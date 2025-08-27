@@ -20,8 +20,6 @@ import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.FightSystem.DamageUtils;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
-import me.Vark123.EpicRPG.Players.Components.RpgModifiers;
-import me.Vark123.EpicRPG.Players.Components.RpgModifiers.EpicModifierTypes;
 import me.Vark123.EpicRPG.Players.Components.RpgSkills;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import me.Vark123.EpicRPG.Stats.ChangeStats;
@@ -87,26 +85,14 @@ public class MeleeCalculator implements IDamageCalculator {
 		
 		RpgStats stats = rpg.getStats();
 		RpgSkills skills = rpg.getSkills();
-		RpgModifiers modifiers = rpg.getModifiers();
 		
 		boolean crit = DamageUtils.checkCrit(rpg, victim);
-		if(!crit && modifiers.hasActiveModifier(EpicModifierTypes.PENETRACJA))
-			crit = true;
 		result.isCrit = crit;
 		
 		if(!hasWeapon && skills.hasPolnocnyBarbarzynca()) {
 			stats.setFinalObrazenia((int) (stats.getFinalObrazenia() + stats.getFinalSila()*0.8));
 			stats.setFinalObrazenia((int) (stats.getFinalObrazenia() + stats.getFinalWytrzymalosc()*0.65));
 		}
-		
-//		if(!Utils.hasWeapon(p)) {
-//			if(skills.hasPolnocnyBarbarzynca()) {
-//				stats.setFinalObrazenia((int) (stats.getFinalObrazenia() + stats.getFinalSila()*0.8));
-//				stats.setFinalObrazenia((int) (stats.getFinalObrazenia() + stats.getFinalWytrzymalosc()*0.65));
-//			} else {
-//				stats.setFinalObrazenia((int) (stats.getFinalObrazenia() * 0.1));
-//			}
-//		}
 		
 		if(victim instanceof Player) {
 			damage = stats.getFinalObrazenia();

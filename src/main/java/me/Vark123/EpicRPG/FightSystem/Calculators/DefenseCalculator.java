@@ -116,6 +116,12 @@ public class DefenseCalculator implements IDamageCalculator {
 		
 		result.damage = baseDamage * (1 - (defenseModifier)/(defenseModifier + baseDamage*damageModifier));
 		
+		if(DamageUtils.checkDamageParry(rpg)) {
+			result.damage *= 0.5;
+			victim.getWorld().playSound(victim.getEyeLocation(), Sound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR, 0.8f, 0.8f);
+			victim.getWorld().spawnParticle(Particle.WHITE_SMOKE, victim.getLocation().clone().add(0,1,0), 9, 0.4, 0.6, 0.4, 0.03);
+		}
+		
 		return result;
 	}
 

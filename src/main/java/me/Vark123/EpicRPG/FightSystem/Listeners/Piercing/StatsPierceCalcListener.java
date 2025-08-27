@@ -14,7 +14,7 @@ public class StatsPierceCalcListener implements Listener {
 		RpgPlayer rpg = e.getRpgPlayer();
 		RpgStats stats = rpg.getStats();
 		
-		e.addChance(stats.getFinalZrecznosc() * 0.0004);
+		e.addChance(stats.getFinalZrecznosc() * 0.0002);
 	}
 
 }

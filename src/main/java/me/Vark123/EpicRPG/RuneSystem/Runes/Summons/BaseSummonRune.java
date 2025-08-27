@@ -1,6 +1,5 @@
-package me.Vark123.EpicRPG.RuneSystem.Runes._InProgress;
+package me.Vark123.EpicRPG.RuneSystem.Runes.Summons;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 import me.Vark123.EpicRPG.Players.RpgPlayer;
@@ -8,13 +7,12 @@ import me.Vark123.EpicRPG.RuneSystem.ACastableRune;
 import me.Vark123.EpicRPG.RuneSystem.EpicRune;
 import me.Vark123.EpicRPG.RuneSystem.Templates.CastSpells.SummonRuneTemplate;
 
-public class PrzyzwanieWilka extends ACastableRune {
+public class BaseSummonRune extends ACastableRune {
 
-	public PrzyzwanieWilka(RpgPlayer rpgPlayer, EpicRune rune) {
+	public BaseSummonRune(RpgPlayer rpgPlayer, EpicRune rune) {
 		super(rpgPlayer, rune);
 	}
 
-	//TODO
 	@Override
 	public void castSpell() {
 		
@@ -23,15 +21,10 @@ public class PrzyzwanieWilka extends ACastableRune {
 		
 		SummonRuneTemplate.castSummon(
 				this,
-				"SummonWilk", 
 				spawnLoc,
 				radius,
-				loc -> {
-					Bukkit.broadcastMessage("Test1");
-				}, 
-				loc -> {
-					Bukkit.broadcastMessage("Test2");
-				});
+				__ -> { }, 
+				__ -> { });
 		
 	}
 

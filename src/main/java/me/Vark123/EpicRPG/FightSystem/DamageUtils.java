@@ -23,10 +23,10 @@ import me.Vark123.EpicRPG.FightSystem.Events.EpicCritCalculateEvent;
 import me.Vark123.EpicRPG.FightSystem.Events.EpicDamageRandomizeEvent;
 import me.Vark123.EpicRPG.FightSystem.Events.EpicDodgeCalculateEvent;
 import me.Vark123.EpicRPG.FightSystem.Events.EpicMegaCritCalculateEvent;
+import me.Vark123.EpicRPG.FightSystem.Events.EpicParryCalculateEvent;
 import me.Vark123.EpicRPG.FightSystem.Events.EpicPierceCalculateEvent;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers.EpicModifierTypes;
-import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import me.Vark123.EpicRPG.RuneSystem.Functional.IRuneLocationEffect;
 import me.Vark123.EpicRPG.Utils.Utils;
 
@@ -80,14 +80,10 @@ public final class DamageUtils {
 	}
 	
 	public static double randomizeDamage(RpgPlayer rpgPlayer, double damage) {
-		RpgStats stats = rpgPlayer.getStats();
-		
-		double mod = stats.getFinalZrecznosc() / 35.;
-		mod *= 0.01;
-		EpicDamageRandomizeEvent event = new EpicDamageRandomizeEvent(rpgPlayer, mod);
+		EpicDamageRandomizeEvent event = new EpicDamageRandomizeEvent(rpgPlayer, 0);
 		Bukkit.getPluginManager().callEvent(event);
 		
-		mod = Math.min(event.getModifier(), 0.6);
+		double mod = Math.min(event.getModifier(), 0.6);
 		double min = 0.95 - mod;
 		double max = 1.05 + mod;
 		
@@ -106,10 +102,24 @@ public final class DamageUtils {
 	}
 	
 	public static boolean checkArmorPierce(RpgPlayer damager, LivingEntity victim, double armor) {
+		if(Utils.hasEntityBuff(damager.getPlayer(), EpicModifierTypes.PENETRACJA))
+			return true;
+		
 		EpicPierceCalculateEvent event = new EpicPierceCalculateEvent(damager);
 		Bukkit.getPluginManager().callEvent(event);
 		
-		double maxChance = 0.6;
+		double maxChance = 0.25;
+		
+		double chance = Utils.limitValue(0, maxChance, event.getChance());
+		double random = rand.nextDouble();
+		return random < chance;
+	}
+	
+	public static boolean checkDamageParry(RpgPlayer player) {
+		EpicParryCalculateEvent event = new EpicParryCalculateEvent(player);
+		Bukkit.getPluginManager().callEvent(event);
+		
+		double maxChance = 0.5;
 		
 		double chance = Utils.limitValue(0, maxChance, event.getChance());
 		double random = rand.nextDouble();

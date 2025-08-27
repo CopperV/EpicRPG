@@ -2,12 +2,16 @@ package me.Vark123.EpicRPG.Files;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -19,6 +23,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import io.lumine.mythic.bukkit.MythicBukkit;
 import lombok.Getter;
 import me.Vark123.EpicRPG.EpicRPGMobManager;
 import me.Vark123.EpicRPG.Main;
@@ -33,12 +38,18 @@ import me.Vark123.EpicRPG.Players.Components.RpgRzemiosla;
 import me.Vark123.EpicRPG.Players.Components.RpgSkills;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import me.Vark123.EpicRPG.Players.Components.RpgVault;
+import me.Vark123.EpicRPG.RuneSystem.SummonSystem.SummonDefinition;
+import me.Vark123.EpicRPG.RuneSystem.SummonSystem.SummonRegistry;
+import me.Vark123.EpicRPG.RuneSystem.SummonSystem.SummonVariant;
 import me.Vark123.EpicRPG.UpgradableSystem.UpgradableFlask;
 import me.Vark123.EpicRPG.UpgradableSystem.UpgradableInhibitor;
 import me.Vark123.EpicRPG.UpgradableSystem.UpgradableInhibitor.InhibitorCrafting;
 import me.Vark123.EpicRPG.UpgradableSystem.UpgradableLevel;
 import me.Vark123.EpicRPG.UpgradableSystem.UpgradableManager;
 import me.Vark123.EpicRPG.Utils.Pair;
+import me.Vark123.EpicRPG.VillagerTradeSystem.EpicTrade;
+import me.Vark123.EpicRPG.VillagerTradeSystem.EpicVillagerManager;
+import me.Vark123.EpicRPG.VillagerTradeSystem.EpicVillagerTrader;
 import me.Vark123.EpicRPG.WildHuntEvents.WHEManager;
 
 public class FileOperations {
@@ -48,6 +59,7 @@ public class FileOperations {
 	private static File jewelry = new File(Main.getInstance().getDataFolder(), "jewelry");
 	private static File oldJewelry = new File(Main.getInstance().getDataFolder(), "old_jewelry");
 	private static File backItems = new File(Main.getInstance().getDataFolder(), "backs");
+	private static File tradesDir = new File(Main.getInstance().getDataFolder(), "trades");
 	private static File exp = new File(Main.getInstance().getDataFolder(), "exp.yml");
 	private static File blackrock = new File(Main.getInstance().getDataFolder(), "blackrock.yml");
 	private static File boosters = new File(Main.getInstance().getDataFolder(), "boosters.yml");
@@ -81,6 +93,9 @@ public class FileOperations {
 		}
 		if(!backItems.exists())
 			backItems.mkdir();
+		if(!tradesDir.exists())
+			tradesDir.mkdir();
+		
 		if(!blackrock.exists()) {
 			try {
 				blackrock.createNewFile();
@@ -220,8 +235,54 @@ public class FileOperations {
 					UpgradableManager.get().registerFlask(flask);
 				});
 		}
+		
+		Arrays.asList(tradesDir.listFiles()).stream()
+			.filter(file -> file.isFile())
+			.filter(file -> file.getName().endsWith(".yml"))
+			.map(YamlConfiguration::loadConfiguration)
+			.forEach(tradeYml -> {
+				tradeYml.getKeys(false).stream()
+					.filter(tradeYml::isConfigurationSection)
+					.map(tradeYml::getConfigurationSection)
+					.forEach(tradeSection -> {
+						String id = tradeSection.getName();
+						String display = ChatColor.translateAlternateColorCodes('&', tradeSection.getString("display", "&6&lHANDLARZ"));
+						
+						Collection<EpicTrade> trades = new LinkedList<>();
+						if(tradeSection.isConfigurationSection("trades")) {
+							var section = tradeSection.getConfigurationSection("trades");
+							section.getKeys(false)
+								.stream()
+								.filter(section::isConfigurationSection)
+								.map(section::getConfigurationSection)
+								.forEach(trade -> {
+									String slot1 = trade.getString("slot1");
+									int slot1Amount = trade.getInt("slot1-amount", 1);
+									String slot2 = trade.getString("slot2");
+									int slot2Amount = trade.getInt("slot2-amount", 1);
+									String result = trade.getString("result");
+									int resultAmount = trade.getInt("result-amount", 1);
+									
+									trades.add(EpicTrade.builder()
+											.slot1(slot1 == null ? null : new Pair<>(slot1, slot1Amount))
+											.slot2(slot2 == null ? null : new Pair<>(slot2, slot2Amount))
+											.result(result == null ? null : new Pair<>(result, resultAmount))
+											.build());
+								});
+						}
+						
+						EpicVillagerManager.get().registerVillager(EpicVillagerTrader.builder()
+								.id(id)
+								.display(display)
+								.trades(trades)
+								.build());
+					});
+			});
+		
+		loadSummonDefinitions();
+//		convertShopkeepers();
 	}
-	
+
 	@Deprecated
 	public static boolean playerStatFileExists(Player p) {
 		return (new File(users, p.getName().toLowerCase()+".yml").exists());
@@ -513,6 +574,106 @@ public class FileOperations {
 				}
 			});
 		oldJewelry.renameTo(new File(Main.getInstance().getDataFolder(), "archive"));
+	}
+	
+	private static String formatInput(String input) {
+		if (input == null || input.isEmpty()) return input;
+		
+	    return Arrays.stream(ChatColor.stripColor(input).split(" "))
+	            .map(word -> word.isEmpty() ? "" :
+	                 Character.toUpperCase(word.charAt(0)) + word.substring(1))
+	            .collect(Collectors.joining("_"));
+	}
+	
+	@Deprecated
+	private static void convertShopkeepers() {
+		File shopkeeperFile = new File("plugins/Shopkeepers/data/save.yml");
+		File targetFile = new File(Main.getInstance().getDataFolder(), "save.yml");
+		if(!shopkeeperFile.exists())
+			return;
+		if(!targetFile.exists()) {
+			try {
+				targetFile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+				return;
+			}
+		}
+		
+		YamlConfiguration shopkeeperYml = YamlConfiguration.loadConfiguration(shopkeeperFile);
+		YamlConfiguration targetYml = YamlConfiguration.loadConfiguration(targetFile);
+		
+		shopkeeperYml.getKeys(false).stream()
+			.filter(shopkeeperYml::isConfigurationSection)
+			.map(shopkeeperYml::getConfigurationSection)
+			.forEach(section -> {
+				String id = section.getName();
+				String display = section.getString("name");
+				
+				targetYml.set(id+".display", display);
+				
+				if(section.isConfigurationSection("recipes")) {
+					ConfigurationSection recipeSection = section.getConfigurationSection("recipes");
+					recipeSection.getKeys(false).stream()
+						.filter(recipeSection::isConfigurationSection)
+						.map(recipeSection::getConfigurationSection)
+						.forEach(recipe -> {
+							String recipeId = recipe.getName();
+							ItemStack it1 = recipe.getItemStack("item1");
+							ItemStack it2 = recipe.getItemStack("item2");
+							ItemStack resultItem = recipe.getItemStack("resultItem");
+							
+							String mmId1 = it1 == null ? null : MythicBukkit.inst().getItemManager()
+									.getMythicTypeFromItem(it1);
+							String mmId2 = it2 == null ? null : MythicBukkit.inst().getItemManager()
+									.getMythicTypeFromItem(it2);
+							String mmResult = resultItem == null ? null : MythicBukkit.inst().getItemManager()
+									.getMythicTypeFromItem(resultItem);
+
+							targetYml.set(id+".trades."+recipeId+".slot1", mmId1 == null ? formatInput(it1.getItemMeta().getDisplayName()) + "?" : mmId1);
+							targetYml.set(id+".trades."+recipeId+".slot1-amount", it1.getAmount());
+
+							if(it2 != null) {
+								targetYml.set(id+".trades."+recipeId+".slot2", mmId2 == null ? formatInput(it2.getItemMeta().getDisplayName()) + "?" : mmId2);
+								targetYml.set(id+".trades."+recipeId+".slot2-amount", it2.getAmount());
+							}
+
+							targetYml.set(id+".trades."+recipeId+".result", mmResult == null ? formatInput(resultItem.getItemMeta().getDisplayName()) + "?" : mmResult);
+							targetYml.set(id+".trades."+recipeId+".result-amount", resultItem.getAmount());
+						});
+				}
+			});
+		
+		try {
+			targetYml.save(targetFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private static void loadSummonDefinitions() {
+		File file = new File(Main.getInstance().getDataFolder(), "summons.yml");
+		if(!file.exists() || !file.isFile())
+			return;
+		
+		YamlConfiguration fYml = YamlConfiguration.loadConfiguration(file);
+		fYml.getKeys(false).stream()
+			.filter(fYml::isConfigurationSection)
+			.map(fYml::getConfigurationSection)
+			.forEach(section -> {
+				String runeName = section.getName();
+				String wildMobType = section.getString("wild", "");
+				
+				List<SummonVariant> variants = new ArrayList<>();
+				section.getMapList("variants").forEach(variantMap -> {
+					String mob = (String) variantMap.get("mob");
+	                int reqInt = (int) variantMap.get("inteligencja");
+	                variants.add(new SummonVariant(mob, reqInt));
+				});
+				
+				SummonDefinition definition = new SummonDefinition(runeName, wildMobType, variants);
+				SummonRegistry.registerDefinition(definition);
+			});
 	}
 	
 }

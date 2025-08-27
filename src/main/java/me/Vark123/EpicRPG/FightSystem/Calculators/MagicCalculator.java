@@ -53,11 +53,14 @@ public class MagicCalculator implements IDamageCalculator {
 		}
 		
 		//DMG OD OBRAZEN
-		double addDmg = (stats.getFinalObrazenia() / Math.max(wplyw, 0.01)) * 0.01;
+		damage += (stats.getFinalObrazenia() / Math.max(wplyw, 0.01)) * 0.01;
 		//DMG OD INTELIGENCJI
-		addDmg += wplyw * stats.getFinalInteligencja() * damage * 0.01;
+		damage += wplyw * stats.getFinalInteligencja() * damage * 0.01;
 		
-		damage += addDmg;
+//		double addDmg = (stats.getFinalObrazenia() / Math.max(wplyw, 0.01)) * 0.01;
+//		addDmg += wplyw * stats.getFinalInteligencja() * damage * 0.01;
+		
+//		damage += addDmg;
 		
 		boolean crit = DamageUtils.checkCrit(rpg, victim);
 		result.isCrit = crit;

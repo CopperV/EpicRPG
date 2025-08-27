@@ -16,6 +16,7 @@ import me.Vark123.EpicRPG.MMExtension.Mechanics.ManaDrainPercentMechanic;
 import me.Vark123.EpicRPG.MMExtension.Mechanics.PlaceholderProjectileMechanic;
 import me.Vark123.EpicRPG.MMExtension.Mechanics.RemoveTargetMechanic;
 import me.Vark123.EpicRPG.MMExtension.Mechanics.SetTargetMechanic;
+import me.Vark123.EpicRPG.MMExtension.Mechanics.SetupSummonTargetMechanic;
 
 public class CustomMechanicsLoadEvent implements Listener {
 
@@ -63,6 +64,10 @@ public class CustomMechanicsLoadEvent implements Listener {
 			case "epicmessage":
 			case "emessage":
 				mechanic = new EpicMessageMechanic(MythicBukkit.inst().getSkillManager(), e.getContainer().getFile(), e.getConfig().getLine(), e.getConfig());
+				e.register(mechanic);
+				break;
+			case "setupsummontarget":
+				mechanic = new SetupSummonTargetMechanic(MythicBukkit.inst().getSkillManager(), e.getContainer().getFile(), e.getConfig().getLine(), e.getConfig());
 				e.register(mechanic);
 				break;
 		}

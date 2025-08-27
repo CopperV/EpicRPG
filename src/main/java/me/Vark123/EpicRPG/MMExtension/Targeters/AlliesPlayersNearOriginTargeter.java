@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 
 import io.lumine.mythic.api.adapters.AbstractEntity;
 import io.lumine.mythic.api.adapters.AbstractLocation;
-import io.lumine.mythic.api.adapters.AbstractPlayer;
 import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.SkillCaster;
 import io.lumine.mythic.api.skills.SkillMetadata;

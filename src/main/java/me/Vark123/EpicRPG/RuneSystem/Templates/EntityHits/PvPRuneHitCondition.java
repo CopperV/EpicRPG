@@ -47,7 +47,7 @@ public class PvPRuneHitCondition implements IRuneHitCondition {
 			return false;
 		
 		ActiveMob aMob = MythicBukkit.inst().getMobManager().getMythicMobInstance(hit);
-		if(aMob.isDead() || aMob.getType().getIsInvincible()
+		if(aMob == null || aMob.isDead() || aMob.getType().getIsInvincible()
 				|| (aMob.hasFaction() && aMob.getFaction().equals("ALLY")))
 			return false;
 		
@@ -55,7 +55,7 @@ public class PvPRuneHitCondition implements IRuneHitCondition {
 			return false;
 		
 		if(aMob.hasFaction() && aMob.getFaction().equals("SUMMONS")) {
-			if(aMob.getOwner().isPresent() && aMob.getOwner().get().equals(caster.getUniqueId()))
+			if(aMob.getOwner().isPresent() && aMob.getOwnerUUID().get().equals(caster.getUniqueId()))
 				return false;
 			return pvpFlag;
 		}

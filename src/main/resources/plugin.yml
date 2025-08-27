@@ -71,3 +71,4 @@ commands:
   epicmoney:
   epicstat:
     aliases: [estat, stat]
+  epic-trader:

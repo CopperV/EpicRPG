@@ -56,7 +56,7 @@ public class PvPAllyRuneCondition implements IRuneHitCondition {
 		if(!pvpFlag)
 			return true;
 		
-		return aMob.getOwner().isPresent() && aMob.getOwner().get().equals(caster.getUniqueId());
+		return aMob.getOwner().isPresent() && aMob.getOwnerUUID().get().equals(caster.getUniqueId());
 	}
 
 }

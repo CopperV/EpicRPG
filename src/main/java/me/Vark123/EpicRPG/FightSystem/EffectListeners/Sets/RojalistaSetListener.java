@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import me.Vark123.EpicRPG.FightSystem.DamageType;
 import me.Vark123.EpicRPG.FightSystem.Calculators.IDamageCalculator.DamageCalculatorResult;
 import me.Vark123.EpicRPG.FightSystem.Events.EpicAttackEvent;
 import me.Vark123.EpicRPG.Players.PlayerManager;

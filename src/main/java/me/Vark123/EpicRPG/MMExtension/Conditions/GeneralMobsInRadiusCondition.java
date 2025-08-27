@@ -2,6 +2,7 @@ package me.Vark123.EpicRPG.MMExtension.Conditions;
 
 import java.util.Collection;
 
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 
 import io.lumine.mythic.api.adapters.AbstractEntity;
@@ -47,6 +48,8 @@ public class GeneralMobsInRadiusCondition extends SkillCondition implements ISki
 				return false;
 			if(entity.getBukkitEntity() instanceof Player)
 				return false;
+			if(entity.getBukkitEntity() instanceof Item)
+				return false;
 			return true;
 		}).count();
 		return this.amount.equals(count);
@@ -67,6 +70,8 @@ public class GeneralMobsInRadiusCondition extends SkillCondition implements ISki
 			if(!manager.isActiveMob(entity))
 				return false;
 			if(entity.getBukkitEntity() instanceof Player)
+				return false;
+			if(entity.getBukkitEntity() instanceof Item)
 				return false;
 			return true;
 		}).count();

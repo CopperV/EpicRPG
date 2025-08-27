@@ -182,7 +182,7 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 							return false;
 						
 						ActiveMob aMob = MythicBukkit.inst().getMobManager().getMythicMobInstance(entity);
-						if(aMob.isDead() || aMob.getType().getIsInvincible()
+						if(aMob == null || aMob.isDead() || aMob.getType().getIsInvincible()
 								|| (aMob.hasFaction() && (aMob.getFaction().equals("ALLY") || aMob.getFaction().equals("SUMMONS"))))
 							return false;
 						

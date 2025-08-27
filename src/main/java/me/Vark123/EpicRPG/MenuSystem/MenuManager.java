@@ -14,6 +14,7 @@ import me.Vark123.EpicRPG.MerchantSystem.MerchantManager;
 import me.Vark123.EpicRPG.Players.AdditionalMenuManager;
 import me.Vark123.EpicRPG.RubySystem.RubyManager;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Rownowaga.KamiennyObserwator;
+import me.Vark123.EpicRPG.RuneSystem.SummonSystem.SummonControllerMenuManager;
 import me.Vark123.EpicRPG.Stats.ResetStatsMenuManager;
 import me.Vark123.EpicRPG.SzponBeliara.SzponBeliaraManager;
 import me.Vark123.EpicRPG.UpgradableSystem.InhibitorMenuManager;
@@ -100,6 +101,9 @@ public class MenuManager {
 				return true;
 			case 24:
 				InhibitorMenuManager.get().openRecipesCraftMenu(p, 0);
+				return true;
+			case 25:
+				SummonControllerMenuManager.getInst().openModifyMenu(p);
 				return true;
 		}
 		return false;

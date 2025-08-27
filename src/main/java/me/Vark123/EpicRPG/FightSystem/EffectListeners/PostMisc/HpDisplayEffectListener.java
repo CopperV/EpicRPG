@@ -34,11 +34,11 @@ public class HpDisplayEffectListener implements Listener {
 				return;
 			
 			ActiveMob aMob = MythicBukkit.inst().getMobManager().getMythicMobInstance(damager);
-			if(!aMob.getOwner().isPresent()
-					|| Bukkit.getPlayer(aMob.getOwner().get()) == null)
+			if(!aMob.getOwnerUUID().isPresent()
+					|| Bukkit.getPlayer(aMob.getOwnerUUID().get()) == null)
 				return;
 			
-			damager = Bukkit.getEntity(aMob.getOwner().get());
+			damager = Bukkit.getEntity(aMob.getOwnerUUID().get());
 		}
 
 		ActiveMob mob = MythicBukkit.inst().getAPIHelper().getMythicMobInstance(victim);

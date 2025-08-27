@@ -46,8 +46,8 @@ public class EntityDeathListener implements Listener {
 		
 		if(MythicBukkit.inst().getMobManager().isMythicMob(killer)) {
 			ActiveMob aMob = MythicBukkit.inst().getMobManager().getMythicMobInstance(killer);
-			if(aMob.getOwner().isPresent())
-				killer = Bukkit.getEntity(aMob.getOwner().get());
+			if(aMob.getOwnerUUID().isPresent())
+				killer = Bukkit.getEntity(aMob.getOwnerUUID().get());
 		}
 		if(!(killer instanceof LivingEntity))
 			return;

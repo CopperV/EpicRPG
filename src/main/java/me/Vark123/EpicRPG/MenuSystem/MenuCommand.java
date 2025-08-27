@@ -18,7 +18,7 @@ public class MenuCommand implements CommandExecutor {
 			sender.sendMessage(Main.getInstance().getPrefix()+" §cNie posiadasz uprawnien do tej komendy!");
 			return false;
 		}
-		if(args.length<2) {
+		if(args.length < 2) {
 			sender.sendMessage(Main.getInstance().getPrefix()+" §aPoprawne uzycie komendy: §c§o/rpgmenu <nick> TYP");
 			return false;
 		}

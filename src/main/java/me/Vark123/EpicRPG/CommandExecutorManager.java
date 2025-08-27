@@ -48,6 +48,7 @@ import me.Vark123.EpicRPG.Players.AdditionalMenuCommand;
 import me.Vark123.EpicRPG.Reputation.ReputationCommand;
 import me.Vark123.EpicRPG.Reputation.ReputationModCommand;
 import me.Vark123.EpicRPG.Stats.StatsCommand;
+import me.Vark123.EpicRPG.VillagerTradeSystem.EpicVillagerTradeCommand;
 
 public class CommandExecutorManager {
 
@@ -96,6 +97,8 @@ public class CommandExecutorManager {
 		Bukkit.getPluginCommand("modyfikatory").setExecutor(new BoosterMenuCommand());
 
 		Bukkit.getPluginCommand("epicstat").setExecutor(new StatModCommand());
+
+		Bukkit.getPluginCommand("epic-trader").setExecutor(new EpicVillagerTradeCommand());
 		
 		BoostCommandManager.get().registerSubcommand(new CoinsBoosterCommand());
 		BoostCommandManager.get().registerSubcommand(new ExpBoosterCommand());

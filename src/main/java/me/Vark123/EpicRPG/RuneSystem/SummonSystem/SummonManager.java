@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.mutable.MutableInt;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,6 +16,8 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
+import io.lumine.mythic.api.adapters.AbstractEntity;
+import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.bukkit.events.MythicMobDeathEvent;
 import io.lumine.mythic.bukkit.events.MythicMobDespawnEvent;
 import io.lumine.mythic.core.mobs.ActiveMob;
@@ -48,6 +51,35 @@ public final class SummonManager implements Listener {
 		playerSummons.get(player).add(info);
 	}
 	
+	public boolean isSummon(AbstractEntity entity) {
+		if(!MythicBukkit.inst().getMobManager().isActiveMob(entity))
+			return false;
+		return isSummon(MythicBukkit.inst().getMobManager().getMythicMobInstance(entity));
+	}
+	
+	public boolean isSummon(ActiveMob mob) {
+		if(!mob.hasFaction() || !mob.getFaction().equalsIgnoreCase("SUMMONS"))
+			return false;
+		
+		if(!mob.getOwnerUUID().isPresent())
+			return false;
+		
+		return true;
+	}
+	
+	public Player getSummonOwner(AbstractEntity entity) {
+		if(!MythicBukkit.inst().getMobManager().isActiveMob(entity))
+			return null;
+		return getSummonOwner(MythicBukkit.inst().getMobManager().getMythicMobInstance(entity));
+	}
+	
+	public Player getSummonOwner(ActiveMob summon) {
+		if(!summon.getOwnerUUID().isPresent())
+			return null;
+		
+		return Bukkit.getPlayer(summon.getOwnerUUID().get());
+	}
+	
 	public void removePlayerSummonInfo(Player player, ActiveMob summon) {
 		if(!playerSummons.containsKey(player))
 			return;
@@ -69,6 +101,15 @@ public final class SummonManager implements Listener {
 		return summonPoints.intValue();
 	}
 	
+	public void applyCommand(Player caster, ASummonCommand command) {
+		if(!playerSummons.containsKey(caster))
+			return;
+		
+		playerSummons.get(caster).stream().collect(Collectors.toSet()).forEach(summonInfo -> {
+			command.apply(caster, summonInfo.summon);
+		});
+	}
+	
 	private void removeAllSummons(Player player) {
 		if(!playerSummons.containsKey(player))
 			return;
@@ -83,11 +124,21 @@ public final class SummonManager implements Listener {
 			});
 	}
 	
-	private void removeAllSummonInfo(ActiveMob aMob) {
-		String mType = aMob.getMobType();
-		if(!(mType.endsWith("_Controlable") || mType.endsWith("_Wild")))
+	public void removeSummon(ActiveMob aMob) {
+		if(!aMob.getOwnerUUID().isPresent())
 			return;
-
+		
+		Player owner = Bukkit.getPlayer(aMob.getOwnerUUID().get());
+		if(owner == null)
+			return;
+		
+		aMob.getEntity().setHealth(0);
+	}
+	
+	private void removeAllSummonInfo(ActiveMob aMob) {
+		if(!aMob.getOwnerUUID().isPresent())
+			return;
+		
 		playerSummons.values().stream()
 			.flatMap(list -> list.stream())
 			.filter(info -> info.getSummon().equals(aMob))
