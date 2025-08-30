@@ -176,7 +176,13 @@ import me.Vark123.EpicRPG.RuneSystem.Runes.Rownowaga.SferaCorristo;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Rownowaga.SilaRownowagi;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Rownowaga.SilaRownowagi_H;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Rownowaga.SilaRownowagi_M;
-import me.Vark123.EpicRPG.RuneSystem.Runes.Summons.BaseSummonRune;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Summons.ObudzenieGolema;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Summons.PrzyzwanieDzika;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Summons.PrzyzwanieGoblina;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Summons.PrzyzwanieNiedzwiedzia;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Summons.PrzyzwanieSzkieleta;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Summons.PrzyzwanieWilka;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Summons.PrzyzwanieZombie;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.AuraCzystosci;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.BlogoslawionaZiemia;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.Czystka;
@@ -613,9 +619,9 @@ public final class RuneManager {
 				break;
 			case MUSIC_DISC_CREATOR:
 				switch(rune.getMythicType()) {
-					case "PrzyzwanieNiedzwiedzia":
-					case "PrzyzwanieDzika":
-					case "PrzyzwanieWilka":				return new BaseSummonRune(rpgPlayer, rune);
+					case "PrzyzwanieWilka":				return new PrzyzwanieWilka(rpgPlayer, rune);
+					case "PrzyzwanieDzika":				return new PrzyzwanieDzika(rpgPlayer, rune);
+					case "PrzyzwanieNiedzwiedzia":		return new PrzyzwanieNiedzwiedzia(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_CREATOR_MUSIC_BOX:
@@ -751,13 +757,13 @@ public final class RuneManager {
 				break;
 			case MUSIC_DISC_RELIC:
 				switch(rune.getMythicType()) {
-					case "PrzyzwanieSzkieletaMaga":
-					case "PrzyzwanieSzkieletaWojownika":
-					case "PrzyzwanieSzkieletaStrzelca":
-					case "ObudzenieGolema":
-					case "PrzyzwanieSzkieleta":
-					case "PrzyzwanieZombie":
-					case "PrzyzwanieGoblina":			return new BaseSummonRune(rpgPlayer, rune);
+					case "PrzyzwanieGoblina":			return new PrzyzwanieGoblina(rpgPlayer, rune);
+					case "PrzyzwanieZombie":			return new PrzyzwanieZombie(rpgPlayer, rune);
+					case "PrzyzwanieSzkieleta":			return new PrzyzwanieSzkieleta(rpgPlayer, rune);
+					case "ObudzenieGolema":				return new ObudzenieGolema(rpgPlayer, rune);
+					case "PrzyzwanieSzkieletaStrzelca":	return new PrzyzwanieSzkieleta(rpgPlayer, rune);
+					case "PrzyzwanieSzkieletaWojownika":return new PrzyzwanieSzkieleta(rpgPlayer, rune);
+					case "PrzyzwanieSzkieletaMaga":		return new PrzyzwanieSzkieleta(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_STAL:

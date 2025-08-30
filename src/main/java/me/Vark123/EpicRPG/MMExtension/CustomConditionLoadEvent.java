@@ -14,6 +14,7 @@ import me.Vark123.EpicRPG.MMExtension.Conditions.EnoughManaCondition;
 import me.Vark123.EpicRPG.MMExtension.Conditions.GeneralMobsInRadiusCondition;
 import me.Vark123.EpicRPG.MMExtension.Conditions.HasValidTargetCondition;
 import me.Vark123.EpicRPG.MMExtension.Conditions.HealthCheckpointCondition;
+import me.Vark123.EpicRPG.MMExtension.Conditions.IsTargetingAlliedSummonCondition;
 import me.Vark123.EpicRPG.MMExtension.Conditions.NotAlliesPlayersCondition;
 import me.Vark123.EpicRPG.MMExtension.Conditions.SneakingCondition;
 import me.Vark123.EpicRPG.MMExtension.Conditions.SummonAlliesPlayersCondition;
@@ -81,6 +82,10 @@ public class CustomConditionLoadEvent implements Listener {
 				break;
 			case "hasvalidtarget":
 				condition = new HasValidTargetCondition(e.getConfig().getLine(), e.getConfig());
+				e.register(condition);
+				break;
+			case "istargetingalliedsummon":
+				condition = new IsTargetingAlliedSummonCondition(e.getConfig().getLine(), e.getConfig());
 				e.register(condition);
 				break;
 		}

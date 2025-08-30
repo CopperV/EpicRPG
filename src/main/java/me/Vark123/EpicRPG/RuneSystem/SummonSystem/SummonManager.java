@@ -124,7 +124,7 @@ public final class SummonManager implements Listener {
 			});
 	}
 	
-	public void removeSummon(ActiveMob aMob) {
+	public void dismissSummon(ActiveMob aMob) {
 		if(!aMob.getOwnerUUID().isPresent())
 			return;
 		
@@ -132,13 +132,11 @@ public final class SummonManager implements Listener {
 		if(owner == null)
 			return;
 		
+		removeAllSummonInfo(aMob);
 		aMob.getEntity().setHealth(0);
 	}
 	
 	private void removeAllSummonInfo(ActiveMob aMob) {
-		if(!aMob.getOwnerUUID().isPresent())
-			return;
-		
 		playerSummons.values().stream()
 			.flatMap(list -> list.stream())
 			.filter(info -> info.getSummon().equals(aMob))

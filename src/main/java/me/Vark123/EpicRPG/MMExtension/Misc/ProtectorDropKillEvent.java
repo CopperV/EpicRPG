@@ -26,7 +26,7 @@ public class ProtectorDropKillEvent implements Listener {
 			return;
 		if(mob.getFaction() == null || mob.getFaction().isEmpty())
 			return;
-		if(!mob.getFaction().equalsIgnoreCase("Archolos_Defenders"))
+		if(!mob.getFaction().equalsIgnoreCase("DEFENDERS"))
 			return;
 
 		e.getDrops().setLootTable(new ArrayList<>());;

@@ -21,11 +21,13 @@ import me.Vark123.EpicRPG.RuneSystem.SummonSystem.Commands.AttackHighestPercenta
 import me.Vark123.EpicRPG.RuneSystem.SummonSystem.Commands.AttackLowestHpCommand;
 import me.Vark123.EpicRPG.RuneSystem.SummonSystem.Commands.AttackLowestPercentageHpCommand;
 import me.Vark123.EpicRPG.RuneSystem.SummonSystem.Commands.AttackNearestCommand;
+import me.Vark123.EpicRPG.RuneSystem.SummonSystem.Commands.AttackRandomCommand;
 import me.Vark123.EpicRPG.RuneSystem.SummonSystem.Commands.BreakThroughCommand;
 import me.Vark123.EpicRPG.RuneSystem.SummonSystem.Commands.DefaultCommand;
 import me.Vark123.EpicRPG.RuneSystem.SummonSystem.Commands.DismissCommand;
 import me.Vark123.EpicRPG.RuneSystem.SummonSystem.Commands.GatheringCommand;
 import me.Vark123.EpicRPG.RuneSystem.SummonSystem.Commands.PassiveCommand;
+import me.Vark123.EpicRPG.RuneSystem.SummonSystem.Commands.ResetTargetCommand;
 import me.Vark123.EpicRPG.Utils.ComboClick;
 
 @Getter
@@ -44,6 +46,7 @@ public final class SummonControllerManager {
 		registerCommand(new PassiveCommand());
 		registerCommand(new DismissCommand());
 		registerCommand(new DefaultCommand());
+		registerCommand(new AttackRandomCommand());
 		registerCommand(new AttackNearestCommand());
 		registerCommand(new AttackFurthestCommand());
 		registerCommand(new AttackLowestHpCommand());
@@ -52,6 +55,7 @@ public final class SummonControllerManager {
 		registerCommand(new AttackHighestPercentageHpCommand());
 		registerCommand(new GatheringCommand());
 		registerCommand(new BreakThroughCommand());
+		registerCommand(new ResetTargetCommand());
 	}
 	
 	public static final SummonControllerManager getInst() {

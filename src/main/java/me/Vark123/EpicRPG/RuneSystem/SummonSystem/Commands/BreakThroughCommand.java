@@ -28,11 +28,8 @@ public class BreakThroughCommand extends ASummonCommand {
 
 	@Override
 	public void apply(Player owner, ActiveMob summon) {
-		Location loc1 = owner.getLocation().clone().add(0,1.3,0);
-		Location loc2 = BukkitAdapter.adapt(summon.getEntity().getEyeLocation());
-		
-		loc2.getWorld().playSound(loc2, Sound.ENTITY_WOLF_HOWL, 2f, 0.8f);
-		Utils.drawLine(Particle.SMOKE, loc1, loc2, 0.2, 2, 0.05f, 0.05f, 0.05f, 0.02f);
+		Location loc1 = owner.getLocation().clone().add(0,1.1,0);
+		Location loc2 = BukkitAdapter.adapt(summon.getEntity().getLocation()).clone().add(0, 0.65, 0);
 		
 		Location loc = owner.getLocation().clone();
 		owner.getWorld().getNearbyEntities(loc, radius, radius, radius, entity -> {
@@ -50,6 +47,14 @@ public class BreakThroughCommand extends ASummonCommand {
 		        score(e1, owner, loc, radius, angle),
 		        score(e2, owner, loc, radius, angle)
 		)).ifPresent(e -> {
+			Location targetLoc = e.getLocation().clone().add(0,1,0);
+			Location eyeLoc = e.getEyeLocation().clone();
+			
+			loc1.getWorld().playSound(loc1, Sound.ENTITY_WITHER_SHOOT, 0.8f, 0.8f);
+			Utils.drawLine(Particle.ANGRY_VILLAGER, loc1, targetLoc, 0.3, 2, 0.05f, 0.05f, 0.05f, 0.02f);
+			Utils.drawLine(Particle.HAPPY_VILLAGER, loc2, targetLoc, 0.2, 2, 0.05f, 0.05f, 0.05f, 0.02f);
+			eyeLoc.getWorld().spawnParticle(Particle.ANGRY_VILLAGER, eyeLoc, 25, 0.4f, 0.4f, 0.4f, 0.05f);
+			
 			summon.setTarget(BukkitAdapter.adapt(e));
 		});
 	}

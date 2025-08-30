@@ -13,18 +13,18 @@ import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.core.mobs.ActiveMob;
 import me.Vark123.EpicRPG.RuneSystem.SummonSystem.ASummonCommand;
 
-public class AttackLowestHpCommand extends ASummonCommand {
+public class AttackRandomCommand extends ASummonCommand {
 
-	public AttackLowestHpCommand() {
-		super("attack_lowest_hp", new SummonCommandItem(Material.LEATHER_CHESTPLATE, "§3Atakuj §7[§3Najmniej HP§7]", Arrays.asList(
+	public AttackRandomCommand() {
+		super("attack_random", new SummonCommandItem(Material.GOLDEN_SHOVEL, "§3Atakuj §7[§3Losowy§7]", Arrays.asList(
 				"§7Nakazuje przywolancowi atakowac",
-				"§7przeciwnikow, ktorzy maja najmniej zycia")));
+				"§7losowego przeciwnika w swoim zasiegu")));
 	}
 
 	@Override
 	public void apply(Player owner, ActiveMob summon) {
 		Location loc = BukkitAdapter.adapt(summon.getEntity().getLocation()).clone().add(0, 0.1, 0);
-		loc.getWorld().playSound(loc, Sound.ENTITY_BREEZE_SHOOT, 1.25f, 1.05f);
+		loc.getWorld().playSound(loc, Sound.ENTITY_EVOKER_CAST_SPELL, 1f, 0.9f);
 		
 		Random rand = new Random();
 		double radius = 1.5;
@@ -38,7 +38,7 @@ public class AttackLowestHpCommand extends ASummonCommand {
 			
 			Location p1 = loc.clone().add(x, 0, z);
 			
-			p1.getWorld().spawnParticle(Particle.SOUL_FIRE_FLAME, p1, 1, 0, 0, 0, 0);
+			p1.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, p1, 1, 0, 0, 0, 0);
 		}
 		for(int i = 0; i < 25; ++i) {
 			double angle = rand.nextDouble(Math.PI*2);
@@ -48,10 +48,10 @@ public class AttackLowestHpCommand extends ASummonCommand {
 			
 			Location p1 = loc.clone().add(x, 0, z);
 			
-			p1.getWorld().spawnParticle(Particle.TRIAL_OMEN, p1, 0, 0, 1, 0, rand.nextFloat(0.03f, 0.15f));
+			p1.getWorld().spawnParticle(Particle.FIREWORK, p1, 0, 0, 1, 0, rand.nextFloat(0.03f, 0.15f));
 		}
 		
-		summon.setStance("attack_lowest_hp");
+		summon.setStance("attack_random");
 		summon.signalMob(BukkitAdapter.adapt(owner), "CLEAR_AI");
 		summon.setTarget(null);
 	}

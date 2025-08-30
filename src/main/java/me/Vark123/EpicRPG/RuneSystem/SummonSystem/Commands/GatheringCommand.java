@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.core.mobs.ActiveMob;
 import me.Vark123.EpicRPG.RuneSystem.SummonSystem.ASummonCommand;
-import me.Vark123.EpicRPG.Utils.Utils;
 
 public class GatheringCommand extends ASummonCommand {
 
@@ -24,13 +23,17 @@ public class GatheringCommand extends ASummonCommand {
 
 	@Override
 	public void apply(Player owner, ActiveMob summon) {
-		Location loc1 = owner.getLocation().clone().add(0,1.3,0);
-		Location loc2 = BukkitAdapter.adapt(summon.getEntity().getEyeLocation());
+		Location loc1 = owner.getLocation().clone();
+		Location loc2 = BukkitAdapter.adapt(summon.getEntity().getLocation()).clone().add(0, 0.5, 0);
 		
-		loc2.getWorld().playSound(loc2, Sound.ENTITY_WOLF_HOWL, 2f, 0.8f);
-		Utils.drawLine(Particle.SMOKE, loc1, loc2, 0.2, 2, 0.05f, 0.05f, 0.05f, 0.02f);
+		loc2.getWorld().playSound(loc2, Sound.ENTITY_ILLUSIONER_MIRROR_MOVE, 1.2f, 0.75f);
+		loc2.getWorld().spawnParticle(Particle.FLASH, loc2, 1);
 		
-		summon.getEntity().teleport(BukkitAdapter.adapt(owner.getLocation().clone()));
+		summon.getEntity().teleport(BukkitAdapter.adapt(loc1));
 		summon.setTarget(null);
+
+		loc2 = BukkitAdapter.adapt(summon.getEntity().getLocation()).clone().add(0, 0.5, 0);
+		loc2.getWorld().playSound(loc2, Sound.ENTITY_ILLUSIONER_MIRROR_MOVE, 1.2f, 0.75f);
+		loc2.getWorld().spawnParticle(Particle.FLASH, loc2, 1);
 	}
 }

@@ -184,9 +184,10 @@ import me.Vark123.EpicRPG.RuneSystem.Listeners.RuneInteractListener;
 import me.Vark123.EpicRPG.RuneSystem.Listeners.RuneStunEffectListener;
 import me.Vark123.EpicRPG.RuneSystem.Listeners.RuneTimeCheckListener;
 import me.Vark123.EpicRPG.RuneSystem.Listeners.Runes.LodowyBlokEvent;
-import me.Vark123.EpicRPG.RuneSystem.SummonSystem.SummonControllerListener;
-import me.Vark123.EpicRPG.RuneSystem.SummonSystem.SummonDismissListener;
 import me.Vark123.EpicRPG.RuneSystem.SummonSystem.SummonManager;
+import me.Vark123.EpicRPG.RuneSystem.SummonSystem.Listeners.SummonControllerListener;
+import me.Vark123.EpicRPG.RuneSystem.SummonSystem.Listeners.SummonDismissListener;
+import me.Vark123.EpicRPG.RuneSystem.SummonSystem.Listeners.SummonLevelCalcByStatsListener;
 import me.Vark123.EpicRPG.ScriptedFightsAndSkills.Loatheb.LoathebHealDebuffListener;
 import me.Vark123.EpicRPG.ScriptedFightsAndSkills.Loatheb.LoathebProjectileNeutralizeListener;
 import me.Vark123.EpicRPG.ScriptedFightsAndSkills.Loatheb.LoathebProjectileReflectListener;
@@ -525,6 +526,7 @@ public class EventListenerManager {
 		Bukkit.getPluginManager().registerEvents(SummonManager.get(), inst);
 		Bukkit.getPluginManager().registerEvents(new SummonControllerListener(), inst);
 		Bukkit.getPluginManager().registerEvents(new SummonDismissListener(), inst);
+		Bukkit.getPluginManager().registerEvents(new SummonLevelCalcByStatsListener(), inst);
 		
 		//Calendar Events
 		if(EpicRPGApi.getApi().getCalendarManager().isRegisteredEvent("reset_blackrock")) 
