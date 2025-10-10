@@ -28,7 +28,7 @@ public class VoidDamageListener implements Listener {
 				return;
 			p.setNoDamageTicks(5);
 		}, 1);
-		e.setDamage(0.05 * p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+		e.setDamage(0.05 * p.getAttribute(Attribute.MAX_HEALTH).getValue());
 	}
 
 }

@@ -87,7 +87,7 @@ public class TemplariuszSetListener implements Listener {
 		player.getWorld().playSound(player.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 0.8f, 1.44f);
 		player.getWorld().spawnParticle(Particle.COMPOSTER, player.getLocation().add(0,1,0), 24, 0.45f, 1f, 0.45f, 0.12f);
 
-		double amount = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()*0.2;
+		double amount = player.getAttribute(Attribute.MAX_HEALTH).getValue()*0.2;
 
 		AttributeModifier modifier = new AttributeModifier(
 				new NamespacedKey(me.Vark123.EpicRPG.Main.getInstance(), "templariusz_divineshield"),
@@ -95,8 +95,8 @@ public class TemplariuszSetListener implements Listener {
 				Operation.ADD_NUMBER,
 				EquipmentSlotGroup.ANY);
 
-		player.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).removeModifier(modifier);
-		player.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).addModifier(modifier);
+		player.getAttribute(Attribute.MAX_ABSORPTION).removeModifier(modifier);
+		player.getAttribute(Attribute.MAX_ABSORPTION).addModifier(modifier);
 		player.setAbsorptionAmount(player.getAbsorptionAmount()+amount);
 		
 		divineShieldCooldowns.add(player.getUniqueId());
@@ -112,7 +112,7 @@ public class TemplariuszSetListener implements Listener {
 					player.setAbsorptionAmount(0);
 				else
 					player.setAbsorptionAmount(player.getAbsorptionAmount() - amount);
-				player.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).removeModifier(modifier);
+				player.getAttribute(Attribute.MAX_ABSORPTION).removeModifier(modifier);
 			}
 		}.runTaskLater(Main.getInst(), 20*5);
 	}

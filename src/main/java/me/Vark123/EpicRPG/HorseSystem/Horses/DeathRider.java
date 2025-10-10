@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.craftbukkit.v1_21_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_21_R5.entity.CraftEntity;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Horse.Color;
 import org.bukkit.entity.Horse.Style;
@@ -34,7 +34,7 @@ public class DeathRider extends AEpicHorse {
 		horse.setCustomName("§7Kon " + p.getName());
 		horse.getInventory().setSaddle(new ItemStack(Material.SADDLE));
 		horse.setColor(Color.WHITE);
-		horse.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
+		horse.getAttribute(Attribute.MAX_HEALTH).setBaseValue(health);
 		horse.setHealth(health);
 		horse.setStyle(Style.NONE);
 
@@ -44,7 +44,7 @@ public class DeathRider extends AEpicHorse {
 		armor.setItemMeta(meta);
 		horse.getInventory().setArmor(armor);
 		((EntityLiving)((CraftEntity)horse).getHandle())
-			.craftAttributes.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speed);
+			.craftAttributes.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(speed);
 	}
 
 	@Override

@@ -70,8 +70,8 @@ public class LodowaAura extends ACastableRune {
 				EpicModifierTypes.LODOWA_AURA,
 				player,
 				target -> {
-					target.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).removeModifier(modifier);
-					target.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).addModifier(modifier);
+					target.getAttribute(Attribute.MAX_ABSORPTION).removeModifier(modifier);
+					target.getAttribute(Attribute.MAX_ABSORPTION).addModifier(modifier);
 					target.setAbsorptionAmount(target.getAbsorptionAmount() + value);
 				}, 
 				target -> {
@@ -84,7 +84,7 @@ public class LodowaAura extends ACastableRune {
 					
 					double value2 = Math.min(value, target.getAbsorptionAmount());
 					target.setAbsorptionAmount(target.getAbsorptionAmount() - value2);
-					target.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).removeModifier(modifier);
+					target.getAttribute(Attribute.MAX_ABSORPTION).removeModifier(modifier);
 				},
 				new TimingRuneEffect(3, target -> {
 					castLoc.getWorld().spawnParticle(Particle.WAX_OFF, player.getLocation().clone().add(0,1,0), 9, 0.4f, 0.8f, 0.4f, 0.1f);

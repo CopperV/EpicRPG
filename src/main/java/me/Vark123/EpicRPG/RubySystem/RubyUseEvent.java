@@ -75,7 +75,7 @@ public class RubyUseEvent implements Listener {
 				return;
 			
 			if(hpRuby) {
-				int toHeal = (int) (p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() - p.getHealth());
+				int toHeal = (int) (p.getAttribute(Attribute.MAX_HEALTH).getValue() - p.getHealth());
 				if(toHeal < 0)
 					return;
 				if(toHeal < present)

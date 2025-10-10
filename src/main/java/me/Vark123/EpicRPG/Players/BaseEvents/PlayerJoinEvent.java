@@ -32,7 +32,7 @@ public class PlayerJoinEvent implements Listener {
 							p.kickPlayer("§cBlad podczas wczytywania danych. Zglos blad administratorowi");
 							return;
 						}
-						p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+						p.setHealth(p.getAttribute(Attribute.MAX_HEALTH).getValue());
 						
 						if(rpg.getInfo().getLevel() == 1) {
 							new BukkitRunnable() {

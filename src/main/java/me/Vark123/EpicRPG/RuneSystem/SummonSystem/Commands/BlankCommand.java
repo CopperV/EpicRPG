@@ -24,7 +24,7 @@ public class BlankCommand extends ASummonCommand {
 		Location loc1 = owner.getLocation().clone().add(0,1.3,0);
 		Location loc2 = BukkitAdapter.adapt(summon.getEntity().getEyeLocation());
 		
-		loc2.getWorld().playSound(loc2, Sound.ENTITY_WOLF_HOWL, 2f, 0.8f);
+		loc2.getWorld().playSound(loc2, Sound.ENTITY_WOLF_GROWL, 2f, 0.8f);
 		Utils.drawLine(Particle.SMOKE, loc1, loc2, 0.2, 2, 0.05f, 0.05f, 0.05f, 0.02f);
 	}
 

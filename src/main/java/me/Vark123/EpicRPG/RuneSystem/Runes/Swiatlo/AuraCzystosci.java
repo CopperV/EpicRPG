@@ -29,7 +29,7 @@ public class AuraCzystosci extends ACastableRune {
 
 	@Override
 	public void castSpell() {
-		double value = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.5;
+		double value = player.getAttribute(Attribute.MAX_HEALTH).getValue() * 0.5;
 		
 		AttributeModifier modifier = new AttributeModifier(
 				new NamespacedKey(Main.getInstance(), rune.getMythicType().toLowerCase()),
@@ -45,8 +45,8 @@ public class AuraCzystosci extends ACastableRune {
 				target -> {
 					target.getWorld().playSound(target.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.2f, 0.7f);
 
-					target.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).removeModifier(modifier);
-					target.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).addModifier(modifier);
+					target.getAttribute(Attribute.MAX_ABSORPTION).removeModifier(modifier);
+					target.getAttribute(Attribute.MAX_ABSORPTION).addModifier(modifier);
 					target.setAbsorptionAmount(target.getAbsorptionAmount() + value);
 				}, 
 				target -> {
@@ -59,7 +59,7 @@ public class AuraCzystosci extends ACastableRune {
 					
 					double value2 = Math.min(value, target.getAbsorptionAmount());
 					target.setAbsorptionAmount(target.getAbsorptionAmount() - value2);
-					target.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).removeModifier(modifier);
+					target.getAttribute(Attribute.MAX_ABSORPTION).removeModifier(modifier);
 				},
 				new TimingRuneEffect(4, target -> {
 					Location _loc = target.getLocation().clone().add(0, 0.05, 0);

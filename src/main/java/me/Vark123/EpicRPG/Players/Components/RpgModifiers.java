@@ -29,7 +29,6 @@ public class RpgModifiers implements Serializable {
 
 	private RpgPlayer rpg;
 	
-	private boolean zewKrwi;
 	private double zewKrwiMod = 0;
 	private boolean paktKrwi;
 	private boolean paktKrwiMeasure;
@@ -397,11 +396,7 @@ public class RpgModifiers implements Serializable {
 	public int getPotionWalka() {
 		return potionWalka;
 	}
-
-	public void setZewKrwi(boolean zewKrwi) {
-		this.zewKrwi = zewKrwi;
-	}
-
+	
 	public void setZewKrwiMod(double zewKrwiMod) {
 		this.zewKrwiMod = zewKrwiMod;
 	}

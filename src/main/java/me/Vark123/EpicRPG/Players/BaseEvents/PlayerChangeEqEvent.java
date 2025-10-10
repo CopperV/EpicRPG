@@ -4,7 +4,6 @@ import java.util.Set;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_21_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
@@ -18,6 +17,7 @@ import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.Vark123.EpicRPG.Main;
@@ -27,7 +27,6 @@ import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 import me.Vark123.EpicRPG.Stats.ChangeStats;
 import me.Vark123.EpicRPG.Stats.CheckStats;
 import me.Vark123.EpicRPG.Utils.Utils;
-import net.minecraft.world.item.ItemArmor;
 
 public class PlayerChangeEqEvent implements Listener {
 	
@@ -117,7 +116,8 @@ public class PlayerChangeEqEvent implements Listener {
 		if(toCheck == null
 				|| toCheck.getType().equals(Material.AIR))
 			return;
-		if(!(CraftItemStack.asNMSCopy(toCheck).c() instanceof ItemArmor)
+		
+		if(!(toCheck.getItemMeta() instanceof ArmorMeta)
 				&& !toCheck.getType().equals(Material.ELYTRA))
 			return;
 		

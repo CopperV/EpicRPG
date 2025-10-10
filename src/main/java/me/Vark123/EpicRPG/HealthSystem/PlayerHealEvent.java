@@ -18,8 +18,8 @@ public class PlayerHealEvent implements Listener {
 		
 		Player p = e.getP();
 		double heal = p.getHealth()+a;
-		if(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() < heal) {
-			heal = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+		if(p.getAttribute(Attribute.MAX_HEALTH).getValue() < heal) {
+			heal = p.getAttribute(Attribute.MAX_HEALTH).getValue();
 		}
 		p.setHealth(heal);
 	}

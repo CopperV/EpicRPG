@@ -74,7 +74,7 @@ public class SlugaBeliaraEffectListener implements Listener {
 		AbstractEntity ae = BukkitAdapter.adapt(e.getVictim());
 		ae.setMetadata("SzponBeliaraEffect", true);
 		
-		double extraDamage = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 2 + rpg.getStats().getFinalObrazenia();
+		double extraDamage = p.getAttribute(Attribute.MAX_HEALTH).getValue() * 2 + rpg.getStats().getFinalObrazenia();
 		e.setDamage(e.getDamage() + extraDamage);
 	}
 	

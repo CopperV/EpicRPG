@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.craftbukkit.v1_21_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_21_R5.entity.CraftEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.SkeletonHorse;
 import org.bukkit.inventory.ItemStack;
@@ -30,10 +30,10 @@ public class ESkeletonHorse extends AEpicHorse {
 		horse.addPassenger(p);
 		horse.setCustomName("§7Kon " + p.getName());
 		horse.getInventory().setSaddle(new ItemStack(Material.SADDLE));
-		horse.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
+		horse.getAttribute(Attribute.MAX_HEALTH).setBaseValue(health);
 		horse.setHealth(health);
 		((EntityLiving)((CraftEntity)horse).getHandle())
-			.craftAttributes.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speed);
+			.craftAttributes.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(speed);
 	}
 
 	@Override

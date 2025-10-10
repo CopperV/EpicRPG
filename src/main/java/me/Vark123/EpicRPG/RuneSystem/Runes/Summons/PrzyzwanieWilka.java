@@ -15,7 +15,7 @@ import me.Vark123.EpicRPG.RuneSystem.Templates.CastSpells.SummonRuneTemplate;
 public class PrzyzwanieWilka extends ACastableRune {
 
 	private IRuneLocationEffect spawnEffect = loc -> {
-		loc.getWorld().playSound(loc, Sound.ENTITY_WOLF_HOWL, 1f, 0.85f);
+		loc.getWorld().playSound(loc, Sound.ENTITY_WOLF_GROWL, 1f, 0.85f);
 		
 		BlockData partData = Material.OAK_LEAVES.createBlockData();
 		Location partLoc = loc.clone().add(0, 0.6, 0);

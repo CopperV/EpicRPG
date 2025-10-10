@@ -112,7 +112,7 @@ public class RunicznyEgzekutorSetListener implements Listener {
 		
 		if(info.getSetCounts().getOrDefault("Runiczny_Egzekutor", 0) >= 2 &&
 				rand.nextDouble() < 0.01) {
-			double hpToRestore = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.15;
+			double hpToRestore = player.getAttribute(Attribute.MAX_HEALTH).getValue() * 0.15;
 			RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg, hpToRestore);
 			Bukkit.getPluginManager().callEvent(event);
 			if(!event.isCancelled()) {
@@ -123,7 +123,7 @@ public class RunicznyEgzekutorSetListener implements Listener {
 		}
 		if(info.getSetCounts().getOrDefault("Runiczny_Egzekutor_H", 0) >= 2 &&
 				rand.nextDouble() < 0.015) {
-			double hpToRestore = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.17;
+			double hpToRestore = player.getAttribute(Attribute.MAX_HEALTH).getValue() * 0.17;
 			RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg, hpToRestore);
 			Bukkit.getPluginManager().callEvent(event);
 			if(!event.isCancelled()) {
@@ -134,7 +134,7 @@ public class RunicznyEgzekutorSetListener implements Listener {
 		}
 		if(info.getSetCounts().getOrDefault("Runiczny_Egzekutor_M", 0) >= 2 &&
 				rand.nextDouble() < 0.02) {
-			double hpToRestore = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.2;
+			double hpToRestore = player.getAttribute(Attribute.MAX_HEALTH).getValue() * 0.2;
 			RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg, hpToRestore);
 			Bukkit.getPluginManager().callEvent(event);
 			if(!event.isCancelled()) {

@@ -236,18 +236,18 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 		
 		ChangeStats.change(this);
 		
-		player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(stats.getFinalHealth());
+		player.getAttribute(Attribute.MAX_HEALTH).setBaseValue(stats.getFinalHealth());
 		return true;
 	}
 	
 	public void updateHp() {
 		var hpAttribute = new AttributeModifier(statsKey, stats.getPotionHealth(), Operation.ADD_NUMBER, EquipmentSlotGroup.ANY);
-		player.getAttribute(Attribute.GENERIC_MAX_HEALTH).removeModifier(hpAttribute);
+		player.getAttribute(Attribute.MAX_HEALTH).removeModifier(hpAttribute);
 		
-		player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(stats.getHealth());
+		player.getAttribute(Attribute.MAX_HEALTH).setBaseValue(stats.getHealth());
 		
 		hpAttribute = new AttributeModifier(statsKey, stats.getPotionHealth(), Operation.ADD_NUMBER, EquipmentSlotGroup.ANY);
-		player.getAttribute(Attribute.GENERIC_MAX_HEALTH).addModifier(hpAttribute);
+		player.getAttribute(Attribute.MAX_HEALTH).addModifier(hpAttribute);
 		
 		stats.setFinalHealth(stats.getHealth() + stats.getPotionHealth());
 	}
@@ -282,7 +282,7 @@ public class RpgPlayer implements Serializable, ChatPrintable {
 			if(hpShowTask != null && !hpShowTask.isCancelled())
 				hpShowTask.cancel();
 			
-			double maxHp = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+			double maxHp = entity.getAttribute(Attribute.MAX_HEALTH).getValue();
 			double percent = newHp / maxHp;
 			
 			double clampedPercent = Utils.normalizeValue(0, 1, percent);

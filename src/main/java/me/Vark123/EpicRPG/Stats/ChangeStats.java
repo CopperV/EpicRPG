@@ -10,10 +10,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_21_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ArmorMeta;
 
 import io.lumine.mythic.bukkit.MythicBukkit;
 import me.Vark123.EpicComponentAPI.EpicComponent;
@@ -22,7 +22,6 @@ import me.Vark123.EpicRPG.Players.Components.RpgJewelry;
 import me.Vark123.EpicRPG.Players.Components.RpgPlayerInfo;
 import me.Vark123.EpicRPG.Players.Components.RpgStats;
 import me.Vark123.EpicRPG.Utils.Utils;
-import net.minecraft.world.item.ItemArmor;
 
 public class ChangeStats {
 	
@@ -81,7 +80,7 @@ public class ChangeStats {
 			itemy.put(36, p.getEquipment().getBoots());
 		
 		if(useBackItem && backItem != null && backItem.getItemMeta().hasLore()) {
-			if(CraftItemStack.asNMSCopy(backItem).c() instanceof ItemArmor
+			if(backItem.getItemMeta() instanceof ArmorMeta
 					|| backItem.getItemMeta().getDisplayName().contains("Demoniczny Sen"))
 				dropBackItem(rpg);
 			else

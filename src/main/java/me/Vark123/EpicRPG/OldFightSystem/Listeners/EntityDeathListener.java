@@ -141,21 +141,21 @@ public class EntityDeathListener implements Listener {
 		}
 		
 //		if(modifiers.hasWampiryzm()) {
-//			double restoreHp = killer.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.05;
+//			double restoreHp = killer.getAttribute(Attribute.MAX_HEALTH).getValue() * 0.05;
 //			RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg, restoreHp);
 //			Bukkit.getPluginManager().callEvent(event);
 //			if(!event.isCancelled())
 //				killer.getWorld().spawnParticle(Particle.HEART, killer.getLocation(), 10, 0.5F, 0.5F, 0.5F, 0.1f);
 //		}
 //		if(modifiers.hasWampiryzm_h()) {
-//			double restoreHp = killer.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.065;
+//			double restoreHp = killer.getAttribute(Attribute.MAX_HEALTH).getValue() * 0.065;
 //			RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg, restoreHp);
 //			Bukkit.getPluginManager().callEvent(event);
 //			if(!event.isCancelled())
 //				killer.getWorld().spawnParticle(Particle.HEART, killer.getLocation(), 10, 0.5F, 0.5F, 0.5F, 0.1f);
 //		}
 //		if(modifiers.hasWampiryzm_m()) {
-//			double restoreHp = killer.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.09;
+//			double restoreHp = killer.getAttribute(Attribute.MAX_HEALTH).getValue() * 0.09;
 //			RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg, restoreHp);
 //			Bukkit.getPluginManager().callEvent(event);
 //			if(!event.isCancelled())
@@ -165,7 +165,7 @@ public class EntityDeathListener implements Listener {
 //		if(modifiers.hasBarbarzynskiSzal()) {
 //			new BukkitRunnable() {
 //				int timer = 0;
-//				double restoreHp = killer.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.0075;
+//				double restoreHp = killer.getAttribute(Attribute.MAX_HEALTH).getValue() * 0.0075;
 //				@Override
 //				public void run() {
 //					if(timer >= 20) {

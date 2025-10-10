@@ -43,7 +43,7 @@ public final class DamageUtils {
 		double zrFactor = Math.min(rpg.getStats().getFinalZrecznosc() * (0.01*0.02), 0.3);
 		double minFactor = 1 - zrFactor;
 		double maxFactor = 1 + zrFactor;
-		double hpPercent = Utils.limitValue(0, 1, victim.getHealth() / victim.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+		double hpPercent = Utils.limitValue(0, 1, victim.getHealth() / victim.getAttribute(Attribute.MAX_HEALTH).getValue());
 		double percent = Utils.scaleValue(0, 1, maxFactor, minFactor, hpPercent);
 		return dmg*percent;
 	}

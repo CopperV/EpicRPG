@@ -147,7 +147,7 @@ public class ScoreboardPlaceholders extends PlaceholderExpansion {
 				if(player.hasPotionEffect(PotionEffectType.WITHER)) {
 					StringBuilder message = new StringBuilder();
 					message.append("  &bHP: &8");
-					int lenght = String.valueOf((int) player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()).length();
+					int lenght = String.valueOf((int) player.getAttribute(Attribute.MAX_HEALTH).getValue()).length();
 					for(int i = 0; i < lenght; ++i)
 						message.append("✘");
 					message.append("&b/&8");
@@ -155,12 +155,12 @@ public class ScoreboardPlaceholders extends PlaceholderExpansion {
 						message.append("✘");
 					return ChatColor.translateAlternateColorCodes('&', message.toString());
 				} else
-					return ChatColor.translateAlternateColorCodes('&', "  &bHP: &c"+((int)player.getHealth())+"&b/&c"+((int)player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
+					return ChatColor.translateAlternateColorCodes('&', "  &bHP: &c"+((int)player.getHealth())+"&b/&c"+((int)player.getAttribute(Attribute.MAX_HEALTH).getValue()));
 			case "percent_hp":
 				if(player.hasPotionEffect(PotionEffectType.WITHER)) {
 					return ChatColor.translateAlternateColorCodes('&', "  &bHP: &8✘✘%");
 				} else
-					return ChatColor.translateAlternateColorCodes('&', "  &bHP: &c"+String.format("%.2f", player.getHealth()/player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()*100.)+"%");
+					return ChatColor.translateAlternateColorCodes('&', "  &bHP: &c"+String.format("%.2f", player.getHealth()/player.getAttribute(Attribute.MAX_HEALTH).getValue()*100.)+"%");
 		}
 		return " ";
 	}

@@ -26,7 +26,7 @@ public class PolnocnyBarbarzyncaSetListener implements Listener {
 		
 		LivingEntity victim = e.getVictim();
 		double health = victim.getHealth();
-		double maxHealth = victim.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+		double maxHealth = victim.getAttribute(Attribute.MAX_HEALTH).getValue();
 		if(maxHealth * 0.5 <= health)
 			return;
 		
@@ -49,7 +49,7 @@ public class PolnocnyBarbarzyncaSetListener implements Listener {
 			return;
 		
 		double health = player.getHealth();
-		double maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+		double maxHealth = player.getAttribute(Attribute.MAX_HEALTH).getValue();
 		if(maxHealth * 0.5 <= health)
 			return;
 		
@@ -72,7 +72,7 @@ public class PolnocnyBarbarzyncaSetListener implements Listener {
 			return;
 		
 		double health = player.getHealth();
-		double maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+		double maxHealth = player.getAttribute(Attribute.MAX_HEALTH).getValue();
 		if(maxHealth * 0.5 <= health)
 			return;
 		

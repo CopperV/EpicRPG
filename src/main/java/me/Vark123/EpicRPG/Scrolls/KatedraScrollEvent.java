@@ -16,8 +16,6 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
-import io.lumine.mythic.bukkit.MythicBukkit;
-import me.Vark123.EpicComponentAPI.EpicComponent;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Utils.Utils;
 

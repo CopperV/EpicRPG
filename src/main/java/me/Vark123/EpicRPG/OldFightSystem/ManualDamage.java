@@ -60,8 +60,8 @@ public class ManualDamage {
 			}
 			victim.setAbsorptionAmount(0);
 		}
-		if(victim.getHealth() > victim.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())
-			victim.setHealth(victim.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+		if(victim.getHealth() > victim.getAttribute(Attribute.MAX_HEALTH).getValue())
+			victim.setHealth(victim.getAttribute(Attribute.MAX_HEALTH).getValue());
 		victim.setHealth(victim.getHealth() - damage);
 		
 //		victim.setLastDamageCause(e);

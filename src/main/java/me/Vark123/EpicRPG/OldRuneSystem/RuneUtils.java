@@ -38,7 +38,7 @@ public class RuneUtils {
 	
 	public static void krewPrzodkowEffect(RpgPlayer rpg) {
 		Player p = rpg.getPlayer();
-		double restoreHp = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.08;
+		double restoreHp = p.getAttribute(Attribute.MAX_HEALTH).getValue() * 0.08;
 		RpgPlayerHealEvent event = new RpgPlayerHealEvent(rpg, restoreHp);
 		Bukkit.getPluginManager().callEvent(event);
 		if(!event.isCancelled())

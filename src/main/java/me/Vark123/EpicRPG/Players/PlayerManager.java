@@ -56,7 +56,7 @@ public class PlayerManager {
 		ChangeStats.change(rpg);
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), ()->{
-//			p.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(rpg.getStats().getFinalHealth());
+//			p.getAttribute(Attribute.MAX_HEALTH).setBaseValue(rpg.getStats().getFinalHealth());
 			if(rpg.getSkills().hasHungerless()) 
 				p.setFoodLevel(18);
 			else

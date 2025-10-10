@@ -179,7 +179,7 @@ public class OstrzeMrozuSetComboListener implements Listener {
 		p.getWorld().playSound(p.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 0.8f, 1.3f);
 		p.getWorld().spawnParticle(Particle.COMPOSTER, p.getLocation().add(0,1,0), 24, 0.45f, 1f, 0.45f, 0.12f);
 
-		double amount = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()*0.5;
+		double amount = p.getAttribute(Attribute.MAX_HEALTH).getValue()*0.5;
 
 		AttributeModifier modifier = new AttributeModifier(
 				new NamespacedKey(me.Vark123.EpicRPG.Main.getInstance(), "ostrze_mrozu_divineshield"),
@@ -187,8 +187,8 @@ public class OstrzeMrozuSetComboListener implements Listener {
 				Operation.ADD_NUMBER,
 				EquipmentSlotGroup.ANY);
 
-		p.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).removeModifier(modifier);
-		p.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).addModifier(modifier);
+		p.getAttribute(Attribute.MAX_ABSORPTION).removeModifier(modifier);
+		p.getAttribute(Attribute.MAX_ABSORPTION).addModifier(modifier);
 		p.setAbsorptionAmount(p.getAbsorptionAmount()+amount);
 		
 		divineShieldCooldowns.add(p.getUniqueId());
@@ -204,7 +204,7 @@ public class OstrzeMrozuSetComboListener implements Listener {
 					p.setAbsorptionAmount(0);
 				else
 					p.setAbsorptionAmount(p.getAbsorptionAmount() - amount);
-				p.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).removeModifier(modifier);
+				p.getAttribute(Attribute.MAX_ABSORPTION).removeModifier(modifier);
 			}
 		}.runTaskLater(Main.getInst(), 20*8);
 	}

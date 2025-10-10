@@ -35,7 +35,7 @@ public class ZewNatury extends ACastableRune {
 				player,
 				target -> {
 					target.addPotionEffect(potion);
-					target.getWorld().playSound(target.getLocation(), Sound.ENTITY_WOLF_HOWL, 1f, 0.7f);
+					target.getWorld().playSound(target.getLocation(), Sound.ENTITY_WOLF_GROWL, 1f, 0.7f);
 				}, 
 				target -> {
 					target.getWorld().playSound(target.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_DEPLETE, 1, 0.9f);

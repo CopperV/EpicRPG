@@ -29,7 +29,7 @@ public class TransfuzjaEffectListener implements Listener {
 			return;
 		
 		RpgPlayer rpg = PlayerManager.getInstance().getRpgPlayer(player);
-		rpg.getStats().createRegenHpTask(5, player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()*0.05);
+		rpg.getStats().createRegenHpTask(5, player.getAttribute(Attribute.MAX_HEALTH).getValue()*0.05);
 		
 		Utils.unsetEntityBuff(player, EpicModifierTypes.TRANSFUZJA);
 		e.setCancelled(true);

@@ -71,7 +71,7 @@ public class UkazanieSmierci extends ACastableRune {
 						return;
 					}
 					
-					double percent = e.getHealth() / e.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+					double percent = e.getHealth() / e.getAttribute(Attribute.MAX_HEALTH).getValue();
 					if(percent > 0.6) {
 						if(RuneUtils.damage(player, e, rune)) {
 							e.getWorld().playSound(loc, Sound.ENTITY_ALLAY_HURT, 2f, 0f);
@@ -98,7 +98,7 @@ public class UkazanieSmierci extends ACastableRune {
 						return;
 					}
 					
-					if(RuneUtils.damage(player, e, rune, e.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 3)) {
+					if(RuneUtils.damage(player, e, rune, e.getAttribute(Attribute.MAX_HEALTH).getValue() * 3)) {
 						e.getWorld().playSound(loc, Sound.ENTITY_ALLAY_DEATH, 2f, 0f);
 
 						loc.getWorld().spawnParticle(Particle.LARGE_SMOKE, loc, 19, 
