@@ -60,7 +60,7 @@ public class SummonRuneTemplate {
 		mobManager.getMythicMob(mobType).ifPresent(mythicMob -> {
 			double angle1 = rand.nextDouble(Math.PI*2);
 			
-			Location randomLoc = summonLoc.clone().add(Utils.transferSphericalToVector(spawnRadius, angle1, 0));
+			Location randomLoc = summonLoc.clone().add(Utils.transferSphericalToVector(spawnRadius, 0, angle1));
 			
 			ActiveMob aMob = mobManager.spawnMob(mobType, BukkitAdapter.adapt(randomLoc), SpawnReason.SUMMON, 1);
 			aMob.getVariables().putInt("mana_cost", castableRune.getRune().getPriceOverTime());

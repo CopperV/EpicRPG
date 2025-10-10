@@ -402,8 +402,12 @@ public class RpgModifiers implements Serializable {
 		this.zewKrwi = zewKrwi;
 	}
 
-	public void setZewKrwiMod(int zewKrwiMod) {
+	public void setZewKrwiMod(double zewKrwiMod) {
 		this.zewKrwiMod = zewKrwiMod;
+	}
+	
+	public double getZewKrwiMod() {
+		return this.zewKrwiMod;
 	}
 
 	public void addZewKrwiMod(double zewKrwiMod) {

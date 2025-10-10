@@ -1,5 +1,6 @@
 package me.Vark123.EpicRPG.RuneSystem;
 
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -119,8 +120,10 @@ public class EpicRune {
 					return;
 				}
 				if(s.contains("Punkty przywolan")) {
-					this.summonPoints = Integer.parseInt(
-							ChatColor.stripColor(s).split(": ")[1].split(" ")[0]);
+					String summonPointsStr = ChatColor.stripColor(s).split(": ")[1].split(" ")[0];
+					if(!StringUtils.isNumeric(summonPointsStr))
+						return;
+					this.summonPoints = Integer.parseInt(summonPointsStr);
 					return;
 				}
 				

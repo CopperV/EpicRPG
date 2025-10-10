@@ -50,7 +50,8 @@ public abstract class ACastableRune {
 		BUFF ("§cUzywasz obecnie innej runy modyfikujacej obrazenia"),
 		PROWOKACJA ("§cEfekt prowokacji jest jeszcze aktywny"),
 		EKSPLODUJACA_STRZALA ("§cObecnie posiadasz efekt innej eksplodujacej strzaly"),
-		WAMPIRYZM ("§cObecnie posiadasz efekt innego wampiryzmu");
+		WAMPIRYZM ("§cObecnie posiadasz efekt innego wampiryzmu"),
+		PAKT_KRWI ("§cJestes w trakcie wypelniania paktu krwi. Nie jestes teraz w stanie zawrzec innego paktu");
 		
 		private String message;
 		private RuneLockerTypes(String message) {

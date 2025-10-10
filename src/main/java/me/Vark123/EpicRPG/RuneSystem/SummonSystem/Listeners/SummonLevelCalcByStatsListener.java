@@ -30,12 +30,12 @@ public class SummonLevelCalcByStatsListener implements Listener {
 		double modifier = 0;
 		switch(rpg.getInfo().getProffesion()) {
 			case "§5Mag":
-				modifier = 0.02;
+				modifier = 0.04;
 				break;
 			case "§cWojownik":
 				break;
 			case "§2Mysliwy":
-				modifier = 0.05;
+				modifier = 0.1;
 				break;
 			default:
 				break;

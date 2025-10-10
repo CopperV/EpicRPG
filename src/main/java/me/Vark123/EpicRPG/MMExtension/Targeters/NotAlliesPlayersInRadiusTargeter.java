@@ -1,10 +1,10 @@
 package me.Vark123.EpicRPG.MMExtension.Targeters;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import io.lumine.mythic.api.adapters.AbstractEntity;
@@ -14,21 +14,19 @@ import io.lumine.mythic.api.config.MythicLineConfig;
 import io.lumine.mythic.api.skills.SkillCaster;
 import io.lumine.mythic.api.skills.SkillMetadata;
 import io.lumine.mythic.api.skills.placeholders.PlaceholderDouble;
+import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.mobs.ActiveMob;
+import io.lumine.mythic.core.mobs.MobExecutor;
 import io.lumine.mythic.core.skills.SkillExecutor;
 import io.lumine.mythic.core.skills.targeters.IEntitySelector;
 import io.lumine.mythic.core.utils.annotations.MythicTargeter;
+import me.Vark123.EpicRPG.Utils.Utils;
 
 @MythicTargeter(aliases={"APIR","EPIR"}, description="Targets all possible enemies in radius")
 public class NotAlliesPlayersInRadiusTargeter extends IEntitySelector {
-
-	private static final List<String> playerAlliesFactions = new ArrayList<>(Arrays.asList(
-			"DEFENDERS",
-			"SUMMONS",
-			"NEUTRAL",
-			"NEUTRAL_ANIMALS"
-	));
+	
+	private final MobExecutor manager = MythicBukkit.inst().getMobManager();
 	
 	private PlaceholderDouble radius;
 	
@@ -42,6 +40,8 @@ public class NotAlliesPlayersInRadiusTargeter extends IEntitySelector {
         SkillCaster am = data.getCaster();
         
         AbstractEntity aCaster = am.getEntity();
+		Entity caster = BukkitAdapter.adapt(aCaster);
+		
         AbstractLocation loc = aCaster.getLocation();
         double r = radius.get(data);
         double sqrRadius = r*r;
@@ -49,18 +49,25 @@ public class NotAlliesPlayersInRadiusTargeter extends IEntitySelector {
         Collection<AbstractEntity> targets = aCaster.getWorld().getEntitiesNearLocation(loc, r, aTarget -> {
         	if(loc.distanceSquared(aTarget) > sqrRadius)
         		return false;
+        	
+        	Entity target = BukkitAdapter.adapt(aTarget);
+        	if(!(target instanceof LivingEntity leTarget))
+        		return false;
+        	
+        	if(caster instanceof Player player) {
+        		return !Utils.isEntityAlly(player, leTarget);
+        	}
 
     		if(aTarget.getBukkitEntity() instanceof Player)
         		return false;
-        	
-        	if(!MythicBukkit.inst().getMobManager().isMythicMob(aTarget))
-        		return false;
-        	
-        	ActiveMob aMob = MythicBukkit.inst().getMobManager().getMythicMobInstance(aTarget);
-        	if(!aMob.hasFaction())
-        		return true;
-        	
-        	return !playerAlliesFactions.contains(aMob.getFaction().toUpperCase());
+    		
+    		if(manager.isActiveMob(aCaster)) {
+    			ActiveMob mob = manager.getMythicMobInstance(aCaster);
+    			if(mob.getOwnerUUID().isPresent() && Bukkit.getPlayer(mob.getOwnerUUID().get()) != null)
+    				return !Utils.isEntityAlly((LivingEntity) caster, leTarget);
+    		}
+    		
+    		return !(target instanceof Player || Utils.isEntityMythicMobAlly(aTarget));
         });
         
         for (AbstractPlayer p : am.getEntity().getWorld().getPlayers()) {

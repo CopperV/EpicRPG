@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import me.Vark123.EpicRPG.Consumables.ConsumableManager;
+import me.Vark123.EpicRPG.Consumables.ConsumableUseEvent;
 import me.Vark123.EpicRPG.Players.PlayerManager;
 import me.Vark123.EpicRPG.Players.RpgPlayer;
 import me.Vark123.EpicRPG.Utils.Utils;
@@ -33,6 +34,10 @@ public class ConsumableUseListener implements Listener {
 		
 		ConsumableManager.inst().getConsumable(it).ifPresent(consumable -> {
 			if(!consumable.canConsume(rpg))
+				return;
+			
+			ConsumableUseEvent event = new ConsumableUseEvent(p, it, consumable);
+			if(event.isCancelled())
 				return;
 			
 			consumable.consume(rpg, e.getHand());

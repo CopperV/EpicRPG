@@ -11,9 +11,9 @@ import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.bukkit.events.MythicMobLootDropEvent;
 import io.lumine.mythic.core.mobs.ActiveMob;
 
-public class ProtectorDropKillEvent implements Listener {
+public class MythicMobLootDropListener implements Listener {
 	
-	@EventHandler()
+	@EventHandler
 	public void onDrop(MythicMobLootDropEvent e) {
 		Entity killer = e.getKiller();
 		if(killer == null)
@@ -26,7 +26,7 @@ public class ProtectorDropKillEvent implements Listener {
 			return;
 		if(mob.getFaction() == null || mob.getFaction().isEmpty())
 			return;
-		if(!mob.getFaction().equalsIgnoreCase("DEFENDERS"))
+		if(mob.getFaction().equalsIgnoreCase("SUMMONS"))
 			return;
 
 		e.getDrops().setLootTable(new ArrayList<>());;

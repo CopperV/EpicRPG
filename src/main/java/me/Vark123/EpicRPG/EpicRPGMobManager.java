@@ -84,6 +84,8 @@ public class EpicRPGMobManager {
 	
 	public int getRandomMobExp(String mob) {
 		Pair<Integer, Integer> pair = getMobExp(mob);
+		if(pair.getKey() >= pair.getValue())
+			return 0;
 		return rand.nextInt(pair.getKey(), pair.getValue());
 	}
 	

@@ -11,6 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import me.Vark123.EpicRPG.Main;
 import me.Vark123.EpicRPG.Players.Components.RpgModifiers.EpicModifierTypes;
 import me.Vark123.EpicRPG.RuneSystem.ACastableRune;
+import me.Vark123.EpicRPG.RuneSystem.Functional.IRuneDisplayGetter;
 import me.Vark123.EpicRPG.RuneSystem.Functional.IRuneEntityEffect;
 import me.Vark123.EpicRPG.RuneSystem.Templates.CastSpells.TimingEffectRuneTemplate.TimingRuneEffect;
 import me.Vark123.EpicRPG.Utils.Utils;
@@ -22,6 +23,23 @@ public class BufferRuneTemplate {
 	public static void castEffect(
 			ACastableRune castableRune,
 			String title,
+			EpicModifierTypes modifier,
+			LivingEntity target,
+			IRuneEntityEffect startEffect,
+			IRuneEntityEffect endEffect,
+			TimingRuneEffect... effects) {
+		castEffect(
+				castableRune,
+				(__1, __2) -> title,
+				modifier, target,
+				startEffect,
+				endEffect,
+				effects);
+	}
+	
+	public static void castEffect(
+			ACastableRune castableRune,
+			IRuneDisplayGetter title,
 			EpicModifierTypes modifier,
 			LivingEntity target,
 			IRuneEntityEffect startEffect,
@@ -49,10 +67,10 @@ public class BufferRuneTemplate {
 					
 					target.sendMessage(Main.getInstance().getPrefix()+" §aEfekt dzialania runy §r"+castableRune.getRune().getName()+" §askonczyl sie");
 					
-					Utils.unsetEntityBuff(target, modifier);
-					
 					if(endEffect != null)
 						endEffect.playEffect(target);
+					
+					Utils.unsetEntityBuff(target, modifier);
 					
 					cancel();
 					return;
@@ -85,7 +103,7 @@ public class BufferRuneTemplate {
 						return;
 					}
 					
-					bar.setTitle(title+" §r§7[§f§l"+(int)timer+"§r§7]");
+					bar.setTitle(title.getDisplay(castableRune, target)+" §r§7[§f§l"+(int)timer+"§r§7]");
 					bar.setProgress(timer / (double)duration);
 					
 					--timer;

@@ -72,7 +72,7 @@ public class MagicznaSfera extends ACastableRune {
 							if(radius.doubleValue() < 1)
 								return;
 							if(RuneUtils.damage(player, entity, rune)) {
-								Location eLoc = entity.getLocation().clone();
+								Location eLoc = entity.getLocation().clone().add(0,1,0);
 								
 								eLoc.getWorld().playSound(eLoc, Sound.ENTITY_EVOKER_CAST_SPELL, 0.6f, 1.3f);
 								eLoc.getWorld().spawnParticle(Particle.WITCH, eLoc, 8,

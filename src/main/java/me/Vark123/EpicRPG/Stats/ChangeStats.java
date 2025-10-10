@@ -71,13 +71,13 @@ public class ChangeStats {
 		Map<Integer,ItemStack> itemy = new ConcurrentHashMap<>();
 		Map<Integer,ItemStack> akcesoria = new ConcurrentHashMap<>();
 
-		if((p.getEquipment().getHelmet() != null) && (p.getEquipment().getHelmet().getItemMeta().hasLore()))
+		if((p.getEquipment().getHelmet() != null && !p.getEquipment().getHelmet().getType().equals(Material.AIR)) && (p.getEquipment().getHelmet().getItemMeta().hasLore()))
 			itemy.put(39, p.getEquipment().getHelmet());
-		if((p.getEquipment().getChestplate() != null) && (p.getEquipment().getChestplate().getItemMeta().hasLore()))
+		if((p.getEquipment().getChestplate() != null && !p.getEquipment().getChestplate().getType().equals(Material.AIR)) && (p.getEquipment().getChestplate().getItemMeta().hasLore()))
 			itemy.put(38, p.getEquipment().getChestplate());
-		if((p.getEquipment().getLeggings() != null) && (p.getEquipment().getLeggings().getItemMeta().hasLore()))
+		if((p.getEquipment().getLeggings() != null && !p.getEquipment().getLeggings().getType().equals(Material.AIR)) && (p.getEquipment().getLeggings().getItemMeta().hasLore()))
 			itemy.put(37, p.getEquipment().getLeggings());
-		if((p.getEquipment().getBoots() != null) && (p.getEquipment().getBoots().getItemMeta().hasLore()))
+		if((p.getEquipment().getBoots() != null && !p.getEquipment().getBoots().getType().equals(Material.AIR)) && (p.getEquipment().getBoots().getItemMeta().hasLore()))
 			itemy.put(36, p.getEquipment().getBoots());
 		
 		if(useBackItem && backItem != null && backItem.getItemMeta().hasLore()) {

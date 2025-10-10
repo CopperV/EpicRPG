@@ -745,7 +745,7 @@ public class Utils {
         return true;
 	}
 	
-	private static boolean isEntityMythicMobAlly(AbstractEntity entity) {
+	public static boolean isEntityMythicMobAlly(AbstractEntity entity) {
 		if(!MythicBukkit.inst().getMobManager().isActiveMob(entity))
 			return false;
 		

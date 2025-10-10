@@ -57,6 +57,9 @@ import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.KrwawyBicz;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.KrwawyDeszcz;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.KrwawyPocisk;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.Mord;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.PaktKrwi;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.PaktKrwi_H;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.PaktKrwi_M;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.PlugawaKrew;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.Rozprucie;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.RytualKrwi;
@@ -68,18 +71,23 @@ import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.Wampiryzm_M;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.WiezyKrwi;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.ZadzaKrwi;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.ZatrutaKrew;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.ZewKrwi;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.ZewSmierci;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.ZewSmierci_H;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Krew.ZewSmierci_M;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.CienAssasyna;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.CiosWPlecy;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.CukierekAlboPsikus;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.CzarnySen;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.KoszmarBeliara;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.KrzykUmarlych;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.KulaSmierci;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.LaskaBeliara;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.OdwrocenieUwagi;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.Skrytobojstwo;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.SmiercOzywiencom;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.SmiertelnaFala;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.Splugawienie;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.StrzalaCiemnosci;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.StrzalaMroku;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Mrok.SwietyMrok;
@@ -105,6 +113,8 @@ import me.Vark123.EpicRPG.RuneSystem.Runes.Natura.EksplodujacaStrzala;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Natura.EksplodujacaStrzala_H;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Natura.EksplodujacaStrzala_M;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Natura.Eksplozja;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Natura.ElektrycznePrzeciazenie;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Natura.FalaDezorientacyjna;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Natura.FalaElektryczna;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Natura.FalaUderzeniowa;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Natura.Gruboskornosc;
@@ -171,11 +181,13 @@ import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.PlomienLenga;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.Rozerwanie;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.WiecznyOgien;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.WulkanicznyGejzer;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Ogien.ZwiastunWojny;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Rownowaga.KamiennyObserwator;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Rownowaga.SferaCorristo;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Rownowaga.SilaRownowagi;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Rownowaga.SilaRownowagi_H;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Rownowaga.SilaRownowagi_M;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Summons.ArmiaUmarlych;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Summons.ObudzenieGolema;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Summons.PrzyzwanieDzika;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Summons.PrzyzwanieGoblina;
@@ -189,10 +201,12 @@ import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.Czystka;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.OstatniBoj;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.OstatniBoj_H;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.OstatniBoj_M;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.PlomienSwiatlosci;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.Poswiecenie;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.RytualWzniesienia;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.SilaJednosci;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.Swiatlo;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.SwietaKrucjata;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.SwietaStrzala;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.SwietaStrzalaLcz;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Swiatlo.SwieteSlowo;
@@ -215,6 +229,9 @@ import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.PozeraczDusz;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.PozeraczDusz_H;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.PozeraczDusz_M;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.Prowokacja;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.PrzyplywEnergii;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.PrzyplywEnergii_H;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.PrzyplywEnergii_M;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.TajemnyBlask;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.TajemnyBlask_M;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Tajemna.TajemnyGrad;
@@ -243,6 +260,7 @@ import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.LodowePrzebicie;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.LodowyBlok;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.LodowyPocisk;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.Pelnia;
+import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.RekaAdanosa;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.SopelLodu;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.WodnaPiesc;
 import me.Vark123.EpicRPG.RuneSystem.Runes.Woda.Zamiec;
@@ -549,6 +567,10 @@ public final class RuneManager {
 					case "UsciskUmarlych_H":			return new UsciskUmarlych(rpgPlayer, rune);
 					case "UsciskUmarlych_M":			return new UsciskUmarlych(rpgPlayer, rune);
 					case "Zaglada":						return new Zaglada(rpgPlayer, rune);
+					case "CzarnySen":					return new CzarnySen(rpgPlayer, rune);
+					case "CzarnySen_H":					return new CzarnySen(rpgPlayer, rune);
+					case "CzarnySen_M":					return new CzarnySen(rpgPlayer, rune);
+					case "LaskaBeliara":				return new LaskaBeliara(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_13:
@@ -566,6 +588,9 @@ public final class RuneManager {
 					case "PrzywolanieBlyskawicy":		return new PrzywolanieBlyskawicy(rpgPlayer, rune);
 					case "Sztorm":						return new Sztorm(rpgPlayer, rune);
 					case "WstrzasElektryczny":			return new WstrzasElektryczny(rpgPlayer, rune);
+					case "ElektrycznePrzeciazenie":		return new ElektrycznePrzeciazenie(rpgPlayer, rune);
+					case "ElektrycznePrzeciazenie_H":	return new ElektrycznePrzeciazenie(rpgPlayer, rune);
+					case "ElektrycznePrzeciazenie_M":	return new ElektrycznePrzeciazenie(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_5:
@@ -580,6 +605,7 @@ public final class RuneManager {
 					case "Haduoken":					return new Haduoken(rpgPlayer, rune);
 					case "UderzenieChi":				return new UderzenieChi(rpgPlayer, rune);
 					case "PiachWOczy":					return new PiachWOczy(rpgPlayer, rune);
+					case "RekaAdanosa":					return new RekaAdanosa(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_CAT:
@@ -596,6 +622,9 @@ public final class RuneManager {
 					case "LodowaTarcza":				return new LodowaTarcza(rpgPlayer, rune);
 					case "LodowaTarcza_H":				return new LodowaTarcza_H(rpgPlayer, rune);
 					case "LodowaTarcza_M":				return new LodowaTarcza_M(rpgPlayer, rune);
+					case "PrzyplywEnergii":				return new PrzyplywEnergii(rpgPlayer, rune);
+					case "PrzyplywEnergii_H":			return new PrzyplywEnergii_H(rpgPlayer, rune);
+					case "PrzyplywEnergii_M":			return new PrzyplywEnergii_M(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_CHIRP:
@@ -660,6 +689,13 @@ public final class RuneManager {
 					case "Wampiryzm_H":					return new Wampiryzm_H(rpgPlayer, rune, Arrays.asList(RuneLockerTypes.WAMPIRYZM));
 					case "Wampiryzm_M":					return new Wampiryzm_M(rpgPlayer, rune, Arrays.asList(RuneLockerTypes.WAMPIRYZM));
 					case "ZadzaKrwi":					return new ZadzaKrwi(rpgPlayer, rune);
+					case "FalaDezorientacyjna":			return new FalaDezorientacyjna(rpgPlayer, rune);
+					case "FalaDezorientacyjna_H":		return new FalaDezorientacyjna(rpgPlayer, rune);
+					case "FalaDezorientacyjna_M":		return new FalaDezorientacyjna(rpgPlayer, rune);
+					case "PlomienSwiatlosci":			return new PlomienSwiatlosci(rpgPlayer, rune, 6);
+					case "PlomienSwiatlosci_H":			return new PlomienSwiatlosci(rpgPlayer, rune, 7);
+					case "PlomienSwiatlosci_M":			return new PlomienSwiatlosci(rpgPlayer, rune, 8);
+					case "SwietaKrucjata":				return new SwietaKrucjata(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_MALL:
@@ -725,6 +761,9 @@ public final class RuneManager {
 					case "WiecznyOgien":				return new WiecznyOgien(rpgPlayer, rune);
 					case "WiecznyOgien_H":				return new WiecznyOgien(rpgPlayer, rune);
 					case "WiecznyOgien_M":				return new WiecznyOgien(rpgPlayer, rune);
+					case "ZwiastunWojny":				return new ZwiastunWojny(rpgPlayer, rune);
+					case "ZwiastunWojny_H":				return new ZwiastunWojny(rpgPlayer, rune);
+					case "ZwiastunWojny_M":				return new ZwiastunWojny(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_OTHERSIDE:
@@ -748,6 +787,10 @@ public final class RuneManager {
 					case "ZewSmierci_M":				return new ZewSmierci_M(rpgPlayer, rune);
 					case "Drenaz":						return new Drenaz(rpgPlayer, rune);
 					case "Transfuzja":					return new Transfuzja(rpgPlayer, rune);
+					case "PaktKrwi":					return new PaktKrwi(rpgPlayer, rune);
+					case "PaktKrwi_H":					return new PaktKrwi_H(rpgPlayer, rune);
+					case "PaktKrwi_M":					return new PaktKrwi_M(rpgPlayer, rune);
+					case "ZewKrwi":						return new ZewKrwi(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_PRECIPICE:
@@ -764,6 +807,7 @@ public final class RuneManager {
 					case "PrzyzwanieSzkieletaStrzelca":	return new PrzyzwanieSzkieleta(rpgPlayer, rune);
 					case "PrzyzwanieSzkieletaWojownika":return new PrzyzwanieSzkieleta(rpgPlayer, rune);
 					case "PrzyzwanieSzkieletaMaga":		return new PrzyzwanieSzkieleta(rpgPlayer, rune);
+					case "ArmiaUmarlych":				return new ArmiaUmarlych(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_STAL:
@@ -818,6 +862,9 @@ public final class RuneManager {
 					case "WloczniaElysian":				return new WloczniaElysian(rpgPlayer, rune);
 					case "SekretWielkanocy":			return new SekretWielkanocy(rpgPlayer, rune);
 					case "LodowaAura":					return new LodowaAura(rpgPlayer, rune);
+					case "Splugawienie":				return new Splugawienie(rpgPlayer, rune);
+					case "Splugawienie_H":				return new Splugawienie(rpgPlayer, rune);
+					case "Splugawienie_M":				return new Splugawienie(rpgPlayer, rune);
 				}
 				break;
 			case MUSIC_DISC_WARD:
@@ -848,6 +895,9 @@ public final class RuneManager {
 					case "ZakazanyRytual_M":			return new ZakazanyRytual_M(rpgPlayer, rune);
 					case "Furia":						return new Furia(rpgPlayer, rune);
 					case "SzalBeliara":					return new SzalBeliara(rpgPlayer, rune);
+					case "KoszmarBeliara":				return new KoszmarBeliara(rpgPlayer, rune);
+					case "KoszmarBeliara_H":			return new KoszmarBeliara(rpgPlayer, rune);
+					case "KoszmarBeliara_M":			return new KoszmarBeliara(rpgPlayer, rune);
 				}
 				break;
 		default:
